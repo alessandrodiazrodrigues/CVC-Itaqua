@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVC Itaquá - Portal de Gestão da Loja - Dashboard</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="CVC Itaquá - Portal de Gestão da Loja - Sistema de Gestão Integrado para a filial de Itaquaquecetuba">
+    <meta name="keywords" content="CVC, Itaquaquecetuba, gestão, viagens, turismo, sistema">
+    <meta name="author" content="CVC Itaquaquecetuba">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/cvc-styles.css" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/cvc-favicon.ico">
+    
+    <style>
+        /* Estilos específicos do dashboard */
+        .dashboard-container {
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+        
+        .dashboard-container.show {
+            opacity: 1;
+        }
+        
+        .login-container {
+            min-height: 100vh;
+            background: var(--cvc-gradiente-principal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-card {
+            background: var(--cvc-branco);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--cvc-sombra-forte);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .login-logo {
+            color: var(--cvc-azul);
+            font-weight: 900;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .login-subtitle {
+            color: var(--cvc-cinza);
+            margin-bottom: 30px;
+        }
+        
+        .google-btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            width: 100%;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .google-btn:hover {
+            background: #3367d6;
+            transform: translateY(-2px);
+        }
+        
+        .senha-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .senha-btn {
+            background: var(--cvc-gradiente-azul);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            width: 100%;
+        }
+        
+        .ou-divider {
+            margin: 20px 0;
+            position: relative;
+            text-align: center;
+        }
+        
+        .ou-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #ddd;
+        }
+        
+        .ou-divider span {
+            background: white;
+            padding: 0 15px;
+            color: #999;
+        }
+        
+        /* Dashboard específico */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .action-card {
+            background: var(--cvc-branco);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: var(--cvc-sombra-suave);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--cvc-sombra-media);
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .action-icon {
+            font-size: 3rem;
+            color: var(--cvc-azul);
+            margin-bottom: 15px;
+        }
+        
+        .action-title {
+            font-weight: 700;
+            color: var(--cvc-azul);
+            margin-bottom: 8px;
+        }
+        
+        .action-desc {
+            color: var(--cvc-cinza);
+            font-size: 0.9rem;
+        }
+        
+        /* Dashboard por vendedores */
+        .vendedores-dashboard {
+            background: var(--cvc-branco);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--cvc-sombra-suave);
+            margin-bottom: 30px;
+        }
+        
+        .vendedor-card {
+            background: var(--cvc-cinza-claro);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .vendedor-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--cvc-sombra-suave);
+        }
+        
+        .vendedor-nome {
+            font-weight: 700;
+            color: var(--cvc-azul);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .vendedor-nome i {
+            margin-right: 8px;
+            color: var(--cvc-amarelo);
+        }
+        
+        .vendedor-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+        
+        .vendedor-stat {
+            text-align: center;
+            padding: 10px;
+            background: var(--cvc-branco);
+            border-radius: 8px;
+            border-left: 3px solid var(--cvc-amarelo);
+        }
+        
+        .vendedor-stat.vendas { border-left-color: #28a745; }
+        .vendedor-stat.checkin { border-left-color: #17a2b8; }
+        .vendedor-stat.pos-venda { border-left-color: #ffc107; }
+        
+        .vendedor-stat-number {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--cvc-azul);
+            line-height: 1;
+        }
+        
+        .vendedor-stat-label {
+            font-size: 0.8rem;
+            color: var(--cvc-cinza);
+            margin-top: 5px;
+        }
+        
+        .admin-indicator {
+            background: var(--cvc-gradiente-principal);
+            color: var(--cvc-azul);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .vendedor-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+            
+            .vendedor-stat {
+                padding: 8px;
+            }
+            
+            .vendedor-stat-number {
+                font-size: 1.2rem;
+            }
+            
+            .vendedor-stat-label {
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Login -->
+    <div id="loginContainer" class="login-container">
+        <div class="login-card">
+            <div class="login-logo">
+                <div class="cvc-logo-symbol mx-auto mb-3" style="width: 60px; height: 60px; font-size: 20px;">
+                    CVC
+                </div>
+                <h2>CVC Itaquá</h2>
+                <p class="login-subtitle">Portal de Gestão da Loja</p>
+            </div>
+            
+            <h3 style="color: var(--cvc-azul); margin-bottom: 25px;">Acesso ao Sistema</h3>
+            
+            <!-- Login Google -->
+            <button class="google-btn" onclick="loginGoogle()">
+                <i class="fab fa-google me-2"></i>
+                Entrar com Google
+            </button>
+            
+            <div class="ou-divider">
+                <span>ou</span>
+            </div>
+            
+            <!-- Login por Senha -->
+            <div class="senha-form">
+                <input type="password" class="senha-input" id="senhaInput" placeholder="Digite a senha do vendedor" maxlength="20">
+                <button class="senha-btn" onclick="loginSenha()">
+                    <i class="fas fa-lock me-2"></i> Entrar com Senha
+                </button>
+            </div>
+            
+            <div style="margin-top: 2rem; font-size: 0.8rem; color: #666; text-align: center;">
+                <p><i class="fas fa-crown"></i> <strong>Gestores:</strong> Use login Google</p>
+                <p><i class="fas fa-chart-line"></i> <strong>Vendedores:</strong> Use senha fornecida</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Principal -->
+    <div id="dashboardContainer" class="dashboard-container">
+        <!-- HEADER CVC PADRÃO -->
+        <header class="cvc-header">
+            <div class="container-fluid">
+                <div class="row align-items-center py-3">
+                    <!-- Logo CVC -->
+                    <div class="col-md-4">
+                        <div class="cvc-logo">
+                            <div class="cvc-logo-symbol">CVC</div>
+                            <div>
+                                <div class="cvc-logo-text">CVC Itaquá</div>
+                                <p class="cvc-subtitle">Portal de Gestão da Loja</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Título da Página -->
+                    <div class="col-md-4 text-center">
+                        <h1 class="page-title mb-0" style="border: none; padding: 0; color: var(--cvc-azul);">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard Principal
+                        </h1>
+                    </div>
+                    
+                    <!-- Informações do Usuário -->
+                    <div class="col-md-4">
+                        <div class="user-info justify-content-end">
+                            <img id="userAvatar" class="user-avatar" src="" alt="Avatar" style="display:none;">
+                            <div class="me-3">
+                                <p class="user-name" id="userName">Carregando...</p>
+                                <p class="user-role" id="userRole">...</p>
+                            </div>
+                            <div id="adminBadge" class="admin-indicator" style="display:none;">
+                                <i class="fas fa-crown"></i> GESTOR
+                            </div>
+                            <button class="logout-btn" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i> Sair
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- NAVEGAÇÃO CVC PADRÃO -->
+        <nav class="cvc-nav">
+            <div class="container-fluid">
+                <ul class="nav nav-pills justify-content-center mb-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="orcamentos.html">
+                            <i class="fas fa-calculator"></i> Padronizador de Orçamentos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="vendas.html">
+                            <i class="fas fa-chart-line"></i> Informe de Vendas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="embarques.html">
+                            <i class="fas fa-plane-departure"></i> Controle de Embarques
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="orbiuns.html">
+                            <i class="fas fa-clipboard-list"></i> Controle de Orbiuns
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- ÁREA DE CONTEÚDO -->
+        <div class="content-area">
+            <div class="container-fluid">
+                
+                <!-- Estatísticas Gerais -->
+                <section class="mb-4">
+                    <h2 class="section-title">
+                        <i class="fas fa-chart-bar"></i> Resumo Geral
+                    </h2>
+                    <div class="stats-grid">
+                        <div class="stat-card vendas">
+                            <div class="stat-number" id="totalVendas">R$ 0</div>
+                            <div class="stat-label">Vendas da Loja</div>
+                            <div class="stat-description">Este mês</div>
+                        </div>
+                        
+                        <div class="stat-card performance">
+                            <div class="stat-number" id="metaLoja">0%</div>
+                            <div class="stat-label">Meta da Loja</div>
+                            <div class="stat-description">Performance mensal</div>
+                        </div>
+                        
+                        <div class="stat-card embarques">
+                            <div class="stat-number" id="totalEmbarques">0</div>
+                            <div class="stat-label">Embarques Próximos</div>
+                            <div class="stat-description">Próximos 7 dias</div>
+                        </div>
+                        
+                        <div class="stat-card urgente">
+                            <div class="stat-number" id="embarquesUrgentes">0</div>
+                            <div class="stat-label">Urgentes</div>
+                            <div class="stat-description">Próximas 24h</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dashboard por Vendedores -->
+                <section class="mb-4">
+                    <h2 class="section-title">
+                        <i class="fas fa-users"></i> Dashboard por Vendedores
+                    </h2>
+                    <div class="vendedores-dashboard" id="vendedoresDashboard">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <p class="mb-0 text-muted">Acompanhamento individual de vendas, check-ins e pós-vendas</p>
+                            <button class="btn btn-cvc-outline btn-sm" onclick="atualizarDashboardVendedores()">
+                                <i class="fas fa-sync-alt"></i> Atualizar
+                            </button>
+                        </div>
+                        <div id="vendedoresContainer">
+                            <!-- Conteúdo será preenchido dinamicamente -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Ações Rápidas -->
+                <section class="mb-4">
+                    <h2 class="section-title">
+                        <i class="fas fa-bolt"></i> Acesso Rápido
+                    </h2>
+                    <div class="quick-actions">
+                        <a href="orcamentos.html" class="action-card">
+                            <div class="action-icon">
+                                <i class="fas fa-calculator"></i>
+                            </div>
+                            <div class="action-title">Gerar Orçamento</div>
+                            <div class="action-desc">IA otimizada para múltiplas opções</div>
+                        </a>
+                        
+                        <a href="vendas.html" class="action-card">
+                            <div class="action-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="action-title">Gerenciar Vendas</div>
+                            <div class="action-desc">Embarques e pós-venda</div>
+                        </a>
+                        
+                        <a href="embarques.html" class="action-card">
+                            <div class="action-icon">
+                                <i class="fas fa-plane-departure"></i>
+                            </div>
+                            <div class="action-title">Controle de Embarques</div>
+                            <div class="action-desc">Check-ins e conferências</div>
+                        </a>
+                        
+                        <a href="orbiuns.html" class="action-card">
+                            <div class="action-icon">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <div class="action-title">Orbiuns</div>
+                            <div class="action-desc">Controle de processos</div>
+                        </a>
+                        
+                        <div class="action-card" id="actionAdmin" style="display:none;" onclick="window.location.href='admin.html'">
+                            <div class="action-icon">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <div class="action-title">Área do Gestor</div>
+                            <div class="action-desc">Usuários e configurações</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="config.js"></script>
+    
+    <script>
+        // Variáveis globais
+        let currentUser = null;
+        let isAdmin = false;
+
+        // ================================================================================
+        // SISTEMA DE LOGIN
+        // ================================================================================
+        
+        function loginGoogle() {
+            // Simulação de login Google
+            const userData = {
+                name: 'Gestor CVC',
+                email: 'gestor@cvc.com.br',
+                avatar: 'https://ui-avatars.com/api/?name=Gestor+CVC&background=0A00B4&color=FFE600&bold=true',
+                role: 'Gestor',
+                isAdmin: true
+            };
+            
+            processLogin(userData);
+        }
+        
+        function loginSenha() {
+            const senha = document.getElementById('senhaInput').value.trim();
+            
+            if (!senha) {
+                alert('Digite uma senha válida');
+                return;
+            }
+            
+            // Verificar se é um vendedor válido (simplificado)
+            const vendedores = CVC_CONFIG.VENDEDORES;
+            const vendedorEncontrado = vendedores.find(v => 
+                v.toLowerCase().replace(/\s+/g, '') === senha.toLowerCase()
+            );
+            
+            if (vendedorEncontrado) {
+                const userData = {
+                    name: vendedorEncontrado,
+                    email: `${vendedorEncontrado.toLowerCase().replace(/\s+/g, '')}@cvc.com.br`,
+                    avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(vendedorEncontrado)}&background=0A00B4&color=FFE600&bold=true`,
+                    role: 'Consultor de Viagens',
+                    isAdmin: false
+                };
+                
+                processLogin(userData);
+            } else {
+                alert('Senha incorreta. Tente novamente.');
+                document.getElementById('senhaInput').value = '';
+            }
+        }
+        
+        function processLogin(userData) {
+            currentUser = userData;
+            isAdmin = userData.isAdmin;
+            
+            // Salvar no localStorage para persistência
+            localStorage.setItem('cvc_user', JSON.stringify(userData));
+            
+            // Ocultar login e mostrar dashboard
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('dashboardContainer').style.display = 'block';
+            
+            // Aplicar dados do usuário
+            setTimeout(() => {
+                updateUserInfo();
+                loadDashboardData();
+                document.getElementById('dashboardContainer').classList.add('show');
+            }, 100);
+        }
+        
+        function logout() {
+            localStorage.removeItem('cvc_user');
+            currentUser = null;
+            isAdmin = false;
+            
+            document.getElementById('dashboardContainer').classList.remove('show');
+            setTimeout(() => {
+                document.getElementById('dashboardContainer').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'flex';
+            }, 300);
+        }
+        
+        // ================================================================================
+        // INTERFACE DO USUÁRIO
+        // ================================================================================
+        
+        function updateUserInfo() {
+            if (!currentUser) return;
+            
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userRole').textContent = currentUser.role;
+            
+            const avatar = document.getElementById('userAvatar');
+            avatar.src = currentUser.avatar;
+            avatar.style.display = 'block';
+            
+            // Mostrar badge de admin se aplicável
+            const adminBadge = document.getElementById('adminBadge');
+            const actionAdmin = document.getElementById('actionAdmin');
+            
+            if (isAdmin) {
+                adminBadge.style.display = 'block';
+                if (actionAdmin) actionAdmin.style.display = 'block';
+            }
+        }
+        
+        // ================================================================================
+        // DASHBOARD DE DADOS
+        // ================================================================================
+        
+        function loadDashboardData() {
+            // Simular carregamento de dados gerais
+            setTimeout(() => {
+                document.getElementById('totalVendas').textContent = 'R$ 125.430';
+                document.getElementById('metaLoja').textContent = '87%';
+                document.getElementById('totalEmbarques').textContent = '23';
+                document.getElementById('embarquesUrgentes').textContent = '5';
+            }, 500);
+            
+            // Carregar dashboard dos vendedores
+            atualizarDashboardVendedores();
+        }
+        
+        function atualizarDashboardVendedores() {
+            const container = document.getElementById('vendedoresContainer');
+            const vendedores = CVC_CONFIG.VENDEDORES;
+            
+            // Mostrar loading
+            container.innerHTML = '<div class="text-center py-4"><div class="loading-spinner"></div><p class="mt-2">Carregando dados dos vendedores...</p></div>';
+            
+            // Simular delay de carregamento
+            setTimeout(() => {
+                let html = '';
+                
+                vendedores.forEach((vendedor, index) => {
+                    // Dados simulados para demonstração
+                    const vendas = Math.floor(Math.random() * 15) + 1;
+                    const checkins = Math.floor(Math.random() * 8) + 1;
+                    const posVendas = Math.floor(Math.random() * 5) + 1;
+                    
+                    html += `
+                        <div class="vendedor-card fade-in" style="animation-delay: ${index * 0.1}s">
+                            <div class="vendedor-nome">
+                                <i class="fas fa-user"></i> ${vendedor}
+                            </div>
+                            <div class="vendedor-stats">
+                                <div class="vendedor-stat vendas">
+                                    <div class="vendedor-stat-number">${vendas}</div>
+                                    <div class="vendedor-stat-label">Vendas</div>
+                                </div>
+                                <div class="vendedor-stat checkin">
+                                    <div class="vendedor-stat-number">${checkins}</div>
+                                    <div class="vendedor-stat-label">Check-ins</div>
+                                </div>
+                                <div class="vendedor-stat pos-venda">
+                                    <div class="vendedor-stat-number">${posVendas}</div>
+                                    <div class="vendedor-stat-label">Pós-vendas</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html;
+            }, 1000);
+        }
+        
+        // ================================================================================
+        // INICIALIZAÇÃO
+        // ================================================================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            debugLog('🏢 Dashboard CVC Itaquá carregado', 'success');
+            
+            // Verificar se já está logado
+            const savedUser = localStorage.getItem('cvc_user');
+            if (savedUser) {
+                try {
+                    const userData = JSON.parse(savedUser);
+                    processLogin(userData);
+                } catch (e) {
+                    localStorage.removeItem('cvc_user');
+                }
+            }
+            
+            // Event listeners
+            document.getElementById('senhaInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    loginSenha();
+                }
+            });
+            
+            console.log('🎯 Dashboard CVC Itaquá - Portal de Gestão da Loja v1.0');
+            console.log('📊 Recursos disponíveis:');
+            console.log('   ✅ Dashboard geral da loja');
+            console.log('   ✅ Dashboard por vendedores (vendas, check-ins, pós-vendas)');
+            console.log('   ✅ Login Google e por senha');
+            console.log('   ✅ Interface responsiva');
+            console.log('   ✅ Dados simulados para demonstração');
+        });
+    </script>
+</body>
+</html>
