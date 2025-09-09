@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVC Portal Itaquá - Controle de Orbiuns</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="CVC Portal Itaquá - Sistema Integrado de Gestão para a filial de Itaquaquecetuba">
+    <meta name="keywords" content="CVC, Itaquaquecetuba, gestão, viagens, turismo, sistema">
+    <meta name="author" content="CVC Itaquaquecetuba">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="CVC Portal Itaquá - Sistema Integrado de Gestão">
+    <meta property="og:description" content="Sistema de gestão integrado da CVC Itaquaquecetuba">
+    <meta property="og:image" content="assets/images/cvc-logo.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/cvc-favicon.ico">
+    <link rel="apple-touch-icon" href="assets/images/cvc-apple-icon.png">
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/cvc-styles.css" rel="stylesheet">
+    
+    <style>
+        /* Estilos específicos do controle de orbiuns */
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: var(--cvc-sombra-forte);
+            backdrop-filter: blur(10px);
+            margin: 20px auto;
+            max-width: 1400px;
+            overflow: hidden;
+        }
+        
+        .content-section {
+            padding: 30px;
+        }
+        
+        .stats-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .stat-card i {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: var(--cvc-amarelo);
+        }
+        
+        .stat-card h6 {
+            margin: 5px 0;
+            font-weight: 600;
+        }
+        
+        .stat-card span {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--cvc-amarelo);
+        }
+        
+        .header-links {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .header-link {
+            background: white;
+            color: var(--cvc-azul);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .header-link:hover {
+            background: var(--cvc-azul);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(10, 0, 180, 0.3);
+            text-decoration: none;
+        }
+        
+        .filter-section {
+            background: var(--cvc-branco);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--cvc-sombra-suave);
+            border-left: 4px solid var(--cvc-azul);
+        }
+        
+        .filter-section h4 {
+            color: var(--cvc-azul);
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--cvc-azul);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .form-control-cvc {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+            font-family: 'Nunito', sans-serif;
+        }
+        
+        .form-control-cvc:focus {
+            border-color: var(--cvc-azul);
+            box-shadow: 0 0 0 0.2rem rgba(10, 0, 180, 0.25);
+            outline: none;
+        }
+        
+        .form-select-cvc {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+            font-family: 'Nunito', sans-serif;
+        }
+        
+        .form-select-cvc:focus {
+            border-color: var(--cvc-azul);
+            box-shadow: 0 0 0 0.2rem rgba(10, 0, 180, 0.25);
+            outline: none;
+        }
+        
+        .orbium-card {
+            background: var(--cvc-branco);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--cvc-sombra-suave);
+            border-left: 4px solid var(--cvc-azul-claro);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .orbium-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: var(--cvc-amarelo);
+            border-radius: 50%;
+            opacity: 0.05;
+            transform: translate(30%, -30%);
+        }
+        
+        .orbium-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--cvc-sombra-media);
+        }
+        
+        .orbium-card.problema {
+            border-left-color: #dc3545;
+            background: linear-gradient(135deg, #fff 0%, #fff5f5 100%);
+        }
+        
+        .orbium-card.em-atendimento {
+            border-left-color: var(--cvc-amarelo);
+        }
+        
+        .orbium-card.resolvido {
+            border-left-color: var(--cvc-verde);
+            opacity: 0.8;
+        }
+        
+        .orbium-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .orbium-status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .status-em-atendimento {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe5a0 100%);
+            color: #856404;
+        }
+        
+        .status-resolvido {
+            background: linear-gradient(135deg, #d4edda 0%, #b8dfca 100%);
+            color: #155724;
+        }
+        
+        .status-problema {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c2c7 100%);
+            color: #721c24;
+        }
+        
+        .orbium-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .orbium-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .orbium-detail-item strong {
+            color: var(--cvc-azul);
+        }
+        
+        .orbium-observacoes {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .action-buttons button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
+            background: var(--cvc-gradiente-azul);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: var(--cvc-sombra-media);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .fab:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: var(--cvc-sombra-forte);
+        }
+        
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            background: var(--cvc-gradiente-azul);
+            color: white;
+            padding: 20px 25px;
+            border: none;
+        }
+        
+        .modal-header h5 {
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .modal-body {
+            padding: 25px;
+        }
+        
+        .btn-close {
+            filter: brightness(0) invert(1);
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--cvc-azul);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .alert-custom {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            max-width: 400px;
+            z-index: 10000;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            animation: slideIn 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .alert-success-custom {
+            background: linear-gradient(135deg, #d4edda 0%, #b8dfca 100%);
+            color: #155724;
+            border: 1px solid #28a745;
+        }
+        
+        .alert-error-custom {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c2c7 100%);
+            color: #721c24;
+            border: 1px solid #dc3545;
+        }
+        
+        .sem-orbiuns {
+            text-align: center;
+            padding: 60px 30px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            box-shadow: var(--cvc-sombra-suave);
+        }
+        
+        .sem-orbiuns i {
+            font-size: 4rem;
+            color: var(--cvc-azul-claro);
+            margin-bottom: 20px;
+        }
+        
+        .sem-orbiuns h3 {
+            color: var(--cvc-azul);
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .orbium-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-card {
+                margin: 10px 0;
+            }
+            
+            .fab {
+                bottom: 20px;
+                right: 20px;
+                width: 55px;
+                height: 55px;
+                font-size: 24px;
+            }
+            
+            .header-links {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .header-link {
+                text-align: center;
+            }
+            
+            .main-container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main-container">
+            <!-- HEADER CVC PADRÃO -->
+            <header class="cvc-header">
+                <div class="container-fluid">
+                    <div class="row align-items-center py-3">
+                        <!-- Logo CVC -->
+                        <div class="col-md-4">
+                            <div class="cvc-logo">
+                                <div class="cvc-logo-symbol">CVC</div>
+                                <div>
+                                    <div class="cvc-logo-text">CVC Portal Itaquá</div>
+                                    <p class="cvc-subtitle">Sistema Integrado de Gestão</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Título da Página -->
+                        <div class="col-md-4 text-center">
+                            <h1 class="page-title mb-0" style="border: none; padding: 0; color: var(--cvc-azul);">
+                                <i class="fas fa-clipboard-list"></i> Controle de Orbiuns
+                            </h1>
+                        </div>
+                        
+                        <!-- Status do Sistema -->
+                        <div class="col-md-4 text-end">
+                            <div class="d-flex align-items-center justify-content-end">
+                                <div class="me-3">
+                                    <small class="text-muted">Gestão e acompanhamento de processos internos</small><br>
+                                    <small class="text-success">
+                                        <i class="fas fa-check-circle"></i> Sistema Online
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- NAVEGAÇÃO CVC PADRÃO -->
+            <nav class="cvc-nav">
+                <div class="container-fluid">
+                    <ul class="nav nav-pills justify-content-center mb-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="orcamentos.html">
+                                <i class="fas fa-calculator"></i> Padronizador de Orçamentos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="vendas.html">
+                                <i class="fas fa-chart-line"></i> Informe de Vendas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="embarques.html">
+                                <i class="fas fa-plane-departure"></i> Controle de Embarques
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="orbiuns.html">
+                                <i class="fas fa-clipboard-list"></i> Controle de Orbiuns
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <!-- ESTATÍSTICAS NO HEADER -->
+            <div class="stats-container">
+                <div class="row">
+                    <div class="col">
+                        <div class="stat-card">
+                            <i class="fas fa-clock"></i>
+                            <h6>Em Atendimento</h6>
+                            <span id="totalAbertos">-</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="stat-card">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <h6>Problemas</h6>
+                            <span id="totalProblemas">-</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="stat-card">
+                            <i class="fas fa-check-circle"></i>
+                            <h6>Resolvidos Hoje</h6>
+                            <span id="totalResolvidosHoje">-</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="stat-card">
+                            <i class="fas fa-calendar-check"></i>
+                            <h6>Últimos 30 dias</h6>
+                            <span id="totalResolvidos30">-</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="stat-card">
+                            <i class="fas fa-database"></i>
+                            <h6>Total Geral</h6>
+                            <span id="totalGeral">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="content-section">
+                <!-- Links do cabeçalho -->
+                <div class="header-links">
+                    <a href="https://docs.google.com/spreadsheets/d/1A7HOrMOw60Rks4_fwj0BNP5i9cZQ9H-dOJ7LKFw5Jis/edit?usp=sharing" 
+                       target="_blank" class="header-link">
+                        <i class="fas fa-table"></i> Abrir Planilha
+                    </a>
+                    <a href="javascript:void(0)" onclick="carregarOrbiuns()" class="header-link">
+                        <i class="fas fa-sync-alt"></i> Atualizar Lista
+                    </a>
+                    <a href="javascript:void(0)" onclick="abrirModalNovoOrbium()" class="header-link">
+                        <i class="fas fa-plus-circle"></i> Novo Orbium
+                    </a>
+                </div>
+
+                <!-- Seção de Filtros -->
+                <div class="filter-section">
+                    <h4><i class="fas fa-filter"></i> Filtros</h4>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="filtroOrbium" class="form-label">Número Orbium</label>
+                            <input type="text" class="form-control form-control-cvc" id="filtroOrbium" 
+                                   placeholder="Ex: ORB123" oninput="filtrarOrbiuns()">
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="filtroStatus" class="form-label">Status</label>
+                            <select class="form-select form-select-cvc" id="filtroStatus" onchange="filtrarOrbiuns()">
+                                <option value="">Todos</option>
+                                <option value="Em atendimento">Em Atendimento</option>
+                                <option value="Problema">Problema</option>
+                                <option value="Resolvido">Resolvido</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="filtroVendedor" class="form-label">Vendedor</label>
+                            <select class="form-select form-select-cvc" id="filtroVendedor" onchange="filtrarOrbiuns()">
+                                <option value="">Todos</option>
+                                <!-- Será preenchido via config.js -->
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="filtroDepartamento" class="form-label">Departamento</label>
+                            <input type="text" class="form-control form-control-cvc" id="filtroDepartamento" 
+                                   placeholder="Ex: Financeiro" oninput="filtrarOrbiuns()">
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="filtroCliente" class="form-label">Cliente</label>
+                            <input type="text" class="form-control form-control-cvc" id="filtroCliente" 
+                                   placeholder="Nome do cliente" oninput="filtrarOrbiuns()">
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="filtroWhatsApp" class="form-label">WhatsApp</label>
+                            <input type="text" class="form-control form-control-cvc" id="filtroWhatsApp" 
+                                   placeholder="Número WhatsApp" oninput="filtrarOrbiuns()">
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="filtroRecibo" class="form-label">Recibo</label>
+                            <input type="text" class="form-control form-control-cvc" id="filtroRecibo" 
+                                   placeholder="Número do recibo" oninput="filtrarOrbiuns()">
+                        </div>
+                        
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button class="btn btn-cvc-secondary w-100" onclick="limparFiltros()">
+                                <i class="fas fa-broom"></i> Limpar Filtros
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de Orbiuns -->
+                <div>
+                    <h4 style="color: var(--cvc-azul); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-list"></i> Orbiuns Ativos
+                    </h4>
+                    <div id="loadingMessage" class="alert alert-info" style="display: none;">
+                        <span class="loading-spinner"></span> Carregando orbiuns da planilha...
+                    </div>
+                    <div id="orbiunsList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAB - Floating Action Button -->
+    <button class="fab" onclick="abrirModalNovoOrbium()" title="Novo Orbium">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- Modal Novo Orbium -->
+    <div class="modal fade" id="modalNovoOrbium" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-plus-circle"></i> Novo Orbium
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formNovoOrbium">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select form-select-cvc" id="status" name="status" required>
+                                    <option value="Em atendimento">Em atendimento</option>
+                                    <option value="Resolvido">Resolvido</option>
+                                    <option value="Problema">Problema</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="orbium" class="form-label">Número do Orbium</label>
+                                <input type="text" class="form-control form-control-cvc" id="orbium" name="orbium" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="data_abertura" class="form-label">Data de Abertura</label>
+                                <input type="date" class="form-control form-control-cvc" id="data_abertura" name="data_abertura" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="departamento" class="form-label">Departamento</label>
+                                <input type="text" class="form-control form-control-cvc" id="departamento" name="departamento" 
+                                       placeholder="Ex: Financeiro, Reservas">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="vendedor" class="form-label">Vendedor</label>
+                                <select class="form-select form-select-cvc" id="vendedor" name="vendedor" required>
+                                    <option value="">Selecione...</option>
+                                    <!-- Será preenchido via config.js -->
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="recibo" class="form-label">Recibo</label>
+                                <input type="text" class="form-control form-control-cvc" id="recibo" name="recibo">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="reserva" class="form-label">Reserva</label>
+                                <input type="text" class="form-control form-control-cvc" id="reserva" name="reserva">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="pedido" class="form-label">Pedido</label>
+                                <input type="text" class="form-control form-control-cvc" id="pedido" name="pedido">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="cia" class="form-label">CIA</label>
+                                <input type="text" class="form-control form-control-cvc" id="cia" name="cia">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="loc_gds" class="form-label">LOC GDS</label>
+                                <input type="text" class="form-control form-control-cvc" id="loc_gds" name="loc_gds">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="loc_cia" class="form-label">LOC CIA</label>
+                                <input type="text" class="form-control form-control-cvc" id="loc_cia" name="loc_cia">
+                            </div>
+
+                            <div class="col-12">
+                                <label for="observacoes" class="form-label">Observações</label>
+                                <textarea class="form-control form-control-cvc" id="observacoes" name="observacoes" rows="3" 
+                                          placeholder="Descreva o problema ou observações importantes..."></textarea>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="nome_cliente" class="form-label">Nome do Cliente</label>
+                                <input type="text" class="form-control form-control-cvc" id="nome_cliente" name="nome_cliente" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="whats_cliente" class="form-label">WhatsApp do Cliente</label>
+                                <input type="text" class="form-control form-control-cvc" id="whats_cliente" name="whats_cliente" 
+                                       pattern="[0-9]+" title="Digite apenas números" placeholder="11999999999">
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-cvc-primary w-100">
+                                <i class="fas fa-save"></i> Cadastrar Orbium
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Orbium -->
+    <div class="modal fade" id="modalEditarOrbium" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-edit"></i> Editar Orbium
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarOrbium">
+                        <input type="hidden" id="edit_id" name="id">
+                        
+                        <div class="mb-3">
+                            <label for="edit_status" class="form-label">Status</label>
+                            <select class="form-select form-select-cvc" id="edit_status" name="status" required>
+                                <option value="Em atendimento">Em atendimento</option>
+                                <option value="Resolvido">Resolvido</option>
+                                <option value="Problema">Problema</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="edit_observacoes" class="form-label">Observações</label>
+                            <textarea class="form-control form-control-cvc" id="edit_observacoes" name="observacoes" rows="4" 
+                                      placeholder="Adicione ou edite observações..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-cvc-primary w-100">
+                            <i class="fas fa-save"></i> Salvar Alterações
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Configuração Central -->
+    <script src="config.js"></script>
+    
+    <script>
+        console.log('🚀 CVC Portal Itaquá - Controle de Orbiuns v8.04');
+        
+        // ================================================================================
+        // CONFIGURAÇÃO - USANDO CONFIG.JS
+        // ================================================================================
+        const API_URL = getApiUrl(); // Vem do config.js
+        const SENHA_ORBIUNS = 'orb123';
+        const VENDEDORES = CVC_CONFIG.VENDEDORES;
+        
+        let orbiunsData = [];
+        let orbiunsFiltrados = [];
+
+        debugLog('🚀 Sistema de Orbiuns CVC v8.04 carregado', 'success');
+        debugLog('🔗 API URL: ' + API_URL, 'info');
+
+        // ================================================================================
+        // INICIALIZAÇÃO
+        // ================================================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            debugLog('📋 Inicializando sistema de Orbiuns...', 'info');
+            
+            // Verificar se config.js foi carregado
+            if (typeof getApiUrl !== 'function') {
+                debugLog('❌ config.js não foi carregado! Verifique se o arquivo existe.', 'error');
+                mostrarAlertaErro('Erro na configuração: config.js não encontrado');
+                return;
+            }
+            
+            preencherSelectVendedores();
+            carregarOrbiuns();
+            
+            // Configurar data padrão
+            const dataInput = document.getElementById('data_abertura');
+            if (dataInput) {
+                dataInput.valueAsDate = new Date();
+            }
+            
+            // Configurar formulários
+            const formNovo = document.getElementById('formNovoOrbium');
+            if (formNovo) {
+                formNovo.addEventListener('submit', enviarNovoOrbium);
+            }
+            
+            const formEditar = document.getElementById('formEditarOrbium');
+            if (formEditar) {
+                formEditar.addEventListener('submit', editarOrbium);
+            }
+            
+            debugLog('✅ Sistema de Orbiuns v8.04 totalmente carregado!', 'success');
+        });
+
+        function preencherSelectVendedores() {
+            const selectVendedor = document.getElementById('vendedor');
+            const selectFiltroVendedor = document.getElementById('filtroVendedor');
+            
+            if (selectVendedor) {
+                selectVendedor.innerHTML = '<option value="">Selecione...</option>';
+                VENDEDORES.forEach(vendedor => {
+                    selectVendedor.innerHTML += `<option value="${vendedor}">${vendedor}</option>`;
+                });
+            }
+            
+            if (selectFiltroVendedor) {
+                selectFiltroVendedor.innerHTML = '<option value="">Todos</option>';
+                VENDEDORES.forEach(vendedor => {
+                    selectFiltroVendedor.innerHTML += `<option value="${vendedor}">${vendedor}</option>`;
+                });
+            }
+            
+            debugLog('✅ Selects de vendedores preenchidos via config.js', 'success');
+        }
+
+        // ================================================================================
+        // COMUNICAÇÃO COM API
+        // ================================================================================
+        async function chamarAPI(dados) {
+            debugLog('📡 Enviando para API', 'info', dados);
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(dados)
+                });
+                
+                debugLog('📊 Status da resposta: ' + response.status, 'info');
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    debugLog('📊 Texto do erro: ' + errorText, 'error');
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}\nDetalhes: ${errorText}`);
+                }
+                
+                const data = await response.json();
+                debugLog('📥 Resposta da API', 'success', data);
+                
+                return data;
+                
+            } catch (error) {
+                debugLog('❌ Erro na comunicação com API: ' + error.message, 'error');
+                mostrarAlertaErro(`Erro de conexão: ${error.message}`);
+                throw error;
+            }
+        }
+
+        // ================================================================================
+        // CARREGAR ORBIUNS DA PLANILHA
+        // ================================================================================
+        async function carregarOrbiuns() {
+            const loadingEl = document.getElementById('loadingMessage');
+            const listEl = document.getElementById('orbiunsList');
+            
+            loadingEl.style.display = 'block';
+            listEl.innerHTML = '';
+
+            try {
+                debugLog('📋 Carregando orbiuns da planilha...', 'info');
+                
+                const data = await chamarAPI({
+                    action: 'listar'
+                });
+                
+                debugLog('📄 Estrutura da resposta', 'info', data);
+                
+                if (data.success) {
+                    if (data.data && data.data.orbiuns) {
+                        orbiunsData = data.data.orbiuns;
+                        debugLog(`✅ ${orbiunsData.length} orbiuns carregados da planilha`, 'success');
+                    } else if (data.orbiuns) {
+                        orbiunsData = data.orbiuns;
+                        debugLog(`✅ ${orbiunsData.length} orbiuns carregados (estrutura alternativa)`, 'success');
+                    } else {
+                        orbiunsData = [];
+                        debugLog('⚠️ Nenhum orbium encontrado na resposta', 'warn');
+                    }
+                    
+                    // Filtrar para mostrar apenas Problemas e Em atendimento por padrão
+                    orbiunsFiltrados = orbiunsData.filter(o => 
+                        o.status === 'Problema' || o.status === 'Em atendimento'
+                    );
+                    
+                    renderizarOrbiuns();
+                    await carregarEstatisticas();
+                    
+                } else {
+                    throw new Error(data.message || 'Erro ao carregar dados da planilha');
+                }
+                
+            } catch (error) {
+                debugLog('❌ Erro ao carregar orbiuns: ' + error.message, 'error');
+                
+                listEl.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h5><i class="fas fa-exclamation-circle"></i> Erro ao conectar com a planilha</h5>
+                        <p>${error.message}</p>
+                        <button onclick="carregarOrbiuns()" class="btn btn-cvc-primary">
+                            <i class="fas fa-sync-alt"></i> Tentar Novamente
+                        </button>
+                    </div>
+                `;
+            } finally {
+                loadingEl.style.display = 'none';
+            }
+        }
+
+        // ================================================================================
+        // CARREGAR ESTATÍSTICAS
+        // ================================================================================
+        async function carregarEstatisticas() {
+            try {
+                const data = await chamarAPI({
+                    action: 'estatisticas'
+                });
+                
+                if (data.success) {
+                    const stats = data.data;
+                    document.getElementById('totalAbertos').textContent = stats.em_atendimento || 0;
+                    document.getElementById('totalProblemas').textContent = stats.problema || 0;
+                    document.getElementById('totalResolvidosHoje').textContent = stats.resolvidos_hoje || 0;
+                    document.getElementById('totalResolvidos30').textContent = stats.resolvidos_semana || 0;
+                    document.getElementById('totalGeral').textContent = stats.total || 0;
+                    
+                    debugLog('📊 Estatísticas carregadas', 'success', stats);
+                } else {
+                    debugLog('⚠️ Erro ao carregar estatísticas: ' + data.message, 'warn');
+                    calcularEstatisticasLocais();
+                }
+                
+            } catch (error) {
+                debugLog('❌ Erro nas estatísticas: ' + error.message, 'error');
+                calcularEstatisticasLocais();
+            }
+        }
+
+        function calcularEstatisticasLocais() {
+            const stats = {
+                em_atendimento: orbiunsData.filter(o => o.status === 'Em atendimento').length,
+                problema: orbiunsData.filter(o => o.status === 'Problema').length,
+                resolvidos_hoje: 0,
+                resolvidos_30_dias: 0,
+                total: orbiunsData.length
+            };
+            
+            document.getElementById('totalAbertos').textContent = stats.em_atendimento;
+            document.getElementById('totalProblemas').textContent = stats.problema;
+            document.getElementById('totalResolvidosHoje').textContent = stats.resolvidos_hoje;
+            document.getElementById('totalResolvidos30').textContent = stats.resolvidos_30_dias;
+            document.getElementById('totalGeral').textContent = stats.total;
+        }
+
+        // ================================================================================
+        // RENDERIZAR ORBIUNS
+        // ================================================================================
+        function renderizarOrbiuns() {
+            const container = document.getElementById('orbiunsList');
+            
+            if (orbiunsFiltrados.length === 0) {
+                container.innerHTML = `
+                    <div class="sem-orbiuns">
+                        <i class="fas fa-clipboard-check"></i>
+                        <h3>Nenhum orbium encontrado</h3>
+                        <p>Não há orbiuns correspondentes aos filtros aplicados.</p>
+                        <button onclick="limparFiltros()" class="btn btn-cvc-primary">
+                            <i class="fas fa-sync-alt"></i> Limpar Filtros e Ver Todos
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            // Ordenar: Problemas primeiro, depois Em atendimento, depois Resolvidos
+            orbiunsFiltrados.sort((a, b) => {
+                const prioridade = {'Problema': 0, 'Em atendimento': 1, 'Resolvido': 2};
+                return prioridade[a.status] - prioridade[b.status];
+            });
+
+            container.innerHTML = orbiunsFiltrados.map(orbium => {
+                const statusClass = orbium.status.toLowerCase().replace(' ', '-');
+                
+                return `
+                    <div class="orbium-card ${statusClass}">
+                        <div class="orbium-header">
+                            <h5 style="margin: 0; color: var(--cvc-azul);">
+                                <i class="fas fa-clipboard"></i> ${orbium.orbium || 'N/A'} - ${orbium.nome_cliente || 'Cliente não informado'}
+                            </h5>
+                            <span class="orbium-status status-${statusClass}">
+                                ${orbium.status}
+                            </span>
+                        </div>
+                        
+                        <div class="orbium-details">
+                            <div class="orbium-detail-item">
+                                <i class="fas fa-calendar-alt text-primary"></i>
+                                <strong>Data:</strong> ${formatarData(orbium.data_abertura)}
+                            </div>
+                            <div class="orbium-detail-item">
+                                <i class="fas fa-user text-primary"></i>
+                                <strong>Vendedor:</strong> ${orbium.vendedor || 'N/A'}
+                            </div>
+                            <div class="orbium-detail-item">
+                                <i class="fas fa-building text-primary"></i>
+                                <strong>Depto:</strong> ${orbium.departamento || 'N/A'}
+                            </div>
+                            <div class="orbium-detail-item">
+                                <i class="fab fa-whatsapp text-success"></i>
+                                <strong>WhatsApp:</strong> ${formatarWhatsApp(orbium.whats_cliente)}
+                            </div>
+                        </div>
+                        
+                        ${orbium.observacoes ? `
+                            <div class="orbium-observacoes">
+                                <strong><i class="fas fa-comment-dots"></i> Observações:</strong><br>
+                                ${orbium.observacoes}
+                            </div>
+                        ` : ''}
+                        
+                        <div style="margin-top: 10px; font-size: 0.85rem; color: #6c757d;">
+                            <strong>Detalhes:</strong>
+                            Recibo: ${orbium.recibo || 'N/A'} | 
+                            Reserva: ${orbium.reserva || 'N/A'} | 
+                            CIA: ${orbium.cia || 'N/A'}
+                        </div>
+
+                        <div class="action-buttons">
+                            ${orbium.status !== 'Resolvido' ? `
+                                <button class="btn btn-cvc-primary btn-sm" onclick="resolverOrbium('${orbium.id}')">
+                                    <i class="fas fa-check"></i> Resolver
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="marcarProblema('${orbium.id}')">
+                                    <i class="fas fa-exclamation-triangle"></i> Problema
+                                </button>
+                            ` : ''}
+                            <button class="btn btn-info btn-sm" onclick="editarOrbiumModal('${orbium.id}')">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ================================================================================
+        // FUNÇÕES DE AÇÃO (RESOLVER, PROBLEMA, ETC)
+        // ================================================================================
+        async function resolverOrbium(id) {
+            if (!confirm('Tem certeza que deseja marcar este orbium como resolvido?')) {
+                return;
+            }
+
+            try {
+                debugLog(`✅ Resolvendo orbium ID: ${id}`, 'info');
+                
+                const result = await chamarAPI({
+                    action: 'atualizar_status',
+                    id: id,
+                    status: 'Resolvido',
+                    observacoes: `Resolvido em ${new Date().toLocaleDateString('pt-BR')}`,
+                    senha: SENHA_ORBIUNS
+                });
+
+                if (result.success) {
+                    mostrarAlertaSucesso('✅ Orbium marcado como resolvido!');
+                    setTimeout(() => {
+                        carregarOrbiuns();
+                    }, 1000);
+                } else {
+                    throw new Error(result.message || 'Erro ao atualizar status');
+                }
+
+            } catch (error) {
+                debugLog('❌ Erro ao resolver orbium: ' + error.message, 'error');
+                mostrarAlertaErro(`❌ Erro: ${error.message}`);
+            }
+        }
+
+        async function marcarProblema(id) {
+            const motivo = prompt('Descreva brevemente o problema:');
+            if (!motivo) return;
+
+            try {
+                debugLog(`⚠️ Marcando problema no orbium ID: ${id}`, 'info');
+                
+                const result = await chamarAPI({
+                    action: 'atualizar_status',
+                    id: id,
+                    status: 'Problema',
+                    observacoes: `PROBLEMA: ${motivo} - ${new Date().toLocaleDateString('pt-BR')}`,
+                    senha: SENHA_ORBIUNS
+                });
+
+                if (result.success) {
+                    mostrarAlertaSucesso('⚠️ Orbium marcado como problema!');
+                    setTimeout(() => {
+                        carregarOrbiuns();
+                    }, 1000);
+                } else {
+                    throw new Error(result.message || 'Erro ao atualizar status');
+                }
+
+            } catch (error) {
+                debugLog('❌ Erro ao marcar problema: ' + error.message, 'error');
+                mostrarAlertaErro(`❌ Erro: ${error.message}`);
+            }
+        }
+
+        // ================================================================================
+        // CADASTRAR NOVO ORBIUM
+        // ================================================================================
+        function abrirModalNovoOrbium() {
+            debugLog('➕ Abrindo modal de novo orbium', 'info');
+            const dataInput = document.getElementById('data_abertura');
+            if (dataInput) {
+                dataInput.valueAsDate = new Date();
+            }
+            const modal = new bootstrap.Modal(document.getElementById('modalNovoOrbium'));
+            modal.show();
+        }
+
+        async function enviarNovoOrbium(e) {
+            e.preventDefault();
+            
+            const botaoSubmit = e.target.querySelector('button[type="submit"]');
+            const textoOriginal = botaoSubmit.innerHTML;
+            
+            botaoSubmit.disabled = true;
+            botaoSubmit.innerHTML = '<span class="loading-spinner"></span> Enviando...';
+
+            try {
+                const dadosFormulario = coletarDadosFormularioNaOrdemCorreta(e.target);
+                
+                debugLog('📤 Dados coletados v8.04 (ordem corrigida)', 'info', dadosFormulario);
+                
+                if (!dadosFormulario.orbium || !dadosFormulario.vendedor || !dadosFormulario.nome_cliente) {
+                    throw new Error('Preencha todos os campos obrigatórios');
+                }
+
+                const result = await chamarAPI({
+                    action: 'cadastrar',
+                    orbium: dadosFormulario,
+                    senha: SENHA_ORBIUNS
+                });
+
+                if (result.success) {
+                    mostrarAlertaSucesso('✅ Orbium cadastrado com sucesso!');
+                    bootstrap.Modal.getInstance(document.getElementById('modalNovoOrbium')).hide();
+                    document.getElementById('formNovoOrbium').reset();
+                    
+                    setTimeout(() => {
+                        carregarOrbiuns();
+                    }, 1000);
+                } else {
+                    throw new Error(result.message || 'Erro ao cadastrar orbium');
+                }
+
+            } catch (error) {
+                debugLog('❌ Erro ao enviar orbium: ' + error.message, 'error');
+                mostrarAlertaErro(`❌ Erro ao cadastrar orbium: ${error.message}`);
+                
+            } finally {
+                botaoSubmit.disabled = false;
+                botaoSubmit.innerHTML = textoOriginal;
+            }
+        }
+
+        function coletarDadosFormularioNaOrdemCorreta(form) {
+            debugLog('📧 v8.04: Coletando dados NA ORDEM CORRETA das colunas...', 'info');
+            
+            const dados = {
+                status: form.querySelector('#status').value || 'Em atendimento',
+                orbium: form.querySelector('#orbium').value || '',
+                data_abertura: form.querySelector('#data_abertura').value || new Date().toISOString().split('T')[0],
+                departamento: form.querySelector('#departamento').value || '',
+                vendedor: form.querySelector('#vendedor').value || '',
+                recibo: form.querySelector('#recibo').value || '',
+                reserva: form.querySelector('#reserva').value || '',
+                pedido: form.querySelector('#pedido').value || '',
+                cia: form.querySelector('#cia').value || '',
+                loc_gds: form.querySelector('#loc_gds').value || '',
+                loc_cia: form.querySelector('#loc_cia').value || '',
+                observacoes: form.querySelector('#observacoes').value || '',
+                nome_cliente: form.querySelector('#nome_cliente').value || '',
+                whats_cliente: form.querySelector('#whats_cliente').value || ''
+            };
+            
+            debugLog('✅ v8.04: Dados coletados na ordem CORRETA', 'success', dados);
+            return dados;
+        }
+
+        // ================================================================================
+        // EDITAR ORBIUM
+        // ================================================================================
+        function editarOrbiumModal(id) {
+            const orbium = orbiunsData.find(o => o.id === id);
+            if (!orbium) {
+                mostrarAlertaErro('Orbium não encontrado!');
+                return;
+            }
+
+            document.getElementById('edit_id').value = id;
+            document.getElementById('edit_status').value = orbium.status;
+            document.getElementById('edit_observacoes').value = orbium.observacoes || '';
+
+            const modal = new bootstrap.Modal(document.getElementById('modalEditarOrbium'));
+            modal.show();
+        }
+
+        async function editarOrbium(e) {
+            e.preventDefault();
+            
+            const botaoSubmit = e.target.querySelector('button[type="submit"]');
+            const textoOriginal = botaoSubmit.innerHTML;
+            
+            botaoSubmit.disabled = true;
+            botaoSubmit.innerHTML = '<span class="loading-spinner"></span> Salvando...';
+
+            try {
+                const formData = new FormData(e.target);
+                const dados = Object.fromEntries(formData.entries());
+
+                debugLog('📝 Editando orbium', 'info', dados);
+
+                const result = await chamarAPI({
+                    action: 'atualizar_status',
+                    id: dados.id,
+                    status: dados.status,
+                    observacoes: dados.observacoes,
+                    senha: SENHA_ORBIUNS
+                });
+
+                if (result.success) {
+                    mostrarAlertaSucesso('✅ Orbium atualizado com sucesso!');
+                    bootstrap.Modal.getInstance(document.getElementById('modalEditarOrbium')).hide();
+                    
+                    setTimeout(() => {
+                        carregarOrbiuns();
+                    }, 1000);
+                } else {
+                    throw new Error(result.message || 'Erro ao editar orbium');
+                }
+
+            } catch (error) {
+                debugLog('❌ Erro ao editar orbium: ' + error.message, 'error');
+                mostrarAlertaErro(`❌ Erro: ${error.message}`);
+                
+            } finally {
+                botaoSubmit.disabled = false;
+                botaoSubmit.innerHTML = textoOriginal;
+            }
+        }
+
+        // ================================================================================
+        // FILTROS
+        // ================================================================================
+        function filtrarOrbiuns() {
+            const filtros = {
+                orbium: document.getElementById('filtroOrbium').value.toLowerCase(),
+                status: document.getElementById('filtroStatus').value.toLowerCase(),
+                vendedor: document.getElementById('filtroVendedor').value.toLowerCase(),
+                departamento: document.getElementById('filtroDepartamento').value.toLowerCase(),
+                cliente: document.getElementById('filtroCliente').value.toLowerCase(),
+                whatsapp: document.getElementById('filtroWhatsApp').value,
+                recibo: document.getElementById('filtroRecibo').value.toLowerCase()
+            };
+
+            const temFiltroAtivo = Object.values(filtros).some(v => v !== '');
+            
+            if (!temFiltroAtivo) {
+                // Sem filtros ativos: mostrar apenas Problemas e Em atendimento
+                orbiunsFiltrados = orbiunsData.filter(o => 
+                    o.status === 'Problema' || o.status === 'Em atendimento'
+                );
+            } else {
+                // Com filtros: aplicar em todos os dados
+                orbiunsFiltrados = orbiunsData.filter(orbium => {
+                    if (filtros.orbium && (!orbium.orbium || !orbium.orbium.toString().toLowerCase().includes(filtros.orbium))) {
+                        return false;
+                    }
+                    if (filtros.status && (!orbium.status || !orbium.status.toString().toLowerCase().includes(filtros.status))) {
+                        return false;
+                    }
+                    if (filtros.vendedor && (!orbium.vendedor || !orbium.vendedor.toString().toLowerCase().includes(filtros.vendedor))) {
+                        return false;
+                    }
+                    if (filtros.departamento && (!orbium.departamento || !orbium.departamento.toString().toLowerCase().includes(filtros.departamento))) {
+                        return false;
+                    }
+                    if (filtros.cliente && (!orbium.nome_cliente || !orbium.nome_cliente.toString().toLowerCase().includes(filtros.cliente))) {
+                        return false;
+                    }
+                    if (filtros.whatsapp && (!orbium.whats_cliente || !orbium.whats_cliente.toString().includes(filtros.whatsapp))) {
+                        return false;
+                    }
+                    if (filtros.recibo && (!orbium.recibo || !orbium.recibo.toString().toLowerCase().includes(filtros.recibo))) {
+                        return false;
+                    }
+                    return true;
+                });
+            }
+            
+            renderizarOrbiuns();
+            debugLog(`🔍 Filtros aplicados: ${orbiunsFiltrados.length} de ${orbiunsData.length} orbiuns exibidos`, 'info');
+        }
+
+        function limparFiltros() {
+            document.getElementById('filtroOrbium').value = '';
+            document.getElementById('filtroStatus').value = '';
+            document.getElementById('filtroVendedor').value = '';
+            document.getElementById('filtroDepartamento').value = '';
+            document.getElementById('filtroCliente').value = '';
+            document.getElementById('filtroWhatsApp').value = '';
+            document.getElementById('filtroRecibo').value = '';
+            
+            // Voltar ao filtro padrão: Problemas e Em atendimento
+            orbiunsFiltrados = orbiunsData.filter(o => 
+                o.status === 'Problema' || o.status === 'Em atendimento'
+            );
+            renderizarOrbiuns();
+        }
+
+        // ================================================================================
+        // FUNÇÕES AUXILIARES
+        // ================================================================================
+        function formatarWhatsApp(numero) {
+            if (!numero) return 'N/A';
+            const numeroLimpo = numero.toString().replace(/\D/g, '');
+            if (numeroLimpo.length === 11) {
+                return `(${numeroLimpo.slice(0,2)}) ${numeroLimpo.slice(2,7)}-${numeroLimpo.slice(7)}`;
+            }
+            return numero;
+        }
+
+        function formatarData(data) {
+            if (!data) return 'N/A';
+            try {
+                const dataObj = new Date(data);
+                if (isNaN(dataObj.getTime())) return data;
+                return dataObj.toLocaleDateString('pt-BR');
+            } catch {
+                return data;
+            }
+        }
+
+        // ================================================================================
+        // SISTEMA DE ALERTAS
+        // ================================================================================
+        function mostrarAlertaSucesso(mensagem) {
+            criarAlertaTemporario(mensagem, 'success');
+        }
+
+        function mostrarAlertaErro(mensagem) {
+            criarAlertaTemporario(mensagem, 'error');
+        }
+
+        function criarAlertaTemporario(mensagem, tipo) {
+            const alerta = document.createElement('div');
+            alerta.className = tipo === 'success' ? 'alert-custom alert-success-custom' : 'alert-custom alert-error-custom';
+            
+            alerta.innerHTML = `
+                <i class="fas fa-${tipo === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                ${mensagem}
+                <button onclick="this.parentElement.remove()" 
+                        style="background: none; border: none; color: inherit; 
+                               font-size: 18px; cursor: pointer; margin-left: 10px;">×</button>
+            `;
+            
+            document.body.appendChild(alerta);
+            
+            setTimeout(() => {
+                if (alerta.parentElement) {
+                    alerta.remove();
+                }
+            }, 5000);
+        }
+
+        // Atalho de teclado para novo orbium
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'n') {
+                e.preventDefault();
+                abrirModalNovoOrbium();
+            }
+        });
+
+        // ================================================================================
+        // LOGS FINAIS v8.04
+        // ================================================================================
+        debugLog('✅ Sistema de Orbiuns CVC v8.04 - ATUALIZADO COMPLETO!', 'success');
+        debugLog('🔧 PRINCIPAIS ATUALIZAÇÕES v8.04:', 'info');
+        debug
