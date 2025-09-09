@@ -1,6 +1,6 @@
 /* ===============================================
    CVC ITAQUÁ - PORTAL DE GESTÃO DA LOJA
-   CSS CENTRALIZADO v1.0
+   CSS CENTRALIZADO v8.05 - CORREÇÃO VISUAL COMPLETA
    Baseado no Manual da Marca CVC Junho/2021
    =============================================== */
 
@@ -17,15 +17,17 @@
     /* Degradê Secundário */
     --cvc-verde: #00D4AA;        /* Conforme degradê do logo */
     
-    /* Variações para Interface */
+    /* Variações para Interface - ATUALIZADAS */
     --cvc-azul-escuro: #1B365D;
     --cvc-azul-claro: #E8F0FE;
     --cvc-amarelo-claro: #FFF9CC;
     --cvc-cinza: #6C757D;
-    --cvc-cinza-claro: #F8F9FA;
+    --cvc-cinza-claro: #f5f6fa;  /* MUDANÇA: mais suave */
     --cvc-cinza-escuro: #495057;
+    --cvc-fundo-card: #fefefe;   /* NOVO: fundo de cards mais suave */
+    --cvc-fundo-area: #f8f9fb;   /* NOVO: fundo de área de conteúdo */
     
-    /* Gradientes Oficiais */
+    /* Gradientes Oficiais - SIMPLIFICADOS */
     --cvc-gradiente-principal: linear-gradient(135deg, var(--cvc-amarelo) 0%, var(--cvc-verde) 100%);
     --cvc-gradiente-azul: linear-gradient(135deg, var(--cvc-azul) 0%, var(--cvc-azul-escuro) 100%);
     
@@ -45,14 +47,14 @@ body {
     font-weight: 400;
     line-height: 1.6;
     color: var(--cvc-azul-escuro);
-    background-color: var(--cvc-cinza-claro);
+    background-color: var(--cvc-cinza-claro); /* MUDANÇA: mais suave para os olhos */
     margin: 0;
     padding: 0;
 }
 
-/* ===== HEADER PRINCIPAL CVC ===== */
+/* ===== HEADER PRINCIPAL CVC - CORRIGIDO ===== */
 .cvc-header {
-    background: var(--cvc-gradiente-principal);
+    background: var(--cvc-azul); /* MUDANÇA: cor sólida ao invés de gradiente */
     box-shadow: var(--cvc-sombra-suave);
     position: relative;
     overflow: hidden;
@@ -67,8 +69,8 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
-    animation: shine 4s infinite;
+    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.05) 50%, transparent 70%);
+    animation: shine 6s infinite; /* MUDANÇA: animação mais sutil e lenta */
 }
 
 @keyframes shine {
@@ -88,20 +90,18 @@ body {
 .cvc-logo-symbol {
     width: 50px;
     height: 50px;
-    background: var(--cvc-azul);
+    background: var(--cvc-amarelo); /* MUDANÇA: cor sólida amarela */
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--cvc-amarelo);
+    color: var(--cvc-azul);
     font-weight: 900;
     font-size: 18px;
     letter-spacing: -1px;
     margin-right: 15px; /* Espaçamento = altura do "C" conforme manual */
     position: relative;
     overflow: hidden;
-    /* Versão com degradê conforme manual */
-    background: var(--cvc-gradiente-azul);
     box-shadow: 0 4px 15px rgba(10, 0, 180, 0.3);
 }
 
@@ -112,13 +112,13 @@ body {
     left: 2px;
     right: 2px;
     bottom: 2px;
-    border: 2px solid var(--cvc-verde);
+    border: 2px solid var(--cvc-azul);
     border-radius: 50%;
     opacity: 0.7;
 }
 
 .cvc-logo-text {
-    color: var(--cvc-azul);
+    color: var(--cvc-branco); /* MUDANÇA: branco no header azul */
     font-weight: 800; /* Nunito ExtraBold conforme manual */
     font-size: 24px;
     line-height: 1;
@@ -126,11 +126,10 @@ body {
 }
 
 .cvc-subtitle {
-    color: var(--cvc-azul-escuro);
+    color: rgba(255, 255, 255, 0.8); /* MUDANÇA: branco transparente */
     font-size: 14px;
     font-weight: 600; /* Nunito SemiBold conforme manual */
     margin: 0;
-    opacity: 0.8;
 }
 
 /* Versões monocromáticas conforme manual */
@@ -145,9 +144,9 @@ body {
     border: 2px solid var(--cvc-azul);
 }
 
-/* ===== NAVEGAÇÃO PRINCIPAL ===== */
+/* ===== NAVEGAÇÃO PRINCIPAL - CORRIGIDA ===== */
 .cvc-nav {
-    background: var(--cvc-azul);
+    background: var(--cvc-azul); /* MUDANÇA: cor sólida */
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     position: relative;
     z-index: 999;
@@ -197,7 +196,7 @@ body {
 .user-info {
     display: flex;
     align-items: center;
-    color: var(--cvc-azul);
+    color: var(--cvc-branco); /* MUDANÇA: branco no header azul */
     position: relative;
     z-index: 2;
 }
@@ -206,7 +205,7 @@ body {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 2px solid var(--cvc-azul);
+    border: 2px solid var(--cvc-amarelo); /* MUDANÇA: borda amarela */
     margin-right: 10px;
     object-fit: cover;
 }
@@ -215,19 +214,18 @@ body {
     font-weight: 700; /* Nunito Bold */
     font-size: 16px;
     margin: 0;
-    color: var(--cvc-azul);
+    color: var(--cvc-branco); /* MUDANÇA: branco */
 }
 
 .user-role {
     font-size: 12px;
-    color: var(--cvc-azul-escuro);
+    color: rgba(255, 255, 255, 0.8); /* MUDANÇA: branco transparente */
     margin: 0;
-    opacity: 0.8;
 }
 
 .logout-btn {
-    background: var(--cvc-azul);
-    color: var(--cvc-branco);
+    background: var(--cvc-amarelo); /* MUDANÇA: botão amarelo */
+    color: var(--cvc-azul);
     border: none;
     padding: 8px 16px;
     border-radius: 25px;
@@ -238,16 +236,17 @@ body {
 }
 
 .logout-btn:hover {
-    background: var(--cvc-azul-escuro);
+    background: #ffe000; /* MUDANÇA: amarelo mais claro */
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(10, 0, 180, 0.3);
-    color: var(--cvc-branco);
+    box-shadow: 0 4px 12px rgba(255, 230, 0, 0.3);
+    color: var(--cvc-azul);
 }
 
-/* ===== ÁREA DE CONTEÚDO ===== */
+/* ===== ÁREA DE CONTEÚDO - CORRIGIDA ===== */
 .content-area {
     padding: 30px 0;
     min-height: calc(100vh - 160px);
+    background: var(--cvc-fundo-area); /* MUDANÇA: fundo mais suave */
 }
 
 /* ===== TÍTULOS E TEXTOS ===== */
@@ -281,11 +280,11 @@ body {
     margin-bottom: 30px;
 }
 
-/* ===== COMPONENTES PADRONIZADOS ===== */
+/* ===== COMPONENTES PADRONIZADOS - CORRIGIDOS ===== */
 
 /* Cards */
 .cvc-card {
-    background: var(--cvc-branco);
+    background: var(--cvc-fundo-card); /* MUDANÇA: fundo mais suave */
     border-radius: 15px;
     box-shadow: var(--cvc-sombra-suave);
     padding: 25px;
@@ -300,8 +299,8 @@ body {
 }
 
 .cvc-card-header {
-    background: var(--cvc-gradiente-principal);
-    color: var(--cvc-azul);
+    background: var(--cvc-azul); /* MUDANÇA: cor sólida */
+    color: var(--cvc-branco);
     padding: 20px 25px;
     border-radius: 15px 15px 0 0;
     margin: -25px -25px 20px -25px;
@@ -315,9 +314,9 @@ body {
     margin-bottom: 15px;
 }
 
-/* Botões */
+/* Botões - CORRIGIDOS */
 .btn-cvc-primary {
-    background: var(--cvc-gradiente-principal);
+    background: var(--cvc-amarelo); /* MUDANÇA: cor sólida amarela */
     border: none;
     color: var(--cvc-azul);
     font-weight: 700;
@@ -333,10 +332,11 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(255, 230, 0, 0.4);
     color: var(--cvc-azul);
+    background: #ffe000; /* MUDANÇA: hover mais sutil */
 }
 
 .btn-cvc-secondary {
-    background: var(--cvc-gradiente-azul);
+    background: var(--cvc-azul); /* MUDANÇA: cor sólida */
     border: none;
     color: var(--cvc-branco);
     font-weight: 600;
@@ -350,6 +350,7 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(10, 0, 180, 0.3);
     color: var(--cvc-branco);
+    background: #001a66; /* MUDANÇA: azul mais escuro */
 }
 
 .btn-cvc-outline {
@@ -377,7 +378,7 @@ body {
 }
 
 .stat-card {
-    background: var(--cvc-branco);
+    background: var(--cvc-fundo-card); /* MUDANÇA: fundo mais suave */
     border-radius: 12px;
     padding: 20px;
     text-align: center;
@@ -395,7 +396,7 @@ body {
     left: 0;
     right: 0;
     height: 4px;
-    background: var(--cvc-gradiente-principal);
+    background: var(--cvc-amarelo); /* MUDANÇA: cor sólida */
 }
 
 .stat-card:hover {
@@ -431,7 +432,7 @@ body {
 .stat-card.embarques { border-top-color: #17a2b8; }
 .stat-card.urgente { border-top-color: #dc3545; }
 
-/* ===== FORMULÁRIOS ===== */
+/* ===== FORMULÁRIOS - CORRIGIDOS ===== */
 .form-control-cvc {
     border: 2px solid #e9ecef;
     border-radius: 10px;
@@ -439,6 +440,7 @@ body {
     font-weight: 500;
     transition: all 0.3s ease;
     font-family: 'Nunito', sans-serif;
+    background: var(--cvc-branco); /* MUDANÇA: fundo branco nos inputs */
 }
 
 .form-control-cvc:focus {
@@ -461,12 +463,40 @@ body {
     font-weight: 500;
     transition: all 0.3s ease;
     font-family: 'Nunito', sans-serif;
+    background: var(--cvc-branco); /* MUDANÇA: fundo branco nos selects */
 }
 
 .form-select-cvc:focus {
     border-color: var(--cvc-amarelo);
     box-shadow: 0 0 0 0.2rem rgba(255, 230, 0, 0.25);
     outline: none;
+}
+
+/* ===== SEÇÕES ESPECÍFICAS - VENDAS.HTML ===== */
+.form-section {
+    background: var(--cvc-fundo-card); /* MUDANÇA: fundo mais suave */
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: var(--cvc-sombra-suave);
+    position: relative;
+    overflow: hidden;
+    border-left: 4px solid var(--cvc-azul);
+}
+
+.main-container {
+    background: rgba(254, 254, 254, 0.95); /* MUDANÇA: menos transparente */
+    border-radius: 20px;
+    box-shadow: var(--cvc-sombra-forte);
+    backdrop-filter: blur(10px);
+    margin: 20px auto;
+    max-width: 1400px;
+    overflow: hidden;
+}
+
+.content-section {
+    padding: 30px;
+    background: var(--cvc-fundo-area); /* MUDANÇA: fundo mais suave */
 }
 
 /* ===== ALERTAS ===== */
@@ -508,15 +538,15 @@ body {
 
 /* ===== TABELAS ===== */
 .table-cvc {
-    background: var(--cvc-branco);
+    background: var(--cvc-fundo-card); /* MUDANÇA: fundo mais suave */
     border-radius: 15px;
     overflow: hidden;
     box-shadow: var(--cvc-sombra-suave);
 }
 
 .table-cvc thead {
-    background: var(--cvc-gradiente-principal);
-    color: var(--cvc-azul);
+    background: var(--cvc-azul); /* MUDANÇA: cor sólida */
+    color: var(--cvc-branco);
 }
 
 .table-cvc th {
@@ -540,11 +570,12 @@ body {
     border-radius: 15px;
     border: none;
     box-shadow: var(--cvc-sombra-forte);
+    background: var(--cvc-fundo-card); /* MUDANÇA: fundo mais suave */
 }
 
 .modal-cvc .modal-header {
-    background: var(--cvc-gradiente-principal);
-    color: var(--cvc-azul);
+    background: var(--cvc-azul); /* MUDANÇA: cor sólida */
+    color: var(--cvc-branco);
     border-radius: 15px 15px 0 0;
     border-bottom: none;
 }
@@ -688,11 +719,11 @@ body {
 }
 
 .bg-cvc-primary {
-    background: var(--cvc-gradiente-principal) !important;
+    background: var(--cvc-azul) !important; /* MUDANÇA: cor sólida */
 }
 
 .bg-cvc-secondary {
-    background: var(--cvc-gradiente-azul) !important;
+    background: var(--cvc-amarelo) !important; /* MUDANÇA: cor sólida */
 }
 
 .bg-cvc-light {
@@ -830,6 +861,268 @@ body {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* ===== SEÇÕES ESPECÍFICAS - VENDAS.HTML ===== */
+
+/* SEÇÃO: É CLIENTE DO ALE? */
+.cliente-ale-section {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    border: 2px solid #ffc107;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    position: relative;
+    overflow: hidden;
+}
+
+.cliente-ale-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: #ffc107;
+}
+
+.cliente-ale-section h4 {
+    color: #856404;
+    font-weight: 700;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cliente-ale-toggle {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.toggle-option {
+    display: flex;
+    align-items: center;
+    background: var(--cvc-branco);
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #ffc107;
+    font-weight: 600;
+    color: #856404;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.toggle-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+}
+
+.toggle-option input[type="radio"] {
+    margin-right: 8px;
+    accent-color: #ffc107;
+}
+
+.toggle-option.selected {
+    background: #ffc107;
+    color: var(--cvc-branco);
+    font-weight: 700;
+}
+
+/* Radio e checkbox personalizados */
+.radio-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.radio-item {
+    background: var(--cvc-branco);
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.radio-item:hover {
+    border-color: var(--cvc-azul);
+    background: var(--cvc-azul-claro);
+    transform: translateY(-2px);
+}
+
+.radio-item.selected {
+    border-color: var(--cvc-azul);
+    background: var(--cvc-azul-claro);
+    font-weight: 600;
+    color: var(--cvc-azul);
+}
+
+.checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.checkbox-item {
+    background: var(--cvc-branco);
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbox-item:hover {
+    border-color: var(--cvc-azul);
+    background: var(--cvc-azul-claro);
+    transform: translateY(-2px);
+}
+
+.checkbox-item.selected {
+    border-color: var(--cvc-azul);
+    background: var(--cvc-azul-claro);
+    font-weight: 600;
+    color: var(--cvc-azul);
+}
+
+/* Recibos */
+.recibo-container {
+    background: var(--cvc-branco);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--cvc-sombra-suave);
+    border-left: 4px solid var(--cvc-verde);
+    position: relative;
+    overflow: hidden;
+}
+
+.recibo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.recibo-number {
+    background: linear-gradient(135deg, var(--cvc-verde) 0%, #007C42 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.btn-remove-recibo {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.btn-remove-recibo:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* Campos extras */
+.extra-fields {
+    margin-top: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #fff3cd 0%, #ffe5a0 100%);
+    border-radius: 12px;
+    border-left: 4px solid var(--cvc-amarelo);
+    display: none;
+}
+
+.multi-datas {
+    margin-top: 15px;
+    padding: 15px;
+    background: linear-gradient(135deg, #d1ecf1 0%, #b8daff 100%);
+    border-radius: 10px;
+    border-left: 3px solid #17a2b8;
+    display: none;
+}
+
+.datas-extras {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.bagagem-assento {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+/* Botões customizados */
+.btn-submit {
+    background: var(--cvc-amarelo); /* MUDANÇA: cor sólida amarela */
+    color: var(--cvc-azul);
+    border: none;
+    padding: 15px 30px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 20px;
+    box-shadow: var(--cvc-sombra-suave);
+}
+
+.btn-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--cvc-sombra-media);
+    background: #ffe000; /* MUDANÇA: hover mais sutil */
+}
+
+.btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Status de conexão */
+.status-conexao {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--cvc-azul);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: var(--cvc-sombra-suave);
+    z-index: 1000;
+    display: none;
+}
+
+.status-conexao.online {
+    background: var(--cvc-verde);
+}
+
+.status-conexao.offline {
+    background: #dc3545;
 }
 
 /* ===== FIM DO ARQUIVO ===== */
