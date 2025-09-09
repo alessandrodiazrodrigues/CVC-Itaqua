@@ -1,15 +1,14 @@
 // ================================================================================
-// CVC ITAQUÁ - PORTAL DE GESTÃO DA LOJA - CONFIGURAÇÃO CENTRAL v8.03
+// CVC ITAQUÁ - PORTAL DE GESTÃO DA LOJA - CONFIGURAÇÃO CENTRAL v8.05
 // ================================================================================
-// ⚡ ÚNICO ARQUIVO PARA ALTERAR QUANDO REIMPLANTAR GOOGLE APPS SCRIPT
-// 🎯 Todos os HTMLs usam esta configuração automaticamente
+// ⚡ CORREÇÃO: Adicionados TIPOS_SERVICO e outras listas em falta
 
 const CVC_CONFIG = {
     // ✅ URL PRINCIPAL - ALTERAR APENAS AQUI quando reimplantar
     API_URL: 'https://script.google.com/macros/s/AKfycbwSpsWw4eskLgAGPCWQ7X0q1emDfSyzWbS6nAT-7nHZHB63Hd4Q1IKWWeTsEQUnwVi3zQ/exec',
     
-    // 📊 INFORMAÇÕES DO SISTEMA - NOMENCLATURA ATUALIZADA
-    VERSION: '8.03',
+    // 📊 INFORMAÇÕES DO SISTEMA
+    VERSION: '8.05',
     SYSTEM_NAME: 'CVC Itaquá - Portal de Gestão da Loja',
     SYSTEM_FULL_NAME: 'CVC Itaquá - Portal de Gestão da Loja - Sistema de Gestão Integrado',
     SYSTEM_SHORT_NAME: 'Portal Itaquá',
@@ -20,7 +19,7 @@ const CVC_CONFIG = {
     FILIAL_PADRAO: '6220',
     NOME_FILIAL: 'Itaquaquecetuba',
     FILIAL_NOME_COMPLETO: 'CVC Itaquaquecetuba',
-    FILIAL_UNICA: true, // Indica que só há uma filial ativa
+    FILIAL_UNICA: true,
     
     // 👥 VENDEDORES ATIVOS
     VENDEDORES: [
@@ -31,6 +30,23 @@ const CVC_CONFIG = {
         'Bia',
         'Conceição',
         'Jhully'
+    ],
+    
+    // 🎫 TIPOS DE SERVIÇO - CORREÇÃO DO ERRO "Cannot read properties of undefined"
+    TIPOS_SERVICO: [
+        'Aéreo',
+        'Aéreo Facial',
+        'A+H',
+        'A+H+S',
+        'Terrestre',
+        'Marítimo',
+        'Seguro',
+        'Câmbio',
+        'Chip',
+        'Transfer',
+        'Passeio',
+        'Ingresso',
+        'Outros'
     ],
     
     // ✈️ COMPANHIAS AÉREAS
@@ -45,6 +61,38 @@ const CVC_CONFIG = {
         'British Airways', 'Copa Airlines', 'Delta', 'Emirates', 
         'Iberia', 'KLM', 'Lufthansa', 'Swiss', 'TAP', 'Turkish Airlines', 
         'United Airlines', 'OUTRAS'
+    ],
+    
+    // 🏢 DEPARTAMENTOS - Para orbiuns.html
+    DEPARTAMENTOS: [
+        'Vendas',
+        'Pós-Vendas',
+        'Financeiro',
+        'Operacional',
+        'Marketing',
+        'Recursos Humanos',
+        'Tecnologia',
+        'Gerência'
+    ],
+    
+    // 📋 STATUS ORBIUM - Para controle de status
+    STATUS_ORBIUM: [
+        'Pendente',
+        'Em Andamento',
+        'Aguardando Aprovação',
+        'Aprovado',
+        'Rejeitado',
+        'Concluído',
+        'Cancelado'
+    ],
+    
+    // 🔄 PRIORIDADES
+    PRIORIDADES: [
+        'Baixa',
+        'Média',
+        'Alta',
+        'Urgente',
+        'Crítica'
     ],
     
     // 📄 PÁGINAS DO SISTEMA
@@ -90,15 +138,15 @@ const CVC_CONFIG = {
     // 🎨 CONFIGURAÇÕES VISUAIS (CONFORME MANUAL DA MARCA CVC)
     VISUAL: {
         COLORS: {
-            PRIMARY_YELLOW: '#FFE600',    // PANTONE 102 C
-            PRIMARY_BLUE: '#0A00B4',      // PANTONE 2736 C  
-            PRIMARY_WHITE: '#FFFFFF',     // Branco oficial
-            SECONDARY_GREEN: '#00D4AA',   // Degradê
+            PRIMARY_YELLOW: '#FFE600',
+            PRIMARY_BLUE: '#0A00B4',
+            PRIMARY_WHITE: '#FFFFFF',
+            SECONDARY_GREEN: '#00D4AA',
             DARK_BLUE: '#1B365D',
             LIGHT_BLUE: '#E8F0FE',
             LIGHT_YELLOW: '#FFF9CC',
             GRAY: '#6C757D',
-            LIGHT_GRAY: '#F8F9FA'
+            LIGHT_GRAY: '#f5f6fa'
         },
         FONTS: {
             PRIMARY: 'Nunito, sans-serif',
@@ -115,15 +163,15 @@ const CVC_CONFIG = {
     
     // 🔧 CONFIGURAÇÕES TÉCNICAS
     DEBUG_MODE: false,
-    CACHE_TIMEOUT: 300000, // 5 minutos
-    REQUEST_TIMEOUT: 30000, // 30 segundos
+    CACHE_TIMEOUT: 300000,
+    REQUEST_TIMEOUT: 30000,
     
     // 📱 CONFIGURAÇÕES DE INTERFACE
     UI: {
         ANIMATION_DURATION: 300,
         TOAST_DURATION: 4000,
         LOADING_DELAY: 1000,
-        AUTO_REFRESH: 300000 // 5 minutos
+        AUTO_REFRESH: 300000
     }
 };
 
@@ -132,7 +180,7 @@ const CVC_CONFIG = {
 // ================================================================================
 
 /**
- * 🌐 Obter URL da API (compatibilidade com versões antigas)
+ * 🌐 Obter URL da API (compatibilidade)
  */
 function getApiUrl() {
     return CVC_CONFIG.API_URL;
@@ -151,7 +199,7 @@ function getConfig() {
 }
 
 /**
- * 🔍 Detectar ambiente de execução
+ * 🔍 Detectar ambiente
  */
 function detectEnvironment() {
     const hostname = window.location.hostname;
@@ -168,14 +216,14 @@ function detectEnvironment() {
 }
 
 /**
- * 📱 Detectar dispositivo móvel
+ * 📱 Detectar móvel
  */
 function isMobile() {
     return window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
 /**
- * 🌐 Obter informações do navegador
+ * 🌐 Info do navegador
  */
 function getBrowserInfo() {
     const ua = navigator.userAgent;
@@ -195,13 +243,12 @@ function getBrowserInfo() {
 }
 
 /**
- * 🎨 Aplicar tema CVC dinâmico
+ * 🎨 Aplicar tema
  */
 function applyTheme() {
     const root = document.documentElement;
     const colors = CVC_CONFIG.VISUAL.COLORS;
     
-    // Aplicar variáveis CSS
     root.style.setProperty('--cvc-amarelo', colors.PRIMARY_YELLOW);
     root.style.setProperty('--cvc-azul', colors.PRIMARY_BLUE);
     root.style.setProperty('--cvc-branco', colors.PRIMARY_WHITE);
@@ -211,12 +258,11 @@ function applyTheme() {
 }
 
 /**
- * 📄 Obter informações da página atual
+ * 📄 Info da página atual
  */
 function getCurrentPageInfo() {
     const currentFile = window.location.pathname.split('/').pop() || 'index.html';
     
-    // Encontrar página correspondente
     for (const [key, page] of Object.entries(CVC_CONFIG.PAGES)) {
         if (page.file === currentFile) {
             return {
@@ -227,7 +273,6 @@ function getCurrentPageInfo() {
         }
     }
     
-    // Retorno padrão para Dashboard
     return {
         key: 'DASHBOARD',
         ...CVC_CONFIG.PAGES.DASHBOARD,
@@ -236,7 +281,7 @@ function getCurrentPageInfo() {
 }
 
 /**
- * 🔧 Sistema de debug melhorado
+ * 🔧 Sistema de debug
  */
 function debugLog(message, level = 'log', data = null) {
     if (!CVC_CONFIG.DEBUG_MODE && level !== 'error') return;
@@ -277,7 +322,7 @@ function debugLog(message, level = 'log', data = null) {
 }
 
 /**
- * ✅ Verificar se a configuração está válida
+ * ✅ Validar configuração - CORRIGIDA
  */
 function validateConfig() {
     const errors = [];
@@ -288,6 +333,16 @@ function validateConfig() {
     
     if (!CVC_CONFIG.VENDEDORES || CVC_CONFIG.VENDEDORES.length === 0) {
         errors.push('Lista de vendedores vazia');
+    }
+    
+    // CORREÇÃO: Verificar se TIPOS_SERVICO existe
+    if (!CVC_CONFIG.TIPOS_SERVICO || CVC_CONFIG.TIPOS_SERVICO.length === 0) {
+        errors.push('Lista TIPOS_SERVICO não encontrada - isso causará erro no vendas.html');
+    }
+    
+    // CORREÇÃO: Verificar se DEPARTAMENTOS existe
+    if (!CVC_CONFIG.DEPARTAMENTOS || CVC_CONFIG.DEPARTAMENTOS.length === 0) {
+        errors.push('Lista DEPARTAMENTOS não encontrada - isso causará erro no orbiuns.html');
     }
     
     if (!CVC_CONFIG.SYSTEM_NAME) {
@@ -304,7 +359,7 @@ function validateConfig() {
 }
 
 /**
- * 🔄 Atualizar título da página dinamicamente
+ * 🔄 Atualizar título
  */
 function updatePageTitle(customTitle = null) {
     const pageInfo = getCurrentPageInfo();
@@ -325,12 +380,10 @@ function updatePageTitle(customTitle = null) {
 function setActiveNavigation() {
     const currentFile = window.location.pathname.split('/').pop() || 'index.html';
     
-    // Remover active de todos os links
     document.querySelectorAll('.nav-link').forEach(link => {
         link.classList.remove('active');
     });
     
-    // Adicionar active no link correto
     document.querySelectorAll('.nav-link').forEach(link => {
         const href = link.getAttribute('href');
         if (href === currentFile || (currentFile === 'index.html' && href === '#')) {
@@ -345,7 +398,6 @@ function setActiveNavigation() {
 // 🚀 INICIALIZAÇÃO AUTOMÁTICA
 // ================================================================================
 
-// Validar configuração quando o arquivo carrega
 document.addEventListener('DOMContentLoaded', function() {
     const validation = validateConfig();
     const config = getConfig();
@@ -357,15 +409,18 @@ document.addEventListener('DOMContentLoaded', function() {
     debugLog(`🔗 API URL: ${CVC_CONFIG.API_URL}`, 'info');
     debugLog(`🏪 Filial: ${CVC_CONFIG.FILIAL_PADRAO} - ${CVC_CONFIG.NOME_FILIAL}`, 'info');
     
+    // CORREÇÃO: Verificar listas essenciais
+    debugLog(`🎫 TIPOS_SERVICO: ${CVC_CONFIG.TIPOS_SERVICO?.length || 0} itens`, 'info');
+    debugLog(`🏢 DEPARTAMENTOS: ${CVC_CONFIG.DEPARTAMENTOS?.length || 0} itens`, 'info');
+    debugLog(`👥 VENDEDORES: ${CVC_CONFIG.VENDEDORES?.length || 0} itens`, 'info');
+    
     if (!validation.valid) {
         console.error('❌ Configuração inválida:', validation.errors);
         alert('Erro na configuração do sistema. Verifique o console.');
     } else {
-        // Aplicar configurações se tudo estiver OK
         applyTheme();
         updatePageTitle();
         
-        // Aguardar DOM estar pronto para navegação
         setTimeout(() => {
             setActiveNavigation();
         }, 100);
@@ -373,31 +428,28 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ================================================================================
-// 🎨 CONFIGURAÇÕES DE TEMA PARA COMPATIBILIDADE
+// 🎨 COMPATIBILIDADE
 // ================================================================================
 
-// Variáveis globais para compatibilidade com código existente
 window.CVC_CONFIG = CVC_CONFIG;
 window.getApiUrl = getApiUrl;
 window.getConfig = getConfig;
 window.debugLog = debugLog;
+
+// Aliases para compatibilidade
+window.obterApiUrl = getApiUrl;
+window.validarConfig = validateConfig;
+window.atualizarTituloPagina = updatePageTitle;
 
 // ================================================================================
 // 📝 LOGS INFORMATIVOS
 // ================================================================================
 
 console.log('%c🏢 CVC ITAQUÁ - PORTAL DE GESTÃO DA LOJA', 'color: #0A00B4; font-size: 16px; font-weight: bold;');
-console.log('%c📊 Config v8.03 carregado com sucesso!', 'color: #FFE600; background: #0A00B4; padding: 4px 8px; font-weight: bold;');
+console.log('%c📊 Config v8.05 carregado com TIPOS_SERVICO!', 'color: #FFE600; background: #0A00B4; padding: 4px 8px; font-weight: bold;');
 console.log('🔧 Para alterar a URL da API, edite apenas este arquivo (config.js)');
 console.log('🎯 URL atual:', CVC_CONFIG.API_URL);
 console.log('🏪 Filial:', CVC_CONFIG.FILIAL_PADRAO, '-', CVC_CONFIG.NOME_FILIAL);
 console.log('📋 Sistema:', CVC_CONFIG.SYSTEM_NAME);
-
-// ================================================================================
-// 🔄 FUNÇÕES DE COMPATIBILIDADE (MANTER PARA NÃO QUEBRAR CÓDIGO EXISTENTE)
-// ================================================================================
-
-// Alias para funções antigas (se existirem no código atual)
-window.obterApiUrl = getApiUrl;
-window.validarConfig = validateConfig;
-window.atualizarTituloPagina = updatePageTitle;
+console.log('🎫 TIPOS_SERVICO adicionados:', CVC_CONFIG.TIPOS_SERVICO?.length || 0, 'itens');
+console.log('🏢 DEPARTAMENTOS adicionados:', CVC_CONFIG.DEPARTAMENTOS?.length || 0, 'itens');
