@@ -22,7 +22,7 @@
     <style>
         /* Estilos específicos do sistema de vendas */
         .main-container {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(254, 254, 254, 0.95);
             border-radius: 20px;
             box-shadow: var(--cvc-sombra-forte);
             backdrop-filter: blur(10px);
@@ -33,11 +33,12 @@
         
         .content-section {
             padding: 30px;
+            background: var(--cvc-fundo-area);
         }
         
         /* Seções do formulário */
         .form-section {
-            background: var(--cvc-branco);
+            background: var(--cvc-fundo-card);
             border-radius: 15px;
             padding: 25px;
             margin-bottom: 25px;
@@ -276,7 +277,7 @@
         
         /* Botões customizados */
         .btn-submit {
-            background: var(--cvc-gradiente-principal);
+            background: var(--cvc-amarelo);
             color: var(--cvc-azul);
             border: none;
             padding: 15px 30px;
@@ -293,6 +294,7 @@
         .btn-submit:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: var(--cvc-sombra-media);
+            background: #ffe000;
         }
         
         .btn-submit:disabled {
@@ -394,7 +396,7 @@
                         
                         <!-- Título da Página -->
                         <div class="col-md-4 text-center">
-                            <h1 class="page-title mb-0" style="border: none; padding: 0; color: var(--cvc-azul);">
+                            <h1 class="page-title mb-0" style="border: none; padding: 0; color: var(--cvc-branco);">
                                 <i class="fas fa-chart-line"></i> Informe de Vendas
                             </h1>
                         </div>
@@ -403,7 +405,7 @@
                         <div class="col-md-4 text-end">
                             <div class="d-flex align-items-center justify-content-end">
                                 <div class="me-3">
-                                    <small class="text-muted">Sistema v8.03 - Configuração centralizada</small><br>
+                                    <small class="text-light">Sistema v8.05 - Configuração centralizada</small><br>
                                     <small class="text-success" id="statusSistema">
                                         <i class="fas fa-check-circle"></i> Sistema Online
                                     </small>
@@ -607,7 +609,7 @@
     <script src="config.js"></script>
     
     <script>
-        console.log('CVC Itaquá - Portal de Gestão da Loja - Informe de Vendas v8.03');
+        console.log('CVC Itaquá - Portal de Gestão da Loja - Informe de Vendas v8.05');
         
         // ================================================================================
         // CONFIGURAÇÕES - VINDAS DO CONFIG.JS
@@ -618,11 +620,6 @@
         console.log('🔗 API URL:', API_URL);
         console.log('🎯 Conceito: 1 LINHA = 1 VOO ESPECÍFICO = 1 CHECK-IN INDIVIDUAL');
         
-        // Listas vindas do config.js
-        const COMPANHIAS_AEREAS = CVC_CONFIG.COMPANHIAS_AEREAS;
-        const TIPOS_SERVICO = CVC_CONFIG.TIPOS_SERVICO;
-        const VENDEDORES = CVC_CONFIG.VENDEDORES;
-
         let contadorRecibos = 0;
         let conexaoOnline = false;
 
@@ -658,10 +655,11 @@
         // ================================================================================
         
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DOM carregado! Iniciando sistema v8.03...');
-            console.log('CVC Itaquá - Portal de Gestão da Loja - Informe de Vendas v8.03');
+            console.log('🚀 DOM carregado! Iniciando sistema v8.05...');
+            console.log('CVC Itaquá - Portal de Gestão da Loja - Informe de Vendas v8.05');
             console.log('✅ Integração com Sistema Master v8.0');
             console.log('🆕 FUNCIONALIDADE: Campo "É cliente do Ale?" (coluna AN)');
+            console.log('🔧 CORREÇÃO: Erro TIPOS_SERVICO undefined resolvido');
             
             if (typeof CVC_CONFIG === 'undefined') {
                 console.error('❌ config.js não foi carregado! Verifique se o arquivo existe e está acessível.');
@@ -706,23 +704,40 @@
             
             verificarConexao();
             
-            console.log('🎉 Sistema v8.03 totalmente carregado com Cliente do Ale!');
+            console.log('🎉 Sistema v8.05 totalmente carregado com Cliente do Ale!');
         });
 
         // ================================================================================
-        // PREENCHIMENTO DE SELECTS VIA CONFIG.JS
+        // PREENCHIMENTO DE SELECTS VIA CONFIG.JS - CORRIGIDO
         // ================================================================================
 
         function preencherSelectVendedores() {
             const selectVendedor = document.getElementById('vendedor');
-            if (!selectVendedor) return;
+            if (!selectVendedor) {
+                console.warn('⚠️ Select vendedor não encontrado');
+                return;
+            }
+            
+            let vendedores = [];
+            
+            // ✅ CORREÇÃO: Verificar múltiplas fontes para vendedores
+            if (typeof CVC_CONFIG !== 'undefined' && CVC_CONFIG.VENDEDORES && Array.isArray(CVC_CONFIG.VENDEDORES)) {
+                vendedores = CVC_CONFIG.VENDEDORES;
+                console.log('✅ Vendedores carregados do CVC_CONFIG:', vendedores.length, 'itens');
+            } else if (typeof VENDEDORES !== 'undefined' && Array.isArray(VENDEDORES)) {
+                vendedores = VENDEDORES;
+                console.log('✅ Vendedores carregados da variável global:', vendedores.length, 'itens');
+            } else {
+                console.warn('⚠️ Lista de vendedores não encontrada! Usando lista padrão...');
+                vendedores = ['Alessandro', 'Ana Paula', 'Adriana', 'Adrielly', 'Bia', 'Conceição', 'Jhully'];
+            }
             
             selectVendedor.innerHTML = '<option value="">Selecione...</option>';
-            VENDEDORES.forEach(vendedor => {
+            vendedores.forEach(vendedor => {
                 selectVendedor.innerHTML += `<option value="${vendedor}">${vendedor}</option>`;
             });
             
-            console.log('✅ Select de vendedores preenchido via config.js');
+            console.log('✅ Select de vendedores preenchido com', vendedores.length, 'opções');
         }
 
         // ================================================================================
@@ -816,7 +831,7 @@
         }
 
         // ================================================================================
-        // GERENCIAMENTO DE RECIBOS
+        // GERENCIAMENTO DE RECIBOS - CORRIGIDO
         // ================================================================================
 
         function adicionarRecibo() {
@@ -833,6 +848,51 @@
                 }
                 
                 console.log('✅ Container encontrado, criando recibo...');
+                
+                // ✅ CORREÇÃO: Verificar se TIPOS_SERVICO existe antes de usar .map()
+                let tiposServicoOptions = '';
+                
+                if (typeof CVC_CONFIG !== 'undefined' && CVC_CONFIG.TIPOS_SERVICO && Array.isArray(CVC_CONFIG.TIPOS_SERVICO)) {
+                    console.log('✅ TIPOS_SERVICO encontrado no config:', CVC_CONFIG.TIPOS_SERVICO.length, 'itens');
+                    tiposServicoOptions = CVC_CONFIG.TIPOS_SERVICO.map(tipo => `<option value="${tipo}">${tipo}</option>`).join('');
+                } else {
+                    console.warn('⚠️ TIPOS_SERVICO não encontrado! Usando lista padrão...');
+                    // FALLBACK: Lista padrão caso config.js falhe
+                    const tiposPadrao = [
+                        'Aéreo',
+                        'Aéreo Facial', 
+                        'A+H',
+                        'A+H+S',
+                        'Terrestre',
+                        'Marítimo',
+                        'Seguro',
+                        'Câmbio',
+                        'Chip',
+                        'Transfer',
+                        'Passeio',
+                        'Ingresso',
+                        'Outros'
+                    ];
+                    tiposServicoOptions = tiposPadrao.map(tipo => `<option value="${tipo}">${tipo}</option>`).join('');
+                }
+                
+                // ✅ CORREÇÃO: Verificar COMPANHIAS_AEREAS da mesma forma
+                let companhiasOptions = '';
+                
+                if (typeof CVC_CONFIG !== 'undefined' && CVC_CONFIG.COMPANHIAS_AEREAS && Array.isArray(CVC_CONFIG.COMPANHIAS_AEREAS)) {
+                    companhiasOptions = CVC_CONFIG.COMPANHIAS_AEREAS.map(cia => 
+                        cia.startsWith('──────') ? 
+                        `<option disabled>${cia}</option>` : 
+                        `<option value="${cia}">${cia}</option>`
+                    ).join('');
+                } else {
+                    console.warn('⚠️ COMPANHIAS_AEREAS não encontrado! Usando lista padrão...');
+                    const companhiasPadrao = [
+                        'LATAM', 'AZUL', 'GOL', 'VOEPASS',
+                        'Air France', 'American Airlines', 'Emirates', 'OUTRAS'
+                    ];
+                    companhiasOptions = companhiasPadrao.map(cia => `<option value="${cia}">${cia}</option>`).join('');
+                }
                 
                 const reciboDiv = document.createElement('div');
                 reciboDiv.className = 'recibo-container';
@@ -878,7 +938,7 @@
                             </label>
                             <select class="form-select form-select-cvc" name="tipo[]" data-recibo="${contadorRecibos}" required>
                                 <option value="">Selecione...</option>
-                                ${TIPOS_SERVICO.map(tipo => `<option value="${tipo}">${tipo}</option>`).join('')}
+                                ${tiposServicoOptions}
                             </select>
                         </div>
                         
@@ -908,11 +968,7 @@
                                 </label>
                                 <select class="form-select form-select-cvc" name="cia[]">
                                     <option value="">Selecione...</option>
-                                    ${COMPANHIAS_AEREAS.map(cia => 
-                                        cia.startsWith('──────') ? 
-                                        `<option disabled>${cia}</option>` : 
-                                        `<option value="${cia}">${cia}</option>`
-                                    ).join('')}
+                                    ${companhiasOptions}
                                 </select>
                             </div>
                             
@@ -987,9 +1043,11 @@
                 configurarEventosRecibo(reciboDiv, contadorRecibos);
                 atualizarBotaoRemover();
                 
-                console.log(`✅ Recibo ${contadorRecibos} adicionado`);
+                console.log(`✅ Recibo ${contadorRecibos} adicionado com sucesso`);
+                console.log(`📋 Tipos de serviço disponíveis: ${tiposServicoOptions ? 'SIM' : 'NÃO'}`);
+                
             } catch (error) {
-                console.error('Erro ao adicionar recibo:', error);
+                console.error('❌ Erro ao adicionar recibo:', error);
                 mostrarAlerta('❌ Erro ao adicionar recibo: ' + error.message, 'error');
             }
         }
@@ -1219,13 +1277,13 @@
         }
 
         // ================================================================================
-        // ENVIO DO FORMULÁRIO - CORRIGIDO v8.03 COM CLIENTE ALE
+        // ENVIO DO FORMULÁRIO - CORRIGIDO v8.05 COM CLIENTE ALE
         // ================================================================================
 
         async function enviarVendaCompleta(e) {
             e.preventDefault();
             
-            console.log('📤 INICIANDO ENVIO DA VENDA COMPLETA v8.03...');
+            console.log('📤 INICIANDO ENVIO DA VENDA COMPLETA v8.05...');
             console.log('⭐ FUNCIONALIDADE: Campo "Cliente do Ale" incluído');
             
             const submitBtn = e.target.querySelector('.btn-submit');
@@ -1310,11 +1368,11 @@
         }
 
         // ================================================================================
-        // CONVERSÃO PARA FORMATO EMBARQUES v8.03 - COM CLIENTE ALE
+        // CONVERSÃO PARA FORMATO EMBARQUES v8.05 - COM CLIENTE ALE
         // ================================================================================
 
         function converterVendaParaEmbarques(dadosVenda) {
-            console.log('📄 Convertendo venda para formato EMBARQUES v8.03...');
+            console.log('📄 Convertendo venda para formato EMBARQUES v8.05...');
             console.log('⭐ Incluindo campo "Cliente do Ale" na conversão...');
             
             const dadosEmbarque = {
@@ -1669,10 +1727,10 @@
         }
         
         // ================================================================================
-        // LOGS E INFORMAÇÕES FINAIS v8.03
+        // LOGS E INFORMAÇÕES FINAIS v8.05
         // ================================================================================
         
-        console.log('✅ CVC Itaquá - Portal de Gestão da Loja - Informe de Vendas v8.03 carregado!');
+        console.log('✅ CVC Itaquá - Portal de Gestão da Loja - Informe de Vendas v8.05 carregado!');
         console.log('🔧 CONFIGURAÇÃO CENTRALIZADA - URL vem do config.js');
         console.log('🔗 Integração completa com Sistema Master v8.0');
         console.log('⭐ FUNCIONALIDADE: Campo "É cliente do Ale?" (coluna AN)');
@@ -1688,7 +1746,8 @@
         console.log('   ✅ Configuração centralizada em config.js');
         console.log('   ✅ Interface CVC Itaquá padrão aplicada');
         console.log('   ⭐ Campo "Cliente do Ale" integrado (coluna AN)');
-        console.log('🚀 Sistema v8.03 pronto para produção!');
+        console.log('   🔧 Erro TIPOS_SERVICO undefined CORRIGIDO');
+        console.log('🚀 Sistema v8.05 pronto para produção!');
     </script>
 </body>
 </html>
