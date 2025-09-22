@@ -1768,68 +1768,97 @@
         // 🛠️ FUNÇÕES DO MODAL v8.05
         // ================================================================================
         
-        async function marcarComoConferido() {
-            if (embarquesRelacionados.length === 0) return;
+ async function marcarComoConferido() {
+    if (embarquesRelacionados.length === 0) return;
+    
+    const clientePrincipal = embarquesRelacionados[0];
+    const novoStatus = !clientePrincipal.conferido;
+    
+    const confirmMessage = novoStatus ? 
+        `Marcar conferência de ${clientePrincipal.nomeCliente} como concluída?` :
+        `Desfazer conferência de ${clientePrincipal.nomeCliente}?`;
+    
+    if (!confirm(confirmMessage)) return;
+    
+    const btnMarcarConferido = document.getElementById('btnMarcarConferido');
+    const originalText = btnMarcarConferido.innerHTML;
+    
+    try {
+        btnMarcarConferido.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+        btnMarcarConferido.disabled = true;
+        
+        // IMPORTANTE: Atualizar a planilha PRIMEIRO
+        if (novoStatus) {
+            // Marcar como conferido na planilha
+            const resultado = await chamarAPI('marcar_conferencia', {
+                cpf: clientePrincipal.cpfCliente,
+                recibo: clientePrincipal.recibo,
+                numeroInforme: clientePrincipal.numeroInforme
+            });
             
-            const clientePrincipal = embarquesRelacionados[0];
-            const novoStatus = !clientePrincipal.conferido;
+            if (!resultado.success) {
+                throw new Error(resultado.message || 'Erro ao atualizar planilha');
+            }
             
-            const confirmMessage = novoStatus ? 
-                `Marcar conferência de ${clientePrincipal.nomeCliente} como concluída?` :
-                `Desfazer conferência de ${clientePrincipal.nomeCliente}?`;
-            
-            if (!confirm(confirmMessage)) return;
-            
-            const btnMarcarConferido = document.getElementById('btnMarcarConferido');
-            const originalText = btnMarcarConferido.innerHTML;
-            
-            try {
-                btnMarcarConferido.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-                btnMarcarConferido.disabled = true;
+            console.log('✅ Conferência marcada na planilha:', resultado);
+        }
+        
+        // Depois atualizar localmente
+        embarquesRelacionados.forEach(embarque => {
+            if (embarque && typeof embarque === 'object') {
+                embarque.conferido = novoStatus;
+                embarque.dataConferencia = novoStatus ? new Date().toLocaleString('pt-BR') : '';
+                embarque.responsavelConferencia = novoStatus ? 'Dashboard v8.05' : '';
                 
-                // Atualizar localmente todos os embarques relacionados
-                embarquesRelacionados.forEach(embarque => {
-                    if (embarque && typeof embarque === 'object') {
-                        embarque.conferido = novoStatus;
-                        if (novoStatus) {
-                            localStorage.setItem(`conferencia_${embarque.id}`, 'true');
-                        } else {
-                            localStorage.removeItem(`conferencia_${embarque.id}`);
-                        }
-                    }
-                });
-                
-                // Tentar sincronizar com a API (sem bloquear se falhar)
-                try {
-                    if (novoStatus) {
-                        await chamarAPI('marcar_conferencia', {
-                            cpf: clientePrincipal.cpfCliente,
-                            recibo: clientePrincipal.recibo,
-                            numeroInforme: clientePrincipal.numeroInforme
-                        });
-                    }
-                } catch (apiError) {
-                    console.warn('Erro na sincronização com API:', apiError);
+                // Atualizar nos dados principais
+                const embarqueOriginal = embarquesData.find(e => e.id === embarque.id);
+                if (embarqueOriginal) {
+                    embarqueOriginal.conferido = novoStatus;
+                    embarqueOriginal.dataConferencia = embarque.dataConferencia;
+                    embarqueOriginal.responsavelConferencia = embarque.responsavelConferencia;
                 }
                 
-                // Atualizar interface
-                atualizarEstatisticas(embarquesData);
-                renderizarEmbarques();
-                
-                const modal = bootstrap.Modal.getInstance(document.getElementById('modalDetalhes'));
-                modal.hide();
-                
-                const statusText = novoStatus ? 'concluída' : 'desfeita';
-                mostrarNotificacao(`Conferência ${statusText} com sucesso!`, 'success');
-                
-            } catch (error) {
-                console.error('Erro ao alterar status:', error);
-                mostrarNotificacao('Erro ao processar conferência: ' + error.message, 'error');
-            } finally {
-                btnMarcarConferido.innerHTML = originalText;
-                btnMarcarConferido.disabled = false;
+                // Salvar no localStorage como backup
+                if (novoStatus) {
+                    localStorage.setItem(`conferencia_${embarque.id}`, 'true');
+                } else {
+                    localStorage.removeItem(`conferencia_${embarque.id}`);
+                }
             }
-        }
+        });
+        
+        // Atualizar interface
+        atualizarEstatisticas(embarquesData);
+        renderizarEmbarques();
+        
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalDetalhes'));
+        modal.hide();
+        
+        const statusText = novoStatus ? 'concluída' : 'desfeita';
+        mostrarNotificacao(`✅ Conferência ${statusText} e salva na planilha com sucesso!`, 'success');
+        
+        // Recarregar dados após 2 segundos para garantir sincronização
+        setTimeout(() => {
+            console.log('🔄 Recarregando dados para sincronização...');
+            carregarEmbarques();
+        }, 2000);
+        
+    } catch (error) {
+        console.error('❌ Erro ao marcar conferência:', error);
+        mostrarNotificacao('❌ Erro ao salvar conferência: ' + error.message, 'error');
+        
+        // Reverter alterações locais em caso de erro
+        embarquesRelacionados.forEach(embarque => {
+            if (embarque) {
+                embarque.conferido = !novoStatus;
+                localStorage.removeItem(`conferencia_${embarque.id}`);
+            }
+        });
+    } finally {
+        btnMarcarConferido.innerHTML = originalText;
+        btnMarcarConferido.disabled = false;
+    }
+}
         
         async function salvarAlteracoes() {
             if (embarquesRelacionados.length === 0) return;
