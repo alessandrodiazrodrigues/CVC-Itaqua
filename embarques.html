@@ -1016,93 +1016,68 @@
         // 📄 PROCESSAMENTO DE DADOS v8.05 COM VERIFICAÇÃO ROBUSTA
         // ================================================================================
         
-        function processarDadosEmbarques(dados) {
-            console.log(`📄 Processando ${dados.length} registros v8.05...`);
+function processarDadosEmbarques(dados) {
+    console.log(`📄 Processando ${dados.length} registros v8.05...`);
+    
+    const embarquesProcessados = [];
+    let rejeitados = 0;
+    
+    informesAgrupados.clear();
+    
+    dados.forEach((embarque, index) => {
+        try {
+            // CORREÇÃO v8.05: Verificar se o embarque não é null/undefined
+            if (!embarque || typeof embarque !== 'object') {
+                console.warn(`⚠️ Registro ${index + 1} é null/undefined, ignorando`);
+                rejeitados++;
+                return;
+            }
             
-            const embarquesProcessados = [];
-            let rejeitados = 0;
-            
-            informesAgrupados.clear();
-            
-            dados.forEach((embarque, index) => {
-                try {
-                    // CORREÇÃO v8.05: Verificar se o embarque não é null/undefined
-                    if (!embarque || typeof embarque !== 'object') {
-                        console.warn(`⚠️ Registro ${index + 1} é null/undefined, ignorando`);
-                        rejeitados++;
-                        return;
+            if (validarEmbarque(embarque)) {
+                embarque.id = embarque.id || `embarque_${index}`;
+                embarque.diasParaVoo = calcularDiasParaVoo(embarque.dataIda);
+                embarque.diasNumericos = calcularDiasNumericos(embarque.dataIda);
+                embarque.conferido = localStorage.getItem(`conferencia_${embarque.id}`) === 'true';
+                
+                // CORREÇÃO v8.06: Usar função correta
+                const classificacao = classificarEmbarqueCorrigido(embarque);
+                
+                // CORREÇÃO v8.05: Verificar se classificação não é null
+                if (classificacao && classificacao.categoria) {
+                    embarque.categoria = classificacao.categoria;
+                    embarque.urgencia = classificacao.urgencia;
+                    
+                    if (embarque.numeroInforme && embarque.categoria === 'conferencia') {
+                        if (!informesAgrupados.has(embarque.numeroInforme)) {
+                            informesAgrupados.set(embarque.numeroInforme, []);
+                        }
+                        informesAgrupados.get(embarque.numeroInforme).push(embarque);
                     }
                     
-                    if (validarEmbarque(embarque)) {
-                        embarque.id = embarque.id || `embarque_${index}`;
-                        embarque.diasParaVoo = calcularDiasParaVoo(embarque.dataIda);
-                        embarque.diasNumericos = calcularDiasNumericos(embarque.dataIda);
-                        embarque.conferido = localStorage.getItem(`conferencia_${embarque.id}`) === 'true';
-                        
-                        const classificacao = classificarEmbarqueCorrigido(embarque);
-                        
-                        // CORREÇÃO v8.05: Verificar se classificação não é null
-                        if (classificacao && classificacao.categoria) {
-                            embarque.categoria = classificacao.categoria;
-                            embarque.urgencia = classificacao.urgencia;
-                            
-                            if (embarque.numeroInforme && embarque.categoria === 'conferencia') {
-                                if (!informesAgrupados.has(embarque.numeroInforme)) {
-                                    informesAgrupados.set(embarque.numeroInforme, []);
-                                }
-                                informesAgrupados.get(embarque.numeroInforme).push(embarque);
-                            }
-                            
-                            embarquesProcessados.push(embarque);
-                            
-                            if (embarque.vendedor) vendedoresUnicos.add(embarque.vendedor);
-                        } else {
-                            console.warn(`⚠️ Registro ${index + 1} não pôde ser classificado, ignorando`);
-                            rejeitados++;
-                        }
-                        
-                    } else {
-                        rejeitados++;
-                    }
-                } catch (error) {
-                    console.warn(`❌ Erro processando registro ${index + 1}: ${error.message}`);
+                    embarquesProcessados.push(embarque);
+                    
+                    if (embarque.vendedor) vendedoresUnicos.add(embarque.vendedor);
+                } else {
+                    console.warn(`⚠️ Registro ${index + 1} não pôde ser classificado, ignorando`);
                     rejeitados++;
                 }
-            });
-            
-            const taxaProcessamento = dados.length > 0 ? ((embarquesProcessados.length / dados.length) * 100).toFixed(1) : 0;
-            console.log(`✅ Processamento v8.05: ${embarquesProcessados.length}/${dados.length} (${taxaProcessamento}%)`);
-            console.log(`📊 Informes agrupados: ${informesAgrupados.size}`);
-            console.log(`❌ Registros rejeitados: ${rejeitados}`);
-            
-            return embarquesProcessados;
+                
+            } else {
+                rejeitados++;
+            }
+        } catch (error) {
+            console.warn(`❌ Erro processando registro ${index + 1}: ${error.message}`);
+            rejeitados++;
         }
-        
-        function validarEmbarque(embarque) {
-            // Verificações básicas de segurança
-            if (!embarque || typeof embarque !== 'object') return false;
-            if (!embarque.nomeCliente || embarque.nomeCliente.length < 3) return false;
-            if (!embarque.cpfCliente || embarque.cpfCliente.replace(/\D/g, '').length < 8) return false;
-            
-            const vendedoresValidos = [
-                'ADRIELLY', 'ALESSANDRO', 'ANA PAULA', 'CAROL', 'CAROLINY',
-                'JHULY', 'DAINA', 'ELAINE', 'ILANA', 'BIA', 'CONCEIÇÃO',
-                'CONCEICAO', 'ADRIANA', 'BEATRIZ', 'TESTE'
-            ];
-            
-            if (!embarque.vendedor) return false;
-            
-            const vendedorNorm = embarque.vendedor.toString().trim().toUpperCase();
-            const vendedorValido = vendedoresValidos.some(v => 
-                vendedorNorm.includes(v) || v.includes(vendedorNorm)
-            );
-            
-            if (!vendedorValido) return false;
-            if (!embarque.dataIda) return false;
-            if (embarque.situacao && embarque.situacao.toLowerCase().includes('cancelado')) return false;
-            
-            return true;
-        }
+    });
+    
+    const taxaProcessamento = dados.length > 0 ? ((embarquesProcessados.length / dados.length) * 100).toFixed(1) : 0;
+    console.log(`✅ Processamento v8.05: ${embarquesProcessados.length}/${dados.length} (${taxaProcessamento}%)`);
+    console.log(`📊 Informes agrupados: ${informesAgrupados.size}`);
+    console.log(`❌ Registros rejeitados: ${rejeitados}`);
+    
+    return embarquesProcessados;
+}
         
         // ================================================================================
         // 🎯 CLASSIFICAÇÃO CORRIGIDA v8.05 COM LIMITE DE 12 DIAS
