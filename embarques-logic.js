@@ -115,19 +115,22 @@ async function chamarAPI(action, dados = {}) {
     try {
         mostrarLoading(true);
         
-        const payload = {
-            action: action,
-            dados: dados
-        };
+        // Criar FormData para evitar CORS
+        const formData = new URLSearchParams();
+        formData.append('action', action);
         
-        debugLog(`📡 Chamando API: ${action}`, 'info', payload);
+        // Adicionar dados se houver
+        if (dados && typeof dados === 'object') {
+            Object.entries(dados).forEach(([key, value]) => {
+                formData.append(key, typeof value === 'object' ? JSON.stringify(value) : value);
+            });
+        }
+        
+        debugLog(`📡 Chamando API: ${action}`, 'info', dados);
         
         const response = await fetch(API_URL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'text/plain;charset=utf-8'
-            },
-            body: JSON.stringify(payload)
+            body: formData
         });
         
         if (!response.ok) {
@@ -159,9 +162,12 @@ async function carregarEmbarques() {
         
         mostrarLoading(true);
         
-        const response = await fetch(`${API_URL}?action=listar_embarques`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
+        // Solução para CORS: usar POST simples sem headers problemáticos
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            body: new URLSearchParams({
+                action: 'listar_embarques'
+            })
         });
         
         if (!response.ok) {
