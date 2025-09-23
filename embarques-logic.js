@@ -172,27 +172,53 @@ async function carregarEmbarques() {
         debugLog('📥 Resposta da API', 'success');
         console.log(resultado);
         
-        if (resultado.success && resultado.data && resultado.data.embarques) {
-            const dadosRaw = resultado.data.embarques;
-            debugLog(`📄 Processando ${dadosRaw.length} registros...`, 'info');
-            
-            embarquesData = processarDadosEmbarques(dadosRaw);
-            embarquesFiltrados = [...embarquesData];
-            
-            const processados = embarquesData.length;
-            const rejeitados = dadosRaw.length - processados;
-            const percentual = ((processados / dadosRaw.length) * 100).toFixed(1);
-            
-            debugLog(`✅ Processamento: ${processados}/${dadosRaw.length} (${percentual}%)`, 'success');
-            if (rejeitados > 0) {
-                debugLog(`❌ Registros rejeitados: ${rejeitados}`, 'warning');
+        if (resultado.success) {
+            // Verificar se há dados de embarques na resposta
+            if (resultado.data && resultado.data.embarques && Array.isArray(resultado.data.embarques)) {
+                const dadosRaw = resultado.data.embarques;
+                debugLog(`📄 Processando ${dadosRaw.length} registros...`, 'info');
+                
+                embarquesData = processarDadosEmbarques(dadosRaw);
+                embarquesFiltrados = [...embarquesData];
+                
+                const processados = embarquesData.length;
+                const rejeitados = dadosRaw.length - processados;
+                const percentual = ((processados / dadosRaw.length) * 100).toFixed(1);
+                
+                debugLog(`✅ Processamento: ${processados}/${dadosRaw.length} (${percentual}%)`, 'success');
+                if (rejeitados > 0) {
+                    debugLog(`❌ Registros rejeitados: ${rejeitados}`, 'warning');
+                }
+                
+                preencherFiltros();
+                atualizarEstatisticas(embarquesData);
+                renderizarEmbarques();
+                
+                debugLog(`✅ ${embarquesData.length} embarques carregados com sucesso`, 'success');
+            } else if (resultado.embarques && Array.isArray(resultado.embarques)) {
+                // Formato alternativo - embarques direto na raiz
+                const dadosRaw = resultado.embarques;
+                debugLog(`📄 Processando ${dadosRaw.length} registros (formato alternativo)...`, 'info');
+                
+                embarquesData = processarDadosEmbarques(dadosRaw);
+                embarquesFiltrados = [...embarquesData];
+                
+                preencherFiltros();
+                atualizarEstatisticas(embarquesData);
+                renderizarEmbarques();
+                
+                debugLog(`✅ ${embarquesData.length} embarques carregados com sucesso`, 'success');
+            } else {
+                // API retornou sucesso mas sem dados de embarques
+                debugLog(`⚠️ API funcionando mas sem dados de embarques. Response: ${resultado.message}`, 'warning');
+                mostrarNotificacao(`Sistema conectado: ${resultado.message || 'API funcionando'}\nNenhum embarque encontrado para carregar.`, 'warning');
+                
+                // Limpar dados existentes
+                embarquesData = [];
+                embarquesFiltrados = [];
+                atualizarEstatisticas([]);
+                renderizarEmbarques();
             }
-            
-            preencherFiltros();
-            atualizarEstatisticas(embarquesData);
-            renderizarEmbarques();
-            
-            debugLog(`✅ ${embarquesData.length} embarques carregados com sucesso`, 'success');
         } else {
             throw new Error(resultado.message || 'Dados não encontrados na resposta');
         }
