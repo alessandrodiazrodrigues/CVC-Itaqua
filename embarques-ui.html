@@ -1,0 +1,2108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVC Portal Itaquá - Controle de Embarques</title>
+    
+    <meta name="description" content="CVC Portal Itaquá - Sistema Integrado de Gestão para a filial de Itaquaquecetuba">
+    <meta name="keywords" content="CVC, Itaquaquecetuba, gestão, viagens, turismo, sistema">
+    <meta name="author" content="CVC Itaquaquecetuba">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="CVC Portal Itaquá - Sistema Integrado de Gestão">
+    <meta property="og:description" content="Sistema de gestão integrado da CVC Itaquaquecetuba">
+    <meta property="og:image" content="assets/images/cvc-logo.png">
+    
+    <link rel="icon" type="image/x-icon" href="assets/images/cvc-favicon.ico">
+    <link rel="apple-touch-icon" href="assets/images/cvc-apple-icon.png">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/cvc-styles.css" rel="stylesheet">
+    
+    <style>
+        /* Estilos específicos do controle de embarques - usando variáveis do cvc-styles.css */
+        .main-container {
+            background: var(--cvc-fundo-card);
+            border-radius: 20px;
+            box-shadow: var(--cvc-sombra-forte);
+            margin: 20px auto;
+            max-width: 1800px;
+            overflow: hidden;
+        }
+        
+        .content-section {
+            padding: 30px;
+            background: var(--cvc-cinza-claro);
+        }
+        
+        /* Estatísticas com tema CVC */
+        .stats-container {
+            background: var(--cvc-azul);
+            padding: 30px;
+            margin: 0;
+            color: var(--cvc-branco);
+            border-radius: 0;
+        }
+        
+        .stat-card.embarques-stat {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            margin-bottom: 0;
+        }
+        
+        .stat-card.embarques-stat:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .stat-card.embarques-stat .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--cvc-amarelo);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        /* Filtros */
+        .filters-section {
+            background: var(--cvc-fundo-card);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--cvc-sombra-suave);
+            border-left: 4px solid var(--cvc-azul);
+        }
+        
+        .filter-group {
+            margin-bottom: 15px;
+        }
+        
+        .filter-label {
+            font-weight: 600;
+            color: var(--cvc-azul);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        /* Cards de embarque com alertas por urgência */
+        .embarque-card {
+            background: var(--cvc-fundo-card);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--cvc-sombra-suave);
+            border-left: 4px solid var(--cvc-azul);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .embarque-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--cvc-sombra-media);
+        }
+        
+        .embarque-card.conferido {
+            opacity: 0.7;
+            border-left-color: #28a745;
+            background: var(--cvc-cinza-claro);
+        }
+        
+        /* Sistema de alertas por urgência */
+        .embarque-card.urgente {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+        
+        .embarque-card.alerta {
+            border-left-color: #ffc107;
+            background: #fffbf0;
+        }
+        
+        .embarque-card.normal {
+            border-left-color: #28a745;
+        }
+        
+        .led-urgencia {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(0,0,0,0.3);
+        }
+        
+        .led-urgencia.verde {
+            background: #28a745;
+            animation: pulse-green 2s infinite;
+        }
+        
+        .led-urgencia.amarelo {
+            background: #ffc107;
+            animation: pulse-yellow 2s infinite;
+        }
+        
+        .led-urgencia.vermelho {
+            background: #dc3545;
+            animation: pulse-red 1s infinite;
+        }
+        
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(40, 167, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
+        
+        @keyframes pulse-yellow {
+            0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(255, 193, 7, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
+        }
+        
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+        }
+        
+        /* Cliente informações */
+        .embarque-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .cliente-info {
+            flex: 1;
+        }
+        
+        .cliente-nome {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--cvc-azul);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .cliente-cpf {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        /* Badges de status */
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .badge-conferencia {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+            color: #333;
+        }
+        
+        .badge-checkin {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+        
+        .badge-pos-venda {
+            background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%);
+            color: white;
+        }
+        
+        .badge-conferido {
+            background: linear-gradient(135deg, #28a745 0%, #007C42 100%);
+            color: white;
+        }
+        
+        /* Tag Cliente Ale */
+        .cliente-ale-tag {
+            background: var(--cvc-azul);
+            color: var(--cvc-branco);
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            margin-left: 8px;
+        }
+        
+        /* Detalhes do embarque */
+        .embarque-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 15px 0;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .detail-icon {
+            color: var(--cvc-azul);
+            width: 16px;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #495057;
+            margin-right: 5px;
+        }
+        
+        .detail-value {
+            color: #212529;
+        }
+        
+        .copy-button {
+            background: none;
+            border: none;
+            color: var(--cvc-azul);
+            font-size: 0.8rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .copy-button:hover {
+            background: var(--cvc-azul);
+            color: var(--cvc-branco);
+        }
+        
+        /* Extras e observações */
+        .embarque-extras {
+            background: var(--cvc-cinza-claro);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .extras-title {
+            font-weight: 600;
+            color: var(--cvc-azul);
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        /* Ações do embarque */
+        .embarque-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        /* Abas de navegação */
+        .nav-tabs {
+            border-bottom: 2px solid var(--cvc-azul);
+            margin-bottom: 25px;
+        }
+        
+        .nav-tabs .nav-link {
+            color: var(--cvc-azul);
+            font-weight: 600;
+            border: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            padding: 15px 20px;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            border-bottom-color: var(--cvc-amarelo);
+            color: var(--cvc-azul);
+        }
+        
+        .nav-tabs .nav-link.active {
+            border-bottom-color: var(--cvc-amarelo);
+            color: var(--cvc-azul);
+            background: rgba(255, 230, 0, 0.1);
+        }
+        
+        .nav-tabs .nav-link .badge {
+            margin-left: 8px;
+        }
+        
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 0, 180, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid var(--cvc-branco);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+            color: var(--cvc-azul);
+        }
+        
+        /* Badges de urgência */
+        .urgencia-badge {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+        
+        .urgencia-normal {
+            background: #28a745;
+            color: var(--cvc-branco);
+        }
+        
+        .urgencia-alerta {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .urgencia-urgente {
+            background: #dc3545;
+            color: var(--cvc-branco);
+        }
+        
+        /* Notificações */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            min-width: 300px;
+            max-width: 400px;
+            border-radius: 10px;
+            padding: 15px 20px;
+            color: var(--cvc-branco);
+            font-weight: 600;
+            box-shadow: var(--cvc-sombra-media);
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        }
+        
+        .notification.warning {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+            color: #333;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        
+        /* Modal customizado */
+        .modal-cvc .modal-content {
+            border-radius: 15px;
+            border: none;
+            box-shadow: var(--cvc-sombra-forte);
+        }
+        
+        .modal-cvc .modal-header {
+            background: var(--cvc-azul);
+            color: var(--cvc-branco);
+            border-radius: 15px 15px 0 0;
+            border-bottom: none;
+        }
+        
+        .modal-cvc .modal-title {
+            font-weight: 700;
+        }
+        
+        /* Info seções no modal */
+        .cliente-header {
+            background: var(--cvc-cinza-claro);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .recibo-box {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: var(--cvc-fundo-card);
+        }
+        
+        .recibo-titulo {
+            font-weight: 600;
+            color: var(--cvc-azul);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-section {
+            background: var(--cvc-cinza-claro);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-title {
+            font-weight: 600;
+            color: var(--cvc-azul);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 1rem;
+            color: #212529;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Campos editáveis */
+        .editable-field {
+            background: var(--cvc-fundo-card);
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-family: 'Nunito', sans-serif;
+        }
+        
+        .editable-field:focus {
+            border-color: var(--cvc-amarelo);
+            box-shadow: 0 0 0 0.2rem rgba(255, 230, 0, 0.25);
+            outline: none;
+        }
+        
+        .editable-label {
+            color: var(--cvc-azul) !important;
+            font-weight: 600 !important;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .embarque-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .embarque-actions {
+                justify-content: center;
+            }
+            
+            .filters-section .row {
+                margin: 0;
+            }
+            
+            .filters-section .col-md-2 {
+                margin-bottom: 10px;
+            }
+            
+            .stat-card.embarques-stat .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+        <div class="loading-overlay" id="loadingOverlay">
+        <div class="text-center text-white">
+            <div class="loading-spinner"></div>
+            <div class="mt-3">Carregando embarques v8.05...</div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="main-container">
+                        <header class="cvc-header">
+                <div class="container-fluid">
+                    <div class="row align-items-center py-3">
+                                                <div class="col-md-4">
+                            <div class="cvc-logo">
+                                <div class="cvc-logo-symbol">CVC</div>
+                                <div>
+                                    <div class="cvc-logo-text">CVC Portal Itaquá</div>
+                                    <p class="cvc-subtitle">Sistema Integrado de Gestão</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                                                <div class="col-md-4 text-center">
+                            <h1 class="page-title mb-0" style="border: none; padding: 0; color: var(--cvc-azul);">
+                                <i class="fas fa-plane-departure"></i> Controle de Embarques
+                            </h1>
+                        </div>
+                        
+                                                <div class="col-md-4 text-end">
+                            <div class="d-flex align-items-center justify-content-end">
+                                <div class="me-3">
+                                    <small class="text-muted">Sistema v8.05 - Gestão de check-ins e conferências de viagem</small><br>
+                                    <small class="text-success" id="statusSistema">
+                                        <i class="fas fa-check-circle"></i> Sistema Online
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+                        <nav class="cvc-nav">
+                <div class="container-fluid">
+                    <ul class="nav nav-pills justify-content-center mb-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="orcamentos.html">
+                                <i class="fas fa-calculator"></i> Padronizador de Orçamentos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="vendas.html">
+                                <i class="fas fa-chart-line"></i> Informe de Vendas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="embarques.html">
+                                <i class="fas fa-plane-departure"></i> Controle de Embarques
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="orbiuns.html">
+                                <i class="fas fa-clipboard-list"></i> Controle de Orbiuns
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+                        <div class="stats-container">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <div class="stat-card embarques-stat">
+                            <div class="stat-number" id="statConferencias">0</div>
+                            <div class="stat-label">
+                                <i class="fas fa-clipboard-check"></i> Conferências
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card embarques-stat">
+                            <div class="stat-number" id="statCheckins">0</div>
+                            <div class="stat-label">
+                                <i class="fas fa-plane"></i> Check-ins
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card embarques-stat">
+                            <div class="stat-number" id="statPosVendas">0</div>
+                            <div class="stat-label">
+                                <i class="fas fa-phone"></i> Pós-vendas
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card embarques-stat">
+                            <div class="stat-number" id="statTotal">0</div>
+                            <div class="stat-label">
+                                <i class="fas fa-chart-bar"></i> Total
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                        <div class="content-section">
+                                <div class="filters-section">
+                    <h5 class="mb-3"><i class="fas fa-filter"></i> Filtros Avançados v8.05</h5>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label class="filter-label">Vendedor</label>
+                                <select class="form-select" id="filtroVendedor">
+                                    <option value="">Todos os Vendedores</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label class="filter-label">Status</label>
+                                <select class="form-select" id="filtroStatus">
+                                    <option value="">Todos os Status</option>
+                                    <option value="conferencia">Conferências</option>
+                                    <option value="checkin">Check-ins</option>
+                                    <option value="pos-venda">Pós-vendas</option>
+                                    <option value="conferido">Conferidos</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label class="filter-label">Cliente Ale</label>
+                                <select class="form-select" id="filtroClienteAle">
+                                    <option value="">Todos</option>
+                                    <option value="Sim">Apenas Cliente Ale</option>
+                                    <option value="Não">Não Cliente Ale</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label class="filter-label">CPF</label>
+                                <input type="text" class="form-control" id="filtroCPF" placeholder="Digite o CPF" maxlength="14">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label class="filter-label">WhatsApp</label>
+                                <input type="text" class="form-control" id="filtroWhatsApp" placeholder="Digite o WhatsApp">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label class="filter-label">Recibo</label>
+                                <input type="text" class="form-control" id="filtroRecibo" placeholder="Número do recibo">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label class="filter-label">Reserva</label>
+                                <input type="text" class="form-control" id="filtroReserva" placeholder="Código da reserva">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label class="filter-label">LOC GDS</label>
+                                <input type="text" class="form-control" id="filtroLocGds" placeholder="Localizador GDS">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label class="filter-label">LOC CIA</label>
+                                <input type="text" class="form-control" id="filtroLocCia" placeholder="Localizador CIA">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label class="filter-label">Data Início</label>
+                                <input type="date" class="form-control" id="filtroDataInicio">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label class="filter-label">Data Check-in</label>
+                                <input type="date" class="form-control" id="filtroDataCheckin">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label class="filter-label">&nbsp;</label>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-cvc-primary" id="btnAplicarFiltros">
+                                        <i class="fas fa-filter"></i> Aplicar
+                                    </button>
+                                    <button class="btn btn-cvc-secondary" id="btnLimparFiltros">
+                                        <i class="fas fa-times"></i> Limpar
+                                    </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3 text-center">
+                        <button class="btn btn-success me-2" id="btnRecarregar">
+                            <i class="fas fa-sync-alt"></i> Recarregar Dados
+                        </button>
+                    </div>
+                </div>
+
+                                <div class="nav nav-tabs" id="navTabs" role="tablist">
+                    <button class="nav-link active" id="tab-conferencias" data-bs-toggle="tab" data-bs-target="#tabConferencias" type="button" role="tab">
+                        <i class="fas fa-clipboard-check"></i> Conferências <span class="badge bg-warning" id="badgeConferencias">0</span>
+                    </button>
+                    <button class="nav-link" id="tab-checkins" data-bs-toggle="tab" data-bs-target="#tabCheckins" type="button" role="tab">
+                        <i class="fas fa-plane"></i> Check-ins <span class="badge bg-success" id="badgeCheckins">0</span>
+                    </button>
+                    <button class="nav-link" id="tab-pos-vendas" data-bs-toggle="tab" data-bs-target="#tabPosVendas" type="button" role="tab">
+                        <i class="fas fa-phone"></i> Pós-vendas <span class="badge bg-danger" id="badgePosVendas">0</span>
+                    </button>
+                </div>
+
+                                <div class="tab-content" id="tabContent">
+                                        <div class="tab-pane fade show active" id="tabConferencias" role="tabpanel">
+                        <div class="mt-3">
+                            <h5><i class="fas fa-clipboard-check"></i> Conferências por Número de Informe</h5>
+                            <p class="text-muted">12-8 dias: Verde | 7-5 dias: Amarelo | 4-0 dias: Vermelho (ATRASO) | Máximo 12 dias</p>
+                            <div id="listaConferencias">
+                                <div class="empty-state">
+                                    <i class="fas fa-clipboard-check"></i>
+                                    <h5>Carregando conferências...</h5>
+                                    <small>Aguarde enquanto buscamos os dados</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                                        <div class="tab-pane fade" id="tabCheckins" role="tabpanel">
+                        <div class="mt-3">
+                            <h5><i class="fas fa-plane"></i> Check-ins por Voo Individual</h5>
+                            <p class="text-muted">ATRASO (passados): Vermelho | 3 dias: Verde | 2 dias: Amarelo | 1-0 dias: Vermelho</p>
+                            <div id="listaCheckins">
+                                <div class="empty-state">
+                                    <i class="fas fa-plane"></i>
+                                    <h5>Nenhum check-in próximo</h5>
+                                    <small>Voos nos próximos 3 dias aparecerão aqui</small>
+                                </div>
+                        </div>
+                    </div>
+
+                                        <div class="tab-pane fade" id="tabPosVendas" role="tabpanel">
+                        <div class="mt-3">
+                            <h5><i class="fas fa-phone"></i> Pós-vendas (1 dia após retorno)</h5>
+                            <p class="text-muted">1-5 dias: Verde | 6-10 dias: Amarelo | 11+ dias: Vermelho</p>
+                            <div id="listaPosVendas">
+                                <div class="empty-state">
+                                    <i class="fas fa-phone"></i>
+                                    <h5>Nenhum pós-venda pendente</h5>
+                                    <small>Clientes que retornaram após 21/08 aparecerão aqui</small>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="modal fade modal-cvc" id="modalDetalhes" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-info-circle"></i> Detalhes Agrupados por Recibo
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cvc-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> Fechar
+                    </button>
+                    <button type="button" class="btn btn-info" id="btnBuscarOrbiuns">
+                        <i class="fas fa-search"></i> Buscar Orbiuns
+                    </button>
+                    <button type="button" class="btn btn-success" id="btnMarcarConferido">
+                        <i class="fas fa-check"></i> Marcar como Conferido
+                    </button>
+                    <button type="button" class="btn btn-cvc-primary" id="btnSalvarAlteracoes">
+                        <i class="fas fa-save"></i> Salvar Alterações
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+        <script src="config.js"></script>
+    
+    <script>
+        console.log('📋 CVC Portal Itaquá - Controle de Embarques v8.05 CORRIGIDO');
+        
+        // ================================================================================
+        // 🔧 CONFIGURAÇÃO SEGURA v8.05
+        // ================================================================================
+        
+        let API_URL = null;
+        let VENDEDORES = [];
+        let TIPOS_SERVICO = [];
+        let COMPANHIAS_AEREAS = [];
+        
+        function obterConfiguracao() {
+            try {
+                // Tentar obter via função getApiUrl
+                if (typeof getApiUrl === 'function') {
+                    API_URL = getApiUrl();
+                    console.log('✅ Config.js carregado via função getApiUrl()');
+                }
+                // Tentar obter via CVC_CONFIG global
+                else if (typeof CVC_CONFIG !== 'undefined' && CVC_CONFIG) {
+                    API_URL = CVC_CONFIG.API_URL;
+                    VENDEDORES = CVC_CONFIG.VENDEDORES || [];
+                    TIPOS_SERVICO = CVC_CONFIG.TIPOS_SERVICO || [];
+                    COMPANHIAS_AEREAS = CVC_CONFIG.COMPANHIAS_AEREAS || [];
+                    console.log('✅ Config.js carregado via CVC_CONFIG');
+                }
+                // Tentar obter via window.CVC_CONFIG
+                else if (window.CVC_CONFIG) {
+                    API_URL = window.CVC_CONFIG.API_URL;
+                    VENDEDORES = window.CVC_CONFIG.VENDEDORES || [];
+                    console.log('✅ Config.js carregado via window.CVC_CONFIG');
+                }
+                
+                // Fallback com listas padrão se config.js não carregar
+                if (!API_URL) {
+                    console.warn('⚠️ Config.js não encontrado, usando configuração fallback');
+                    API_URL = 'https://script.google.com/macros/s/AKfycbwSpsWw4eskLgAGPCWQ7X0q1emDfSyzWbS6nAT-7nHZHB63Hd4Q1IKWWeTsEQUnwVi3zQ/exec';
+                }
+                
+                // Fallback para vendedores se não tiver no config
+                if (!VENDEDORES || VENDEDORES.length === 0) {
+                    VENDEDORES = ['Alessandro', 'Ana Paula', 'Adriana', 'Adrielly', 'Bia', 'Conceição', 'Jhully'];
+                    console.log('📋 Usando lista de vendedores fallback');
+                }
+                
+                // Fallback para tipos de serviço
+                if (!TIPOS_SERVICO || TIPOS_SERVICO.length === 0) {
+                    TIPOS_SERVICO = ['Aéreo', 'A+H', 'A+H+S', 'Terrestre', 'Marítimo', 'Seguro', 'Outros'];
+                    console.log('📋 Usando lista de tipos de serviço fallback');
+                }
+                
+                console.log('🔗 API URL configurada:', API_URL);
+                console.log('👥 Vendedores carregados:', VENDEDORES.length);
+                
+                return true;
+                
+            } catch (error) {
+                console.error('❌ Erro ao obter configuração:', error);
+                return false;
+            }
+        }
+        
+        // ================================================================================
+        // 🌍 VARIÁVEIS GLOBAIS v8.05
+        // ================================================================================
+        
+        let embarquesData = [];
+        let embarquesFiltrados = [];
+        let vendedoresUnicos = new Set();
+        let informesAgrupados = new Map();
+        let embarquesRelacionados = [];
+
+        let stats = {
+            checkins: 0,
+            conferencias: 0,
+            posVendas: 0,
+            total: 0
+        };
+
+        const DATA_HOJE = new Date('2025-09-07');
+        
+        // ================================================================================
+        // 📄 PROCESSAMENTO DE DADOS v8.05 COM VERIFICAÇÃO ROBUSTA
+        // ================================================================================
+        
+        function processarDadosEmbarques(dados) {
+            console.log(`📄 Processando ${dados.length} registros v8.05...`);
+            
+            const embarquesProcessados = [];
+            let rejeitados = 0;
+            
+            informesAgrupados.clear();
+            
+            dados.forEach((embarque, index) => {
+                try {
+                    // CORREÇÃO v8.05: Verificar se o embarque não é null/undefined
+                    if (!embarque || typeof embarque !== 'object') {
+                        console.warn(`⚠️ Registro ${index + 1} é null/undefined, ignorando`);
+                        rejeitados++;
+                        return;
+                    }
+                    
+                    if (validarEmbarque(embarque)) {
+                        embarque.id = embarque.id || `embarque_${index}`;
+                        embarque.diasParaVoo = calcularDiasParaVoo(embarque.dataIda);
+                        embarque.diasNumericos = calcularDiasNumericos(embarque.dataIda);
+                        embarque.conferido = localStorage.getItem(`conferencia_${embarque.id}`) === 'true';
+                        
+                        const classificacao = classificarEmbarqueCorrigido(embarque);
+                        
+                        // CORREÇÃO v8.05: Verificar se classificação não é null
+                        if (classificacao && classificacao.categoria) {
+                            embarque.categoria = classificacao.categoria;
+                            embarque.urgencia = classificacao.urgencia;
+                            
+                            if (embarque.numeroInforme && embarque.categoria === 'conferencia') {
+                                if (!informesAgrupados.has(embarque.numeroInforme)) {
+                                    informesAgrupados.set(embarque.numeroInforme, []);
+                                }
+                                informesAgrupados.get(embarque.numeroInforme).push(embarque);
+                            }
+                            
+                            embarquesProcessados.push(embarque);
+                            
+                            if (embarque.vendedor) vendedoresUnicos.add(embarque.vendedor);
+                        } else {
+                            console.warn(`⚠️ Registro ${index + 1} não pôde ser classificado, ignorando`);
+                            rejeitados++;
+                        }
+                        
+                    } else {
+                        rejeitados++;
+                    }
+                } catch (error) {
+                    console.warn(`❌ Erro processando registro ${index + 1}: ${error.message}`);
+                    rejeitados++;
+                }
+            });
+            
+            const taxaProcessamento = dados.length > 0 ? ((embarquesProcessados.length / dados.length) * 100).toFixed(1) : 0;
+            console.log(`✅ Processamento v8.05: ${embarquesProcessados.length}/${dados.length} (${taxaProcessamento}%)`);
+            console.log(`📊 Informes agrupados: ${informesAgrupados.size}`);
+            console.log(`❌ Registros rejeitados: ${rejeitados}`);
+            
+            return embarquesProcessados;
+        }
+        
+        function validarEmbarque(embarque) {
+            // Verificações básicas de segurança
+            if (!embarque || typeof embarque !== 'object') return false;
+            if (!embarque.nomeCliente || embarque.nomeCliente.length < 3) return false;
+            if (!embarque.cpfCliente || embarque.cpfCliente.replace(/\D/g, '').length < 8) return false;
+            
+            const vendedoresValidos = [
+                'ADRIELLY', 'ALESSANDRO', 'ANA PAULA', 'CAROL', 'CAROLINY',
+                'JHULY', 'DAINA', 'ELAINE', 'ILANA', 'BIA', 'CONCEIÇÃO',
+                'CONCEICAO', 'ADRIANA', 'BEATRIZ', 'TESTE'
+            ];
+            
+            if (!embarque.vendedor) return false;
+            
+            const vendedorNorm = embarque.vendedor.toString().trim().toUpperCase();
+            const vendedorValido = vendedoresValidos.some(v => 
+                vendedorNorm.includes(v) || v.includes(vendedorNorm)
+            );
+            
+            if (!vendedorValido) return false;
+            if (!embarque.dataIda) return false;
+            if (embarque.situacao && embarque.situacao.toLowerCase().includes('cancelado')) return false;
+            
+            return true;
+        }
+        
+        // ================================================================================
+        // 🎯 CLASSIFICAÇÃO CORRIGIDA v8.05 COM LIMITE DE 12 DIAS
+        // ================================================================================
+        
+        function classificarEmbarqueCorrigido(embarque) {
+            if (!embarque || !embarque.dataIda) return { categoria: 'conferencia', urgencia: 'normal' };
+            
+            try {
+                let dataVoo = parseData(embarque.dataIda);
+                let dataVolta = embarque.dataVolta ? parseData(embarque.dataVolta) : null;
+                
+                if (!dataVoo || isNaN(dataVoo.getTime())) {
+                    return { categoria: 'conferencia', urgencia: 'normal' };
+                }
+                
+                const hoje = new Date(DATA_HOJE);
+                hoje.setHours(0, 0, 0, 0);
+                dataVoo.setHours(0, 0, 0, 0);
+                
+                const diffTime = dataVoo.getTime() - hoje.getTime();
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                // PÓS-VENDA: 1 dia após retorno da viagem
+                if (dataVolta) {
+                    dataVolta.setHours(0, 0, 0, 0);
+                    const diffRetorno = hoje.getTime() - dataVolta.getTime();
+                    const diasAposRetorno = Math.ceil(diffRetorno / (1000 * 60 * 60 * 24));
+                    
+                    if (diasAposRetorno >= 1) {
+                        let urgencia = 'normal';
+                        if (diasAposRetorno >= 1 && diasAposRetorno <= 5) urgencia = 'normal';
+                        else if (diasAposRetorno >= 6 && diasAposRetorno <= 10) urgencia = 'alerta';
+                        else if (diasAposRetorno >= 11) urgencia = 'urgente';
+                        
+                        return { categoria: 'pos-venda', urgencia };
+                    }
+                }
+                
+                // CHECK-IN: 3 dias antes de cada voo (incluindo datas passadas como ATRASO)
+                if (diffDays >= -365 && diffDays <= 3) {
+                    let urgencia = 'normal';
+                    if (diffDays < 0) urgencia = 'urgente'; // ATRASO - qualquer voo passado
+                    else if (diffDays === 3) urgencia = 'normal';
+                    else if (diffDays === 2) urgencia = 'alerta';
+                    else if (diffDays <= 1) urgencia = 'urgente';
+                    
+                    return { categoria: 'checkin', urgencia };
+                }
+                
+                // CONFERÊNCIA: 4 a 12 dias antes (LIMITE DE 12 DIAS)
+                if (diffDays >= 4 && diffDays <= 12) {
+                    let urgencia = 'normal';
+                    if (diffDays >= 8 && diffDays <= 12) urgencia = 'normal';
+                    else if (diffDays >= 5 && diffDays <= 7) urgencia = 'alerta';
+                    else if (diffDays === 4) urgencia = 'urgente';
+                    
+                    return { categoria: 'conferencia', urgencia };
+                }
+                
+                // CORREÇÃO v8.05: Retornar null para voos muito distantes
+                return null;
+                
+            } catch (error) {
+                console.warn('Erro na classificação do embarque:', error);
+                return { categoria: 'conferencia', urgencia: 'normal' };
+            }
+        }
+        
+        function parseData(dataStr) {
+            if (!dataStr) return null;
+            if (dataStr instanceof Date) return dataStr;
+            
+            const str = dataStr.toString();
+            
+            if (str.includes('/')) {
+                const partes = str.split('/');
+                if (partes.length === 3) {
+                    return new Date(partes[2], partes[1] - 1, partes[0]);
+                }
+            }
+            
+            return new Date(str);
+        }
+        
+        function calcularDiasParaVoo(dataIda) {
+            if (!dataIda) return 'N/A';
+            
+            try {
+                const dataVoo = parseData(dataIda);
+                if (!dataVoo || isNaN(dataVoo.getTime())) return 'N/A';
+                
+                const hoje = new Date(DATA_HOJE);
+                hoje.setHours(0, 0, 0, 0);
+                dataVoo.setHours(0, 0, 0, 0);
+                
+                const diffTime = dataVoo.getTime() - hoje.getTime();
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === 0) return 'Hoje';
+                if (diffDays === 1) return 'Amanhã';
+                if (diffDays === -1) return 'Ontem';
+                if (diffDays > 0) return `${diffDays} dias`;
+                return `${Math.abs(diffDays)} dias atrás`;
+                
+            } catch (error) {
+                return 'N/A';
+            }
+        }
+
+        function calcularDiasNumericos(dataIda) {
+            if (!dataIda) return 999;
+            
+            try {
+                const dataVoo = parseData(dataIda);
+                if (!dataVoo || isNaN(dataVoo.getTime())) return 999;
+                
+                const hoje = new Date(DATA_HOJE);
+                hoje.setHours(0, 0, 0, 0);
+                dataVoo.setHours(0, 0, 0, 0);
+                
+                const diffTime = dataVoo.getTime() - hoje.getTime();
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                return diffDays;
+                
+            } catch (error) {
+                return 999;
+            }
+        }
+
+        // ================================================================================
+        // 📊 RENDERIZAÇÃO DA INTERFACE v8.05 COM VERIFICAÇÕES ROBUSTAS
+        // ================================================================================
+        
+        function renderizarEmbarques() {
+            const filtroStatus = document.getElementById('filtroStatus').value;
+            
+            // CORREÇÃO v8.05: Filtrar itens null/undefined ANTES de processar
+            let embarquesParaRender = embarquesFiltrados.filter(e => e && typeof e === 'object');
+            
+            if (filtroStatus === 'conferido') {
+                embarquesParaRender = embarquesParaRender.filter(e => e.conferido);
+            } else if (filtroStatus && filtroStatus !== 'conferido') {
+                embarquesParaRender = embarquesParaRender.filter(e => e.categoria === filtroStatus && !e.conferido);
+            }
+            
+            const conferencias = embarquesParaRender.filter(e => e.categoria === 'conferencia' && !e.conferido);
+            const checkins = embarquesParaRender.filter(e => e.categoria === 'checkin' && !e.conferido);
+            const posVendas = embarquesParaRender.filter(e => e.categoria === 'pos-venda' && !e.conferido);
+            
+            renderizarListaEmbarques('listaConferencias', conferencias, 'conferencia');
+            renderizarListaEmbarques('listaCheckins', checkins, 'checkin');
+            renderizarListaEmbarques('listaPosVendas', posVendas, 'pos-venda');
+            
+            document.getElementById('badgeConferencias').textContent = conferencias.length;
+            document.getElementById('badgeCheckins').textContent = checkins.length;
+            document.getElementById('badgePosVendas').textContent = posVendas.length;
+        }
+        
+        function renderizarListaEmbarques(containerId, embarques, categoria) {
+            const container = document.getElementById(containerId);
+            
+            if (!container) {
+                console.error(`Container ${containerId} não encontrado`);
+                return;
+            }
+            
+            if (embarques.length === 0) {
+                const emptyMessage = {
+                    'conferencia': 'Nenhuma conferência pendente (máximo 12 dias)',
+                    'checkin': 'Nenhum check-in próximo',
+                    'pos-venda': 'Nenhum pós-venda pendente'
+                };
+                
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-${categoria === 'conferencia' ? 'clipboard-check' : categoria === 'checkin' ? 'plane' : 'phone'}"></i>
+                        <h5>${emptyMessage[categoria]}</h5>
+                        <small>Sistema v8.05 - Total processados: ${stats.total} embarques</small>
+                    </div>
+                `;
+                return;
+            }
+            
+            // ================================================================================
+            // 📄 ORDENAÇÃO CORRIGIDA v8.05 - CHECK-IN ESPECIAL
+            // ================================================================================
+            
+            // CORREÇÃO v8.05: Verificar se embarques existem antes de ordenar
+            const embarquesValidos = embarques.filter(e => e && typeof e === 'object');
+            
+            embarquesValidos.sort((a, b) => {
+                // Usar diasNumericos para ordenação correta
+                const diasA = (a && a.diasNumericos !== undefined) ? a.diasNumericos : 999;
+                const diasB = (b && b.diasNumericos !== undefined) ? b.diasNumericos : 999;
+                
+                if (categoria === 'checkin') {
+                    // CHECK-IN: Ordenação especial
+                    // ATRASO (mais antigos primeiro) → Hoje → Amanhã → 2 dias → 3 dias
+                    
+                    // Se ambos são atraso (< 0)
+                    if (diasA < 0 && diasB < 0) {
+                        return diasA - diasB; // Mais antigo primeiro (-5, -4, -3, -2, -1)
+                    }
+                    
+                    // Se apenas A é atraso
+                    if (diasA < 0 && diasB >= 0) {
+                        return -1; // A vem primeiro
+                    }
+                    
+                    // Se apenas B é atraso
+                    if (diasA >= 0 && diasB < 0) {
+                        return 1; // B vem primeiro
+                    }
+                    
+                    // Se ambos são futuros (>= 0), ordem crescente normal
+                    return diasA - diasB; // 0 (hoje), 1 (amanhã), 2, 3...
+                } else {
+                    // CONFERENCIA e POS-VENDA: ordem crescente normal
+                    return diasA - diasB;
+                }
+            });
+            
+            container.innerHTML = embarquesValidos.map(embarque => criarCardEmbarqueCorrigido(embarque, categoria)).join('');
+        }
+        
+        function criarCardEmbarqueCorrigido(embarque, categoria) {
+            // CORREÇÃO v8.05: Verificar se embarque existe
+            if (!embarque || typeof embarque !== 'object') {
+                console.warn('Tentativa de criar card para embarque inválido');
+                return '';
+            }
+            
+            const badgeClass = {
+                'conferencia': 'badge-conferencia',
+                'checkin': 'badge-checkin',
+                'pos-venda': 'badge-pos-venda'
+            };
+            
+            const badgeText = {
+                'conferencia': 'Conferência',
+                'checkin': 'Check-in',
+                'pos-venda': 'Pós-venda'
+            };
+            
+            const urgenciaClass = embarque.urgencia || 'normal';
+            const ledClass = urgenciaClass === 'normal' ? 'verde' : urgenciaClass === 'alerta' ? 'amarelo' : 'vermelho';
+            
+            const whatsappLink = embarque.whatsappCliente ? 
+                `https://wa.me/55${embarque.whatsappCliente.replace(/\D/g, '')}` : '#';
+            
+            const clienteAleTag = embarque.clienteAle === 'Sim' ? 
+                '<span class="cliente-ale-tag">Cliente Ale</span>' : '';
+            
+            // Texto de urgência personalizado para check-ins com atraso
+            let urgenciaTexto = urgenciaClass === 'normal' ? 'Normal' : urgenciaClass === 'alerta' ? 'Cuidado' : 'URGENTE';
+            if (categoria === 'checkin' && embarque.diasNumericos < 0) {
+                urgenciaTexto = 'ATRASO';
+            }
+            
+            return `
+                <div class="embarque-card ${embarque.conferido ? 'conferido' : urgenciaClass}" data-embarque-id="${embarque.id}">
+                    <div class="led-urgencia ${ledClass}"></div>
+                    
+                    <div class="embarque-header">
+                        <div class="cliente-info">
+                            <div class="cliente-nome">
+                                ${embarque.nomeCliente || 'Nome não informado'}
+                                ${clienteAleTag}
+                            </div>
+                            <div class="cliente-cpf">CPF: ${embarque.cpfCliente || 'Não informado'}</div>
+                        </div>
+                        <div class="status-badge ${badgeClass[categoria]}">
+                            ${embarque.conferido ? 'Conferido' : badgeText[categoria]}
+                            <span class="urgencia-badge urgencia-${urgenciaClass}">
+                                ${urgenciaTexto}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="embarque-details">
+                        <div class="detail-item">
+                            <i class="fas fa-user-tie detail-icon"></i>
+                            <span class="detail-label">Vendedor:</span>
+                            <span class="detail-value">${embarque.vendedor || 'Não informado'}</span>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <i class="fas fa-calendar detail-icon"></i>
+                            <span class="detail-label">Data do Voo:</span>
+                            <span class="detail-value">${formatarData(embarque.dataIda)}</span>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <i class="fas fa-clock detail-icon"></i>
+                            <span class="detail-label">Dias para Voo:</span>
+                            <span class="detail-value">${embarque.diasParaVoo}</span>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <i class="fas fa-receipt detail-icon"></i>
+                            <span class="detail-label">Recibo:</span>
+                            <span class="detail-value">${embarque.recibo || 'N/A'}</span>
+                            ${embarque.recibo ? `<button class="copy-button" onclick="copiarTexto('${embarque.recibo}', this)"><i class="fas fa-copy"></i></button>` : ''}
+                        </div>
+                        
+                        <div class="detail-item">
+                            <i class="fas fa-building detail-icon"></i>
+                            <span class="detail-label">Nº Informe:</span>
+                            <span class="detail-value">${embarque.numeroInforme || 'N/A'}</span>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <i class="fab fa-whatsapp detail-icon"></i>
+                            <span class="detail-label">WhatsApp:</span>
+                            <span class="detail-value">${embarque.whatsappCliente || 'N/A'}</span>
+                            ${embarque.whatsappCliente ? `<button class="copy-button" onclick="copiarTexto('${embarque.whatsappCliente}', this)"><i class="fas fa-copy"></i></button>` : ''}
+                        </div>
+                    </div>
+                    
+                    ${embarque.observacoes ? `
+                        <div class="embarque-extras">
+                            <div class="extras-title">Observações</div>
+                            <div class="detail-value">${embarque.observacoes.substring(0, 150)}${embarque.observacoes.length > 150 ? '...' : ''}</div>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="embarque-actions">
+                        ${embarque.whatsappCliente ? `
+                            <a href="${whatsappLink}" target="_blank" class="btn btn-success btn-sm">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                        ` : ''}
+                        
+                        <button class="btn btn-cvc-primary btn-sm" onclick="abrirDetalhesAgrupados('${embarque.numeroInforme || embarque.id}')">
+                            <i class="fas fa-eye"></i> Ver Detalhes
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function atualizarEstatisticas(embarques) {
+            // CORREÇÃO v8.05: Filtrar itens válidos antes de contar
+            const embarquesValidos = embarques.filter(e => e && typeof e === 'object');
+            
+            stats = {
+                checkins: embarquesValidos.filter(e => e.categoria === 'checkin' && !e.conferido).length,
+                conferencias: embarquesValidos.filter(e => e.categoria === 'conferencia' && !e.conferido).length,
+                posVendas: embarquesValidos.filter(e => e.categoria === 'pos-venda' && !e.conferido).length,
+                total: embarquesValidos.length
+            };
+            
+            document.getElementById('statCheckins').textContent = stats.checkins;
+            document.getElementById('statConferencias').textContent = stats.conferencias;
+            document.getElementById('statPosVendas').textContent = stats.posVendas;
+            document.getElementById('statTotal').textContent = stats.total;
+        }
+        
+        function preencherFiltros() {
+            const filtroVendedor = document.getElementById('filtroVendedor');
+            
+            if (!filtroVendedor) {
+                console.error('Elemento filtroVendedor não encontrado');
+                return;
+            }
+            
+            filtroVendedor.innerHTML = '<option value="">Todos os Vendedores</option>';
+            
+            // Usar vendedores únicos coletados dos dados OU fallback
+            const vendedoresParaUsar = vendedoresUnicos.size > 0 ? Array.from(vendedoresUnicos) : VENDEDORES;
+            
+            vendedoresParaUsar.sort().forEach(vendedor => {
+                const option = document.createElement('option');
+                option.value = vendedor;
+                option.textContent = vendedor;
+                filtroVendedor.appendChild(option);
+            });
+            
+            console.log(`✅ Filtro de vendedores preenchido com ${vendedoresParaUsar.length} opções`);
+        }
+
+        // ================================================================================
+        // 📋 MODAL AGRUPADO POR RECIBO v8.05 - CORRIGIDO
+        // ================================================================================
+        
+        function abrirDetalhesAgrupados(numeroInforme) {
+            embarquesRelacionados = [];
+            
+            if (numeroInforme && numeroInforme !== 'undefined') {
+                // CORREÇÃO v8.05: Filtrar embarques válidos antes de buscar
+                embarquesRelacionados = embarquesData.filter(e => 
+                    e && typeof e === 'object' && (
+                        e.numeroInforme === numeroInforme || 
+                        (e.cpfCliente && embarquesData.find(ref => ref && ref.numeroInforme === numeroInforme && ref.cpfCliente === e.cpfCliente))
+                    )
+                );
+            } else {
+                const embarqueUnico = embarquesData.find(e => e && e.id === numeroInforme);
+                if (embarqueUnico) {
+                    embarquesRelacionados = [embarqueUnico];
+                }
+            }
+            
+            if (embarquesRelacionados.length === 0) {
+                mostrarNotificacao('Nenhum embarque encontrado para exibir detalhes.', 'warning');
+                return;
+            }
+            
+            const modalBody = document.getElementById('modalBody');
+            
+            if (!modalBody) {
+                console.error('Modal body não encontrado');
+                return;
+            }
+            
+            // Agrupar por recibo
+            const embarquesPorRecibo = new Map();
+            embarquesRelacionados.forEach(embarque => {
+                if (embarque && typeof embarque === 'object') {
+                    const recibo = embarque.recibo || 'Sem Recibo';
+                    if (!embarquesPorRecibo.has(recibo)) {
+                        embarquesPorRecibo.set(recibo, []);
+                    }
+                    embarquesPorRecibo.get(recibo).push(embarque);
+                }
+            });
+            
+            const clientePrincipal = embarquesRelacionados[0];
+            const whatsappLink = clientePrincipal.whatsappCliente ? 
+                `https://wa.me/55${clientePrincipal.whatsappCliente.replace(/\D/g, '')}` : '#';
+            
+            modalBody.innerHTML = `
+                                <div class="cliente-header">
+                    <div class="info-title">
+                        <i class="fas fa-user"></i> Dados do Cliente
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Nome Completo</div>
+                            <div class="info-value">${clientePrincipal.nomeCliente || 'Não informado'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">CPF</div>
+                            <div class="info-value">
+                                ${clientePrincipal.cpfCliente || 'Não informado'}
+                                ${clientePrincipal.cpfCliente ? `
+                                    <button class="copy-button" onclick="copiarTexto('${clientePrincipal.cpfCliente}', this)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">WhatsApp</div>
+                            <div class="info-value">
+                                ${clientePrincipal.whatsappCliente ? 
+                                    `<a href="${whatsappLink}" target="_blank" class="text-success">${clientePrincipal.whatsappCliente}</a>
+                                     <button class="copy-button" onclick="copiarTexto('${clientePrincipal.whatsappCliente}', this)">
+                                         <i class="fas fa-copy"></i>
+                                     </button>` : 
+                                    'Não informado'
+                                }
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Vendedor</div>
+                            <div class="info-value">${clientePrincipal.vendedor || 'Não informado'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Cliente Ale</div>
+                            <div class="info-value">
+                                <span class="badge ${clientePrincipal.clienteAle === 'Sim' ? 'bg-primary' : 'bg-secondary'}">
+                                    ${clientePrincipal.clienteAle || 'Não'}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                                ${Array.from(embarquesPorRecibo.entries()).map(([recibo, embarques]) => `
+                    <div class="recibo-box">
+                        <div class="recibo-titulo">
+                            <i class="fas fa-receipt"></i> 
+                            Recibo: ${recibo}
+                            ${recibo !== 'Sem Recibo' ? `
+                                <button class="copy-button" onclick="copiarTexto('${recibo}', this)">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                        
+                        ${embarques.map((embarque, index) => `
+                            <div class="info-section">
+                                <div class="info-title">
+                                    <i class="fas fa-plane"></i> Voo ${index + 1} - ${formatarData(embarque.dataIda)}
+                                </div>
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <div class="info-label">Data de Ida</div>
+                                        <div class="info-value">${formatarData(embarque.dataIda)}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Data de Volta</div>
+                                        <div class="info-value">${formatarData(embarque.dataVolta) || 'N/A'}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Tipo de Serviço</div>
+                                        <div class="info-value">${embarque.tipo || embarque.tipoAereo || 'N/A'}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Companhia Aérea</div>
+                                        <div class="info-value">${embarque.cia || 'N/A'}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Reserva</div>
+                                        <div class="info-value">
+                                            ${embarque.reserva || 'N/A'}
+                                            ${embarque.reserva ? `
+                                                <button class="copy-button" onclick="copiarTexto('${embarque.reserva}', this)">
+                                                    <i class="fas fa-copy"></i>
+                                                </button>
+                                            ` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">LOC GDS</div>
+                                        <div class="info-value">
+                                            ${embarque.locGds || 'N/A'}
+                                            ${embarque.locGds ? `
+                                                <button class="copy-button" onclick="copiarTexto('${embarque.locGds}', this)">
+                                                    <i class="fas fa-copy"></i>
+                                                </button>
+                                            ` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">LOC CIA</div>
+                                        <div class="info-value">
+                                            ${embarque.locCia || 'N/A'}
+                                            ${embarque.locCia ? `
+                                                <button class="copy-button" onclick="copiarTexto('${embarque.locCia}', this)">
+                                                    <i class="fas fa-copy"></i>
+                                                </button>
+                                            ` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Número do Pedido</div>
+                                        <div class="info-value">${embarque.numeroPedido || 'N/A'}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Bagagem</div>
+                                        <div class="info-value">${embarque.temBagagem || 'Não informado'}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Assento</div>
+                                        <div class="info-value">${embarque.temAssento || 'Não informado'}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Multi Trecho</div>
+                                        <div class="info-value">${embarque.multiTrecho || 'Não'}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Seguro</div>
+                                        <div class="info-value">${embarque.seguro || 'Não informado'}</div>
+                                    </div>
+                                </div>
+                                
+                                ${embarque.observacoes ? `
+                                    <div class="mt-3">
+                                        <div class="info-label">Observações</div>
+                                        <div class="info-value">${embarque.observacoes}</div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `).join('')}
+                
+                                <div class="info-section">
+                    <div class="info-title">
+                        <i class="fas fa-edit"></i> Observações Editáveis
+                    </div>
+                    <div class="mt-3">
+                        <label class="editable-label">Observações</label>
+                        <textarea class="editable-field" id="observacoesEditaveis" rows="3" 
+                                  placeholder="Digite observações sobre a conferência...">
+                        </textarea>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="editable-label">Grupo Ofertas WhatsApp</label>
+                            <select class="editable-field" id="grupoOfertas">
+                                <option value="">Selecione...</option>
+                                <option value="Sim">Sim</option>
+                                <option value="Não">Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="editable-label">Postou no Instagram</label>
+                            <select class="editable-field" id="postouInsta">
+                                <option value="">Selecione...</option>
+                                <option value="Sim">Sim</option>
+                                <option value="Não">Não</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="editable-label">Avaliação Google</label>
+                            <select class="editable-field" id="avaliacaoGoogle">
+                                <option value="">Selecione...</option>
+                                <option value="Sim">Sim</option>
+                                <option value="Não">Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="editable-label">SAC</label>
+                            <input type="text" class="editable-field" id="sacPosVenda" 
+                                   placeholder="Número do SAC">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <div class="info-title">
+                        <i class="fas fa-check-circle"></i> Status da Conferência
+                    </div>
+                    <div class="info-value">
+                        ${clientePrincipal.conferido ? 
+                            '<span class="badge bg-success">Conferência Concluída</span>' : 
+                            '<span class="badge bg-warning">Aguardando Conferência</span>'
+                        }
+                    </div>
+                </div>
+            `;
+            
+            // Atualizar botões do modal baseado no status
+            const btnMarcarConferido = document.getElementById('btnMarcarConferido');
+            
+            if (btnMarcarConferido) {
+                if (clientePrincipal.conferido) {
+                    btnMarcarConferido.innerHTML = '<i class="fas fa-undo"></i> Desfazer Conferência';
+                    btnMarcarConferido.className = 'btn btn-warning';
+                } else {
+                    btnMarcarConferido.innerHTML = '<i class="fas fa-check"></i> Marcar como Conferido';
+                    btnMarcarConferido.className = 'btn btn-success';
+                }
+            }
+            
+            const modal = new bootstrap.Modal(document.getElementById('modalDetalhes'));
+            modal.show();
+        }
+        
+        // ================================================================================
+        // 🛠️ FUNÇÕES DO MODAL v8.05
+        // ================================================================================
+        
+async function marcarComoConferido() {
+    console.log('🎯 marcarComoConferido() iniciada');
+    
+    if (embarquesRelacionados.length === 0) {
+        console.log('❌ Nenhum embarque relacionado encontrado');
+        return;
+    }
+    
+    const clientePrincipal = embarquesRelacionados[0];
+    const novoStatus = !clientePrincipal.conferido;
+    
+    console.log('📊 Estado atual:', {
+        cliente: clientePrincipal.nomeCliente,
+        cpf: clientePrincipal.cpfCliente,
+        recibo: clientePrincipal.recibo,
+        numeroInforme: clientePrincipal.numeroInforme,
+        conferidoAtual: clientePrincipal.conferido,
+        novoStatus: novoStatus
+    });
+    
+    const confirmMessage = novoStatus ? 
+        `Marcar conferência de ${clientePrincipal.nomeCliente} como concluída?` :
+        `Desfazer conferência de ${clientePrincipal.nomeCliente}?`;
+    
+    if (!confirm(confirmMessage)) {
+        console.log('❌ Usuário cancelou a operação');
+        return;
+    }
+    
+    const btnMarcarConferido = document.getElementById('btnMarcarConferido');
+    const originalText = btnMarcarConferido.innerHTML;
+    
+    try {
+        btnMarcarConferido.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+        btnMarcarConferido.disabled = true;
+        
+        console.log('🔄 Iniciando chamada da API...');
+        
+        // IMPORTANTE: Atualizar a planilha PRIMEIRO
+        if (novoStatus) {
+            console.log('📡 Chamando API marcar_conferencia...');
+            
+            const payloadAPI = {
+                cpf: clientePrincipal.cpfCliente,
+                recibo: clientePrincipal.recibo,
+                numeroInforme: clientePrincipal.numeroInforme
+            };
+            
+            console.log('📤 Payload enviado:', payloadAPI);
+            
+            const resultado = await chamarAPI('marcar_conferencia', payloadAPI);
+            
+            console.log('📥 Resposta da API:', resultado);
+            
+            if (!resultado.success) {
+                console.error('❌ API retornou erro:', resultado.message);
+                throw new Error(resultado.message || 'Erro ao atualizar planilha');
+            }
+            
+            console.log('✅ API executada com sucesso:', resultado);
+        }
+        
+        // Depois atualizar localmente
+        console.log('🔄 Atualizando dados localmente...');
+        embarquesRelacionados.forEach(embarque => {
+            if (embarque && typeof embarque === 'object') {
+                embarque.conferido = novoStatus;
+                embarque.dataConferencia = novoStatus ? new Date().toLocaleString('pt-BR') : '';
+                embarque.responsavelConferencia = novoStatus ? 'Dashboard v8.05' : '';
+                
+                // Atualizar nos dados principais
+                const embarqueOriginal = embarquesData.find(e => e.id === embarque.id);
+                if (embarqueOriginal) {
+                    embarqueOriginal.conferido = novoStatus;
+                    embarqueOriginal.dataConferencia = embarque.dataConferencia;
+                    embarqueOriginal.responsavelConferencia = embarque.responsavelConferencia;
+                    console.log('📝 Embarque atualizado localmente:', embarqueOriginal.id);
+                }
+                
+                // Salvar no localStorage como backup
+                if (novoStatus) {
+                    localStorage.setItem(`conferencia_${embarque.id}`, 'true');
+                    console.log('💾 Salvo no localStorage:', `conferencia_${embarque.id}`);
+                } else {
+                    localStorage.removeItem(`conferencia_${embarque.id}`);
+                    console.log('🗑️ Removido do localStorage:', `conferencia_${embarque.id}`);
+                }
+            }
+        });
+        
+        // Atualizar interface
+        console.log('🖥️ Atualizando interface...');
+        atualizarEstatisticas(embarquesData);
+        renderizarEmbarques();
+        
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalDetalhes'));
+        modal.hide();
+        
+        const statusText = novoStatus ? 'concluída' : 'desfeita';
+        mostrarNotificacao(`✅ Conferência ${statusText} e salva na planilha com sucesso!`, 'success');
+        
+        console.log('✅ Operação concluída com sucesso');
+        
+        // Recarregar dados após 2 segundos para garantir sincronização
+        setTimeout(() => {
+            console.log('🔄 Recarregando dados para sincronização...');
+            carregarEmbarques();
+        }, 2000);
+        
+    } catch (error) {
+        console.error('❌ Erro completo:', {
+            message: error.message,
+            stack: error.stack,
+            error: error
+        });
+        
+        mostrarNotificacao('❌ Erro ao salvar conferência: ' + error.message, 'error');
+        
+        // Reverter alterações locais em caso de erro
+        embarquesRelacionados.forEach(embarque => {
+            if (embarque) {
+                embarque.conferido = !novoStatus;
+                localStorage.removeItem(`conferencia_${embarque.id}`);
+                console.log('🔙 Revertido embarque:', embarque.id);
+            }
+        });
+    } finally {
+        btnMarcarConferido.innerHTML = originalText;
+        btnMarcarConferido.disabled = false;
+        console.log('🏁 Função marcarComoConferido() finalizada');
+    }
+}
+        
+        async function salvarAlteracoes() {
+            if (embarquesRelacionados.length === 0) return;
+            
+            const clientePrincipal = embarquesRelacionados[0];
+            
+            // Coletar dados editáveis
+            const dadosEditaveis = {
+                observacoes: document.getElementById('observacoesEditaveis').value,
+                grupoOfertas: document.getElementById('grupoOfertas').value,
+                postouInsta: document.getElementById('postouInsta').value,
+                avaliacaoGoogle: document.getElementById('avaliacaoGoogle').value,
+                sac: document.getElementById('sacPosVenda').value
+            };
+            
+            const btnSalvar = document.getElementById('btnSalvarAlteracoes');
+            const originalText = btnSalvar.innerHTML;
+            
+            try {
+                btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+                btnSalvar.disabled = true;
+                
+                // Salvar localmente
+                embarquesRelacionados.forEach(embarque => {
+                    if (embarque && typeof embarque === 'object') {
+                        Object.assign(embarque, dadosEditaveis);
+                        localStorage.setItem(`embarque_${embarque.id}`, JSON.stringify(embarque));
+                    }
+                });
+                
+                // Tentar sincronizar com a API
+                try {
+                    await chamarAPI('marcar_pos_venda', {
+                        cpf: clientePrincipal.cpfCliente,
+                        recibo: clientePrincipal.recibo,
+                        numeroInforme: clientePrincipal.numeroInforme,
+                        dadosEditaveis: dadosEditaveis
+                    });
+                } catch (apiError) {
+                    console.warn('Erro na sincronização com API:', apiError);
+                }
+                
+                mostrarNotificacao('Alterações salvas com sucesso!', 'success');
+                
+            } catch (error) {
+                console.error('Erro ao salvar:', error);
+                mostrarNotificacao('Erro ao salvar: ' + error.message, 'error');
+            } finally {
+                btnSalvar.innerHTML = originalText;
+                btnSalvar.disabled = false;
+            }
+        }
+        
+        async function buscarOrbiunsCliente() {
+            if (embarquesRelacionados.length === 0) return;
+            
+            const clientePrincipal = embarquesRelacionados[0];
+            const btnBuscar = document.getElementById('btnBuscarOrbiuns');
+            
+            btnBuscar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Buscando...';
+            btnBuscar.disabled = true;
+            
+            try {
+                const result = await chamarAPI('buscar_orbiuns', {
+                    cpf: clientePrincipal.cpfCliente
+                });
+                
+                if (result.success && result.data.orbiuns.length > 0) {
+                    mostrarOrbiunsEncontrados(result.data.orbiuns);
+                } else {
+                    mostrarNotificacao('Nenhum Orbium encontrado para este cliente.', 'warning');
+                }
+                
+            } catch (error) {
+                console.error('Erro ao buscar Orbiuns:', error);
+                mostrarNotificacao('Erro ao buscar Orbiuns: ' + error.message, 'error');
+            } finally {
+                btnBuscar.innerHTML = '<i class="fas fa-search"></i> Buscar Orbiuns';
+                btnBuscar.disabled = false;
+            }
+        }
+        
+        function mostrarOrbiunsEncontrados(orbiuns) {
+            const orbiunsHtml = orbiuns.map(orbium => `
+                <div class="info-item">
+                    <div class="info-label">Orbium ${orbium.orbium}</div>
+                    <div class="info-value">
+                        Status: ${orbium.status}<br>
+                        Vendedor: ${orbium.vendedor}<br>
+                        ${orbium.observacoes ? 'Obs: ' + orbium.observacoes : ''}
+                    </div>
+                </div>
+            `).join('');
+            
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML += `
+                <div class="info-section">
+                    <div class="info-title">
+                        <i class="fas fa-clipboard-list"></i> Orbiuns Relacionados
+                    </div>
+                    <div class="info-grid">
+                        ${orbiunsHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ================================================================================
+        // 🔍 SISTEMA DE FILTROS v8.05
+        // ================================================================================
+        
+        function aplicarFiltros() {
+            const filtroVendedor = document.getElementById('filtroVendedor').value;
+            const filtroStatus = document.getElementById('filtroStatus').value;
+            const filtroClienteAle = document.getElementById('filtroClienteAle').value;
+            const filtroCPF = document.getElementById('filtroCPF').value.replace(/\D/g, '');
+            const filtroWhatsApp = document.getElementById('filtroWhatsApp').value.replace(/\D/g, '');
+            const filtroRecibo = document.getElementById('filtroRecibo').value;
+            const filtroReserva = document.getElementById('filtroReserva').value;
+            const filtroLocGds = document.getElementById('filtroLocGds').value;
+            const filtroLocCia = document.getElementById('filtroLocCia').value;
+            const filtroDataInicio = document.getElementById('filtroDataInicio').value;
+            const filtroDataCheckin = document.getElementById('filtroDataCheckin').value;
+            
+            // CORREÇÃO v8.05: Filtrar embarques válidos antes de aplicar filtros
+            embarquesFiltrados = embarquesData.filter(embarque => {
+                if (!embarque || typeof embarque !== 'object') return false;
+                
+                if (filtroVendedor && !embarque.vendedor.includes(filtroVendedor)) {
+                    return false;
+                }
+                
+                if (filtroStatus) {
+                    if (filtroStatus === 'conferido' && !embarque.conferido) {
+                        return false;
+                    } else if (filtroStatus !== 'conferido' && (embarque.categoria !== filtroStatus || embarque.conferido)) {
+                        return false;
+                    }
+                }
+                
+                if (filtroClienteAle && embarque.clienteAle !== filtroClienteAle) {
+                    return false;
+                }
+                
+                if (filtroCPF) {
+                    const cpfEmbarque = embarque.cpfCliente ? embarque.cpfCliente.replace(/\D/g, '') : '';
+                    if (!cpfEmbarque.includes(filtroCPF)) {
+                        return false;
+                    }
+                }
+                
+                if (filtroWhatsApp) {
+                    const whatsappEmbarque = embarque.whatsappCliente ? embarque.whatsappCliente.replace(/\D/g, '') : '';
+                    if (!whatsappEmbarque.includes(filtroWhatsApp)) {
+                        return false;
+                    }
+                }
+                
+                if (filtroRecibo) {
+                    const reciboEmbarque = embarque.recibo ? embarque.recibo.toString() : '';
+                    if (!reciboEmbarque.toLowerCase().includes(filtroRecibo.toLowerCase())) {
+                        return false;
+                    }
+                }
+                
+                if (filtroReserva) {
+                    const reservaEmbarque = embarque.reserva ? embarque.reserva.toString() : '';
+                    if (!reservaEmbarque.toLowerCase().includes(filtroReserva.toLowerCase())) {
+                        return false;
+                    }
+                }
+                
+                if (filtroLocGds) {
+                    const locGdsEmbarque = embarque.locGds ? embarque.locGds.toString() : '';
+                    if (!locGdsEmbarque.toLowerCase().includes(filtroLocGds.toLowerCase())) {
+                        return false;
+                    }
+                }
+                
+                if (filtroLocCia) {
+                    const locCiaEmbarque = embarque.locCia ? embarque.locCia.toString() : '';
+                    if (!locCiaEmbarque.toLowerCase().includes(filtroLocCia.toLowerCase())) {
+                        return false;
+                    }
+                }
+                
+                if (filtroDataInicio) {
+                    const dataInicio = new Date(filtroDataInicio);
+                    const dataEmbarque = parseData(embarque.dataIda);
+                    if (!dataEmbarque || dataEmbarque.toDateString() !== dataInicio.toDateString()) {
+                        return false;
+                    }
+                }
+                
+                if (filtroDataCheckin) {
+                    const dataCheckin = new Date(filtroDataCheckin);
+                    const dataEmbarque = parseData(embarque.dataIda);
+                    if (!dataEmbarque) return false;
+                    
+                    const diffTime = dataEmbarque.getTime() - dataCheckin.getTime();
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    if (diffDays !== 3) {
+                        return false;
+                    }
+                }
+                
+                return true;
+            });
+            
+            atualizarEstatisticas(embarquesFiltrados);
+            renderizarEmbarques();
+            
+            console.log(`🔍 Filtros aplicados: ${embarquesFiltrados.length} embarques`);
+        }
+        
+        function limparFiltros() {
+            document.getElementById('filtroVendedor').value = '';
+            document.getElementById('filtroStatus').value = '';
+            document.getElementById('filtroClienteAle').value = '';
+            document.getElementById('filtroCPF').value = '';
+            document.getElementById('filtroWhatsApp').value = '';
+            document.getElementById('filtroRecibo').value = '';
+            document.getElementById('filtroReserva').value = '';
+            document.getElementById('filtroLocGds').value = '';
+            document.getElementById('filtroLocCia').value = '';
+            document.getElementById('filtroDataInicio').value = '';
+            document.getElementById('filtroDataCheckin').value = '';
+            
+            // CORREÇÃO v8.05: Filtrar embarques válidos
+            embarquesFiltrados = embarquesData.filter(e => e && typeof e === 'object');
+            atualizarEstatisticas(embarquesFiltrados);
+            renderizarEmbarques();
+            
+            console.log('🧹 Todos os filtros limpos');
+        }
