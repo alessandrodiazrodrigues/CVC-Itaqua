@@ -32,10 +32,13 @@
             max-width: 1800px;
             overflow: hidden;
         }
+        
         .content-section {
             padding: 30px;
             background: var(--cvc-cinza-claro);
         }
+        
+        /* Estatísticas com tema CVC */
         .stats-container {
             background: var(--cvc-azul);
             padding: 30px;
@@ -43,6 +46,7 @@
             color: var(--cvc-branco);
             border-radius: 0;
         }
+        
         .stat-card.embarques-stat {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
@@ -53,16 +57,20 @@
             transition: all 0.3s ease;
             margin-bottom: 0;
         }
+        
         .stat-card.embarques-stat:hover {
             transform: translateY(-5px);
             background: rgba(255, 255, 255, 0.15);
         }
+        
         .stat-card.embarques-stat .stat-number {
             font-size: 3rem;
             font-weight: 900;
             color: var(--cvc-amarelo);
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
+        
+        /* Filtros */
         .filters-section {
             background: var(--cvc-fundo-card);
             border-radius: 15px;
@@ -71,15 +79,19 @@
             box-shadow: var(--cvc-sombra-suave);
             border-left: 4px solid var(--cvc-azul);
         }
+        
         .filter-group {
             margin-bottom: 15px;
         }
+        
         .filter-label {
             font-weight: 600;
             color: var(--cvc-azul);
             margin-bottom: 8px;
             font-size: 0.9rem;
         }
+        
+        /* Cards de embarque com alertas por urgência */
         .embarque-card {
             background: var(--cvc-fundo-card);
             border-radius: 15px;
@@ -90,26 +102,33 @@
             transition: all 0.3s ease;
             position: relative;
         }
+        
         .embarque-card:hover {
             transform: translateY(-2px);
             box-shadow: var(--cvc-sombra-media);
         }
+        
         .embarque-card.conferido {
             opacity: 0.7;
             border-left-color: #28a745;
             background: var(--cvc-cinza-claro);
         }
+        
+        /* Sistema de alertas por urgência */
         .embarque-card.urgente {
             border-left-color: #dc3545;
             background: #fff5f5;
         }
+        
         .embarque-card.alerta {
             border-left-color: #ffc107;
             background: #fffbf0;
         }
+        
         .embarque-card.normal {
             border-left-color: #28a745;
         }
+        
         .led-urgencia {
             position: absolute;
             top: 15px;
@@ -119,33 +138,41 @@
             border-radius: 50%;
             box-shadow: 0 0 8px rgba(0,0,0,0.3);
         }
+        
         .led-urgencia.verde {
             background: #28a745;
             animation: pulse-green 2s infinite;
         }
+        
         .led-urgencia.amarelo {
             background: #ffc107;
             animation: pulse-yellow 2s infinite;
         }
+        
         .led-urgencia.vermelho {
             background: #dc3545;
             animation: pulse-red 1s infinite;
         }
+        
         @keyframes pulse-green {
             0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
             70% { box-shadow: 0 0 0 8px rgba(40, 167, 69, 0); }
             100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
         }
+        
         @keyframes pulse-yellow {
             0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7); }
             70% { box-shadow: 0 0 0 8px rgba(255, 193, 7, 0); }
             100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
         }
+        
         @keyframes pulse-red {
             0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
             70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
             100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
         }
+        
+        /* Cliente informações */
         .embarque-header {
             display: flex;
             justify-content: space-between;
@@ -153,9 +180,11 @@
             margin-bottom: 15px;
             flex-wrap: wrap;
         }
+        
         .cliente-info {
             flex: 1;
         }
+        
         .cliente-nome {
             font-size: 1.2rem;
             font-weight: 700;
@@ -165,10 +194,13 @@
             align-items: center;
             gap: 10px;
         }
+        
         .cliente-cpf {
             color: #6c757d;
             font-size: 0.9rem;
         }
+        
+        /* Badges de status */
         .status-badge {
             padding: 8px 16px;
             border-radius: 20px;
@@ -178,22 +210,28 @@
             align-items: center;
             gap: 8px;
         }
+        
         .badge-conferencia {
             background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
             color: #333;
         }
+        
         .badge-checkin {
             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
             color: white;
         }
+        
         .badge-pos-venda {
             background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%);
             color: white;
         }
+        
         .badge-concluido {
             background: linear-gradient(135deg, #00A859 0%, #007C42 100%);
             color: white;
         }
+        
+        /* Tag Cliente Ale */
         .cliente-ale-tag {
             background: var(--cvc-azul);
             color: var(--cvc-branco);
@@ -203,30 +241,37 @@
             font-size: 0.7rem;
             margin-left: 8px;
         }
+        
+        /* Detalhes do embarque */
         .embarque-details {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 12px;
             margin: 15px 0;
         }
+        
         .detail-item {
             display: flex;
             align-items: center;
             gap: 8px;
             font-size: 0.9rem;
         }
+        
         .detail-icon {
             color: var(--cvc-azul);
             width: 16px;
         }
+        
         .detail-label {
             font-weight: 600;
             color: #495057;
             margin-right: 5px;
         }
+        
         .detail-value {
             color: #212529;
         }
+        
         .copy-button {
             background: none;
             border: none;
@@ -238,22 +283,28 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
+        
         .copy-button:hover {
             background: var(--cvc-azul);
             color: var(--cvc-branco);
         }
+        
+        /* Extras e observações */
         .embarque-extras {
             background: var(--cvc-cinza-claro);
             border-radius: 10px;
             padding: 15px;
             margin: 15px 0;
         }
+        
         .extras-title {
             font-weight: 600;
             color: var(--cvc-azul);
             margin-bottom: 10px;
             font-size: 0.9rem;
         }
+        
+        /* Ações do embarque */
         .embarque-actions {
             display: flex;
             gap: 10px;
@@ -261,10 +312,13 @@
             flex-wrap: wrap;
             margin-top: 15px;
         }
+        
+        /* Abas de navegação */
         .nav-tabs {
             border-bottom: 2px solid var(--cvc-azul);
             margin-bottom: 25px;
         }
+        
         .nav-tabs .nav-link {
             color: var(--cvc-azul);
             font-weight: 600;
@@ -273,18 +327,23 @@
             transition: all 0.3s ease;
             padding: 15px 20px;
         }
+        
         .nav-tabs .nav-link:hover {
             border-bottom-color: var(--cvc-amarelo);
             color: var(--cvc-azul);
         }
+        
         .nav-tabs .nav-link.active {
             border-bottom-color: var(--cvc-amarelo);
             color: var(--cvc-azul);
             background: rgba(255, 230, 0, 0.1);
         }
+        
         .nav-tabs .nav-link .badge {
             margin-left: 8px;
         }
+        
+        /* Loading overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -297,6 +356,7 @@
             justify-content: center;
             z-index: 9999;
         }
+        
         .loading-spinner {
             width: 60px;
             height: 60px;
@@ -305,21 +365,27 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
+        /* Empty state */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
             color: #6c757d;
         }
+        
         .empty-state i {
             font-size: 4rem;
             margin-bottom: 20px;
             opacity: 0.5;
             color: var(--cvc-azul);
         }
+        
+        /* Badges de urgência */
         .urgencia-badge {
             font-size: 0.7rem;
             padding: 2px 8px;
@@ -327,18 +393,23 @@
             font-weight: 600;
             margin-left: 5px;
         }
+        
         .urgencia-normal {
             background: #28a745;
             color: var(--cvc-branco);
         }
+        
         .urgencia-alerta {
             background: #ffc107;
             color: #333;
         }
+        
         .urgencia-urgente {
             background: #dc3545;
             color: var(--cvc-branco);
         }
+        
+        /* Notificações */
         .notification {
             position: fixed;
             top: 20px;
@@ -353,44 +424,56 @@
             box-shadow: var(--cvc-sombra-media);
             animation: slideIn 0.3s ease-out;
         }
+        
         .notification.success {
             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
         }
+        
         .notification.error {
             background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
         }
+        
         .notification.warning {
             background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
             color: #333;
         }
+        
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+        
         @keyframes slideOut {
             from { transform: translateX(0); opacity: 1; }
             to { transform: translateX(100%); opacity: 0; }
         }
+        
+        /* Modal customizado */
         .modal-cvc .modal-content {
             border-radius: 15px;
             border: none;
             box-shadow: var(--cvc-sombra-forte);
         }
+        
         .modal-cvc .modal-header {
             background: var(--cvc-azul);
             color: var(--cvc-branco);
             border-radius: 15px 15px 0 0;
             border-bottom: none;
         }
+        
         .modal-cvc .modal-title {
             font-weight: 700;
         }
+        
+        /* Info seções no modal */
         .cliente-header {
             background: var(--cvc-cinza-claro);
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
         }
+        
         .recibo-box {
             border: 2px solid #e9ecef;
             border-radius: 10px;
@@ -398,6 +481,7 @@
             margin-bottom: 20px;
             background: var(--cvc-fundo-card);
         }
+        
         .recibo-titulo {
             font-weight: 600;
             color: var(--cvc-azul);
@@ -406,12 +490,14 @@
             align-items: center;
             gap: 10px;
         }
+        
         .info-section {
             background: var(--cvc-cinza-claro);
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
         }
+        
         .info-title {
             font-weight: 600;
             color: var(--cvc-azul);
@@ -420,21 +506,25 @@
             align-items: center;
             gap: 10px;
         }
+        
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
         }
+        
         .info-item {
             display: flex;
             flex-direction: column;
         }
+        
         .info-label {
             font-size: 0.85rem;
             color: #6c757d;
             font-weight: 600;
             margin-bottom: 5px;
         }
+        
         .info-value {
             font-size: 1rem;
             color: #212529;
@@ -443,6 +533,8 @@
             align-items: center;
             gap: 8px;
         }
+        
+        /* Campos editáveis */
         .editable-field {
             background: var(--cvc-fundo-card);
             border: 2px solid #e9ecef;
@@ -453,32 +545,41 @@
             transition: all 0.3s ease;
             font-family: 'Nunito', sans-serif;
         }
+        
         .editable-field:focus {
             border-color: var(--cvc-amarelo);
             box-shadow: 0 0 0 0.2rem rgba(255, 230, 0, 0.25);
             outline: none;
         }
+        
         .editable-label {
             color: var(--cvc-azul) !important;
             font-weight: 600 !important;
         }
+        
+        /* Responsividade */
         @media (max-width: 768px) {
             .main-container {
                 margin: 10px;
                 border-radius: 15px;
             }
+            
             .embarque-details {
                 grid-template-columns: 1fr;
             }
+            
             .embarque-actions {
                 justify-content: center;
             }
+            
             .filters-section .row {
                 margin: 0;
             }
+            
             .filters-section .col-md-2 {
                 margin-bottom: 10px;
             }
+            
             .stat-card.embarques-stat .stat-number {
                 font-size: 2rem;
             }
@@ -818,6 +919,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="config.js"></script>
     <script src="embarques-logic.js"></script>
-    <script src="embarques-main.js"></script>
 </body>
 </html>
