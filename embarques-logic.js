@@ -8,7 +8,7 @@
 // 🔧 CONFIGURAÇÃO E VARIÁVEIS GLOBAIS
 // ================================================================================
 let API_URL = null;
-let CVC_CONFIG = null;
+// CVC_CONFIG já existe no config.js - não redeclarar
 let VENDEDORES = [];
 
 let embarquesData = [];
