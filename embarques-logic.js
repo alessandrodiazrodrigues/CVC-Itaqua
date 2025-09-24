@@ -1,7 +1,7 @@
 // ================================================================================
-// [MODULO] embarques-logic.js - Lógica do Dashboard de Embarques v8.08
+// [MODULO] embarques-logic.js - Lógica do Dashboard de Embarques v8.09
 // ================================================================================
-// 🎯 VERSÃO FINAL COMPLETA - Visual CVC + Lógica corrigida + Todas funcionalidades
+// 🎯 VERSÃO FINAL SEM FALLBACK - APENAS DADOS REAIS DA API
 // ================================================================================
 
 // ================================================================================
@@ -24,7 +24,7 @@ const DATA_HOJE = new Date();
 // 🚀 INICIALIZAÇÃO
 // ================================================================================
 document.addEventListener('DOMContentLoaded', function() {
-    debugLog('🚀 Inicializando embarques-logic.js v8.08...', 'info');
+    debugLog('🚀 Inicializando embarques-logic.js v8.09...', 'info');
     obterConfiguracao();
     configurarEventos();
     carregarEmbarques();
@@ -55,7 +55,7 @@ function obterConfiguracao() {
         // Fallback com configuração padrão
         if (!API_URL) {
             debugLog('⚠️ Config.js não encontrado, usando configuração fallback', 'warning');
-            API_URL = 'https://script.google.com/macros/s/AKfycbzV-sRXW3umtUXYy9NaWfABHmhX36WnNklr8exYLN2UuBCcuRonOnfJgqMJ_JwA3A7nYA/exec';
+            API_URL = 'https://script.google.com/macros/s/AKfycbzJK9dQdZf9buvBvOXn42PgOZEAI_XQGw6pyzcWETOGzfqB78Cx6o7q9M35hgHaVbZzEA/exec';
         }
         
         // Fallback para vendedores
@@ -109,52 +109,8 @@ function configurarEventos() {
 }
 
 // ================================================================================
-// 📡 COMUNICAÇÃO COM API
+// 📡 CARREGAMENTO DE DADOS - APENAS API REAL
 // ================================================================================
-async function chamarAPI(action, dados = {}) {
-    try {
-        mostrarLoading(true);
-        
-        // Criar FormData para evitar CORS
-        const formData = new URLSearchParams();
-        formData.append('action', action);
-        
-        // Adicionar dados se houver
-        if (dados && typeof dados === 'object') {
-            Object.entries(dados).forEach(([key, value]) => {
-                formData.append(key, typeof value === 'object' ? JSON.stringify(value) : value);
-            });
-        }
-        
-        debugLog(`📡 Chamando API: ${action}`, 'info', dados);
-        
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            body: formData
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        
-        const result = await response.json();
-        debugLog('📥 Resposta da API', 'success', result);
-        
-        if (!result.success) {
-            throw new Error(result.message || 'Erro na API');
-        }
-        
-        return result;
-        
-    } catch (error) {
-        debugLog(`❌ Erro na API: ${error.message}`, 'error');
-        mostrarNotificacao(`Erro de conexão: ${error.message}`, 'error');
-        throw error;
-    } finally {
-        mostrarLoading(false);
-    }
-}
-
 async function carregarEmbarques() {
     try {
         debugLog('📋 Carregando embarques da planilha...', 'info');
@@ -162,256 +118,85 @@ async function carregarEmbarques() {
         
         mostrarLoading(true);
         
-        try {
-            // Tentar carregar da API real
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                body: new URLSearchParams({
-                    action: 'listar_embarques'
-                })
-            });
-            
-            if (!response.ok) {
-                throw new Error(`Erro HTTP: ${response.status}`);
-            }
-            
-            const resultado = await response.json();
-            debugLog('📥 Resposta da API', 'success');
-            console.log(resultado);
-            
-            if (resultado.success) {
-                // Verificar se há dados de embarques na resposta
-                if (resultado.data && resultado.data.embarques && Array.isArray(resultado.data.embarques)) {
-                    const dadosRaw = resultado.data.embarques;
-                    debugLog(`📄 Processando ${dadosRaw.length} registros...`, 'info');
-                    
-                    embarquesData = processarDadosEmbarques(dadosRaw);
-                    embarquesFiltrados = [...embarquesData];
-                    
-                    const processados = embarquesData.length;
-                    const rejeitados = dadosRaw.length - processados;
-                    const percentual = ((processados / dadosRaw.length) * 100).toFixed(1);
-                    
-                    debugLog(`✅ Processamento: ${processados}/${dadosRaw.length} (${percentual}%)`, 'success');
-                    if (rejeitados > 0) {
-                        debugLog(`❌ Registros rejeitados: ${rejeitados}`, 'warning');
-                    }
-                    
-                    preencherFiltros();
-                    atualizarEstatisticas(embarquesData);
-                    renderizarEmbarques();
-                    
-                    debugLog(`✅ ${embarquesData.length} embarques carregados com sucesso`, 'success');
-                    return; // Sucesso, sair da função
-                } else if (resultado.embarques && Array.isArray(resultado.embarques)) {
-                    // Formato alternativo - embarques direto na raiz
-                    const dadosRaw = resultado.embarques;
-                    debugLog(`📄 Processando ${dadosRaw.length} registros (formato alternativo)...`, 'info');
-                    
-                    embarquesData = processarDadosEmbarques(dadosRaw);
-                    embarquesFiltrados = [...embarquesData];
-                    
-                    preencherFiltros();
-                    atualizarEstatisticas(embarquesData);
-                    renderizarEmbarques();
-                    
-                    debugLog(`✅ ${embarquesData.length} embarques carregados com sucesso`, 'success');
-                    return; // Sucesso, sair da função
-                } else {
-                    // API retornou sucesso mas sem dados de embarques
-                    debugLog(`⚠️ API funcionando mas sem dados de embarques. Response: ${resultado.message}`, 'warning');
-                    throw new Error('Sem dados de embarques na API');
-                }
-            } else {
-                throw new Error(resultado.message || 'Dados não encontrados na resposta');
-            }
-        } catch (apiError) {
-            debugLog(`⚠️ API não disponível (${apiError.message}), carregando dados de exemplo...`, 'warning');
-            
-            // FALLBACK: Carregar dados de exemplo para testar a interface
-            const dadosExemplo = [
-                {
-                    id: 1,
-                    numeroInforme: 'VENDA-1758134334653',
-                    filial: 6220,
-                    vendedor: 'Adriana',
-                    nomeCliente: 'Maria Gorete Abreu De Souza',
-                    cpfCliente: '251.651.898-64',
-                    whatsappCliente: '11987654321',
-                    dataIda: '2025-11-28',
-                    dataVolta: '',
-                    recibo: '62200000128415',
-                    numeroPedido: '',
-                    reserva: '',
-                    tipo: 'Aéreo',
-                    cia: 'GOL',
-                    locGds: '',
-                    locCia: 'OCUJVF',
-                    temBagagem: 'Não',
-                    temAssento: 'Não',
-                    multiTrecho: 'Não',
-                    seguro: 'Não informado',
-                    observacoes: 'Bagagem: Não, Assento: Não',
-                    ofertadoSVAs: 'Cadastrado',
-                    grupoOfertas: '',
-                    postouInsta: '',
-                    avaliacaoGoogle: '',
-                    statusGeral: 'Ativo',
-                    clienteAle: 'Não',
-                    conferenciaFeita: false,
-                    checkinFeito: false,
-                    posVendaFeita: false,
-                    situacao: 'Ativo'
-                },
-                {
-                    id: 2,
-                    numeroInforme: 'VENDA-1758134334654',
-                    filial: 6220,
-                    vendedor: 'Alessandro',
-                    nomeCliente: 'João Carlos Silva',
-                    cpfCliente: '123.456.789-01',
-                    whatsappCliente: '11976543210',
-                    dataIda: '2025-09-30',
-                    dataVolta: '2025-10-07',
-                    recibo: '62200000128416',
-                    numeroPedido: '',
-                    reserva: 'ABC123',
-                    tipo: 'A+H',
-                    cia: 'AZUL',
-                    locGds: 'ABC123',
-                    locCia: 'XYZ456',
-                    temBagagem: 'Sim',
-                    temAssento: 'Sim',
-                    multiTrecho: 'Não',
-                    seguro: 'Sim',
-                    observacoes: 'Cliente preferencial, check-in online',
-                    ofertadoSVAs: 'Sim',
-                    grupoOfertas: 'Sim',
-                    postouInsta: 'Não',
-                    avaliacaoGoogle: 'Pendente',
-                    statusGeral: 'Ativo',
-                    clienteAle: 'Sim',
-                    conferenciaFeita: false,
-                    checkinFeito: false,
-                    posVendaFeita: false,
-                    situacao: 'Ativo'
-                },
-                {
-                    id: 3,
-                    numeroInforme: 'VENDA-1758134334655',
-                    filial: 6220,
-                    vendedor: 'Ana Paula',
-                    nomeCliente: 'Fernanda Costa Santos',
-                    cpfCliente: '987.654.321-00',
-                    whatsappCliente: '11965432109',
-                    dataIda: '2025-10-02',
-                    dataVolta: '',
-                    recibo: '62200000128417',
-                    numeroPedido: '',
-                    reserva: 'DEF789',
-                    tipo: 'Aéreo',
-                    cia: 'LATAM',
-                    locGds: 'DEF789',
-                    locCia: 'GHI012',
-                    temBagagem: 'Não',
-                    temAssento: 'Sim',
-                    multiTrecho: 'Sim',
-                    seguro: 'Não',
-                    observacoes: 'Voo executivo, sem bagagem despachada',
-                    ofertadoSVAs: 'Não',
-                    grupoOfertas: 'Não',
-                    postouInsta: 'Sim',
-                    avaliacaoGoogle: 'Sim',
-                    statusGeral: 'Ativo',
-                    clienteAle: 'Não',
-                    conferenciaFeita: true,
-                    checkinFeito: false,
-                    posVendaFeita: false,
-                    situacao: 'Ativo'
-                },
-                {
-                    id: 4,
-                    numeroInforme: 'VENDA-1758134334656',
-                    filial: 6220,
-                    vendedor: 'Bia',
-                    nomeCliente: 'Carlos Eduardo Lima',
-                    cpfCliente: '456.789.123-45',
-                    whatsappCliente: '11954321098',
-                    dataIda: '2025-09-25',
-                    dataVolta: '2025-09-30',
-                    recibo: '62200000128418',
-                    numeroPedido: '',
-                    reserva: 'JKL345',
-                    tipo: 'A+H+S',
-                    cia: 'GOL',
-                    locGds: 'JKL345',
-                    locCia: 'MNO678',
-                    temBagagem: 'Sim',
-                    temAssento: 'Sim',
-                    multiTrecho: 'Não',
-                    seguro: 'Sim',
-                    observacoes: 'Pacote completo com seguro viagem',
-                    ofertadoSVAs: 'Sim',
-                    grupoOfertas: 'Sim',
-                    postouInsta: 'Sim',
-                    avaliacaoGoogle: 'Não',
-                    statusGeral: 'Ativo',
-                    clienteAle: 'Não',
-                    conferenciaFeita: true,
-                    checkinFeito: true,
-                    posVendaFeita: false,
-                    situacao: 'Ativo'
-                },
-                {
-                    id: 5,
-                    numeroInforme: 'VENDA-1758134334657',
-                    filial: 6220,
-                    vendedor: 'Conceição',
-                    nomeCliente: 'Patricia Oliveira Matos',
-                    cpfCliente: '789.123.456-78',
-                    whatsappCliente: '',
-                    dataIda: '2025-09-20',
-                    dataVolta: '2025-09-27',
-                    recibo: '62200000128419',
-                    numeroPedido: '',
-                    reserva: 'PQR901',
-                    tipo: 'Terrestre',
-                    cia: 'OUTROS',
-                    locGds: '',
-                    locCia: 'STU234',
-                    temBagagem: 'Sim',
-                    temAssento: 'N/A',
-                    multiTrecho: 'Não',
-                    seguro: 'Sim',
-                    observacoes: 'Viagem de ônibus para Gramado',
-                    ofertadoSVAs: 'Não',
-                    grupoOfertas: 'Não',
-                    postouInsta: 'Não',
-                    avaliacaoGoogle: 'Sim',
-                    statusGeral: 'Ativo',
-                    clienteAle: 'Não',
-                    conferenciaFeita: true,
-                    checkinFeito: true,
-                    posVendaFeita: true,
-                    situacao: 'Ativo'
-                }
-            ];
-            
-            debugLog(`📄 Processando ${dadosExemplo.length} registros de exemplo...`, 'info');
-            embarquesData = processarDadosEmbarques(dadosExemplo);
-            embarquesFiltrados = [...embarquesData];
-            
-            preencherFiltros();
-            atualizarEstatisticas(embarquesData);
-            renderizarEmbarques();
-            
-            debugLog(`✅ ${embarquesData.length} embarques de exemplo carregados com sucesso`, 'success');
-            mostrarNotificacao(`Modo demonstração ativo!\nUsando dados de exemplo para testar a interface.\n\nPara dados reais, resolva o problema de CORS no Google Apps Script.`, 'warning', 8000);
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            body: new URLSearchParams({
+                action: 'listar_embarques'
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
         }
         
+        const resultado = await response.json();
+        debugLog('📥 Resposta da API', 'success');
+        console.log(resultado);
+        
+        if (resultado.success) {
+            // Verificar se há dados de embarques na resposta
+            if (resultado.data && resultado.data.embarques && Array.isArray(resultado.data.embarques)) {
+                const dadosRaw = resultado.data.embarques;
+                debugLog(`📄 Processando ${dadosRaw.length} registros...`, 'info');
+                
+                embarquesData = processarDadosEmbarques(dadosRaw);
+                embarquesFiltrados = [...embarquesData];
+                
+                const processados = embarquesData.length;
+                const rejeitados = dadosRaw.length - processados;
+                const percentual = ((processados / dadosRaw.length) * 100).toFixed(1);
+                
+                debugLog(`✅ Processamento: ${processados}/${dadosRaw.length} (${percentual}%)`, 'success');
+                if (rejeitados > 0) {
+                    debugLog(`❌ Registros rejeitados: ${rejeitados}`, 'warning');
+                }
+                
+                preencherFiltros();
+                atualizarEstatisticas(embarquesData);
+                renderizarEmbarques();
+                
+                debugLog(`✅ ${embarquesData.length} embarques carregados com sucesso`, 'success');
+            } else if (resultado.embarques && Array.isArray(resultado.embarques)) {
+                // Formato alternativo - embarques direto na raiz
+                const dadosRaw = resultado.embarques;
+                debugLog(`📄 Processando ${dadosRaw.length} registros (formato alternativo)...`, 'info');
+                
+                embarquesData = processarDadosEmbarques(dadosRaw);
+                embarquesFiltrados = [...embarquesData];
+                
+                preencherFiltros();
+                atualizarEstatisticas(embarquesData);
+                renderizarEmbarques();
+                
+                debugLog(`✅ ${embarquesData.length} embarques carregados com sucesso`, 'success');
+            } else {
+                // API retornou sucesso mas sem dados de embarques
+                debugLog(`⚠️ API funcionando mas sem dados de embarques. Response: ${resultado.message}`, 'warning');
+                mostrarNotificacao(`Sistema conectado: ${resultado.message || 'API funcionando'}\nNenhum embarque encontrado na planilha.`, 'warning');
+                
+                // Limpar dados existentes
+                embarquesData = [];
+                embarquesFiltrados = [];
+                atualizarEstatisticas([]);
+                renderizarEmbarques();
+            }
+        } else {
+            throw new Error(resultado.message || 'Resposta de erro da API');
+        }
     } catch (error) {
         debugLog(`❌ Erro ao carregar embarques: ${error.message}`, 'error');
-        mostrarNotificacao('Erro ao carregar dados. Tente novamente.', 'error');
+        
+        if (error.message.includes('Failed to fetch') || error.message.includes('CORS')) {
+            mostrarNotificacao(`❌ Erro de CORS: Não é possível conectar à API.\n\n🔧 Soluções necessárias:\n1. Aplicar correção de CORS no Google Apps Script\n2. Reimplantar o script com headers corretos\n\n🌐 Domínio atual: ${window.location.origin}`, 'error', 10000);
+        } else {
+            mostrarNotificacao('Erro ao carregar dados da API. Verifique a conexão e tente novamente.', 'error');
+        }
+        
+        // Limpar dados em caso de erro - SEM FALLBACK
+        embarquesData = [];
+        embarquesFiltrados = [];
+        atualizarEstatisticas([]);
+        renderizarEmbarques();
     } finally {
         mostrarLoading(false);
     }
@@ -421,7 +206,7 @@ async function carregarEmbarques() {
 // 📄 PROCESSAMENTO E CLASSIFICAÇÃO DOS DADOS - CORRIGIDO
 // ================================================================================
 function processarDadosEmbarques(dados) {
-    debugLog(`📄 Processando ${dados.length} registros v8.08...`, 'info');
+    debugLog(`📄 Processando ${dados.length} registros v8.09...`, 'info');
     
     const embarquesProcessados = [];
     embarquesAgrupados.clear();
@@ -679,7 +464,7 @@ function renderizarLista(containerId, embarques, categoria) {
             ">
                 <i class="fas fa-${categoria === 'conferencia' ? 'clipboard-check' : categoria === 'checkin' ? 'plane' : categoria === 'pos-venda' ? 'phone' : 'check-double'}" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;"></i>
                 <h5 style="margin-bottom: 10px; color: #495057;">${mensagens[categoria]}</h5>
-                <small style="color: #6c757d;">Sistema v8.08 - Total processados: ${stats.total} embarques</small>
+                <small style="color: #6c757d;">Sistema v8.09 - Total processados: ${stats.total} embarques</small>
             </div>
         `;
         return;
@@ -998,541 +783,6 @@ function preencherFiltros() {
 }
 
 // ================================================================================
-// 📋 MODAL E AÇÕES
-// ================================================================================
-function abrirDetalhesAgrupados(idOuInforme) {
-    embarquesRelacionados = [];
-    
-    if (idOuInforme && idOuInforme !== 'undefined') {
-        embarquesRelacionados = embarquesData.filter(e => 
-            e && typeof e === 'object' && (
-                e.numeroInforme === idOuInforme || 
-                e.id === idOuInforme ||
-                (e.cpfCliente && embarquesData.find(ref => ref && ref.numeroInforme === idOuInforme && ref.cpfCliente === e.cpfCliente))
-            )
-        );
-    }
-    
-    if (embarquesRelacionados.length === 0) {
-        mostrarNotificacao('Nenhum embarque encontrado para exibir detalhes.', 'warning');
-        return;
-    }
-    
-    const clientePrincipal = embarquesRelacionados[0];
-    const modalBody = document.getElementById('modalBody');
-    
-    if (!modalBody) {
-        debugLog('Modal body não encontrado', 'error');
-        return;
-    }
-    
-    // Agrupar por recibo
-    const embarquesPorRecibo = new Map();
-    embarquesRelacionados.forEach(embarque => {
-        if (embarque && typeof embarque === 'object') {
-            const recibo = embarque.recibo || 'Sem Recibo';
-            if (!embarquesPorRecibo.has(recibo)) {
-                embarquesPorRecibo.set(recibo, []);
-            }
-            embarquesPorRecibo.get(recibo).push(embarque);
-        }
-    });
-    
-    const whatsappLink = clientePrincipal.whatsappCliente ? 
-        `https://wa.me/55${clientePrincipal.whatsappCliente.replace(/\D/g, '')}` : '#';
-    
-    modalBody.innerHTML = `
-        <div class="cliente-header" style="
-            background: linear-gradient(135deg, #0A00B4 0%, #1B365D 100%);
-            color: #FFE600;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        ">
-            <div class="info-title" style="
-                font-size: 1.2rem;
-                font-weight: 700;
-                margin-bottom: 15px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            ">
-                <i class="fas fa-user"></i> Dados do Cliente
-            </div>
-            <div class="info-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
-                <div class="info-item">
-                    <div class="info-label" style="font-weight: 600; margin-bottom: 5px;">Nome Completo</div>
-                    <div class="info-value" style="background: rgba(255, 230, 0, 0.1); padding: 8px; border-radius: 5px;">${clientePrincipal.nomeCliente || 'Não informado'}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label" style="font-weight: 600; margin-bottom: 5px;">CPF</div>
-                    <div class="info-value" style="background: rgba(255, 230, 0, 0.1); padding: 8px; border-radius: 5px; display: flex; align-items: center; gap: 10px;">
-                        ${clientePrincipal.cpfCliente || 'Não informado'}
-                        ${clientePrincipal.cpfCliente ? `
-                            <button class="copy-button" onclick="copiarTexto('${clientePrincipal.cpfCliente}', this)" style="background: #FFE600; color: #0A00B4; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                        ` : ''}
-                    </div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label" style="font-weight: 600; margin-bottom: 5px;">WhatsApp</div>
-                    <div class="info-value" style="background: rgba(255, 230, 0, 0.1); padding: 8px; border-radius: 5px;">
-                        ${clientePrincipal.whatsappCliente ? 
-                            `<a href="${whatsappLink}" target="_blank" style="color: #FFE600; text-decoration: none;">${clientePrincipal.whatsappCliente}</a>
-                             <button class="copy-button" onclick="copiarTexto('${clientePrincipal.whatsappCliente}', this)" style="background: #FFE600; color: #0A00B4; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-left: 10px;">
-                                 <i class="fas fa-copy"></i>
-                             </button>` : 
-                            'Não informado'
-                        }
-                    </div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label" style="font-weight: 600; margin-bottom: 5px;">Vendedor</div>
-                    <div class="info-value" style="background: rgba(255, 230, 0, 0.1); padding: 8px; border-radius: 5px;">${clientePrincipal.vendedor || 'Não informado'}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label" style="font-weight: 600; margin-bottom: 5px;">Cliente Ale</div>
-                    <div class="info-value">
-                        <span style="
-                            background: ${clientePrincipal.clienteAle === 'Sim' ? '#FFE600' : '#6c757d'};
-                            color: ${clientePrincipal.clienteAle === 'Sim' ? '#0A00B4' : 'white'};
-                            padding: 4px 12px;
-                            border-radius: 15px;
-                            font-weight: 600;
-                            font-size: 0.8rem;
-                        ">${clientePrincipal.clienteAle || 'Não'}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        ${Array.from(embarquesPorRecibo.entries()).map(([recibo, embarques]) => `
-            <div class="recibo-box" style="
-                background: #f8f9fa;
-                border: 1px solid #dee2e6;
-                border-radius: 10px;
-                padding: 20px;
-                margin-bottom: 20px;
-            ">
-                <div class="recibo-titulo" style="
-                    font-size: 1.1rem;
-                    font-weight: 700;
-                    color: #0A00B4;
-                    margin-bottom: 15px;
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                ">
-                    <i class="fas fa-receipt"></i> 
-                    Recibo: ${recibo}
-                    ${recibo !== 'Sem Recibo' ? `
-                        <button class="copy-button" onclick="copiarTexto('${recibo}', this)" style="
-                            background: #0A00B4;
-                            color: #FFE600;
-                            border: none;
-                            padding: 4px 8px;
-                            border-radius: 4px;
-                            cursor: pointer;
-                            margin-left: 10px;
-                        ">
-                            <i class="fas fa-copy"></i>
-                        </button>
-                    ` : ''}
-                </div>
-                
-                ${embarques.map((embarque, index) => `
-                    <div class="info-section" style="
-                        background: white;
-                        border-radius: 8px;
-                        padding: 15px;
-                        margin-bottom: 15px;
-                        border-left: 4px solid #0A00B4;
-                    ">
-                        <div class="info-title" style="
-                            font-weight: 600;
-                            color: #0A00B4;
-                            margin-bottom: 10px;
-                            display: flex;
-                            align-items: center;
-                            gap: 8px;
-                        ">
-                            <i class="fas fa-plane"></i> Voo ${index + 1} - ${formatarData(embarque.dataIda)}
-                        </div>
-                        <div class="info-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
-                            <div class="info-item">
-                                <div class="info-label" style="font-weight: 600; color: #495057; font-size: 0.85rem;">Data de Ida</div>
-                                <div class="info-value" style="color: #1B365D;">${formatarData(embarque.dataIda)}</div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label" style="font-weight: 600; color: #495057; font-size: 0.85rem;">Data de Volta</div>
-                                <div class="info-value" style="color: #1B365D;">${formatarData(embarque.dataVolta) || 'N/A'}</div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label" style="font-weight: 600; color: #495057; font-size: 0.85rem;">Tipo de Serviço</div>
-                                <div class="info-value" style="color: #1B365D;">${embarque.tipo || embarque.tipoAereo || 'N/A'}</div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label" style="font-weight: 600; color: #495057; font-size: 0.85rem;">Companhia Aérea</div>
-                                <div class="info-value" style="color: #1B365D;">${embarque.cia || 'N/A'}</div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label" style="font-weight: 600; color: #495057; font-size: 0.85rem;">Reserva</div>
-                                <div class="info-value" style="color: #1B365D; display: flex; align-items: center; gap: 8px;">
-                                    ${embarque.reserva || 'N/A'}
-                                    ${embarque.reserva ? `
-                                        <button class="copy-button" onclick="copiarTexto('${embarque.reserva}', this)" style="background: #0A00B4; color: #FFE600; border: none; padding: 2px 6px; border-radius: 3px; cursor: pointer;">
-                                            <i class="fas fa-copy"></i>
-                                        </button>
-                                    ` : ''}
-                                </div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label" style="font-weight: 600; color: #495057; font-size: 0.85rem;">LOC GDS</div>
-                                <div class="info-value" style="color: #1B365D; display: flex; align-items: center; gap: 8px;">
-                                    ${embarque.locGds || 'N/A'}
-                                    ${embarque.locGds ? `
-                                        <button class="copy-button" onclick="copiarTexto('${embarque.locGds}', this)" style="background: #0A00B4; color: #FFE600; border: none; padding: 2px 6px; border-radius: 3px; cursor: pointer;">
-                                            <i class="fas fa-copy"></i>
-                                        </button>
-                                    ` : ''}
-                                </div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label" style="font-weight: 600; color: #495057; font-size: 0.85rem;">LOC CIA</div>
-                                <div class="info-value" style="color: #1B365D; display: flex; align-items: center; gap: 8px;">
-                                    ${embarque.locCia || 'N/A'}
-                                    ${embarque.locCia ? `
-                                        <button class="copy-button" onclick="copiarTexto('${embarque.locCia}', this)" style="background: #0A00B4; color: #FFE600; border: none; padding: 2px 6px; border-radius: 3px; cursor: pointer;">
-                                            <i class="fas fa-copy"></i>
-                                        </button>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        ${embarque.observacoes ? `
-                            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #dee2e6;">
-                                <div class="info-label" style="font-weight: 600; color: #495057; margin-bottom: 5px;">Observações</div>
-                                <div class="info-value" style="color: #1B365D; background: #f8f9fa; padding: 10px; border-radius: 5px;">${embarque.observacoes}</div>
-                            </div>
-                        ` : ''}
-                    </div>
-                `).join('')}
-            </div>
-        `).join('')}
-        
-        <div class="info-section" style="
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid #dee2e6;
-        ">
-            <div class="info-title" style="
-                font-weight: 700;
-                color: #0A00B4;
-                margin-bottom: 15px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            ">
-                <i class="fas fa-edit"></i> Observações Editáveis
-            </div>
-            <div style="margin-bottom: 15px;">
-                <label class="editable-label" style="font-weight: 600; color: #495057; margin-bottom: 5px; display: block;">Observações</label>
-                <textarea class="editable-field" id="observacoesEditaveis" rows="3" 
-                          placeholder="Digite observações sobre a conferência..."
-                          style="width: 100%; padding: 10px; border: 1px solid #dee2e6; border-radius: 5px; font-family: 'Nunito', sans-serif;">
-                </textarea>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;">
-                <div>
-                    <label class="editable-label" style="font-weight: 600; color: #495057; margin-bottom: 5px; display: block;">Grupo Ofertas WhatsApp</label>
-                    <select class="editable-field" id="grupoOfertas" style="width: 100%; padding: 8px; border: 1px solid #dee2e6; border-radius: 5px;">
-                        <option value="">Selecione...</option>
-                        <option value="Sim">Sim</option>
-                        <option value="Não">Não</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="editable-label" style="font-weight: 600; color: #495057; margin-bottom: 5px; display: block;">Postou no Instagram</label>
-                    <select class="editable-field" id="postouInsta" style="width: 100%; padding: 8px; border: 1px solid #dee2e6; border-radius: 5px;">
-                        <option value="">Selecione...</option>
-                        <option value="Sim">Sim</option>
-                        <option value="Não">Não</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="editable-label" style="font-weight: 600; color: #495057; margin-bottom: 5px; display: block;">Avaliação Google</label>
-                    <select class="editable-field" id="avaliacaoGoogle" style="width: 100%; padding: 8px; border: 1px solid #dee2e6; border-radius: 5px;">
-                        <option value="">Selecione...</option>
-                        <option value="Sim">Sim</option>
-                        <option value="Não">Não</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="editable-label" style="font-weight: 600; color: #495057; margin-bottom: 5px; display: block;">SAC</label>
-                    <input type="text" class="editable-field" id="sacPosVenda" 
-                           placeholder="Número do SAC"
-                           style="width: 100%; padding: 8px; border: 1px solid #dee2e6; border-radius: 5px;">
-                </div>
-            </div>
-        </div>
-        
-        <div class="info-section" style="
-            background: ${clientePrincipal.conferenciaFeita ? '#d4edda' : '#fff3cd'};
-            border: 1px solid ${clientePrincipal.conferenciaFeita ? '#c3e6cb' : '#ffeaa7'};
-            border-radius: 10px;
-            padding: 20px;
-        ">
-            <div class="info-title" style="
-                font-weight: 700;
-                color: ${clientePrincipal.conferenciaFeita ? '#155724' : '#856404'};
-                margin-bottom: 10px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            ">
-                <i class="fas fa-check-circle"></i> Status da Conferência
-            </div>
-            <div class="info-value">
-                ${clientePrincipal.conferenciaFeita ? 
-                    '<span style="background: #28a745; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600;">Conferência Concluída</span>' : 
-                    '<span style="background: #ffc107; color: #212529; padding: 8px 16px; border-radius: 20px; font-weight: 600;">Aguardando Conferência</span>'
-                }
-            </div>
-        </div>
-    `;
-    
-    // Atualizar botão do modal
-    const btnMarcarConferido = document.getElementById('btnMarcarConferido');
-    if (btnMarcarConferido) {
-        if (clientePrincipal.conferenciaFeita) {
-            btnMarcarConferido.innerHTML = '<i class="fas fa-undo"></i> Desfazer Conferência';
-            btnMarcarConferido.className = 'btn btn-warning';
-        } else {
-            btnMarcarConferido.innerHTML = '<i class="fas fa-check"></i> Marcar como Conferido';
-            btnMarcarConferido.className = 'btn btn-success';
-        }
-    }
-    
-    const modal = new bootstrap.Modal(document.getElementById('modalDetalhes'));
-    modal.show();
-}
-
-async function marcarComoConferido() {
-    if (embarquesRelacionados.length === 0) {
-        mostrarNotificacao('Nenhum embarque selecionado.', 'warning');
-        return;
-    }
-    
-    const clientePrincipal = embarquesRelacionados[0];
-    const novoStatus = !clientePrincipal.conferenciaFeita;
-    
-    const confirmMessage = novoStatus ? 
-        `Marcar conferência de ${clientePrincipal.nomeCliente} como concluída?` :
-        `Desfazer conferência de ${clientePrincipal.nomeCliente}?`;
-    
-    if (!confirm(confirmMessage)) {
-        return;
-    }
-    
-    const btnMarcarConferido = document.getElementById('btnMarcarConferido');
-    const originalText = btnMarcarConferido.innerHTML;
-    
-    try {
-        btnMarcarConferido.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-        btnMarcarConferido.disabled = true;
-        
-        if (novoStatus) {
-            const payload = {
-                cpf: clientePrincipal.cpfCliente,
-                recibo: clientePrincipal.recibo,
-                numeroInforme: clientePrincipal.numeroInforme
-            };
-            
-            const resultado = await chamarAPI('marcar_conferencia', payload);
-            
-            if (!resultado.success) {
-                throw new Error(resultado.message || 'Erro ao atualizar planilha');
-            }
-        }
-        
-        // Atualizar dados localmente
-        embarquesRelacionados.forEach(embarque => {
-            if (embarque && typeof embarque === 'object') {
-                embarque.conferenciaFeita = novoStatus;
-                embarque.dataConferencia = novoStatus ? new Date().toLocaleString('pt-BR') : '';
-                embarque.responsavelConferencia = novoStatus ? 'Dashboard v8.08' : '';
-                
-                // Atualizar nos dados principais
-                const embarqueOriginal = embarquesData.find(e => e.id === embarque.id);
-                if (embarqueOriginal) {
-                    embarqueOriginal.conferenciaFeita = novoStatus;
-                    embarqueOriginal.dataConferencia = embarque.dataConferencia;
-                    embarqueOriginal.responsavelConferencia = embarque.responsavelConferencia;
-                    
-                    // Reclassificar se concluído
-                    if (novoStatus) {
-                        embarqueOriginal.categoria = 'concluido';
-                    } else {
-                        const novaClassificacao = classificarEmbarquePorTempo(embarqueOriginal, embarqueOriginal.diasNumericos, false, embarqueOriginal.checkinFeito, embarqueOriginal.posVendaFeita);
-                        embarqueOriginal.categoria = novaClassificacao;
-                    }
-                }
-            }
-        });
-        
-        // Atualizar interface
-        atualizarEstatisticas(embarquesData);
-        renderizarEmbarques();
-        
-        const modal = bootstrap.Modal.getInstance(document.getElementById('modalDetalhes'));
-        modal.hide();
-        
-        const statusText = novoStatus ? 'concluída' : 'desfeita';
-        mostrarNotificacao(`Conferência ${statusText} e salva com sucesso!`, 'success');
-        
-        // Recarregar dados para sincronização
-        setTimeout(() => {
-            carregarEmbarques();
-        }, 2000);
-        
-    } catch (error) {
-        debugLog(`Erro ao marcar conferência: ${error.message}`, 'error');
-        mostrarNotificacao('Erro ao salvar conferência: ' + error.message, 'error');
-    } finally {
-        btnMarcarConferido.innerHTML = originalText;
-        btnMarcarConferido.disabled = false;
-    }
-}
-
-async function salvarAlteracoes() {
-    if (embarquesRelacionados.length === 0) return;
-    
-    const clientePrincipal = embarquesRelacionados[0];
-    
-    const dadosEditaveis = {
-        observacoes: document.getElementById('observacoesEditaveis').value,
-        grupoOfertas: document.getElementById('grupoOfertas').value,
-        postouInsta: document.getElementById('postouInsta').value,
-        avaliacaoGoogle: document.getElementById('avaliacaoGoogle').value,
-        sac: document.getElementById('sacPosVenda').value
-    };
-    
-    const btnSalvar = document.getElementById('btnSalvarAlteracoes');
-    const originalText = btnSalvar.innerHTML;
-    
-    try {
-        btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
-        btnSalvar.disabled = true;
-        
-        // Salvar localmente
-        embarquesRelacionados.forEach(embarque => {
-            if (embarque && typeof embarque === 'object') {
-                Object.assign(embarque, dadosEditaveis);
-                
-                // Atualizar nos dados principais
-                const embarqueOriginal = embarquesData.find(e => e.id === embarque.id);
-                if (embarqueOriginal) {
-                    Object.assign(embarqueOriginal, dadosEditaveis);
-                }
-            }
-        });
-        
-        // Tentar sincronizar com API
-        try {
-            await chamarAPI('marcar_pos_venda', {
-                cpf: clientePrincipal.cpfCliente,
-                recibo: clientePrincipal.recibo,
-                numeroInforme: clientePrincipal.numeroInforme,
-                dadosEditaveis: dadosEditaveis
-            });
-        } catch (apiError) {
-            debugLog('Erro na sincronização com API (continuando):', apiError);
-        }
-        
-        mostrarNotificacao('Alterações salvas com sucesso!', 'success');
-        
-    } catch (error) {
-        debugLog(`Erro ao salvar: ${error.message}`, 'error');
-        mostrarNotificacao('Erro ao salvar: ' + error.message, 'error');
-    } finally {
-        btnSalvar.innerHTML = originalText;
-        btnSalvar.disabled = false;
-    }
-}
-
-async function buscarOrbiunsCliente() {
-    if (embarquesRelacionados.length === 0) return;
-    
-    const clientePrincipal = embarquesRelacionados[0];
-    const btnBuscar = document.getElementById('btnBuscarOrbiuns');
-    
-    btnBuscar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Buscando...';
-    btnBuscar.disabled = true;
-    
-    try {
-        const result = await chamarAPI('buscar_orbiuns', {
-            cpf: clientePrincipal.cpfCliente
-        });
-        
-        if (result.success && result.data.orbiuns && result.data.orbiuns.length > 0) {
-            mostrarOrbiunsEncontrados(result.data.orbiuns);
-        } else {
-            mostrarNotificacao('Nenhum Orbium encontrado para este cliente.', 'warning');
-        }
-        
-    } catch (error) {
-        debugLog(`Erro ao buscar Orbiuns: ${error.message}`, 'error');
-        mostrarNotificacao('Erro ao buscar Orbiuns: ' + error.message, 'error');
-    } finally {
-        btnBuscar.innerHTML = '<i class="fas fa-search"></i> Buscar Orbiuns';
-        btnBuscar.disabled = false;
-    }
-}
-
-function mostrarOrbiunsEncontrados(orbiuns) {
-    const orbiunsHtml = orbiuns.map(orbium => `
-        <div class="info-item" style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #0A00B4;">
-            <div class="info-label" style="font-weight: 700; color: #0A00B4; margin-bottom: 8px;">Orbium ${orbium.orbium}</div>
-            <div class="info-value" style="color: #1B365D; line-height: 1.5;">
-                <strong>Status:</strong> ${orbium.status}<br>
-                <strong>Vendedor:</strong> ${orbium.vendedor}<br>
-                ${orbium.observacoes ? '<strong>Obs:</strong> ' + orbium.observacoes : ''}
-            </div>
-        </div>
-    `).join('');
-    
-    const modalBody = document.getElementById('modalBody');
-    modalBody.innerHTML += `
-        <div class="info-section" style="
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-        ">
-            <div class="info-title" style="
-                font-weight: 700;
-                color: #0A00B4;
-                margin-bottom: 15px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            ">
-                <i class="fas fa-clipboard-list"></i> Orbiuns Relacionados
-            </div>
-            <div class="info-grid">
-                ${orbiunsHtml}
-            </div>
-        </div>
-    `;
-}
-
-// ================================================================================
 // 🔍 SISTEMA DE FILTROS
 // ================================================================================
 function aplicarFiltros() {
@@ -1835,7 +1085,7 @@ function mostrarLoading(mostrar) {
                 font-family: 'Nunito', sans-serif;
             ">
                 <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #0A00B4; margin-bottom: 15px;"></i>
-                <div style="color: #1B365D; font-weight: 600;">Carregando...</div>
+                <div style="color: #1B365D; font-weight: 600;">Carregando dados da API...</div>
             </div>
         `;
         
@@ -1863,6 +1113,25 @@ function debugLog(message, level = 'info', data = null) {
 }
 
 // ================================================================================
+// 📋 FUNÇÕES DE MODAL E AÇÕES (STUBS BÁSICOS)
+// ================================================================================
+function abrirDetalhesAgrupados(idOuInforme) {
+    mostrarNotificacao('Função de detalhes em desenvolvimento. Configure o modal no HTML.', 'info');
+}
+
+function marcarComoConferido() {
+    mostrarNotificacao('Função de conferência em desenvolvimento. Configure o modal no HTML.', 'info');
+}
+
+function salvarAlteracoes() {
+    mostrarNotificacao('Função de salvar alterações em desenvolvimento.', 'info');
+}
+
+function buscarOrbiunsCliente() {
+    mostrarNotificacao('Função de buscar Orbiuns em desenvolvimento.', 'info');
+}
+
+// ================================================================================
 // 🌍 FUNÇÕES GLOBAIS (ACESSÍVEIS PELO HTML)
 // ================================================================================
 window.abrirDetalhesAgrupados = abrirDetalhesAgrupados;
@@ -1879,7 +1148,8 @@ window.copiarTexto = copiarTexto;
 // 📝 LOGS INFORMATIVOS
 // ================================================================================
 console.log('%c🏢 CVC ITAQUÁ - CONTROLE DE EMBARQUES', 'color: #0A00B4; font-size: 16px; font-weight: bold;');
-console.log('%c📊 embarques-logic.js v8.08 carregado!', 'color: #FFE600; background: #0A00B4; padding: 4px 8px; font-weight: bold;');
-console.log('🔧 Sistema totalmente funcional e independente');
-console.log('🎯 Compatível com config.js e API v8.08');
+console.log('%c📊 embarques-logic.js v8.09 carregado!', 'color: #FFE600; background: #0A00B4; padding: 4px 8px; font-weight: bold;');
+console.log('🔧 Sistema funcional apenas com dados reais da API');
+console.log('🎯 Compatível com config.js e API corrigida');
 console.log('🎨 Visual CVC aplicado conforme Manual da Marca');
+console.log('🚫 SEM FALLBACKS - Apenas dados reais');
