@@ -593,18 +593,18 @@ function classificarEmbarquePorTempo(embarque, diffDays, conferenciaFeita, check
         }
     }
     
-    // CHECK-IN: 3 dias antes do voo
-    if (diffDays >= -365 && diffDays <= 3) {
+    // CHECK-IN: 3 dias antes do voo (ou qualquer voo próximo)
+    if (diffDays >= -365 && diffDays <= 7) {
         return 'checkin';
     }
     
-    // CONFERÊNCIA: 4 a 12 dias antes
-    if (diffDays >= 4 && diffDays <= 12) {
+    // CONFERÊNCIA: 4 dias ou mais antes (ou qualquer prazo)
+    if (diffDays >= 4) {
         return 'conferencia';
     }
     
-    // Muito distante - futuro
-    return 'futuro';
+    // Padrão: conferência (para não perder nenhum embarque)
+    return 'conferencia';
 }
 
 // ================================================================================
