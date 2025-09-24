@@ -162,72 +162,253 @@ async function carregarEmbarques() {
         
         mostrarLoading(true);
         
-        // Solução para CORS: usar POST simples sem headers problemáticos
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            body: new URLSearchParams({
-                action: 'listar_embarques'
-            })
-        });
-        
-        if (!response.ok) {
-            throw new Error(`Erro HTTP: ${response.status}`);
-        }
-        
-        const resultado = await response.json();
-        debugLog('📥 Resposta da API', 'success');
-        console.log(resultado);
-        
-        if (resultado.success) {
-            // Verificar se há dados de embarques na resposta
-            if (resultado.data && resultado.data.embarques && Array.isArray(resultado.data.embarques)) {
-                const dadosRaw = resultado.data.embarques;
-                debugLog(`📄 Processando ${dadosRaw.length} registros...`, 'info');
-                
-                embarquesData = processarDadosEmbarques(dadosRaw);
-                embarquesFiltrados = [...embarquesData];
-                
-                const processados = embarquesData.length;
-                const rejeitados = dadosRaw.length - processados;
-                const percentual = ((processados / dadosRaw.length) * 100).toFixed(1);
-                
-                debugLog(`✅ Processamento: ${processados}/${dadosRaw.length} (${percentual}%)`, 'success');
-                if (rejeitados > 0) {
-                    debugLog(`❌ Registros rejeitados: ${rejeitados}`, 'warning');
-                }
-                
-                preencherFiltros();
-                atualizarEstatisticas(embarquesData);
-                renderizarEmbarques();
-                
-                debugLog(`✅ ${embarquesData.length} embarques carregados com sucesso`, 'success');
-            } else if (resultado.embarques && Array.isArray(resultado.embarques)) {
-                // Formato alternativo - embarques direto na raiz
-                const dadosRaw = resultado.embarques;
-                debugLog(`📄 Processando ${dadosRaw.length} registros (formato alternativo)...`, 'info');
-                
-                embarquesData = processarDadosEmbarques(dadosRaw);
-                embarquesFiltrados = [...embarquesData];
-                
-                preencherFiltros();
-                atualizarEstatisticas(embarquesData);
-                renderizarEmbarques();
-                
-                debugLog(`✅ ${embarquesData.length} embarques carregados com sucesso`, 'success');
-            } else {
-                // API retornou sucesso mas sem dados de embarques
-                debugLog(`⚠️ API funcionando mas sem dados de embarques. Response: ${resultado.message}`, 'warning');
-                mostrarNotificacao(`Sistema conectado: ${resultado.message || 'API funcionando'}\nNenhum embarque encontrado para carregar.`, 'warning');
-                
-                // Limpar dados existentes
-                embarquesData = [];
-                embarquesFiltrados = [];
-                atualizarEstatisticas([]);
-                renderizarEmbarques();
+        try {
+            // Tentar carregar da API real
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                body: new URLSearchParams({
+                    action: 'listar_embarques'
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Erro HTTP: ${response.status}`);
             }
-        } else {
-            throw new Error(resultado.message || 'Dados não encontrados na resposta');
+            
+            const resultado = await response.json();
+            debugLog('📥 Resposta da API', 'success');
+            console.log(resultado);
+            
+            if (resultado.success) {
+                // Verificar se há dados de embarques na resposta
+                if (resultado.data && resultado.data.embarques && Array.isArray(resultado.data.embarques)) {
+                    const dadosRaw = resultado.data.embarques;
+                    debugLog(`📄 Processando ${dadosRaw.length} registros...`, 'info');
+                    
+                    embarquesData = processarDadosEmbarques(dadosRaw);
+                    embarquesFiltrados = [...embarquesData];
+                    
+                    const processados = embarquesData.length;
+                    const rejeitados = dadosRaw.length - processados;
+                    const percentual = ((processados / dadosRaw.length) * 100).toFixed(1);
+                    
+                    debugLog(`✅ Processamento: ${processados}/${dadosRaw.length} (${percentual}%)`, 'success');
+                    if (rejeitados > 0) {
+                        debugLog(`❌ Registros rejeitados: ${rejeitados}`, 'warning');
+                    }
+                    
+                    preencherFiltros();
+                    atualizarEstatisticas(embarquesData);
+                    renderizarEmbarques();
+                    
+                    debugLog(`✅ ${embarquesData.length} embarques carregados com sucesso`, 'success');
+                    return; // Sucesso, sair da função
+                } else if (resultado.embarques && Array.isArray(resultado.embarques)) {
+                    // Formato alternativo - embarques direto na raiz
+                    const dadosRaw = resultado.embarques;
+                    debugLog(`📄 Processando ${dadosRaw.length} registros (formato alternativo)...`, 'info');
+                    
+                    embarquesData = processarDadosEmbarques(dadosRaw);
+                    embarquesFiltrados = [...embarquesData];
+                    
+                    preencherFiltros();
+                    atualizarEstatisticas(embarquesData);
+                    renderizarEmbarques();
+                    
+                    debugLog(`✅ ${embarquesData.length} embarques carregados com sucesso`, 'success');
+                    return; // Sucesso, sair da função
+                } else {
+                    // API retornou sucesso mas sem dados de embarques
+                    debugLog(`⚠️ API funcionando mas sem dados de embarques. Response: ${resultado.message}`, 'warning');
+                    throw new Error('Sem dados de embarques na API');
+                }
+            } else {
+                throw new Error(resultado.message || 'Dados não encontrados na resposta');
+            }
+        } catch (apiError) {
+            debugLog(`⚠️ API não disponível (${apiError.message}), carregando dados de exemplo...`, 'warning');
+            
+            // FALLBACK: Carregar dados de exemplo para testar a interface
+            const dadosExemplo = [
+                {
+                    id: 1,
+                    numeroInforme: 'VENDA-1758134334653',
+                    filial: 6220,
+                    vendedor: 'Adriana',
+                    nomeCliente: 'Maria Gorete Abreu De Souza',
+                    cpfCliente: '251.651.898-64',
+                    whatsappCliente: '11987654321',
+                    dataIda: '2025-11-28',
+                    dataVolta: '',
+                    recibo: '62200000128415',
+                    numeroPedido: '',
+                    reserva: '',
+                    tipo: 'Aéreo',
+                    cia: 'GOL',
+                    locGds: '',
+                    locCia: 'OCUJVF',
+                    temBagagem: 'Não',
+                    temAssento: 'Não',
+                    multiTrecho: 'Não',
+                    seguro: 'Não informado',
+                    observacoes: 'Bagagem: Não, Assento: Não',
+                    ofertadoSVAs: 'Cadastrado',
+                    grupoOfertas: '',
+                    postouInsta: '',
+                    avaliacaoGoogle: '',
+                    statusGeral: 'Ativo',
+                    clienteAle: 'Não',
+                    conferenciaFeita: false,
+                    checkinFeito: false,
+                    posVendaFeita: false,
+                    situacao: 'Ativo'
+                },
+                {
+                    id: 2,
+                    numeroInforme: 'VENDA-1758134334654',
+                    filial: 6220,
+                    vendedor: 'Alessandro',
+                    nomeCliente: 'João Carlos Silva',
+                    cpfCliente: '123.456.789-01',
+                    whatsappCliente: '11976543210',
+                    dataIda: '2025-09-30',
+                    dataVolta: '2025-10-07',
+                    recibo: '62200000128416',
+                    numeroPedido: '',
+                    reserva: 'ABC123',
+                    tipo: 'A+H',
+                    cia: 'AZUL',
+                    locGds: 'ABC123',
+                    locCia: 'XYZ456',
+                    temBagagem: 'Sim',
+                    temAssento: 'Sim',
+                    multiTrecho: 'Não',
+                    seguro: 'Sim',
+                    observacoes: 'Cliente preferencial, check-in online',
+                    ofertadoSVAs: 'Sim',
+                    grupoOfertas: 'Sim',
+                    postouInsta: 'Não',
+                    avaliacaoGoogle: 'Pendente',
+                    statusGeral: 'Ativo',
+                    clienteAle: 'Sim',
+                    conferenciaFeita: false,
+                    checkinFeito: false,
+                    posVendaFeita: false,
+                    situacao: 'Ativo'
+                },
+                {
+                    id: 3,
+                    numeroInforme: 'VENDA-1758134334655',
+                    filial: 6220,
+                    vendedor: 'Ana Paula',
+                    nomeCliente: 'Fernanda Costa Santos',
+                    cpfCliente: '987.654.321-00',
+                    whatsappCliente: '11965432109',
+                    dataIda: '2025-10-02',
+                    dataVolta: '',
+                    recibo: '62200000128417',
+                    numeroPedido: '',
+                    reserva: 'DEF789',
+                    tipo: 'Aéreo',
+                    cia: 'LATAM',
+                    locGds: 'DEF789',
+                    locCia: 'GHI012',
+                    temBagagem: 'Não',
+                    temAssento: 'Sim',
+                    multiTrecho: 'Sim',
+                    seguro: 'Não',
+                    observacoes: 'Voo executivo, sem bagagem despachada',
+                    ofertadoSVAs: 'Não',
+                    grupoOfertas: 'Não',
+                    postouInsta: 'Sim',
+                    avaliacaoGoogle: 'Sim',
+                    statusGeral: 'Ativo',
+                    clienteAle: 'Não',
+                    conferenciaFeita: true,
+                    checkinFeito: false,
+                    posVendaFeita: false,
+                    situacao: 'Ativo'
+                },
+                {
+                    id: 4,
+                    numeroInforme: 'VENDA-1758134334656',
+                    filial: 6220,
+                    vendedor: 'Bia',
+                    nomeCliente: 'Carlos Eduardo Lima',
+                    cpfCliente: '456.789.123-45',
+                    whatsappCliente: '11954321098',
+                    dataIda: '2025-09-25',
+                    dataVolta: '2025-09-30',
+                    recibo: '62200000128418',
+                    numeroPedido: '',
+                    reserva: 'JKL345',
+                    tipo: 'A+H+S',
+                    cia: 'GOL',
+                    locGds: 'JKL345',
+                    locCia: 'MNO678',
+                    temBagagem: 'Sim',
+                    temAssento: 'Sim',
+                    multiTrecho: 'Não',
+                    seguro: 'Sim',
+                    observacoes: 'Pacote completo com seguro viagem',
+                    ofertadoSVAs: 'Sim',
+                    grupoOfertas: 'Sim',
+                    postouInsta: 'Sim',
+                    avaliacaoGoogle: 'Não',
+                    statusGeral: 'Ativo',
+                    clienteAle: 'Não',
+                    conferenciaFeita: true,
+                    checkinFeito: true,
+                    posVendaFeita: false,
+                    situacao: 'Ativo'
+                },
+                {
+                    id: 5,
+                    numeroInforme: 'VENDA-1758134334657',
+                    filial: 6220,
+                    vendedor: 'Conceição',
+                    nomeCliente: 'Patricia Oliveira Matos',
+                    cpfCliente: '789.123.456-78',
+                    whatsappCliente: '',
+                    dataIda: '2025-09-20',
+                    dataVolta: '2025-09-27',
+                    recibo: '62200000128419',
+                    numeroPedido: '',
+                    reserva: 'PQR901',
+                    tipo: 'Terrestre',
+                    cia: 'OUTROS',
+                    locGds: '',
+                    locCia: 'STU234',
+                    temBagagem: 'Sim',
+                    temAssento: 'N/A',
+                    multiTrecho: 'Não',
+                    seguro: 'Sim',
+                    observacoes: 'Viagem de ônibus para Gramado',
+                    ofertadoSVAs: 'Não',
+                    grupoOfertas: 'Não',
+                    postouInsta: 'Não',
+                    avaliacaoGoogle: 'Sim',
+                    statusGeral: 'Ativo',
+                    clienteAle: 'Não',
+                    conferenciaFeita: true,
+                    checkinFeito: true,
+                    posVendaFeita: true,
+                    situacao: 'Ativo'
+                }
+            ];
+            
+            debugLog(`📄 Processando ${dadosExemplo.length} registros de exemplo...`, 'info');
+            embarquesData = processarDadosEmbarques(dadosExemplo);
+            embarquesFiltrados = [...embarquesData];
+            
+            preencherFiltros();
+            atualizarEstatisticas(embarquesData);
+            renderizarEmbarques();
+            
+            debugLog(`✅ ${embarquesData.length} embarques de exemplo carregados com sucesso`, 'success');
+            mostrarNotificacao(`Modo demonstração ativo!\nUsando dados de exemplo para testar a interface.\n\nPara dados reais, resolva o problema de CORS no Google Apps Script.`, 'warning', 8000);
         }
+        
     } catch (error) {
         debugLog(`❌ Erro ao carregar embarques: ${error.message}`, 'error');
         mostrarNotificacao('Erro ao carregar dados. Tente novamente.', 'error');
