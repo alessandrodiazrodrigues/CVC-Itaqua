@@ -1467,4 +1467,4 @@ function aplicarFiltros() {
     const filtroDataInicio = document.getElementById('filtroDataInicio')?.value || '';
     const filtroDataCheckin = document.getElementById('filtroDataCheckin')?.value || '';
     
-    embarquesFiltrados
+    
