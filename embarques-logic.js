@@ -252,6 +252,34 @@ function processarDados(dados) {
     return embarquesProcessados;
 }
 
+function preencherFiltros() {
+    const filtroVendedor = document.getElementById('filtroVendedor');
+    
+    if (!filtroVendedor) {
+        console.log('Elemento filtroVendedor não encontrado');
+        return;
+    }
+    
+    // Obter vendedores únicos dos dados processados
+    const vendedoresUnicos = new Set();
+    embarquesData.forEach(e => {
+        if (e.vendedor && e.vendedor !== 'N/A') {
+            vendedoresUnicos.add(e.vendedor);
+        }
+    });
+    
+    filtroVendedor.innerHTML = '<option value="">Todos os Vendedores</option>';
+    
+    Array.from(vendedoresUnicos).sort().forEach(vendedor => {
+        const option = document.createElement('option');
+        option.value = vendedor;
+        option.textContent = vendedor;
+        filtroVendedor.appendChild(option);
+    });
+    
+    console.log(`Filtro de vendedores preenchido com ${vendedoresUnicos.size} opções`);
+}
+
 function validarEmbarque(embarque) {
     if (!embarque || typeof embarque !== 'object') return false;
     if (!embarque.nomeCliente && !embarque['Nome do Cliente']) return false;
