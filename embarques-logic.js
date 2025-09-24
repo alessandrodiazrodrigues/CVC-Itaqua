@@ -621,19 +621,26 @@ function filtrarPorCategoria(categoria) {
 // 🎯 AÇÕES DOS CARDS
 // ================================================================================
 async function abrirDetalhesEmbarque(numeroInforme) {
-    console.log(`🔍 Abrindo detalhes: ${numeroInforme}`);
+    console.log(`🔍 Abrindo detalhes para: ${numeroInforme}`);
     
     // Buscar embarques relacionados
-    embarquesRelacionados = embarquesData.filter(e => 
-        e.numeroInforme === numeroInforme || e.id.toString() === numeroInforme.toString()
-    );
+    embarquesRelacionados = embarquesData.filter(e => {
+        const match1 = e.numeroInforme === numeroInforme;
+        const match2 = e.id.toString() === numeroInforme.toString();
+        console.log(`Comparando: ${e.numeroInforme} === ${numeroInforme} (${match1}) ou ${e.id} === ${numeroInforme} (${match2})`);
+        return match1 || match2;
+    });
+    
+    console.log(`Encontrados ${embarquesRelacionados.length} embarques relacionados`);
     
     if (embarquesRelacionados.length === 0) {
+        console.log('❌ Nenhum embarque encontrado');
         mostrarNotificacao('Nenhum embarque encontrado', 'warning');
         return;
     }
     
     const cliente = embarquesRelacionados[0];
+    console.log(`👤 Cliente: ${cliente.nomeCliente}`);
     
     // Criar modal se não existir
     criarModal();
@@ -643,9 +650,18 @@ async function abrirDetalhesEmbarque(numeroInforme) {
     
     // Mostrar modal
     const modalEl = document.getElementById('modalDetalhes');
-    if (modalEl && typeof bootstrap !== 'undefined') {
-        const modal = new bootstrap.Modal(modalEl);
-        modal.show();
+    console.log(`Modal elemento: ${modalEl ? 'encontrado' : 'não encontrado'}`);
+    
+    if (modalEl) {
+        if (typeof bootstrap !== 'undefined') {
+            console.log('Abrindo modal com Bootstrap');
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        } else {
+            console.log('Bootstrap não disponível, tentando CSS');
+            modalEl.style.display = 'block';
+            modalEl.classList.add('show');
+        }
     }
 }
 
