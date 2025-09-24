@@ -623,12 +623,27 @@ function filtrarPorCategoria(categoria) {
 async function abrirDetalhesEmbarque(numeroInforme) {
     console.log(`🔍 Abrindo detalhes para: ${numeroInforme}`);
     
-    // Buscar embarques relacionados
+    // Buscar embarques relacionados - BUSCA MELHORADA
     embarquesRelacionados = embarquesData.filter(e => {
-        const match1 = e.numeroInforme === numeroInforme;
-        const match2 = e.id.toString() === numeroInforme.toString();
-        console.log(`Comparando: ${e.numeroInforme} === ${numeroInforme} (${match1}) ou ${e.id} === ${numeroInforme} (${match2})`);
-        return match1 || match2;
+        // Buscar por número de informe
+        const matchInforme = e.numeroInforme === numeroInforme;
+        
+        // Buscar por ID
+        const matchId = e.id.toString() === numeroInforme.toString();
+        
+        // Buscar embarques com o mesmo CPF (cliente agrupado)
+        const clientePrincipal = embarquesData.find(em => 
+            em.numeroInforme === numeroInforme || em.id.toString() === numeroInforme.toString()
+        );
+        
+        let matchCPF = false;
+        if (clientePrincipal) {
+            matchCPF = e.cpfCliente === clientePrincipal.cpfCliente;
+        }
+        
+        console.log(`Embarque ${e.numeroInforme} - Informe: ${matchInforme}, ID: ${matchId}, CPF: ${matchCPF}`);
+        
+        return matchInforme || matchId || matchCPF;
     });
     
     console.log(`Encontrados ${embarquesRelacionados.length} embarques relacionados`);
@@ -639,8 +654,11 @@ async function abrirDetalhesEmbarque(numeroInforme) {
         return;
     }
     
+    // Ordenar por data
+    embarquesRelacionados.sort((a, b) => new Date(a.dataIda) - new Date(b.dataIda));
+    
     const cliente = embarquesRelacionados[0];
-    console.log(`👤 Cliente: ${cliente.nomeCliente}`);
+    console.log(`👤 Cliente: ${cliente.nomeCliente}, Total de voos: ${embarquesRelacionados.length}`);
     
     // Criar modal se não existir
     criarModal();
@@ -702,43 +720,91 @@ function criarModal() {
 
 function preencherModal(cliente, embarques) {
     const modalBody = document.getElementById('modalDetalhesBody');
-    if (!modalBody) return;
+    if (!modalBody) {
+        console.log('❌ modalDetalhesBody não encontrado');
+        return;
+    }
     
-    const embarquesHtml = embarques.map((embarque, index) => `
-        <div style="border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
-            <h6 style="color: #0A00B4;">
-                <i class="fas fa-plane"></i> Voo ${index + 1} - ${formatarData(embarque.dataIda)}
-            </h6>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
-                <div><strong>CIA:</strong> ${embarque.cia || 'N/A'}</div>
-                <div><strong>Reserva:</strong> ${embarque.reserva || 'N/A'}</div>
-                <div><strong>LOC GDS:</strong> ${embarque.locGds || 'N/A'}</div>
-                <div><strong>LOC CIA:</strong> ${embarque.locCia || 'N/A'}</div>
+    console.log(`📝 Preenchendo modal para ${cliente.nomeCliente} com ${embarques.length} embarques`);
+    
+    const embarquesHtml = embarques.map((embarque, index) => {
+        // Status das etapas
+        const dataConferenciaHtml = embarque.dataConferencia ? 
+            `<div style="color: #28a745; margin: 5px 0;"><i class="fas fa-check-circle"></i> Conferência: ${embarque.dataConferencia} por ${embarque.responsavelConferencia}</div>` : 
+            '<div style="color: #ffc107; margin: 5px 0;"><i class="fas fa-clock"></i> Conferência: Pendente</div>';
+            
+        const dataCheckinHtml = embarque.dataCheckin ?
+            `<div style="color: #28a745; margin: 5px 0;"><i class="fas fa-check-circle"></i> Check-in: ${embarque.dataCheckin} por ${embarque.responsavelCheckin}</div>` :
+            '<div style="color: #ffc107; margin: 5px 0;"><i class="fas fa-clock"></i> Check-in: Pendente</div>';
+            
+        const dataPosVendaHtml = embarque.dataPosVenda ?
+            `<div style="color: #28a745; margin: 5px 0;"><i class="fas fa-check-circle"></i> Pós-venda: ${embarque.dataPosVenda} por ${embarque.responsavelPosVenda}</div>` :
+            '<div style="color: #ffc107; margin: 5px 0;"><i class="fas fa-clock"></i> Pós-venda: Pendente</div>';
+        
+        return `
+            <div style="border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin-bottom: 15px; background: #f8f9fa;">
+                <div style="margin-bottom: 10px;">
+                    <h6 style="color: #0A00B4; margin-bottom: 5px;">
+                        <i class="fas fa-plane"></i> Voo ${index + 1} - ${formatarData(embarque.dataIda)}
+                    </h6>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 10px;">
+                    <div><strong>Companhia Aérea:</strong> ${embarque.cia || 'N/A'}</div>
+                    <div><strong>Reserva:</strong> ${embarque.reserva || 'N/A'}</div>
+                    <div><strong>LOC GDS:</strong> ${embarque.locGds || 'N/A'}</div>
+                    <div><strong>LOC CIA:</strong> ${embarque.locCia || 'N/A'}</div>
+                    <div><strong>Recibo:</strong> ${embarque.recibo || 'N/A'}</div>
+                    <div><strong>Nº Informe:</strong> ${embarque.numeroInforme || 'N/A'}</div>
+                </div>
+                ${dataConferenciaHtml}
+                ${dataCheckinHtml}
+                ${dataPosVendaHtml}
             </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 
-    modalBody.innerHTML = `
+    const conteudoCompleto = `
         <div style="background: linear-gradient(135deg, #0A00B4 0%, #1B365D 100%); color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-            <h5><i class="fas fa-user"></i> Dados do Cliente</h5>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
-                <div><strong style="color: #FFE600;">Nome:</strong> ${cliente.nomeCliente}</div>
-                <div><strong style="color: #FFE600;">CPF:</strong> ${cliente.cpfCliente}</div>
-                <div><strong style="color: #FFE600;">Vendedor:</strong> ${cliente.vendedor}</div>
-                <div><strong style="color: #FFE600;">WhatsApp:</strong> ${cliente.whatsappCliente}</div>
-                <div><strong style="color: #FFE600;">Cliente Ale:</strong> ${cliente.clienteAle}</div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                <i class="fas fa-user" style="font-size: 1.5rem;"></i>
+                <span style="font-size: 1.2rem; font-weight: 600;">Dados do Cliente</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                <div>
+                    <div style="color: #FFE600; font-weight: 600; margin-bottom: 5px;">Nome</div>
+                    <div style="font-size: 1.1rem;">${cliente.nomeCliente}</div>
+                </div>
+                <div>
+                    <div style="color: #FFE600; font-weight: 600; margin-bottom: 5px;">CPF</div>
+                    <div>${cliente.cpfCliente}</div>
+                </div>
+                <div>
+                    <div style="color: #FFE600; font-weight: 600; margin-bottom: 5px;">Vendedor</div>
+                    <div>${cliente.vendedor}</div>
+                </div>
+                <div>
+                    <div style="color: #FFE600; font-weight: 600; margin-bottom: 5px;">WhatsApp</div>
+                    <div>${cliente.whatsappCliente || 'N/A'}</div>
+                </div>
+                <div>
+                    <div style="color: #FFE600; font-weight: 600; margin-bottom: 5px;">Cliente Ale</div>
+                    <div>${cliente.clienteAle}</div>
+                </div>
             </div>
         </div>
         
         <div style="margin-bottom: 20px;">
-            <h5 style="color: #0A00B4;"><i class="fas fa-edit"></i> Campos Editáveis</h5>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: #0A00B4;">
+                <i class="fas fa-edit"></i>
+                <span style="font-weight: 600;">Campos Editáveis (Pós-venda)</span>
+            </div>
             <div class="row g-3">
                 <div class="col-12">
-                    <label class="form-label">Observações</label>
-                    <textarea class="form-control" id="observacoesEditaveis" rows="3">${cliente.observacoes || ''}</textarea>
+                    <label style="font-weight: 600; color: #495057; margin-bottom: 5px; display: block;">Observações</label>
+                    <textarea class="form-control" id="observacoesEditaveis" rows="3" placeholder="Digite as observações...">${cliente.observacoes || ''}</textarea>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Grupo Ofertas WhatsApp</label>
+                    <label style="font-weight: 600; color: #495057; margin-bottom: 5px; display: block;">Grupo Ofertas WhatsApp</label>
                     <select class="form-select" id="grupoOfertas">
                         <option value="">Selecione...</option>
                         <option value="Sim" ${cliente.grupoOfertas === 'Sim' ? 'selected' : ''}>Sim</option>
@@ -746,7 +812,7 @@ function preencherModal(cliente, embarques) {
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Postou no Instagram</label>
+                    <label style="font-weight: 600; color: #495057; margin-bottom: 5px; display: block;">Postou no Instagram</label>
                     <select class="form-select" id="postouInsta">
                         <option value="">Selecione...</option>
                         <option value="Sim" ${cliente.postouInsta === 'Sim' ? 'selected' : ''}>Sim</option>
@@ -754,7 +820,7 @@ function preencherModal(cliente, embarques) {
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Avaliação Google</label>
+                    <label style="font-weight: 600; color: #495057; margin-bottom: 5px; display: block;">Avaliação Google</label>
                     <select class="form-select" id="avaliacaoGoogle">
                         <option value="">Selecione...</option>
                         <option value="Sim" ${cliente.avaliacaoGoogle === 'Sim' ? 'selected' : ''}>Sim</option>
@@ -762,17 +828,23 @@ function preencherModal(cliente, embarques) {
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">SAC</label>
+                    <label style="font-weight: 600; color: #495057; margin-bottom: 5px; display: block;">SAC</label>
                     <input type="text" class="form-control" id="sacPosVenda" value="${cliente.sac || ''}" placeholder="Número do SAC">
                 </div>
             </div>
         </div>
         
         <div>
-            <h5 style="color: #0A00B4;"><i class="fas fa-plane"></i> Embarques Relacionados</h5>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: #0A00B4;">
+                <i class="fas fa-plane"></i>
+                <span style="font-weight: 600;">Embarques Relacionados (${embarques.length} voos)</span>
+            </div>
             ${embarquesHtml}
         </div>
     `;
+    
+    modalBody.innerHTML = conteudoCompleto;
+    console.log('✅ Modal preenchido com sucesso');
 }
 
 async function marcarConferencia() {
