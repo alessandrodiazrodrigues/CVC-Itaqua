@@ -734,25 +734,61 @@
         
         // Aguardar carregamento completo do DOM e config.js
         function inicializarSistema() {
-            console.log('🚀 Iniciando sistema v8.07...');
-            console.log('CVC Itaquá - Portal de Gestão da Loja - Informe de Vendas v8.07');
-            console.log('✅ CORREÇÃO: Inicialização robusta implementada');
-            console.log('🆕 FUNCIONALIDADE: Campo "É cliente do Ale?" (coluna AN)');
+            console.log('🚀 Iniciando sistema v8.08...');
+            console.log('CVC Itaquá - Portal de Gestão da Loja - Informe de Vendas v8.08');
+            
+            // AGUARDAR config.js carregar - VERIFICAÇÃO ROBUSTA
+            let tentativas = 0;
+            const maxTentativas = 10;
+            
+            function verificarConfig() {
+                tentativas++;
+                console.log(`🔍 Tentativa ${tentativas}/${maxTentativas} - Verificando config.js...`);
+                
+                // Verificar múltiplas formas de acesso ao config
+                const configExiste = (
+                    typeof CVC_CONFIG !== 'undefined' ||
+                    typeof window.CVC_CONFIG !== 'undefined' ||
+                    typeof getApiUrl === 'function'
+                );
+                
+                if (configExiste) {
+                    console.log('✅ Config.js detectado, prosseguindo com inicialização...');
+                    prosseguirInicializacao();
+                    return true;
+                } else if (tentativas < maxTentativas) {
+                    console.log(`⏱️ Config.js não carregado ainda, aguardando... (${tentativas}/${maxTentativas})`);
+                    setTimeout(verificarConfig, 200);
+                    return false;
+                } else {
+                    console.warn('⚠️ Config.js não carregou após múltiplas tentativas, usando fallback');
+                    prosseguirInicializacao();
+                    return false;
+                }
+            }
+            
+            // Iniciar verificação
+            return verificarConfig();
+        }
+        
+        function prosseguirInicializacao() {
+            console.log('🔄 Prosseguindo com inicialização do sistema...');
             
             // Obter configuração da API com fallback
             try {
                 if (typeof getApiUrl === 'function') {
                     API_URL = getApiUrl();
-                    console.log('✅ API URL obtida via getApiUrl()');
+                    console.log('✅ API URL obtida via getApiUrl():', API_URL);
                 } else if (typeof CVC_CONFIG !== 'undefined' && CVC_CONFIG.API_URL) {
                     API_URL = CVC_CONFIG.API_URL;
-                    console.log('✅ API URL obtida via CVC_CONFIG');
+                    console.log('✅ API URL obtida via CVC_CONFIG:', API_URL);
+                } else if (typeof window.CVC_CONFIG !== 'undefined' && window.CVC_CONFIG.API_URL) {
+                    API_URL = window.CVC_CONFIG.API_URL;
+                    console.log('✅ API URL obtida via window.CVC_CONFIG:', API_URL);
                 } else {
                     API_URL = 'https://script.google.com/macros/s/AKfycbwEpCAGKyFowlT2mmt_5yGAetdYP1fYIA8KDZtaZtw2iGH6f2Sxekey9JlVcpiVPGpD6g/exec';
-                    console.log('⚠️ API URL usando fallback');
+                    console.log('⚠️ API URL usando fallback:', API_URL);
                 }
-                
-                console.log('✅ API URL configurada:', API_URL);
             } catch (error) {
                 console.error('❌ Erro na configuração da API:', error);
                 API_URL = 'https://script.google.com/macros/s/AKfycbwEpCAGKyFowlT2mmt_5yGAetdYP1fYIA8KDZtaZtw2iGH6f2Sxekey9JlVcpiVPGpD6g/exec';
@@ -782,7 +818,9 @@
                 // Configurar componentes em ordem
                 console.log('🔧 Configurando componentes...');
                 
+                // PREENCHIMENTO PRIORITÁRIO DOS VENDEDORES
                 preencherSelectVendedores();
+                
                 configurarMascaras();
                 configurarRadioCheckbox();
                 configurarEventos();
@@ -810,7 +848,7 @@
                     verificarConexao();
                 }, 500);
                 
-                console.log('🎉 Sistema v8.07 totalmente carregado!');
+                console.log('🎉 Sistema v8.08 totalmente carregado!');
                 return true;
                 
             } catch (error) {
@@ -820,33 +858,32 @@
             }
         }
         
-        // Múltiplas estratégias de inicialização
+        // Estratégia de inicialização aprimorada
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('📄 DOM carregado, tentando inicializar...');
+            console.log('📄 DOM carregado, aguardando config.js...');
             
-            // Aguardar um pouco para garantir que config.js carregou
+            // Aguardar um momento para o config.js carregar
             setTimeout(() => {
-                if (!inicializarSistema()) {
-                    // Se falhou, tentar novamente após mais tempo
-                    console.log('⏱️ Primeira tentativa falhou, tentando novamente...');
-                    setTimeout(() => {
-                        inicializarSistema();
-                    }, 1000);
-                }
-            }, 300);
+                inicializarSistema();
+            }, 100);
         });
         
-        // Fallback: inicializar quando window carregar completamente
+        // Fallback adicional
         window.addEventListener('load', function() {
             console.log('🌐 Window carregado completamente');
             
-            // Verificar se já foi inicializado
+            // Verificar se vendedores foram carregados
+            const selectVendedor = document.getElementById('vendedor');
+            if (selectVendedor && selectVendedor.options.length <= 1) {
+                console.log('🔄 Vendedores não carregaram, forçando nova tentativa...');
+                preencherSelectVendedores();
+            }
+            
+            // Verificar se botão funciona
             const btnAdicionar = document.getElementById('btnAdicionarRecibo');
-            if (btnAdicionar && !btnAdicionar.onclick && btnAdicionar.style.pointerEvents !== 'auto') {
-                console.log('🔄 Sistema não inicializou ainda, forçando inicialização...');
-                setTimeout(() => {
-                    inicializarSistema();
-                }, 100);
+            if (btnAdicionar && !btnAdicionar.onclick) {
+                console.log('🔄 Botões não configurados, forçando configuração...');
+                configurarEventos();
             }
         });
 
