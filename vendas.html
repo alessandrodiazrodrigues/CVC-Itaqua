@@ -405,7 +405,7 @@
                         <div class="col-md-4 text-end">
                             <div class="d-flex align-items-center justify-content-end">
                                 <div class="me-3">
-                                    <small class="text-light">Sistema v8.05 - Configuração centralizada</small><br>
+                                    <small class="text-light">Sistema v8.06 - JSONP Corrigido</small><br>
                                     <small class="text-success" id="statusSistema">
                                         <i class="fas fa-check-circle"></i> Sistema Online
                                     </small>
@@ -609,19 +609,97 @@
     <script src="config.js"></script>
     
     <script>
-        console.log('CVC Itaquá - Portal de Gestão da Loja - Informe de Vendas v8.05');
+        console.log('CVC Itaquá - Portal de Gestão da Loja - Informe de Vendas v8.06 - JSONP CORRIGIDO');
         
         // ================================================================================
-        // CONFIGURAÇÕES - VINDAS DO CONFIG.JS
+        // CONFIGURAÇÕES - VINDAS DO CONFIG.JS v8.06
         // ================================================================================
         
-        const API_URL = getApiUrl();
-        console.log('✅ Configuração carregada via config.js');
-        console.log('🔗 API URL:', API_URL);
-        console.log('🎯 Conceito: 1 LINHA = 1 VOO ESPECÍFICO = 1 CHECK-IN INDIVIDUAL');
-        
+        let API_URL = null;
         let contadorRecibos = 0;
         let conexaoOnline = false;
+
+        // JSONP - COMO NO EMBARQUES-LOGIC.JS v8.18
+        const JSONP_CALLBACK_NAME = 'cvcJsonpCallback';
+        let jsonpCounter = 0;
+        let pendingCallbacks = new Set();
+
+        // ================================================================================
+        // 🌐 CLIENTE JSONP CORRIGIDO v8.06
+        // ================================================================================
+        function chamarAPIComJSONP(payload) {
+            return new Promise((resolve, reject) => {
+                const callbackName = `${JSONP_CALLBACK_NAME}_${++jsonpCounter}_${Date.now()}`;
+                const script = document.createElement('script');
+                
+                // Timeout aumentado para 60 segundos
+                const timeoutId = setTimeout(() => {
+                    cleanup();
+                    reject(new Error('Timeout: Servidor não respondeu em 60 segundos'));
+                }, 60000);
+
+                // Cleanup melhorado
+                function cleanup() {
+                    clearTimeout(timeoutId);
+                    if (script && script.parentNode) {
+                        try {
+                            document.head.removeChild(script);
+                        } catch(e) {
+                            console.warn('Script já removido:', e.message);
+                        }
+                    }
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                    }
+                    pendingCallbacks.delete(callbackName);
+                }
+
+                // Rastrear callbacks pendentes
+                pendingCallbacks.add(callbackName);
+
+                window[callbackName] = function(response) {
+                    console.log('📥 Callback executado:', callbackName, response);
+                    cleanup();
+                    
+                    if (response && response.success) {
+                        resolve(response);
+                    } else {
+                        reject(new Error(response?.message || 'Erro na API'));
+                    }
+                };
+
+                // Montar URL com parâmetros
+                const params = new URLSearchParams({
+                    callback: callbackName,
+                    ...payload
+                });
+
+                script.src = `${API_URL}?${params.toString()}`;
+                
+                script.onerror = () => {
+                    cleanup();
+                    reject(new Error('Erro de rede ao conectar com a API'));
+                };
+
+                document.head.appendChild(script);
+                console.log(`🚀 JSONP Request: ${payload.action} | Callback: ${callbackName}`);
+            });
+        }
+
+        // Limpar callbacks órfãos
+        function limparCallbacksOrfaos() {
+            const agora = Date.now();
+            pendingCallbacks.forEach(callbackName => {
+                if (window[callbackName]) {
+                    const timestamp = callbackName.split('_')[2];
+                    if (agora - parseInt(timestamp) > 120000) {
+                        delete window[callbackName];
+                        pendingCallbacks.delete(callbackName);
+                        console.log('🧹 Callback órfão removido:', callbackName);
+                    }
+                }
+            });
+        }
 
         // ================================================================================
         // FUNCIONALIDADE CLIENTE DO ALE
@@ -651,15 +729,25 @@
         }
 
         // ================================================================================
-        // INICIALIZAÇÃO ROBUSTA
+        // INICIALIZAÇÃO ROBUSTA v8.06
         // ================================================================================
         
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DOM carregado! Iniciando sistema v8.05...');
-            console.log('CVC Itaquá - Portal de Gestão da Loja - Informe de Vendas v8.05');
-            console.log('✅ Integração com Sistema Master v8.0');
+            console.log('🚀 DOM carregado! Iniciando sistema v8.06...');
+            console.log('CVC Itaquá - Portal de Gestão da Loja - Informe de Vendas v8.06');
+            console.log('✅ CORREÇÃO: JSONP implementado como embarques-logic.js');
             console.log('🆕 FUNCIONALIDADE: Campo "É cliente do Ale?" (coluna AN)');
-            console.log('🔧 CORREÇÃO: Erro TIPOS_SERVICO undefined resolvido');
+            
+            // Obter configuração da API
+            if (typeof getApiUrl === 'function') {
+                API_URL = getApiUrl();
+            } else if (typeof CVC_CONFIG !== 'undefined') {
+                API_URL = CVC_CONFIG.API_URL;
+            } else {
+                API_URL = 'https://script.google.com/macros/s/AKfycbwEpCAGKyFowlT2mmt_5yGAetdYP1fYIA8KDZtaZtw2iGH6f2Sxekey9JlVcpiVPGpD6g/exec';
+            }
+            
+            console.log('✅ API URL configurada:', API_URL);
             
             if (typeof CVC_CONFIG === 'undefined') {
                 console.error('❌ config.js não foi carregado! Verifique se o arquivo existe e está acessível.');
@@ -704,7 +792,7 @@
             
             verificarConexao();
             
-            console.log('🎉 Sistema v8.05 totalmente carregado com Cliente do Ale!');
+            console.log('🎉 Sistema v8.06 totalmente carregado com JSONP!');
         });
 
         // ================================================================================
@@ -770,7 +858,7 @@
         }
 
         // ================================================================================
-        // VERIFICAÇÃO DE CONEXÃO
+        // VERIFICAÇÃO DE CONEXÃO v8.06 - COM JSONP
         // ================================================================================
 
         async function verificarConexao() {
@@ -780,34 +868,26 @@
             statusDiv.style.display = 'block';
             
             try {
-                console.log('🔍 Verificando conexão com API v8.0...');
+                console.log('🔍 Verificando conexão com API v8.06 via JSONP...');
                 
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 10000);
+                // Limpar callbacks órfãos antes de nova requisição
+                limparCallbacksOrfaos();
                 
-                const response = await fetch(API_URL, {
-                    method: 'GET',
-                    signal: controller.signal
+                const resultado = await chamarAPIComJSONP({
+                    action: 'ping'
                 });
                 
-                clearTimeout(timeoutId);
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success) {
-                        conexaoOnline = true;
-                        statusDiv.className = 'status-conexao online';
-                        statusTexto.innerHTML = '<i class="fas fa-check-circle"></i> Sistema v8.0 Online';
-                        console.log('✅ Conexão OK v8.0:', data.message || 'Sistema Master funcionando');
-                        
-                        setTimeout(() => {
-                            statusDiv.style.display = 'none';
-                        }, 3000);
-                    } else {
-                        throw new Error('Resposta inválida da API');
-                    }
+                if (resultado.success) {
+                    conexaoOnline = true;
+                    statusDiv.className = 'status-conexao online';
+                    statusTexto.innerHTML = '<i class="fas fa-check-circle"></i> Sistema v8.06 Online';
+                    console.log('✅ Conexão OK v8.06:', resultado.message || 'Sistema Master funcionando');
+                    
+                    setTimeout(() => {
+                        statusDiv.style.display = 'none';
+                    }, 3000);
                 } else {
-                    throw new Error(`HTTP ${response.status}`);
+                    throw new Error('Resposta inválida da API');
                 }
                 
             } catch (error) {
@@ -817,9 +897,9 @@
                 
                 console.error('❌ Erro de conexão:', error.message);
                 
-                if (error.name === 'AbortError') {
-                    console.log('⏱️ Timeout na conexão');
-                    mostrarAlerta('⏱️ Timeout na conexão. Verifique sua internet.', 'error');
+                if (error.message.includes('Timeout')) {
+                    console.log('⏱️ Timeout na conexão JSONP');
+                    mostrarAlerta('⏱️ Timeout na conexão JSONP. Verifique sua internet.', 'error');
                 } else {
                     mostrarAlerta('❌ Problema de conexão com o servidor. Verifique se o Google Apps Script foi reimplantado.', 'error');
                 }
@@ -1277,14 +1357,15 @@
         }
 
         // ================================================================================
-        // ENVIO DO FORMULÁRIO - CORRIGIDO v8.05 COM CLIENTE ALE
+        // ENVIO DO FORMULÁRIO - CORRIGIDO v8.06 COM JSONP
         // ================================================================================
 
         async function enviarVendaCompleta(e) {
             e.preventDefault();
             
-            console.log('📤 INICIANDO ENVIO DA VENDA COMPLETA v8.05...');
+            console.log('📤 INICIANDO ENVIO DA VENDA COMPLETA v8.06 com JSONP...');
             console.log('⭐ FUNCIONALIDADE: Campo "Cliente do Ale" incluído');
+            console.log('🔧 CORREÇÃO: JSONP implementado como embarques-logic.js');
             
             const submitBtn = e.target.querySelector('.btn-submit');
             const textoOriginal = submitBtn.innerHTML;
@@ -1296,7 +1377,7 @@
                 }
                 
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<span class="loading-spinner"></span> Processando venda...';
+                submitBtn.innerHTML = '<span class="loading-spinner"></span> Processando venda via JSONP...';
                 
                 const dadosVenda = coletarDadosFormulario(e.target);
                 console.log('📋 Dados da venda coletados:', dadosVenda);
@@ -1311,55 +1392,42 @@
                 const dadosEmbarque = converterVendaParaEmbarques(dadosVenda);
                 console.log('📄 Dados convertidos para EMBARQUES v8.0:', dadosEmbarque);
                 
-                const payload = {
+                // Limpar callbacks órfãos antes de nova requisição
+                limparCallbacksOrfaos();
+                
+                console.log('📤 ENVIANDO via JSONP...');
+                
+                const resultado = await chamarAPIComJSONP({
                     action: 'cadastrar_venda_completa',
-                    dados: dadosEmbarque
-                };
-                
-                console.log('📤 PAYLOAD final para Sistema Master v8.0:', payload);
-                
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
+                    dados: JSON.stringify(dadosEmbarque)
                 });
                 
-                console.log('📡 Response status:', response.status);
+                console.log('📊 RESPOSTA da API v8.06:', resultado);
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
-                const result = await response.json();
-                console.log('📊 RESPOSTA da API v8.0:', result);
-                
-                if (result.success) {
-                    mostrarAlerta(`✅ Venda cadastrada com sucesso! ${result.data?.total_voos || 1} voo(s) individual(is) criado(s) na aba EMBARQUES\n\n⭐ Cliente do Ale: ${dadosVenda.clienteAle}`, 'success');
-                    console.log('✅ SUCESSO! Venda processada v8.0:', result.data);
+                if (resultado.success) {
+                    mostrarAlerta(`✅ Venda cadastrada com sucesso via JSONP! ${resultado.data?.total_voos || 1} voo(s) individual(is) criado(s) na aba EMBARQUES\n\n⭐ Cliente do Ale: ${dadosVenda.clienteAle}`, 'success');
+                    console.log('✅ SUCESSO! Venda processada v8.06 via JSONP:', resultado.data);
                     limparFormulario();
                 } else {
-                    throw new Error(result.error || result.message || 'Erro desconhecido');
+                    throw new Error(resultado.error || resultado.message || 'Erro desconhecido');
                 }
                 
             } catch (error) {
-                console.error('❌ Erro ao enviar venda:', error);
+                console.error('❌ Erro ao enviar venda via JSONP:', error);
                 
                 let mensagemErro = error.message;
                 
-                if (error.message.includes('Failed to fetch') || error.message.includes('AbortError')) {
-                    mensagemErro = '🌐 Erro de conexão. Verifique:\n' +
+                if (error.message.includes('Timeout')) {
+                    mensagemErro = '⏱️ Timeout na conexão JSONP. Verifique:\n' +
                                   '• Sua conexão com a internet\n' +
                                   '• Se o Google Apps Script foi reimplantado\n' +
                                   '• Tente novamente em alguns segundos';
-                } else if (error.message.includes('CORS')) {
-                    mensagemErro = '⚙️ Erro de configuração CORS.\n' +
-                                  'Verifique se o Google Apps Script foi implantado corretamente.';
+                } else if (error.message.includes('Erro de rede')) {
+                    mensagemErro = '🌐 Erro de rede JSONP.\n' +
+                                  'Verifique se o Google Apps Script está funcionando corretamente.';
                 }
                 
-                mostrarAlerta('❌ Erro ao cadastrar venda:\n' + mensagemErro, 'error');
+                mostrarAlerta('❌ Erro ao cadastrar venda via JSONP:\n' + mensagemErro, 'error');
                 
             } finally {
                 submitBtn.disabled = false;
@@ -1368,11 +1436,11 @@
         }
 
         // ================================================================================
-        // CONVERSÃO PARA FORMATO EMBARQUES v8.05 - COM CLIENTE ALE
+        // CONVERSÃO PARA FORMATO EMBARQUES v8.06 - COM CLIENTE ALE
         // ================================================================================
 
         function converterVendaParaEmbarques(dadosVenda) {
-            console.log('📄 Convertendo venda para formato EMBARQUES v8.05...');
+            console.log('📄 Convertendo venda para formato EMBARQUES v8.06...');
             console.log('⭐ Incluindo campo "Cliente do Ale" na conversão...');
             
             const dadosEmbarque = {
@@ -1413,19 +1481,19 @@
                 seguro: converterSeguro(dadosVenda.seguro),
                 
                 // MÚLTIPLOS RECIBOS COMO ARRAYS
-                recibo: dadosVenda.recibo || [],
-                tipo: dadosVenda.tipo || [],
-                dataIda: dadosVenda.dataIda || [],
-                dataVolta: dadosVenda.dataVolta || [],
+                recibos: dadosVenda.recibo || [],
+                tipos: dadosVenda.tipo || [],
+                datasIda: dadosVenda.dataIda || [],
+                datasVolta: dadosVenda.dataVolta || [],
                 observacoes: dadosVenda.observacoes || [],
-                cia: dadosVenda.cia || [],
-                temBagagem: dadosVenda.temBagagem || [],
-                temAssento: dadosVenda.temAssento || [],
-                multiTrecho: dadosVenda.multiTrecho || [],
-                pedido: dadosVenda.pedido || [],
-                reserva: dadosVenda.reserva || [],
-                locGds: dadosVenda.locGds || [],
-                locCia: dadosVenda.locCia || [],
+                cias: dadosVenda.cia || [],
+                temBagagens: dadosVenda.temBagagem || [],
+                temAssentos: dadosVenda.temAssento || [],
+                multiTrechos: dadosVenda.multiTrecho || [],
+                pedidos: dadosVenda.pedido || [],
+                reservas: dadosVenda.reserva || [],
+                locsGds: dadosVenda.locGds || [],
+                locsCia: dadosVenda.locCia || [],
                 
                 // CONTROLE DE MÚLTIPLOS RECIBOS
                 numeroInforme: dadosVenda.nInforme || `VENDA-${Date.now()}`,
@@ -1727,12 +1795,12 @@
         }
         
         // ================================================================================
-        // LOGS E INFORMAÇÕES FINAIS v8.05
+        // LOGS E INFORMAÇÕES FINAIS v8.06 - JSONP CORRIGIDO
         // ================================================================================
         
-        console.log('✅ CVC Itaquá - Portal de Gestão da Loja - Informe de Vendas v8.05 carregado!');
-        console.log('🔧 CONFIGURAÇÃO CENTRALIZADA - URL vem do config.js');
-        console.log('🔗 Integração completa com Sistema Master v8.0');
+        console.log('✅ CVC Itaquá - Portal de Gestão da Loja - Informe de Vendas v8.06 carregado!');
+        console.log('🔧 CORREÇÃO PRINCIPAL: JSONP implementado como embarques-logic.js v8.18');
+        console.log('🔗 Integração completa com Sistema Master v8.0 via JSONP');
         console.log('⭐ FUNCIONALIDADE: Campo "É cliente do Ale?" (coluna AN)');
         console.log('🎯 Conceito: 1 LINHA = 1 VOO ESPECÍFICO = 1 CHECK-IN INDIVIDUAL');
         console.log('📊 Funcionalidades:');
@@ -1742,12 +1810,9 @@
         console.log('   ✅ Controle granular por voo individual');
         console.log('   ✅ Integração com 39 colunas da planilha');
         console.log('   ✅ Array de observações CORRIGIDO');
-        console.log('   ✅ CORS corrigido para API');
+        console.log('   ✅ JSONP para evitar problemas de CORS');
         console.log('   ✅ Configuração centralizada em config.js');
         console.log('   ✅ Interface CVC Itaquá padrão aplicada');
         console.log('   ⭐ Campo "Cliente do Ale" integrado (coluna AN)');
         console.log('   🔧 Erro TIPOS_SERVICO undefined CORRIGIDO');
-        console.log('🚀 Sistema v8.05 pronto para produção!');
-    </script>
-</body>
-</html>
+        console.log('🚀 Sistema v8.06 pronto para produção com JSONP!');
