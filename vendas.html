@@ -863,55 +863,92 @@
             
             let vendedores = [];
             
-            // ✅ CORREÇÃO v8.07: Múltiplas estratégias para obter vendedores
+            // DEBUG: Verificar todas as fontes possíveis
+            console.log('🔍 DEBUG - Verificando fontes de vendedores:');
+            console.log('   typeof CVC_CONFIG:', typeof CVC_CONFIG);
+            console.log('   CVC_CONFIG:', window.CVC_CONFIG);
+            console.log('   typeof VENDEDORES:', typeof VENDEDORES);
+            console.log('   typeof getApiUrl:', typeof getApiUrl);
+            
+            // ✅ CORREÇÃO v8.07: FORÇAR lista de vendedores se necessário
             try {
-                if (typeof CVC_CONFIG !== 'undefined' && CVC_CONFIG.VENDEDORES && Array.isArray(CVC_CONFIG.VENDEDORES)) {
+                if (typeof CVC_CONFIG !== 'undefined' && CVC_CONFIG && CVC_CONFIG.VENDEDORES && Array.isArray(CVC_CONFIG.VENDEDORES)) {
                     vendedores = CVC_CONFIG.VENDEDORES;
-                    console.log('✅ Vendedores carregados do CVC_CONFIG:', vendedores.length, 'itens');
+                    console.log('✅ Vendedores do CVC_CONFIG:', vendedores);
                 } else if (typeof VENDEDORES !== 'undefined' && Array.isArray(VENDEDORES)) {
                     vendedores = VENDEDORES;
-                    console.log('✅ Vendedores carregados da variável global:', vendedores.length, 'itens');
+                    console.log('✅ Vendedores da variável global:', vendedores);
                 } else if (window.CVC_CONFIG && window.CVC_CONFIG.VENDEDORES) {
                     vendedores = window.CVC_CONFIG.VENDEDORES;
-                    console.log('✅ Vendedores carregados do window.CVC_CONFIG:', vendedores.length, 'itens');
-                } else {
-                    console.warn('⚠️ Lista de vendedores não encontrada! Usando lista padrão...');
-                    // FALLBACK: Lista padrão mais completa
-                    vendedores = [
-                        'Alessandro', 
-                        'Ana Paula', 
-                        'Adriana', 
-                        'Adrielly', 
-                        'Bia', 
-                        'Conceição', 
-                        'Jhully',
-                        'Outros'
-                    ];
+                    console.log('✅ Vendedores do window.CVC_CONFIG:', vendedores);
                 }
             } catch (error) {
-                console.error('❌ Erro ao obter vendedores:', error);
-                vendedores = ['Alessandro', 'Ana Paula', 'Adriana', 'Adrielly', 'Bia', 'Conceição', 'Jhully', 'Outros'];
+                console.error('❌ Erro ao acessar configurações:', error);
             }
             
-            // Limpar select e repovoar
-            selectVendedor.innerHTML = '<option value="">Selecione...</option>';
+            // FALLBACK GARANTIDO: Se não encontrou nenhuma fonte, usar lista hardcoded
+            if (!vendedores || vendedores.length === 0) {
+                console.warn('⚠️ NENHUMA fonte de vendedores encontrada! Usando lista HARDCODED...');
+                vendedores = [
+                    'Alessandro', 
+                    'Ana Paula', 
+                    'Adriana', 
+                    'Adrielly', 
+                    'Bia', 
+                    'Conceição', 
+                    'Jhully'
+                ];
+                console.log('📋 Lista HARDCODED aplicada:', vendedores);
+            }
             
-            vendedores.forEach(vendedor => {
-                const option = document.createElement('option');
-                option.value = vendedor;
-                option.textContent = vendedor;
-                selectVendedor.appendChild(option);
+            // Limpar select completamente
+            selectVendedor.innerHTML = '';
+            
+            // Adicionar opção padrão
+            const optionDefault = document.createElement('option');
+            optionDefault.value = '';
+            optionDefault.textContent = 'Selecione...';
+            selectVendedor.appendChild(optionDefault);
+            
+            // Adicionar cada vendedor individualmente
+            vendedores.forEach((vendedor, index) => {
+                try {
+                    const option = document.createElement('option');
+                    option.value = vendedor;
+                    option.textContent = vendedor;
+                    selectVendedor.appendChild(option);
+                    console.log(`📝 Vendedor ${index + 1} adicionado: ${vendedor}`);
+                } catch (error) {
+                    console.error(`❌ Erro ao adicionar vendedor ${vendedor}:`, error);
+                }
             });
             
-            // Forçar update visual
+            // Forçar update visual e habilitar
             selectVendedor.disabled = false;
             selectVendedor.style.opacity = '1';
             selectVendedor.style.pointerEvents = 'auto';
+            selectVendedor.style.display = 'block';
             
-            console.log('✅ Select de vendedores preenchido com', vendedores.length, 'opções');
+            // Verificação final
+            const totalOptions = selectVendedor.options.length;
+            console.log(`✅ Select finalizado com ${totalOptions} opções (incluindo "Selecione...")`);
+            console.log('📋 HTML do select:', selectVendedor.innerHTML.substring(0, 200) + '...');
             
-            // Log de debug
-            console.log('📋 Lista de vendedores:', vendedores);
+            // Se ainda estiver vazio, forçar uma última vez
+            if (totalOptions <= 1) {
+                console.log('🚨 SELECT AINDA VAZIO! Forçando inserção manual...');
+                selectVendedor.innerHTML = `
+                    <option value="">Selecione...</option>
+                    <option value="Alessandro">Alessandro</option>
+                    <option value="Ana Paula">Ana Paula</option>
+                    <option value="Adriana">Adriana</option>
+                    <option value="Adrielly">Adrielly</option>
+                    <option value="Bia">Bia</option>
+                    <option value="Conceição">Conceição</option>
+                    <option value="Jhully">Jhully</option>
+                `;
+                console.log('🔧 Vendedores inseridos via innerHTML direto');
+            }
         }
 
         // ================================================================================
