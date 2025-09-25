@@ -405,7 +405,7 @@
                         <div class="col-md-4 text-end">
                             <div class="d-flex align-items-center justify-content-end">
                                 <div class="me-3">
-                                    <small class="text-light">Sistema v8.07 - Inicialização Robusta</small><br>
+                                    <small class="text-light">Sistema v8.09 - Inicialização Limpa</small><br>
                                     <small class="text-success" id="statusSistema">
                                         <i class="fas fa-check-circle"></i> Sistema Online
                                     </small>
@@ -732,248 +732,99 @@
         // INICIALIZAÇÃO ROBUSTA v8.07 - CORRIGIDA
         // ================================================================================
         
-        // Aguardar carregamento completo do DOM e config.js
+        // ================================================================================
+        // INICIALIZAÇÃO SIMPLIFICADA v8.09 - SEM CONFLITOS
+        // ================================================================================
+        
+        let sistemaInicializado = false; // Prevenir inicialização dupla
+        
         function inicializarSistema() {
-            console.log('🚀 Iniciando sistema v8.08...');
-            console.log('CVC Itaquá - Portal de Gestão da Loja - Informe de Vendas v8.08');
-            
-            // AGUARDAR config.js carregar - VERIFICAÇÃO ROBUSTA
-            let tentativas = 0;
-            const maxTentativas = 10;
-            
-            function verificarConfig() {
-                tentativas++;
-                console.log(`🔍 Tentativa ${tentativas}/${maxTentativas} - Verificando config.js...`);
-                
-                // Verificar múltiplas formas de acesso ao config
-                const configExiste = (
-                    typeof CVC_CONFIG !== 'undefined' ||
-                    typeof window.CVC_CONFIG !== 'undefined' ||
-                    typeof getApiUrl === 'function'
-                );
-                
-                if (configExiste) {
-                    console.log('✅ Config.js detectado, prosseguindo com inicialização...');
-                    prosseguirInicializacao();
-                    return true;
-                } else if (tentativas < maxTentativas) {
-                    console.log(`⏱️ Config.js não carregado ainda, aguardando... (${tentativas}/${maxTentativas})`);
-                    setTimeout(verificarConfig, 200);
-                    return false;
-                } else {
-                    console.warn('⚠️ Config.js não carregou após múltiplas tentativas, usando fallback');
-                    prosseguirInicializacao();
-                    return false;
-                }
+            if (sistemaInicializado) {
+                console.log('⚠️ Sistema já inicializado, pulando...');
+                return true;
             }
             
-            // Iniciar verificação
-            return verificarConfig();
-        }
-        
-        function prosseguirInicializacao() {
-            console.log('🔄 Prosseguindo com inicialização do sistema...');
+            console.log('🚀 Iniciando sistema v8.09...');
             
-            // Obter configuração da API com fallback
             try {
+                // Obter API URL
                 if (typeof getApiUrl === 'function') {
                     API_URL = getApiUrl();
-                    console.log('✅ API URL obtida via getApiUrl():', API_URL);
-                } else if (typeof CVC_CONFIG !== 'undefined' && CVC_CONFIG.API_URL) {
-                    API_URL = CVC_CONFIG.API_URL;
-                    console.log('✅ API URL obtida via CVC_CONFIG:', API_URL);
-                } else if (typeof window.CVC_CONFIG !== 'undefined' && window.CVC_CONFIG.API_URL) {
+                } else if (window.CVC_CONFIG && window.CVC_CONFIG.API_URL) {
                     API_URL = window.CVC_CONFIG.API_URL;
-                    console.log('✅ API URL obtida via window.CVC_CONFIG:', API_URL);
                 } else {
                     API_URL = 'https://script.google.com/macros/s/AKfycbwEpCAGKyFowlT2mmt_5yGAetdYP1fYIA8KDZtaZtw2iGH6f2Sxekey9JlVcpiVPGpD6g/exec';
-                    console.log('⚠️ API URL usando fallback:', API_URL);
                 }
-            } catch (error) {
-                console.error('❌ Erro na configuração da API:', error);
-                API_URL = 'https://script.google.com/macros/s/AKfycbwEpCAGKyFowlT2mmt_5yGAetdYP1fYIA8KDZtaZtw2iGH6f2Sxekey9JlVcpiVPGpD6g/exec';
-            }
-            
-            // Verificar elementos DOM essenciais
-            const form = document.getElementById('formVendaCompleta');
-            const container = document.getElementById('recibosContainer');
-            const btnAdicionar = document.getElementById('btnAdicionarRecibo');
-            const selectVendedor = document.getElementById('vendedor');
-            
-            console.log('🔍 Verificação de elementos DOM:');
-            console.log('   - Formulário:', !!form);
-            console.log('   - Container recibos:', !!container);
-            console.log('   - Botão adicionar:', !!btnAdicionar);
-            console.log('   - Select vendedor:', !!selectVendedor);
-            
-            if (!form || !container || !btnAdicionar || !selectVendedor) {
-                console.error('❌ Elementos essenciais não encontrados!');
-                setTimeout(() => {
-                    mostrarAlerta('❌ Erro na inicialização: elementos DOM não encontrados', 'error');
-                }, 1000);
-                return false;
-            }
-            
-            try {
-                // Configurar componentes em ordem
-                console.log('🔧 Configurando componentes...');
+                console.log('✅ API URL:', API_URL);
                 
-                // PREENCHIMENTO PRIORITÁRIO DOS VENDEDORES
+                // Verificar elementos essenciais
+                const form = document.getElementById('formVendaCompleta');
+                const container = document.getElementById('recibosContainer');
+                const btnAdicionar = document.getElementById('btnAdicionarRecibo');
+                const selectVendedor = document.getElementById('vendedor');
+                
+                if (!form || !container || !btnAdicionar || !selectVendedor) {
+                    console.error('❌ Elementos DOM não encontrados');
+                    return false;
+                }
+                
+                // Configurar componentes
                 preencherSelectVendedores();
-                
                 configurarMascaras();
                 configurarRadioCheckbox();
                 configurarEventos();
                 
-                // Adicionar primeiro recibo
-                console.log('📋 Adicionando primeiro recibo automaticamente...');
-                setTimeout(() => {
-                    try {
-                        adicionarRecibo();
-                        console.log('✅ Primeiro recibo adicionado');
-                    } catch (error) {
-                        console.error('❌ Erro ao adicionar primeiro recibo:', error);
-                        mostrarAlerta('❌ Erro ao inicializar formulário', 'error');
-                    }
-                }, 200);
-                
-                // Configurar formulário
-                if (form) {
+                // Configurar formulário (apenas uma vez)
+                if (!form.hasAttribute('data-configured')) {
                     form.addEventListener('submit', enviarVendaCompleta);
-                    console.log('✅ Event listener do formulário configurado');
+                    form.setAttribute('data-configured', 'true');
+                    console.log('✅ Formulário configurado');
                 }
                 
-                // Verificar conexão
-                setTimeout(() => {
-                    verificarConexao();
-                }, 500);
+                // Adicionar primeiro recibo
+                setTimeout(() => adicionarRecibo(), 300);
                 
-                console.log('🎉 Sistema v8.08 totalmente carregado!');
+                // Verificar conexão
+                setTimeout(() => verificarConexao(), 600);
+                
+                sistemaInicializado = true;
+                console.log('🎉 Sistema v8.09 inicializado com sucesso!');
                 return true;
                 
             } catch (error) {
                 console.error('❌ Erro na inicialização:', error);
-                mostrarAlerta('❌ Erro na inicialização do sistema: ' + error.message, 'error');
                 return false;
             }
         }
         
-        // Estratégia de inicialização aprimorada
+        // Inicialização única e direta
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('📄 DOM carregado, aguardando config.js...');
+            console.log('📄 DOM carregado');
             
-            // Aguardar um momento para o config.js carregar
+            // Aguardar brevemente para config.js
             setTimeout(() => {
-                inicializarSistema();
+                console.log('🔄 Tentando inicializar...');
+                if (!inicializarSistema()) {
+                    // Uma única tentativa adicional
+                    setTimeout(() => {
+                        console.log('🔄 Segunda tentativa...');
+                        inicializarSistema();
+                    }, 500);
+                }
             }, 100);
         });
         
-        // Fallback adicional
+        // Backup final
         window.addEventListener('load', function() {
-            console.log('🌐 Window carregado completamente');
+            if (!sistemaInicializado) {
+                console.log('🌐 Backup de inicialização');
+                inicializarSistema();
+            }
             
-            // Verificar se vendedores foram carregados
+            // Verificações finais forçadas
             const selectVendedor = document.getElementById('vendedor');
             if (selectVendedor && selectVendedor.options.length <= 1) {
-                console.log('🔄 Vendedores não carregaram, forçando nova tentativa...');
-                preencherSelectVendedores();
-            }
-            
-            // Verificar se botão funciona
-            const btnAdicionar = document.getElementById('btnAdicionarRecibo');
-            if (btnAdicionar && !btnAdicionar.onclick) {
-                console.log('🔄 Botões não configurados, forçando configuração...');
-                configurarEventos();
-            }
-        });
-
-        // ================================================================================
-        // PREENCHIMENTO DE SELECTS VIA CONFIG.JS - CORRIGIDO
-        // ================================================================================
-
-        function preencherSelectVendedores() {
-            const selectVendedor = document.getElementById('vendedor');
-            if (!selectVendedor) {
-                console.warn('⚠️ Select vendedor não encontrado');
-                return;
-            }
-            
-            let vendedores = [];
-            
-            // DEBUG: Verificar todas as fontes possíveis
-            console.log('🔍 DEBUG - Verificando fontes de vendedores:');
-            console.log('   typeof CVC_CONFIG:', typeof CVC_CONFIG);
-            console.log('   CVC_CONFIG:', window.CVC_CONFIG);
-            console.log('   typeof VENDEDORES:', typeof VENDEDORES);
-            console.log('   typeof getApiUrl:', typeof getApiUrl);
-            
-            // ✅ CORREÇÃO v8.07: FORÇAR lista de vendedores se necessário
-            try {
-                if (typeof CVC_CONFIG !== 'undefined' && CVC_CONFIG && CVC_CONFIG.VENDEDORES && Array.isArray(CVC_CONFIG.VENDEDORES)) {
-                    vendedores = CVC_CONFIG.VENDEDORES;
-                    console.log('✅ Vendedores do CVC_CONFIG:', vendedores);
-                } else if (typeof VENDEDORES !== 'undefined' && Array.isArray(VENDEDORES)) {
-                    vendedores = VENDEDORES;
-                    console.log('✅ Vendedores da variável global:', vendedores);
-                } else if (window.CVC_CONFIG && window.CVC_CONFIG.VENDEDORES) {
-                    vendedores = window.CVC_CONFIG.VENDEDORES;
-                    console.log('✅ Vendedores do window.CVC_CONFIG:', vendedores);
-                }
-            } catch (error) {
-                console.error('❌ Erro ao acessar configurações:', error);
-            }
-            
-            // FALLBACK GARANTIDO: Se não encontrou nenhuma fonte, usar lista hardcoded
-            if (!vendedores || vendedores.length === 0) {
-                console.warn('⚠️ NENHUMA fonte de vendedores encontrada! Usando lista HARDCODED...');
-                vendedores = [
-                    'Alessandro', 
-                    'Ana Paula', 
-                    'Adriana', 
-                    'Adrielly', 
-                    'Bia', 
-                    'Conceição', 
-                    'Jhully'
-                ];
-                console.log('📋 Lista HARDCODED aplicada:', vendedores);
-            }
-            
-            // Limpar select completamente
-            selectVendedor.innerHTML = '';
-            
-            // Adicionar opção padrão
-            const optionDefault = document.createElement('option');
-            optionDefault.value = '';
-            optionDefault.textContent = 'Selecione...';
-            selectVendedor.appendChild(optionDefault);
-            
-            // Adicionar cada vendedor individualmente
-            vendedores.forEach((vendedor, index) => {
-                try {
-                    const option = document.createElement('option');
-                    option.value = vendedor;
-                    option.textContent = vendedor;
-                    selectVendedor.appendChild(option);
-                    console.log(`📝 Vendedor ${index + 1} adicionado: ${vendedor}`);
-                } catch (error) {
-                    console.error(`❌ Erro ao adicionar vendedor ${vendedor}:`, error);
-                }
-            });
-            
-            // Forçar update visual e habilitar
-            selectVendedor.disabled = false;
-            selectVendedor.style.opacity = '1';
-            selectVendedor.style.pointerEvents = 'auto';
-            selectVendedor.style.display = 'block';
-            
-            // Verificação final
-            const totalOptions = selectVendedor.options.length;
-            console.log(`✅ Select finalizado com ${totalOptions} opções (incluindo "Selecione...")`);
-            console.log('📋 HTML do select:', selectVendedor.innerHTML.substring(0, 200) + '...');
-            
-            // Se ainda estiver vazio, forçar uma última vez
-            if (totalOptions <= 1) {
-                console.log('🚨 SELECT AINDA VAZIO! Forçando inserção manual...');
+                console.log('🔧 Força final: vendedores');
                 selectVendedor.innerHTML = `
                     <option value="">Selecione...</option>
                     <option value="Alessandro">Alessandro</option>
@@ -984,7 +835,123 @@
                     <option value="Conceição">Conceição</option>
                     <option value="Jhully">Jhully</option>
                 `;
-                console.log('🔧 Vendedores inseridos via innerHTML direto');
+            }
+            
+            const btnAdicionar = document.getElementById('btnAdicionarRecibo');
+            if (btnAdicionar && !btnAdicionar.onclick) {
+                btnAdicionar.onclick = (e) => { e.preventDefault(); adicionarRecibo(); };
+            }
+        });
+
+        // ================================================================================
+        // PREENCHIMENTO DE SELECTS VIA CONFIG.JS - CORRIGIDO
+        // ================================================================================
+
+        function preencherSelectVendedores() {
+            console.log('🔧 INICIANDO preencherSelectVendedores v8.08...');
+            
+            const selectVendedor = document.getElementById('vendedor');
+            if (!selectVendedor) {
+                console.error('❌ Select vendedor não encontrado no DOM');
+                return false;
+            }
+            
+            console.log('✅ Select vendedor encontrado:', selectVendedor);
+            
+            // FORÇAR carregamento direto dos vendedores do config.js
+            let vendedores = [];
+            
+            // LOG DETALHADO de todas as tentativas
+            console.log('🔍 TENTATIVA 1 - window.CVC_CONFIG:');
+            console.log('typeof window.CVC_CONFIG:', typeof window.CVC_CONFIG);
+            console.log('window.CVC_CONFIG:', window.CVC_CONFIG);
+            
+            if (window.CVC_CONFIG && window.CVC_CONFIG.VENDEDORES) {
+                vendedores = window.CVC_CONFIG.VENDEDORES;
+                console.log('✅ SUCESSO! Vendedores obtidos via window.CVC_CONFIG:', vendedores);
+            } else {
+                console.log('🔍 TENTATIVA 2 - CVC_CONFIG global:');
+                console.log('typeof CVC_CONFIG:', typeof CVC_CONFIG);
+                
+                if (typeof CVC_CONFIG !== 'undefined' && CVC_CONFIG.VENDEDORES) {
+                    vendedores = CVC_CONFIG.VENDEDORES;
+                    console.log('✅ SUCESSO! Vendedores obtidos via CVC_CONFIG global:', vendedores);
+                } else {
+                    console.log('🔍 TENTATIVA 3 - Lista HARDCODED DE EMERGÊNCIA:');
+                    vendedores = [
+                        'Alessandro',
+                        'Ana Paula', 
+                        'Adriana',
+                        'Adrielly',
+                        'Bia',
+                        'Conceição',
+                        'Jhully'
+                    ];
+                    console.log('⚠️ USANDO LISTA HARDCODED:', vendedores);
+                }
+            }
+            
+            if (!vendedores || vendedores.length === 0) {
+                console.error('❌ FALHA TOTAL - Nenhum vendedor disponível');
+                return false;
+            }
+            
+            // FORÇAR limpeza e reconstrução do select
+            try {
+                console.log('🧹 Limpando select...');
+                selectVendedor.innerHTML = '';
+                selectVendedor.disabled = false;
+                selectVendedor.style.display = 'block';
+                
+                // Opção padrão
+                const optDefault = document.createElement('option');
+                optDefault.value = '';
+                optDefault.textContent = 'Selecione...';
+                optDefault.selected = true;
+                selectVendedor.appendChild(optDefault);
+                console.log('✅ Opção padrão adicionada');
+                
+                // Adicionar cada vendedor
+                vendedores.forEach((vendedor, index) => {
+                    const option = document.createElement('option');
+                    option.value = vendedor;
+                    option.textContent = vendedor;
+                    selectVendedor.appendChild(option);
+                    console.log(`✅ Vendedor ${index + 1} adicionado: ${vendedor}`);
+                });
+                
+                // Verificação final
+                const totalOpcoes = selectVendedor.options.length;
+                console.log(`🎯 RESULTADO FINAL: ${totalOpcoes} opções no select`);
+                console.log('📋 Conteúdo do select:', selectVendedor.outerHTML.substring(0, 300));
+                
+                // FORÇAR refresh visual
+                selectVendedor.style.opacity = '1';
+                selectVendedor.style.pointerEvents = 'auto';
+                
+                // Trigger change event para atualizar visualmente
+                selectVendedor.dispatchEvent(new Event('change'));
+                
+                console.log('✅ preencherSelectVendedores CONCLUÍDO COM SUCESSO');
+                return true;
+                
+            } catch (error) {
+                console.error('❌ ERRO ao manipular select:', error);
+                
+                // ÚLTIMO RECURSO: innerHTML direto
+                console.log('🚨 TENTATIVA DE EMERGÊNCIA via innerHTML...');
+                selectVendedor.innerHTML = `
+                    <option value="">Selecione...</option>
+                    <option value="Alessandro">Alessandro</option>
+                    <option value="Ana Paula">Ana Paula</option>
+                    <option value="Adriana">Adriana</option>
+                    <option value="Adrielly">Adrielly</option>
+                    <option value="Bia">Bia</option>
+                    <option value="Conceição">Conceição</option>
+                    <option value="Jhully">Jhully</option>
+                `;
+                console.log('🔧 innerHTML de emergência aplicado');
+                return true;
             }
         }
 
