@@ -629,6 +629,9 @@ async function abrirDetalhesEmbarque(numeroInforme) {
         return e.numeroInforme === numeroInforme;
     });
     
+    // CORREÇÃO: Atualizar variável global
+    window.embarquesRelacionados = embarquesRelacionados;
+    
     console.log(`Encontrados ${embarquesRelacionados.length} embarques com informe: ${numeroInforme}`);
     
     if (embarquesRelacionados.length === 0) {
@@ -648,6 +651,11 @@ async function abrirDetalhesEmbarque(numeroInforme) {
     
     // Preencher modal
     preencherModalCorrigido(cliente, embarquesRelacionados);
+    
+    // CORREÇÃO: Configurar eventos após preencher modal
+    setTimeout(() => {
+        configurarEventosBotoes();
+    }, 100);
     
     // Mostrar modal
     const modalEl = document.getElementById('modalDetalhes');
@@ -751,6 +759,60 @@ function criarModalComBotaoCPF() {
     `;
     
     document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+// ================================================================================
+// 🔧 CONFIGURAR EVENTOS DOS BOTÕES DO MODAL
+// ================================================================================
+function configurarEventosBotoes() {
+    console.log('🔧 Configurando eventos dos botões do modal...');
+    
+    const botaoConferencia = document.querySelector('#modalDetalhes button[onclick*="marcarConferencia"]');
+    const botaoSalvar = document.querySelector('#modalDetalhes button[onclick*="salvarAlteracoes"]');
+    const botaoTodosVoos = document.querySelector('#modalDetalhes button[onclick*="buscarTodosVoosCliente"]');
+    const botaoOrbiuns = document.querySelector('#modalDetalhes button[onclick*="buscarOrbiuns"]');
+    
+    if (botaoConferencia) {
+        console.log('✅ Configurando evento do botão conferência');
+        botaoConferencia.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🖱️ Clique no botão conferência detectado!');
+            marcarConferencia();
+        });
+    } else {
+        console.error('❌ Botão conferência NÃO encontrado');
+    }
+    
+    if (botaoSalvar) {
+        console.log('✅ Configurando evento do botão salvar');
+        botaoSalvar.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🖱️ Clique no botão salvar detectado!');
+            salvarAlteracoes();
+        });
+    }
+    
+    if (botaoTodosVoos) {
+        console.log('✅ Configurando evento do botão todos voos');
+        botaoTodosVoos.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🖱️ Clique no botão todos voos detectado!');
+            buscarTodosVoosCliente();
+        });
+    }
+    
+    if (botaoOrbiuns) {
+        console.log('✅ Configurando evento do botão orbiuns');
+        botaoOrbiuns.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🖱️ Clique no botão orbiuns detectado!');
+            buscarOrbiuns();
+        });
+    }
 }
 
 // ================================================================================
@@ -1201,7 +1263,7 @@ function mostrarLoading(mostrar) {
 }
 
 // ================================================================================
-// 🌐 FUNÇÕES GLOBAIS
+// 🌐 FUNÇÕES E VARIÁVEIS GLOBAIS - CORREÇÃO
 // ================================================================================
 window.abrirDetalhesEmbarque = abrirDetalhesEmbarque;
 window.buscarTodosVoosCliente = buscarTodosVoosCliente;
@@ -1213,6 +1275,9 @@ window.limparFiltros = limparFiltros;
 window.filtrarPorCategoria = filtrarPorCategoria;
 window.carregarEmbarques = carregarEmbarques;
 window.copiarTexto = copiarTexto;
+
+// CORREÇÃO CRÍTICA: Tornar embarquesRelacionados global
+window.embarquesRelacionados = embarquesRelacionados;
 
 // ================================================================================
 // 📝 LOGS FINAIS v8.13
