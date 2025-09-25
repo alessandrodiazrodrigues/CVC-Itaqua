@@ -1,8 +1,8 @@
 // ================================================================================
-// [MODULO] embarques-logic.js - Dashboard de Embarques v8.12 - BUG MODAL CORRIGIDO
+// [MODULO] embarques-logic.js - Dashboard de Embarques v8.13 - LÓGICA CORRIGIDA
 // ================================================================================
-// 🎯 VERSÃO CORRIGIDA: modalDetalhesBody → modalBody
-// 🎯 MODAL AGRUPADO POR RECIBO FUNCIONANDO
+// 🎯 CORREÇÃO: Buscar APENAS por número de informe + botão adicional para CPF
+// 🎯 Modal agrupado corretamente por informe, não por cliente
 // ================================================================================
 
 // ================================================================================
@@ -22,7 +22,7 @@ let jsonpCounter = 0;
 // 🚀 INICIALIZAÇÃO
 // ================================================================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Inicializando embarques-logic.js v8.12...');
+    console.log('🚀 Inicializando embarques-logic.js v8.13...');
     inicializarSistema();
 });
 
@@ -619,39 +619,21 @@ function filtrarPorCategoria(categoria) {
 }
 
 // ================================================================================
-// 🎯 MODAL CORRIGIDO - BUG modalDetalhesBody RESOLVIDO
+// 🎯 MODAL CORRIGIDO - BUSCA APENAS POR NÚMERO DE INFORME
 // ================================================================================
 async function abrirDetalhesEmbarque(numeroInforme) {
     console.log(`🔍 Abrindo detalhes para: ${numeroInforme}`);
     
-    // Buscar embarques relacionados - BUSCA MELHORADA
+    // CORREÇÃO: Buscar APENAS por número de informe (não por CPF)
     embarquesRelacionados = embarquesData.filter(e => {
-        // Buscar por número de informe
-        const matchInforme = e.numeroInforme === numeroInforme;
-        
-        // Buscar por ID
-        const matchId = e.id.toString() === numeroInforme.toString();
-        
-        // Buscar embarques com o mesmo CPF (cliente agrupado)
-        const clientePrincipal = embarquesData.find(em => 
-            em.numeroInforme === numeroInforme || em.id.toString() === numeroInforme.toString()
-        );
-        
-        let matchCPF = false;
-        if (clientePrincipal) {
-            matchCPF = e.cpfCliente === clientePrincipal.cpfCliente;
-        }
-        
-        console.log(`Embarque ${e.numeroInforme} - Informe: ${matchInforme}, ID: ${matchId}, CPF: ${matchCPF}`);
-        
-        return matchInforme || matchId || matchCPF;
+        return e.numeroInforme === numeroInforme;
     });
     
-    console.log(`Encontrados ${embarquesRelacionados.length} embarques relacionados`);
+    console.log(`Encontrados ${embarquesRelacionados.length} embarques com informe: ${numeroInforme}`);
     
     if (embarquesRelacionados.length === 0) {
-        console.log('❌ Nenhum embarque encontrado');
-        mostrarNotificacao('Nenhum embarque encontrado', 'warning');
+        console.log('❌ Nenhum embarque encontrado para este informe');
+        mostrarNotificacao('Nenhum embarque encontrado para este número de informe', 'warning');
         return;
     }
     
@@ -659,18 +641,16 @@ async function abrirDetalhesEmbarque(numeroInforme) {
     embarquesRelacionados.sort((a, b) => new Date(a.dataIda) - new Date(b.dataIda));
     
     const cliente = embarquesRelacionados[0];
-    console.log(`👤 Cliente: ${cliente.nomeCliente}, Total de voos: ${embarquesRelacionados.length}`);
+    console.log(`👤 Cliente: ${cliente.nomeCliente}, Voos no informe: ${embarquesRelacionados.length}`);
     
     // Criar modal se não existir
-    criarModal();
+    criarModalComBotaoCPF();
     
-    // Preencher modal - CORREÇÃO AQUI!
+    // Preencher modal
     preencherModalCorrigido(cliente, embarquesRelacionados);
     
     // Mostrar modal
     const modalEl = document.getElementById('modalDetalhes');
-    console.log(`Modal elemento: ${modalEl ? 'encontrado' : 'não encontrado'}`);
-    
     if (modalEl) {
         if (typeof bootstrap !== 'undefined') {
             console.log('Abrindo modal com Bootstrap');
@@ -684,7 +664,46 @@ async function abrirDetalhesEmbarque(numeroInforme) {
     }
 }
 
-function criarModal() {
+// ================================================================================
+// 🆕 FUNÇÃO ADICIONAL: BUSCAR TODOS OS VOOS DO CLIENTE (POR CPF)
+// ================================================================================
+async function buscarTodosVoosCliente() {
+    if (embarquesRelacionados.length === 0) return;
+    
+    const clientePrincipal = embarquesRelacionados[0];
+    const cpfCliente = clientePrincipal.cpfCliente;
+    
+    console.log(`🔍 Buscando TODOS os voos do CPF: ${cpfCliente}`);
+    
+    // Buscar todos os embarques deste CPF
+    const todosVoosCliente = embarquesData.filter(e => {
+        return e.cpfCliente === cpfCliente;
+    });
+    
+    console.log(`Encontrados ${todosVoosCliente.length} voos total para o cliente`);
+    
+    if (todosVoosCliente.length === embarquesRelacionados.length) {
+        mostrarNotificacao('Este informe já contém todos os voos do cliente!', 'info');
+        return;
+    }
+    
+    // Atualizar modal com todos os voos
+    embarquesRelacionados = todosVoosCliente.sort((a, b) => new Date(a.dataIda) - new Date(b.dataIda));
+    preencherModalCorrigido(clientePrincipal, embarquesRelacionados);
+    
+    // Atualizar título do modal
+    const modalTitle = document.getElementById('modalDetalhesLabel');
+    if (modalTitle) {
+        modalTitle.innerHTML = '<i class="fas fa-user-check"></i> Todos os Voos do Cliente (Agrupados por CPF)';
+    }
+    
+    mostrarNotificacao(`Exibindo ${todosVoosCliente.length} voos total do cliente`, 'success');
+}
+
+// ================================================================================
+// 🔧 MODAL CORRIGIDO COM BOTÃO ADICIONAL
+// ================================================================================
+function criarModalComBotaoCPF() {
     if (document.getElementById('modalDetalhes')) return;
     
     const modalHTML = `
@@ -693,25 +712,30 @@ function criarModal() {
                 <div class="modal-content" style="border-radius: 15px; overflow: hidden;">
                     <div class="modal-header" style="background: linear-gradient(135deg, #0A00B4 0%, #1B365D 100%); color: white; padding: 20px 30px;">
                         <h5 class="modal-title" id="modalDetalhesLabel" style="font-weight: 700;">
-                            <i class="fas fa-info-circle"></i> Detalhes Agrupados por Recibo
+                            <i class="fas fa-info-circle"></i> Detalhes Agrupados por Número de Informe
                         </h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body" id="modalBody" style="padding: 30px; max-height: 70vh; overflow-y: auto;">
-                        <!-- CORREÇÃO CRÍTICA: ID CORRETO É modalBody, NÃO modalDetalhesBody -->
-                        <!-- Conteúdo dinâmico será inserido aqui -->
+                        <!-- Conteúdo dinâmico -->
                     </div>
                     <div class="modal-footer" style="padding: 20px 30px; background: #f8f9fa; border-top: 2px solid #e9ecef;">
-                        <div class="d-flex gap-2 w-100 justify-content-between">
-                            <div>
+                        <div class="d-flex gap-2 w-100 justify-content-between flex-wrap">
+                            <!-- Botões secundários à esquerda -->
+                            <div class="d-flex gap-2">
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     <i class="fas fa-times"></i> Fechar
                                 </button>
                                 <button type="button" class="btn btn-info" onclick="buscarOrbiuns()">
                                     <i class="fas fa-search"></i> Buscar Orbiuns
                                 </button>
+                                <button type="button" class="btn btn-warning" onclick="buscarTodosVoosCliente()">
+                                    <i class="fas fa-user-check"></i> Todos Voos Cliente
+                                </button>
                             </div>
-                            <div>
+                            
+                            <!-- Botões principais à direita - CORREÇÃO: onclick correto -->
+                            <div class="d-flex gap-2">
                                 <button type="button" class="btn btn-success" onclick="marcarConferencia()">
                                     <i class="fas fa-check"></i> Marcar Conferência
                                 </button>
@@ -730,11 +754,11 @@ function criarModal() {
 }
 
 // ================================================================================
-// 📝 MODAL PREENCHIMENTO CORRIGIDO v8.12
+// 📝 MODAL PREENCHIMENTO CORRIGIDO v8.13
 // ================================================================================
 function preencherModalCorrigido(cliente, embarques) {
-    // CORREÇÃO CRÍTICA: Buscar pelo ID correto!
-    const modalBody = document.getElementById('modalBody'); // NÃO modalDetalhesBody!
+    // CORREÇÃO: Buscar pelo ID correto!
+    const modalBody = document.getElementById('modalBody');
     
     if (!modalBody) {
         console.error('❌ modalBody não encontrado');
@@ -775,7 +799,7 @@ function preencherModalCorrigido(cliente, embarques) {
                 <div class="voo-individual mb-3 p-3" style="border-left: 4px solid #0A00B4; background: #f8f9fa; border-radius: 8px;">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <h6 class="mb-0" style="color: #0A00B4;"><i class="fas fa-plane"></i> <strong>Voo ${index + 1}</strong></h6>
-                        <small class="text-muted">ID: ${embarque.id || 'N/A'}</small>
+                        <small class="text-muted">Informe: ${embarque.numeroInforme}</small>
                     </div>
                     
                     <div class="row g-2 mb-2">
@@ -825,7 +849,7 @@ function preencherModalCorrigido(cliente, embarques) {
             <div class="recibo-section mb-4">
                 <div class="recibo-header p-3 mb-3" style="background: linear-gradient(135deg, #0A00B4 0%, #1B365D 100%); color: white; border-radius: 10px;">
                     <h5 class="mb-0"><i class="fas fa-receipt"></i> <strong>Recibo: ${recibo}</strong></h5>
-                    <small>Total de voos: ${voosDoRecibo.length}</small>
+                    <small>Voos neste recibo: ${voosDoRecibo.length}</small>
                 </div>
                 ${voosHtml}
             </div>
@@ -866,15 +890,15 @@ function preencherModalCorrigido(cliente, embarques) {
                     <strong>${cliente.clienteAle || 'Não'}</strong>
                 </div>
                 <div class="col-md-6">
-                    <small class="text-muted d-block">Número do Informe</small>
-                    <strong>${cliente.numeroInforme || 'N/A'}</strong>
+                    <small class="text-muted d-block">Total de Voos Exibidos</small>
+                    <strong class="text-primary">${embarques.length} voos</strong>
                 </div>
             </div>
         </div>
 
         <!-- Voos Agrupados por Recibo -->
         <div class="voos-section mb-4">
-            <h5 class="mb-3" style="color: #0A00B4;"><i class="fas fa-plane-departure"></i> <strong>Todos os Voos Agrupados por Recibo</strong></h5>
+            <h5 class="mb-3" style="color: #0A00B4;"><i class="fas fa-plane-departure"></i> <strong>Voos Agrupados por Recibo</strong></h5>
             ${recibosHtml}
         </div>
 
@@ -934,17 +958,50 @@ function preencherModalCorrigido(cliente, embarques) {
 }
 
 // ================================================================================
-// 🛠️ AÇÕES DO MODAL
+// 🛠️ AÇÕES DO MODAL CORRIGIDAS
 // ================================================================================
 async function marcarConferencia() {
-    if (embarquesRelacionados.length === 0) return;
+    console.log('🎯 marcarConferencia() iniciada');
+    
+    if (embarquesRelacionados.length === 0) {
+        console.log('❌ Nenhum embarque relacionado encontrado');
+        return;
+    }
     
     const cliente = embarquesRelacionados[0];
     const novoStatus = !cliente.conferenciaFeita;
     
-    if (!confirm(`Deseja ${novoStatus ? 'marcar' : 'desmarcar'} conferência para ${cliente.nomeCliente}?`)) return;
+    console.log('📊 Estado atual:', {
+        cliente: cliente.nomeCliente,
+        cpf: cliente.cpfCliente,
+        recibo: cliente.recibo,
+        numeroInforme: cliente.numeroInforme,
+        conferenciaAtual: cliente.conferenciaFeita,
+        novoStatus: novoStatus
+    });
+    
+    const confirmMessage = novoStatus ? 
+        `Marcar conferência de ${cliente.nomeCliente} como concluída?` :
+        `Desfazer conferência de ${cliente.nomeCliente}?`;
+    
+    if (!confirm(confirmMessage)) {
+        console.log('❌ Usuário cancelou a operação');
+        return;
+    }
+    
+    // Buscar botão e mostrar loading
+    const btnMarcar = document.querySelector('[onclick="marcarConferencia()"]');
+    let originalText = '';
+    
+    if (btnMarcar) {
+        originalText = btnMarcar.innerHTML;
+        btnMarcar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+        btnMarcar.disabled = true;
+    }
     
     try {
+        console.log('🔄 Iniciando chamada da API...');
+        
         const resultado = await chamarAPIComJSONP({
             action: 'marcar_conferencia',
             cpf: cliente.cpfCliente,
@@ -953,15 +1010,51 @@ async function marcarConferencia() {
             desfazer: !novoStatus
         });
         
-        mostrarNotificacao('Conferência atualizada com sucesso!', 'success');
-        carregarEmbarques();
+        console.log('📥 Resposta da API:', resultado);
+        
+        if (!resultado.success) {
+            throw new Error(resultado.message || 'Erro ao atualizar planilha');
+        }
+        
+        // Atualizar dados localmente
+        console.log('🔄 Atualizando dados localmente...');
+        embarquesRelacionados.forEach(embarque => {
+            if (embarque) {
+                embarque.conferenciaFeita = novoStatus;
+                embarque.dataConferencia = novoStatus ? new Date().toLocaleString('pt-BR') : '';
+                embarque.responsavelConferencia = novoStatus ? 'Dashboard v8.13' : '';
+                
+                // Atualizar nos dados principais
+                const embarqueOriginal = embarquesData.find(e => e.id === embarque.id);
+                if (embarqueOriginal) {
+                    embarqueOriginal.conferenciaFeita = novoStatus;
+                    embarqueOriginal.dataConferencia = embarque.dataConferencia;
+                    embarqueOriginal.responsavelConferencia = embarque.responsavelConferencia;
+                    console.log('📝 Embarque atualizado:', embarqueOriginal.id);
+                }
+            }
+        });
         
         // Fechar modal
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalDetalhes'));
         if (modal) modal.hide();
         
+        const statusText = novoStatus ? 'marcada como concluída' : 'desmarcada';
+        mostrarNotificacao(`✅ Conferência ${statusText} com sucesso!`, 'success');
+        
+        // Recarregar dados
+        console.log('🔄 Recarregando dados...');
+        setTimeout(() => carregarEmbarques(), 1500);
+        
     } catch (error) {
-        mostrarNotificacao(`Erro: ${error.message}`, 'error');
+        console.error('❌ Erro completo:', error);
+        mostrarNotificacao(`❌ Erro ao salvar conferência: ${error.message}`, 'error');
+    } finally {
+        // Restaurar botão
+        if (btnMarcar && originalText) {
+            btnMarcar.innerHTML = originalText;
+            btnMarcar.disabled = false;
+        }
     }
 }
 
@@ -1111,6 +1204,7 @@ function mostrarLoading(mostrar) {
 // 🌐 FUNÇÕES GLOBAIS
 // ================================================================================
 window.abrirDetalhesEmbarque = abrirDetalhesEmbarque;
+window.buscarTodosVoosCliente = buscarTodosVoosCliente;
 window.marcarConferencia = marcarConferencia;
 window.salvarAlteracoes = salvarAlteracoes;
 window.buscarOrbiuns = buscarOrbiuns;
@@ -1121,11 +1215,11 @@ window.carregarEmbarques = carregarEmbarques;
 window.copiarTexto = copiarTexto;
 
 // ================================================================================
-// 📝 LOGS FINAIS v8.12
+// 📝 LOGS FINAIS v8.13
 // ================================================================================
-console.log('%c🏢 CVC ITAQUÁ - EMBARQUES v8.12 CORRIGIDO', 'color: #0A00B4; font-size: 16px; font-weight: bold;');
-console.log('✅ BUG modalDetalhesBody → modalBody CORRIGIDO');
-console.log('✅ Modal agrupado por recibo funcionando');
-console.log('✅ Campo SAC adicionado');
+console.log('%c🏢 CVC ITAQUÁ - EMBARQUES v8.13 - LÓGICA CORRIGIDA', 'color: #0A00B4; font-size: 16px; font-weight: bold;');
+console.log('✅ Busca APENAS por número de informe');
+console.log('✅ Botão adicional para ver todos os voos do cliente');
+console.log('✅ Modal agrupado corretamente por recibo');
 console.log('✅ Interface CVC aplicada');
 console.log('🚀 PRONTO PARA PRODUÇÃO!');
