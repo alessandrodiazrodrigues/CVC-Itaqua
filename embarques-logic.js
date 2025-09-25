@@ -1,7 +1,8 @@
 // ================================================================================
-// [MODULO] embarques-logic.js - Dashboard de Embarques v8.11 - LIMPO E FUNCIONAL
+// [MODULO] embarques-logic.js - Dashboard de Embarques v8.12 - BUG MODAL CORRIGIDO
 // ================================================================================
-// 🎯 VERSÃO LIMPA COM JSONP - TODAS AS FUNCIONALIDADES OPERACIONAIS
+// 🎯 VERSÃO CORRIGIDA: modalDetalhesBody → modalBody
+// 🎯 MODAL AGRUPADO POR RECIBO FUNCIONANDO
 // ================================================================================
 
 // ================================================================================
@@ -21,7 +22,7 @@ let jsonpCounter = 0;
 // 🚀 INICIALIZAÇÃO
 // ================================================================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Inicializando embarques-logic.js v8.11...');
+    console.log('🚀 Inicializando embarques-logic.js v8.12...');
     inicializarSistema();
 });
 
@@ -220,7 +221,7 @@ function processarDados(dados) {
                 grupoOfertas: embarque.grupoOfertas || embarque['Grupo Ofertas Whats'] || '',
                 postouInsta: embarque.postouInsta || embarque['Postou no Insta'] || '',
                 avaliacaoGoogle: embarque.avaliacaoGoogle || embarque['Avaliação Google'] || '',
-                sac: embarque.sac || embarque.SAC || '',
+                numeroSac: embarque.numeroSac || embarque.SAC || '',
                 
                 // Status das etapas
                 conferenciaFeita,
@@ -618,7 +619,7 @@ function filtrarPorCategoria(categoria) {
 }
 
 // ================================================================================
-// 🎯 AÇÕES DOS CARDS
+// 🎯 MODAL CORRIGIDO - BUG modalDetalhesBody RESOLVIDO
 // ================================================================================
 async function abrirDetalhesEmbarque(numeroInforme) {
     console.log(`🔍 Abrindo detalhes para: ${numeroInforme}`);
@@ -663,8 +664,8 @@ async function abrirDetalhesEmbarque(numeroInforme) {
     // Criar modal se não existir
     criarModal();
     
-    // Preencher modal
-    preencherModal(cliente, embarquesRelacionados);
+    // Preencher modal - CORREÇÃO AQUI!
+    preencherModalCorrigido(cliente, embarquesRelacionados);
     
     // Mostrar modal
     const modalEl = document.getElementById('modalDetalhes');
@@ -687,28 +688,38 @@ function criarModal() {
     if (document.getElementById('modalDetalhes')) return;
     
     const modalHTML = `
-        <div class="modal fade" id="modalDetalhes" tabindex="-1">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header" style="background: #0A00B4; color: white;">
-                        <h5 class="modal-title">
-                            <i class="fas fa-user"></i> Detalhes do Cliente
+        <div class="modal fade" id="modalDetalhes" tabindex="-1" aria-labelledby="modalDetalhesLabel">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                <div class="modal-content" style="border-radius: 15px; overflow: hidden;">
+                    <div class="modal-header" style="background: linear-gradient(135deg, #0A00B4 0%, #1B365D 100%); color: white; padding: 20px 30px;">
+                        <h5 class="modal-title" id="modalDetalhesLabel" style="font-weight: 700;">
+                            <i class="fas fa-info-circle"></i> Detalhes Agrupados por Recibo
                         </h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body" id="modalDetalhesBody">
-                        <!-- Conteúdo dinâmico -->
+                    <div class="modal-body" id="modalBody" style="padding: 30px; max-height: 70vh; overflow-y: auto;">
+                        <!-- CORREÇÃO CRÍTICA: ID CORRETO É modalBody, NÃO modalDetalhesBody -->
+                        <!-- Conteúdo dinâmico será inserido aqui -->
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            <i class="fas fa-times"></i> Fechar
-                        </button>
-                        <button type="button" class="btn btn-success" onclick="marcarConferencia()">
-                            <i class="fas fa-check"></i> Marcar Conferência
-                        </button>
-                        <button type="button" class="btn btn-primary" onclick="salvarAlteracoes()">
-                            <i class="fas fa-save"></i> Salvar Alterações
-                        </button>
+                    <div class="modal-footer" style="padding: 20px 30px; background: #f8f9fa; border-top: 2px solid #e9ecef;">
+                        <div class="d-flex gap-2 w-100 justify-content-between">
+                            <div>
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    <i class="fas fa-times"></i> Fechar
+                                </button>
+                                <button type="button" class="btn btn-info" onclick="buscarOrbiuns()">
+                                    <i class="fas fa-search"></i> Buscar Orbiuns
+                                </button>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-success" onclick="marcarConferencia()">
+                                    <i class="fas fa-check"></i> Marcar Conferência
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="salvarAlteracoes()" style="background: #0A00B4; border-color: #0A00B4;">
+                                    <i class="fas fa-save"></i> Salvar Alterações
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -718,93 +729,170 @@ function criarModal() {
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 }
 
-function preencherModal(cliente, embarques) {
-    const modalBody = document.getElementById('modalDetalhesBody');
+// ================================================================================
+// 📝 MODAL PREENCHIMENTO CORRIGIDO v8.12
+// ================================================================================
+function preencherModalCorrigido(cliente, embarques) {
+    // CORREÇÃO CRÍTICA: Buscar pelo ID correto!
+    const modalBody = document.getElementById('modalBody'); // NÃO modalDetalhesBody!
+    
     if (!modalBody) {
-        console.log('❌ modalDetalhesBody não encontrado');
+        console.error('❌ modalBody não encontrado');
         return;
     }
     
-    console.log(`📝 Preenchendo modal para ${cliente.nomeCliente} com ${embarques.length} embarques`);
+    console.log('✅ modalBody encontrado, preenchendo conteúdo...');
     
-    const embarquesHtml = embarques.map((embarque, index) => {
-        // Status das etapas
-        const dataConferenciaHtml = embarque.dataConferencia ? 
-            `<div style="color: #28a745; margin: 5px 0;"><i class="fas fa-check-circle"></i> Conferência: ${embarque.dataConferencia} por ${embarque.responsavelConferencia}</div>` : 
-            '<div style="color: #ffc107; margin: 5px 0;"><i class="fas fa-clock"></i> Conferência: Pendente</div>';
-            
-        const dataCheckinHtml = embarque.dataCheckin ?
-            `<div style="color: #28a745; margin: 5px 0;"><i class="fas fa-check-circle"></i> Check-in: ${embarque.dataCheckin} por ${embarque.responsavelCheckin}</div>` :
-            '<div style="color: #ffc107; margin: 5px 0;"><i class="fas fa-clock"></i> Check-in: Pendente</div>';
-            
-        const dataPosVendaHtml = embarque.dataPosVenda ?
-            `<div style="color: #28a745; margin: 5px 0;"><i class="fas fa-check-circle"></i> Pós-venda: ${embarque.dataPosVenda} por ${embarque.responsavelPosVenda}</div>` :
-            '<div style="color: #ffc107; margin: 5px 0;"><i class="fas fa-clock"></i> Pós-venda: Pendente</div>';
-        
+    // Agrupar embarques por recibo
+    const embarquesPorRecibo = new Map();
+    embarques.forEach(embarque => {
+        const recibo = embarque.recibo || 'Sem Recibo';
+        if (!embarquesPorRecibo.has(recibo)) {
+            embarquesPorRecibo.set(recibo, []);
+        }
+        embarquesPorRecibo.get(recibo).push(embarque);
+    });
+
+    const whatsappLink = cliente.whatsappCliente ? 
+        `https://wa.me/55${cliente.whatsappCliente.replace(/\D/g, '')}` : '#';
+
+    // Gerar HTML dos voos agrupados por recibo
+    const recibosHtml = Array.from(embarquesPorRecibo.entries()).map(([recibo, voosDoRecibo]) => {
+        const voosHtml = voosDoRecibo.map((embarque, index) => {
+            const statusConferencia = embarque.dataConferencia 
+                ? `<span class="badge bg-success">✅ Conferido em ${formatarData(embarque.dataConferencia)}</span>`
+                : `<span class="badge bg-warning">⏰ Pendente</span>`;
+                
+            const statusCheckin = embarque.dataCheckin 
+                ? `<span class="badge bg-success">✅ Check-in feito em ${formatarData(embarque.dataCheckin)}</span>`
+                : `<span class="badge bg-warning">⏰ Pendente</span>`;
+                
+            const statusPosVenda = embarque.dataPosVenda 
+                ? `<span class="badge bg-success">✅ Pós-venda feito em ${formatarData(embarque.dataPosVenda)}</span>`
+                : `<span class="badge bg-warning">⏰ Pendente</span>`;
+
+            return `
+                <div class="voo-individual mb-3 p-3" style="border-left: 4px solid #0A00B4; background: #f8f9fa; border-radius: 8px;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0" style="color: #0A00B4;"><i class="fas fa-plane"></i> <strong>Voo ${index + 1}</strong></h6>
+                        <small class="text-muted">ID: ${embarque.id || 'N/A'}</small>
+                    </div>
+                    
+                    <div class="row g-2 mb-2">
+                        <div class="col-md-3">
+                            <small class="text-muted d-block">Data Ida</small>
+                            <strong>${formatarData(embarque.dataIda) || 'N/A'}</strong>
+                        </div>
+                        <div class="col-md-3">
+                            <small class="text-muted d-block">Data Volta</small>
+                            <strong>${formatarData(embarque.dataVolta) || 'Só ida'}</strong>
+                        </div>
+                        <div class="col-md-3">
+                            <small class="text-muted d-block">Companhia</small>
+                            <strong>${embarque.cia || 'N/A'}</strong>
+                        </div>
+                        <div class="col-md-3">
+                            <small class="text-muted d-block">Reserva</small>
+                            <strong>${embarque.reserva || 'N/A'}</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-2 mb-2">
+                        <div class="col-md-4">
+                            <small class="text-muted d-block">LOC GDS</small>
+                            <strong>${embarque.locGds || 'N/A'}</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="text-muted d-block">LOC CIA</small>
+                            <strong>${embarque.locCia || 'N/A'}</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="text-muted d-block">Tipo</small>
+                            <strong>${embarque.tipo || 'N/A'}</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="status-etapas">
+                        <div class="mb-1"><strong>Conferência:</strong> ${statusConferencia}</div>
+                        <div class="mb-1"><strong>Check-in:</strong> ${statusCheckin}</div>
+                        <div class="mb-1"><strong>Pós-venda:</strong> ${statusPosVenda}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
         return `
-            <div style="border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin-bottom: 15px; background: #f8f9fa;">
-                <div style="margin-bottom: 10px;">
-                    <h6 style="color: #0A00B4; margin-bottom: 5px;">
-                        <i class="fas fa-plane"></i> Voo ${index + 1} - ${formatarData(embarque.dataIda)}
-                    </h6>
+            <div class="recibo-section mb-4">
+                <div class="recibo-header p-3 mb-3" style="background: linear-gradient(135deg, #0A00B4 0%, #1B365D 100%); color: white; border-radius: 10px;">
+                    <h5 class="mb-0"><i class="fas fa-receipt"></i> <strong>Recibo: ${recibo}</strong></h5>
+                    <small>Total de voos: ${voosDoRecibo.length}</small>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 10px;">
-                    <div><strong>Companhia Aérea:</strong> ${embarque.cia || 'N/A'}</div>
-                    <div><strong>Reserva:</strong> ${embarque.reserva || 'N/A'}</div>
-                    <div><strong>LOC GDS:</strong> ${embarque.locGds || 'N/A'}</div>
-                    <div><strong>LOC CIA:</strong> ${embarque.locCia || 'N/A'}</div>
-                    <div><strong>Recibo:</strong> ${embarque.recibo || 'N/A'}</div>
-                    <div><strong>Nº Informe:</strong> ${embarque.numeroInforme || 'N/A'}</div>
-                </div>
-                ${dataConferenciaHtml}
-                ${dataCheckinHtml}
-                ${dataPosVendaHtml}
+                ${voosHtml}
             </div>
         `;
     }).join('');
 
+    // Montar conteúdo completo do modal
     const conteudoCompleto = `
-        <div style="background: linear-gradient(135deg, #0A00B4 0%, #1B365D 100%); color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                <i class="fas fa-user" style="font-size: 1.5rem;"></i>
-                <span style="font-size: 1.2rem; font-weight: 600;">Dados do Cliente</span>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
-                <div>
-                    <div style="color: #FFE600; font-weight: 600; margin-bottom: 5px;">Nome</div>
-                    <div style="font-size: 1.1rem;">${cliente.nomeCliente}</div>
+        <!-- Dados do Cliente -->
+        <div class="cliente-info-section mb-4 p-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 10px; border-left: 5px solid #0A00B4;">
+            <h5 class="mb-3" style="color: #0A00B4;"><i class="fas fa-user-circle"></i> <strong>Dados do Cliente</strong></h5>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <small class="text-muted d-block">Nome Completo</small>
+                    <strong>${cliente.nomeCliente || 'N/A'}</strong>
                 </div>
-                <div>
-                    <div style="color: #FFE600; font-weight: 600; margin-bottom: 5px;">CPF</div>
-                    <div>${cliente.cpfCliente}</div>
+                <div class="col-md-6">
+                    <small class="text-muted d-block">CPF</small>
+                    <strong>${cliente.cpfCliente || 'N/A'}</strong>
                 </div>
-                <div>
-                    <div style="color: #FFE600; font-weight: 600; margin-bottom: 5px;">Vendedor</div>
-                    <div>${cliente.vendedor}</div>
+                <div class="col-md-6">
+                    <small class="text-muted d-block">Vendedor Responsável</small>
+                    <strong>${cliente.vendedor || 'N/A'}</strong>
                 </div>
-                <div>
-                    <div style="color: #FFE600; font-weight: 600; margin-bottom: 5px;">WhatsApp</div>
-                    <div>${cliente.whatsappCliente || 'N/A'}</div>
+                <div class="col-md-6">
+                    <small class="text-muted d-block">WhatsApp</small>
+                    <div class="d-flex align-items-center gap-2">
+                        <strong>${cliente.whatsappCliente || 'N/A'}</strong>
+                        ${cliente.whatsappCliente ? `
+                            <a href="${whatsappLink}" target="_blank" class="btn btn-success btn-sm">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                        ` : ''}
+                    </div>
                 </div>
-                <div>
-                    <div style="color: #FFE600; font-weight: 600; margin-bottom: 5px;">Cliente Ale</div>
-                    <div>${cliente.clienteAle}</div>
+                <div class="col-md-6">
+                    <small class="text-muted d-block">Cliente Ale</small>
+                    <strong>${cliente.clienteAle || 'Não'}</strong>
+                </div>
+                <div class="col-md-6">
+                    <small class="text-muted d-block">Número do Informe</small>
+                    <strong>${cliente.numeroInforme || 'N/A'}</strong>
                 </div>
             </div>
         </div>
-        
-        <div style="margin-bottom: 20px;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: #0A00B4;">
-                <i class="fas fa-edit"></i>
-                <span style="font-weight: 600;">Campos Editáveis (Pós-venda)</span>
-            </div>
+
+        <!-- Voos Agrupados por Recibo -->
+        <div class="voos-section mb-4">
+            <h5 class="mb-3" style="color: #0A00B4;"><i class="fas fa-plane-departure"></i> <strong>Todos os Voos Agrupados por Recibo</strong></h5>
+            ${recibosHtml}
+        </div>
+
+        <!-- Campos Editáveis (Pós-venda) -->
+        <div class="campos-editaveis p-4" style="background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); border-radius: 10px; border-left: 5px solid #ffc107;">
+            <h5 class="mb-3" style="color: #856404;"><i class="fas fa-edit"></i> <strong>Campos Editáveis (Pós-venda)</strong></h5>
             <div class="row g-3">
                 <div class="col-12">
-                    <label style="font-weight: 600; color: #495057; margin-bottom: 5px; display: block;">Observações</label>
-                    <textarea class="form-control" id="observacoesEditaveis" rows="3" placeholder="Digite as observações...">${cliente.observacoes || ''}</textarea>
+                    <label class="form-label"><strong>Observações</strong></label>
+                    <textarea 
+                        class="form-control" 
+                        id="observacoesEditaveis" 
+                        rows="4"
+                        placeholder="Digite observações do pós-venda..."
+                    >${cliente.observacoes || ''}</textarea>
                 </div>
                 <div class="col-md-6">
-                    <label style="font-weight: 600; color: #495057; margin-bottom: 5px; display: block;">Grupo Ofertas WhatsApp</label>
+                    <label class="form-label"><strong>Grupo Ofertas WhatsApp</strong></label>
                     <select class="form-select" id="grupoOfertas">
                         <option value="">Selecione...</option>
                         <option value="Sim" ${cliente.grupoOfertas === 'Sim' ? 'selected' : ''}>Sim</option>
@@ -812,7 +900,7 @@ function preencherModal(cliente, embarques) {
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label style="font-weight: 600; color: #495057; margin-bottom: 5px; display: block;">Postou no Instagram</label>
+                    <label class="form-label"><strong>Postou no Instagram</strong></label>
                     <select class="form-select" id="postouInsta">
                         <option value="">Selecione...</option>
                         <option value="Sim" ${cliente.postouInsta === 'Sim' ? 'selected' : ''}>Sim</option>
@@ -820,7 +908,7 @@ function preencherModal(cliente, embarques) {
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label style="font-weight: 600; color: #495057; margin-bottom: 5px; display: block;">Avaliação Google</label>
+                    <label class="form-label"><strong>Avaliação Google</strong></label>
                     <select class="form-select" id="avaliacaoGoogle">
                         <option value="">Selecione...</option>
                         <option value="Sim" ${cliente.avaliacaoGoogle === 'Sim' ? 'selected' : ''}>Sim</option>
@@ -828,25 +916,26 @@ function preencherModal(cliente, embarques) {
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label style="font-weight: 600; color: #495057; margin-bottom: 5px; display: block;">SAC</label>
-                    <input type="text" class="form-control" id="sacPosVenda" value="${cliente.sac || ''}" placeholder="Número do SAC">
+                    <label class="form-label"><strong>SAC (Número)</strong></label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="numeroSac" 
+                        placeholder="Ex: 2024001234"
+                        value="${cliente.numeroSac || ''}"
+                    >
                 </div>
             </div>
-        </div>
-        
-        <div>
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: #0A00B4;">
-                <i class="fas fa-plane"></i>
-                <span style="font-weight: 600;">Embarques Relacionados (${embarques.length} voos)</span>
-            </div>
-            ${embarquesHtml}
         </div>
     `;
     
     modalBody.innerHTML = conteudoCompleto;
-    console.log('✅ Modal preenchido com sucesso');
+    console.log('✅ Modal preenchido com sucesso usando modalBody correto!');
 }
 
+// ================================================================================
+// 🛠️ AÇÕES DO MODAL
+// ================================================================================
 async function marcarConferencia() {
     if (embarquesRelacionados.length === 0) return;
     
@@ -885,7 +974,7 @@ async function salvarAlteracoes() {
         grupoOfertas: document.getElementById('grupoOfertas')?.value || '',
         postouInsta: document.getElementById('postouInsta')?.value || '',
         avaliacaoGoogle: document.getElementById('avaliacaoGoogle')?.value || '',
-        sac: document.getElementById('sacPosVenda')?.value || ''
+        numeroSac: document.getElementById('numeroSac')?.value || ''
     };
     
     try {
@@ -908,6 +997,10 @@ async function salvarAlteracoes() {
     } catch (error) {
         mostrarNotificacao(`Erro: ${error.message}`, 'error');
     }
+}
+
+function buscarOrbiuns() {
+    mostrarNotificacao('Função "Buscar Orbiuns" será implementada em breve!', 'info');
 }
 
 // ================================================================================
@@ -1020,6 +1113,7 @@ function mostrarLoading(mostrar) {
 window.abrirDetalhesEmbarque = abrirDetalhesEmbarque;
 window.marcarConferencia = marcarConferencia;
 window.salvarAlteracoes = salvarAlteracoes;
+window.buscarOrbiuns = buscarOrbiuns;
 window.aplicarFiltros = aplicarFiltros;
 window.limparFiltros = limparFiltros;
 window.filtrarPorCategoria = filtrarPorCategoria;
@@ -1027,10 +1121,11 @@ window.carregarEmbarques = carregarEmbarques;
 window.copiarTexto = copiarTexto;
 
 // ================================================================================
-// 📝 LOGS FINAIS
+// 📝 LOGS FINAIS v8.12
 // ================================================================================
-console.log('%c🏢 CVC ITAQUÁ - EMBARQUES v8.11', 'color: #0A00B4; font-size: 16px; font-weight: bold;');
-console.log('✅ Sistema limpo e funcional com JSONP');
-console.log('✅ Todas as ações implementadas');
+console.log('%c🏢 CVC ITAQUÁ - EMBARQUES v8.12 CORRIGIDO', 'color: #0A00B4; font-size: 16px; font-weight: bold;');
+console.log('✅ BUG modalDetalhesBody → modalBody CORRIGIDO');
+console.log('✅ Modal agrupado por recibo funcionando');
+console.log('✅ Campo SAC adicionado');
 console.log('✅ Interface CVC aplicada');
 console.log('🚀 PRONTO PARA PRODUÇÃO!');
