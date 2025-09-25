@@ -1,7 +1,7 @@
 // ================================================================================
-// [MODULO] embarques-logic.js - Dashboard de Embarques v8.13 - LÓGICA CORRIGIDA
+// [MODULO] embarques-logic.js - Dashboard de Embarques v8.14 - BUGFIX CRÍTICO
 // ================================================================================
-// 🎯 CORREÇÃO: Buscar APENAS por número de informe + botão adicional para CPF
+// 🎯 CORREÇÕES: Timeout API + Sincronização Estado + Cleanup JSONP
 // 🎯 Modal agrupado corretamente por informe, não por cliente
 // ================================================================================
 
@@ -17,12 +17,13 @@ let stats = { conferencias: 0, checkins: 0, posVendas: 0, total: 0, concluidos: 
 // JSONP
 const JSONP_CALLBACK_NAME = 'cvcJsonpCallback';
 let jsonpCounter = 0;
+let pendingCallbacks = new Set(); // NOVO: Para rastrear callbacks pendentes
 
 // ================================================================================
 // 🚀 INICIALIZAÇÃO
 // ================================================================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Inicializando embarques-logic.js v8.13...');
+    console.log('🚀 Inicializando embarques-logic.js v8.14...');
     inicializarSistema();
 });
 
@@ -69,32 +70,46 @@ function configurarEventos() {
 }
 
 // ================================================================================
-// 🌐 CLIENTE JSONP
+// 🌐 CLIENTE JSONP CORRIGIDO v8.14
 // ================================================================================
 function chamarAPIComJSONP(payload) {
     return new Promise((resolve, reject) => {
         const callbackName = `${JSONP_CALLBACK_NAME}_${++jsonpCounter}_${Date.now()}`;
         const script = document.createElement('script');
         
+        // CORREÇÃO v8.14: Timeout aumentado para 60 segundos
         const timeoutId = setTimeout(() => {
             cleanup();
-            reject(new Error('Timeout: Servidor não respondeu em 30 segundos'));
-        }, 30000);
+            reject(new Error('Timeout: Servidor não respondeu em 60 segundos'));
+        }, 60000);
 
+        // CORREÇÃO v8.14: Cleanup melhorado
         function cleanup() {
             clearTimeout(timeoutId);
-            if (script.parentNode) {
-                document.head.removeChild(script);
+            if (script && script.parentNode) {
+                try {
+                    document.head.removeChild(script);
+                } catch(e) {
+                    console.warn('Script já removido:', e.message);
+                }
             }
-            delete window[callbackName];
+            if (window[callbackName]) {
+                delete window[callbackName];
+            }
+            pendingCallbacks.delete(callbackName);
         }
 
+        // CORREÇÃO v8.14: Rastrear callbacks pendentes
+        pendingCallbacks.add(callbackName);
+
         window[callbackName] = function(response) {
+            console.log('📥 Callback executado:', callbackName, response);
             cleanup();
+            
             if (response && response.success) {
                 resolve(response);
             } else {
-                reject(new Error(response.message || 'Erro na API'));
+                reject(new Error(response?.message || 'Erro na API'));
             }
         };
 
@@ -105,23 +120,43 @@ function chamarAPIComJSONP(payload) {
         });
 
         script.src = `${API_URL}?${params.toString()}`;
+        
         script.onerror = () => {
             cleanup();
             reject(new Error('Erro de rede ao conectar com a API'));
         };
 
         document.head.appendChild(script);
-        console.log(`🚀 JSONP Request: ${payload.action}`);
+        console.log(`🚀 JSONP Request: ${payload.action} | Callback: ${callbackName}`);
+    });
+}
+
+// NOVO v8.14: Limpar callbacks órfãos
+function limparCallbacksOrfaos() {
+    const agora = Date.now();
+    pendingCallbacks.forEach(callbackName => {
+        if (window[callbackName]) {
+            // Verificar se é muito antigo (mais de 2 minutos)
+            const timestamp = callbackName.split('_')[2];
+            if (agora - parseInt(timestamp) > 120000) {
+                delete window[callbackName];
+                pendingCallbacks.delete(callbackName);
+                console.log('🧹 Callback órfão removido:', callbackName);
+            }
+        }
     });
 }
 
 // ================================================================================
-// 📡 CARREGAMENTO DE DADOS
+// 📡 CARREGAMENTO DE DADOS CORRIGIDO v8.14
 // ================================================================================
 async function carregarEmbarques() {
     try {
         console.log('📋 Carregando embarques via JSONP...');
         mostrarLoading(true);
+        
+        // NOVO v8.14: Limpar callbacks órfãos antes de nova requisição
+        limparCallbacksOrfaos();
         
         const resultado = await chamarAPIComJSONP({
             action: 'listar_embarques'
@@ -152,13 +187,22 @@ async function carregarEmbarques() {
         }
     } catch (error) {
         console.error('❌ Erro ao carregar embarques:', error);
+        
+        // CORREÇÃO v8.14: Não mostrar erro em caso de timeout após operação bem-sucedida
+        if (error.message.includes('Timeout') && embarquesData.length > 0) {
+            console.log('📊 Mantendo dados existentes após timeout');
+            mostrarNotificacao('Dados mantidos da sessão anterior (timeout de rede)', 'warning');
+            return;
+        }
+        
         mostrarNotificacao(`Erro ao carregar dados: ${error.message}`, 'error');
         
-        // Limpar dados
-        embarquesData = [];
-        embarquesFiltrados = [];
-        atualizarEstatisticas();
-        renderizarEmbarques();
+        // Limpar dados apenas se não houver dados anteriores
+        if (embarquesData.length === 0) {
+            embarquesFiltrados = [];
+            atualizarEstatisticas();
+            renderizarEmbarques();
+        }
     } finally {
         mostrarLoading(false);
     }
@@ -317,10 +361,10 @@ function converterData(dataString) {
 // ================================================================================
 function renderizarEmbarques() {
     const listas = {
-        conferencia: embarquesFiltrados.filter(e => e.categoria === 'conferencia'),
+        conferencia: embarquesFiltrados.filter(e => e.categoria === 'conferencia' && !e.conferenciaFeita),
         checkin: embarquesFiltrados.filter(e => e.categoria === 'checkin'),
         posVenda: embarquesFiltrados.filter(e => e.categoria === 'pos-venda'),
-        concluido: embarquesFiltrados.filter(e => e.categoria === 'concluido')
+        concluido: embarquesFiltrados.filter(e => e.conferenciaFeita || e.categoria === 'concluido')
     };
     
     renderizarLista('listaConferencias', listas.conferencia, 'conferencia');
@@ -524,10 +568,10 @@ function formatarData(data) {
 // ================================================================================
 function atualizarEstatisticas() {
     stats = {
-        conferencias: embarquesData.filter(e => e.categoria === 'conferencia').length,
+        conferencias: embarquesData.filter(e => e.categoria === 'conferencia' && !e.conferenciaFeita).length,
         checkins: embarquesData.filter(e => e.categoria === 'checkin').length,
         posVendas: embarquesData.filter(e => e.categoria === 'pos-venda').length,
-        concluidos: embarquesData.filter(e => e.categoria === 'concluido').length,
+        concluidos: embarquesData.filter(e => e.conferenciaFeita || e.categoria === 'concluido').length,
         total: embarquesData.length
     };
 }
@@ -734,7 +778,7 @@ function criarModalComBotaoCPF() {
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     <i class="fas fa-times"></i> Fechar
                                 </button>
-                                <button type="button" class="btn btn-info" onclick="buscarOrbiuns()">
+                                <button type="button" id="btnBuscarOrbiuns" class="btn btn-info">
                                     <i class="fas fa-search"></i> Buscar Orbiuns
                                 </button>
                                 <button type="button" class="btn btn-warning" onclick="buscarTodosVoosCliente()">
@@ -742,12 +786,12 @@ function criarModalComBotaoCPF() {
                                 </button>
                             </div>
                             
-                            <!-- Botões principais à direita - CORREÇÃO: onclick correto -->
+                            <!-- Botões principais à direita -->
                             <div class="d-flex gap-2">
-                                <button type="button" class="btn btn-success" onclick="marcarConferencia()">
-                                    <i class="fas fa-check"></i> Marcar Conferência
+                                <button type="button" id="btnMarcarConferido" class="btn btn-success">
+                                    <i class="fas fa-check"></i> Marcar como Conferido
                                 </button>
-                                <button type="button" class="btn btn-primary" onclick="salvarAlteracoes()" style="background: #0A00B4; border-color: #0A00B4;">
+                                <button type="button" id="btnSalvarAlteracoes" class="btn btn-primary" style="background: #0A00B4; border-color: #0A00B4;">
                                     <i class="fas fa-save"></i> Salvar Alterações
                                 </button>
                             </div>
@@ -773,7 +817,6 @@ function configurarEventosBotoes() {
         return;
     }
     
-    // CORREÇÃO: Buscar botões pelos IDs que realmente existem
     const botaoConferencia = document.getElementById('btnMarcarConferido');
     const botaoSalvar = document.getElementById('btnSalvarAlteracoes');
     const botaoTodosVoos = modal.querySelector('button[onclick*="buscarTodosVoosCliente"]');
@@ -787,19 +830,24 @@ function configurarEventosBotoes() {
     
     if (botaoConferencia) {
         console.log('✅ Configurando evento do botão conferência');
-        botaoConferencia.addEventListener('click', function(e) {
+        // Remover listeners antigos
+        const novoBtn = botaoConferencia.cloneNode(true);
+        botaoConferencia.parentNode.replaceChild(novoBtn, botaoConferencia);
+        
+        novoBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             console.log('🖱️ Clique no botão conferência detectado!');
             marcarConferencia();
         });
-    } else {
-        console.error('❌ Botão conferência com ID btnMarcarConferido NÃO encontrado');
     }
     
     if (botaoSalvar) {
         console.log('✅ Configurando evento do botão salvar');
-        botaoSalvar.addEventListener('click', function(e) {
+        const novoBtn = botaoSalvar.cloneNode(true);
+        botaoSalvar.parentNode.replaceChild(novoBtn, botaoSalvar);
+        
+        novoBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             console.log('🖱️ Clique no botão salvar detectado!');
@@ -820,7 +868,10 @@ function configurarEventosBotoes() {
     
     if (botaoOrbiuns) {
         console.log('✅ Configurando evento do botão orbiuns');
-        botaoOrbiuns.addEventListener('click', function(e) {
+        const novoBtn = botaoOrbiuns.cloneNode(true);
+        botaoOrbiuns.parentNode.replaceChild(novoBtn, botaoOrbiuns);
+        
+        novoBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             console.log('🖱️ Clique no botão orbiuns detectado!');
@@ -830,10 +881,9 @@ function configurarEventosBotoes() {
 }
 
 // ================================================================================
-// 📝 MODAL PREENCHIMENTO CORRIGIDO v8.13
+// 📝 MODAL PREENCHIMENTO CORRIGIDO v8.14
 // ================================================================================
 function preencherModalCorrigido(cliente, embarques) {
-    // CORREÇÃO: Buscar pelo ID correto!
     const modalBody = document.getElementById('modalBody');
     
     if (!modalBody) {
@@ -1034,13 +1084,14 @@ function preencherModalCorrigido(cliente, embarques) {
 }
 
 // ================================================================================
-// 🛠️ AÇÕES DO MODAL CORRIGIDAS
+// 🛠️ AÇÕES DO MODAL CORRIGIDAS v8.14
 // ================================================================================
 async function marcarConferencia() {
-    console.log('🎯 marcarConferencia() iniciada');
+    console.log('🎯 marcarConferencia() v8.14 iniciada');
     
-    if (embarquesRelacionados.length === 0) {
+    if (!embarquesRelacionados || embarquesRelacionados.length === 0) {
         console.log('❌ Nenhum embarque relacionado encontrado');
+        mostrarNotificacao('Nenhum embarque selecionado', 'error');
         return;
     }
     
@@ -1066,12 +1117,12 @@ async function marcarConferencia() {
     }
     
     // Buscar botão e mostrar loading
-    const btnMarcar = document.querySelector('[onclick="marcarConferencia()"]');
+    const btnMarcar = document.getElementById('btnMarcarConferido');
     let originalText = '';
     
     if (btnMarcar) {
         originalText = btnMarcar.innerHTML;
-        btnMarcar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+        btnMarcar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
         btnMarcar.disabled = true;
     }
     
@@ -1092,24 +1143,41 @@ async function marcarConferencia() {
             throw new Error(resultado.message || 'Erro ao atualizar planilha');
         }
         
-        // Atualizar dados localmente
+        // CORREÇÃO v8.14: Atualizar dados localmente de forma mais robusta
         console.log('🔄 Atualizando dados localmente...');
+        
+        // Atualizar embarquesRelacionados
         embarquesRelacionados.forEach(embarque => {
             if (embarque) {
                 embarque.conferenciaFeita = novoStatus;
                 embarque.dataConferencia = novoStatus ? new Date().toLocaleString('pt-BR') : '';
-                embarque.responsavelConferencia = novoStatus ? 'Dashboard v8.13' : '';
-                
-                // Atualizar nos dados principais
-                const embarqueOriginal = embarquesData.find(e => e.id === embarque.id);
-                if (embarqueOriginal) {
-                    embarqueOriginal.conferenciaFeita = novoStatus;
-                    embarqueOriginal.dataConferencia = embarque.dataConferencia;
-                    embarqueOriginal.responsavelConferencia = embarque.responsavelConferencia;
-                    console.log('📝 Embarque atualizado:', embarqueOriginal.id);
-                }
+                embarque.responsavelConferencia = novoStatus ? 'Dashboard v8.14' : '';
+                console.log('📝 Embarque relacionado atualizado:', embarque.id);
             }
         });
+        
+        // Atualizar dados principais
+        embarquesData.forEach(embarque => {
+            if (embarque.numeroInforme === cliente.numeroInforme) {
+                embarque.conferenciaFeita = novoStatus;
+                embarque.dataConferencia = novoStatus ? new Date().toLocaleString('pt-BR') : '';
+                embarque.responsavelConferencia = novoStatus ? 'Dashboard v8.14' : '';
+                console.log('📝 Embarque principal atualizado:', embarque.id);
+            }
+        });
+        
+        // Atualizar filtrados
+        embarquesFiltrados.forEach(embarque => {
+            if (embarque.numeroInforme === cliente.numeroInforme) {
+                embarque.conferenciaFeita = novoStatus;
+                embarque.dataConferencia = novoStatus ? new Date().toLocaleString('pt-BR') : '';
+                embarque.responsavelConferencia = novoStatus ? 'Dashboard v8.14' : '';
+            }
+        });
+        
+        // CORREÇÃO v8.14: Atualizar interface imediatamente
+        atualizarEstatisticas();
+        renderizarEmbarques();
         
         // Fechar modal
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalDetalhes'));
@@ -1118,13 +1186,47 @@ async function marcarConferencia() {
         const statusText = novoStatus ? 'marcada como concluída' : 'desmarcada';
         mostrarNotificacao(`✅ Conferência ${statusText} com sucesso!`, 'success');
         
-        // Recarregar dados
-        console.log('🔄 Recarregando dados...');
-        setTimeout(() => carregarEmbarques(), 1500);
+        console.log('✅ Operação concluída com sucesso - Interface atualizada');
+        
+        // CORREÇÃO v8.14: NÃO recarregar dados automaticamente (evita timeout)
+        // A interface já foi atualizada localmente
         
     } catch (error) {
         console.error('❌ Erro completo:', error);
-        mostrarNotificacao(`❌ Erro ao salvar conferência: ${error.message}`, 'error');
+        
+        // CORREÇÃO v8.14: Mensagem de erro mais específica
+        let mensagemErro = 'Erro desconhecido';
+        if (error.message.includes('Timeout')) {
+            mensagemErro = 'Timeout - Os dados podem ter sido salvos. Recarregue para verificar.';
+        } else {
+            mensagemErro = error.message;
+        }
+        
+        mostrarNotificacao(`❌ ${mensagemErro}`, 'error');
+        
+        // Reverter alterações locais em caso de erro (exceto timeout)
+        if (!error.message.includes('Timeout')) {
+            embarquesRelacionados.forEach(embarque => {
+                if (embarque) {
+                    embarque.conferenciaFeita = !novoStatus;
+                    embarque.dataConferencia = '';
+                    embarque.responsavelConferencia = '';
+                }
+            });
+            
+            // Reverter também nos dados principais
+            embarquesData.forEach(embarque => {
+                if (embarque.numeroInforme === cliente.numeroInforme) {
+                    embarque.conferenciaFeita = !novoStatus;
+                    embarque.dataConferencia = '';
+                    embarque.responsavelConferencia = '';
+                }
+            });
+            
+            // Atualizar interface com dados revertidos
+            atualizarEstatisticas();
+            renderizarEmbarques();
+        }
     } finally {
         // Restaurar botão
         if (btnMarcar && originalText) {
@@ -1135,7 +1237,10 @@ async function marcarConferencia() {
 }
 
 async function salvarAlteracoes() {
-    if (embarquesRelacionados.length === 0) return;
+    if (!embarquesRelacionados || embarquesRelacionados.length === 0) {
+        mostrarNotificacao('Nenhum embarque selecionado', 'error');
+        return;
+    }
     
     const cliente = embarquesRelacionados[0];
     const dadosEditaveis = {
@@ -1146,7 +1251,18 @@ async function salvarAlteracoes() {
         numeroSac: document.getElementById('numeroSac')?.value || ''
     };
     
+    const btnSalvar = document.getElementById('btnSalvarAlteracoes');
+    let originalText = '';
+    
+    if (btnSalvar) {
+        originalText = btnSalvar.innerHTML;
+        btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+        btnSalvar.disabled = true;
+    }
+    
     try {
+        console.log('💾 Salvando alterações de pós-venda...');
+        
         const resultado = await chamarAPIComJSONP({
             action: 'marcar_pos_venda',
             cpf: cliente.cpfCliente,
@@ -1156,15 +1272,45 @@ async function salvarAlteracoes() {
             desfazer: false
         });
         
-        mostrarNotificacao('Alterações salvas com sucesso!', 'success');
-        carregarEmbarques();
+        if (!resultado.success) {
+            throw new Error(resultado.message || 'Erro ao salvar alterações');
+        }
+        
+        // Atualizar dados localmente
+        embarquesRelacionados.forEach(embarque => {
+            if (embarque) {
+                Object.assign(embarque, dadosEditaveis);
+                embarque.dataPosVenda = new Date().toLocaleString('pt-BR');
+                embarque.responsavelPosVenda = 'Dashboard v8.14';
+            }
+        });
+        
+        mostrarNotificacao('✅ Alterações salvas com sucesso!', 'success');
         
         // Fechar modal
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalDetalhes'));
         if (modal) modal.hide();
         
+        // Atualizar interface
+        atualizarEstatisticas();
+        renderizarEmbarques();
+        
     } catch (error) {
-        mostrarNotificacao(`Erro: ${error.message}`, 'error');
+        console.error('❌ Erro ao salvar:', error);
+        
+        let mensagemErro = 'Erro desconhecido';
+        if (error.message.includes('Timeout')) {
+            mensagemErro = 'Timeout - As alterações podem ter sido salvas. Recarregue para verificar.';
+        } else {
+            mensagemErro = error.message;
+        }
+        
+        mostrarNotificacao(`❌ ${mensagemErro}`, 'error');
+    } finally {
+        if (btnSalvar && originalText) {
+            btnSalvar.innerHTML = originalText;
+            btnSalvar.disabled = false;
+        }
     }
 }
 
@@ -1294,11 +1440,13 @@ window.copiarTexto = copiarTexto;
 window.embarquesRelacionados = embarquesRelacionados;
 
 // ================================================================================
-// 📝 LOGS FINAIS v8.13
+// 📝 LOGS FINAIS v8.14 - BUGFIX CRÍTICO
 // ================================================================================
-console.log('%c🏢 CVC ITAQUÁ - EMBARQUES v8.13 - LÓGICA CORRIGIDA', 'color: #0A00B4; font-size: 16px; font-weight: bold;');
-console.log('✅ Busca APENAS por número de informe');
-console.log('✅ Botão adicional para ver todos os voos do cliente');
-console.log('✅ Modal agrupado corretamente por recibo');
-console.log('✅ Interface CVC aplicada');
-console.log('🚀 PRONTO PARA PRODUÇÃO!');
+console.log('%c🏢 CVC ITAQUÁ - EMBARQUES v8.14 - BUGFIX CRÍTICO', 'color: #0A00B4; font-size: 16px; font-weight: bold;');
+console.log('✅ Timeout da API aumentado para 60s');
+console.log('✅ Cleanup JSONP melhorado');
+console.log('✅ Sincronização estado local/servidor corrigida');
+console.log('✅ Interface atualizada imediatamente após ações');
+console.log('✅ Não recarrega dados automaticamente (evita timeout)');
+console.log('✅ Mensagens de erro mais específicas');
+console.log('🚀 PRONTO PARA PRODUÇÃO - BUGS CORRIGIDOS!');
