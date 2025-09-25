@@ -762,15 +762,28 @@ function criarModalComBotaoCPF() {
 }
 
 // ================================================================================
-// 🔧 CONFIGURAR EVENTOS DOS BOTÕES DO MODAL
+// 🔧 CONFIGURAR EVENTOS DOS BOTÕES DO MODAL - CORRIGIDO
 // ================================================================================
 function configurarEventosBotoes() {
     console.log('🔧 Configurando eventos dos botões do modal...');
     
-    const botaoConferencia = document.querySelector('#modalDetalhes button[onclick*="marcarConferencia"]');
-    const botaoSalvar = document.querySelector('#modalDetalhes button[onclick*="salvarAlteracoes"]');
-    const botaoTodosVoos = document.querySelector('#modalDetalhes button[onclick*="buscarTodosVoosCliente"]');
-    const botaoOrbiuns = document.querySelector('#modalDetalhes button[onclick*="buscarOrbiuns"]');
+    const modal = document.getElementById('modalDetalhes');
+    if (!modal) {
+        console.error('❌ Modal não encontrado');
+        return;
+    }
+    
+    // CORREÇÃO: Buscar botões pelos IDs que realmente existem
+    const botaoConferencia = document.getElementById('btnMarcarConferido');
+    const botaoSalvar = document.getElementById('btnSalvarAlteracoes');
+    const botaoTodosVoos = modal.querySelector('button[onclick*="buscarTodosVoosCliente"]');
+    const botaoOrbiuns = document.getElementById('btnBuscarOrbiuns');
+    
+    console.log('🔍 Status dos botões:');
+    console.log('Conferência:', botaoConferencia ? 'ENCONTRADO' : 'NÃO ENCONTRADO');
+    console.log('Salvar:', botaoSalvar ? 'ENCONTRADO' : 'NÃO ENCONTRADO');
+    console.log('Todos Voos:', botaoTodosVoos ? 'ENCONTRADO' : 'NÃO ENCONTRADO');
+    console.log('Orbiuns:', botaoOrbiuns ? 'ENCONTRADO' : 'NÃO ENCONTRADO');
     
     if (botaoConferencia) {
         console.log('✅ Configurando evento do botão conferência');
@@ -781,7 +794,7 @@ function configurarEventosBotoes() {
             marcarConferencia();
         });
     } else {
-        console.error('❌ Botão conferência NÃO encontrado');
+        console.error('❌ Botão conferência com ID btnMarcarConferido NÃO encontrado');
     }
     
     if (botaoSalvar) {
@@ -796,6 +809,7 @@ function configurarEventosBotoes() {
     
     if (botaoTodosVoos) {
         console.log('✅ Configurando evento do botão todos voos');
+        botaoTodosVoos.removeAttribute('onclick');
         botaoTodosVoos.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
