@@ -136,6 +136,7 @@
             cursor: pointer;
             text-decoration: none;
             color: inherit;
+            position: relative;
         }
         
         .action-card:hover {
@@ -145,10 +146,47 @@
             color: inherit;
         }
         
+        /* Card de Importação - NOVO */
+        .action-card.importacao {
+            background: linear-gradient(135deg, #FFE600, #FFF9CC);
+            border: 2px solid #FFE600;
+            transform: scale(1.02);
+        }
+        
+        .action-card.importacao:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(255, 230, 0, 0.3);
+        }
+        
+        .action-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(45deg, #FF4444, #FF6B6B);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
         .action-icon {
             font-size: 3rem;
             color: var(--cvc-azul);
             margin-bottom: 15px;
+        }
+        
+        .action-card.importacao .action-icon {
+            color: var(--cvc-azul);
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
         }
         
         .action-title {
@@ -160,6 +198,11 @@
         .action-desc {
             color: var(--cvc-cinza);
             font-size: 0.9rem;
+        }
+        
+        .action-card.importacao .action-desc {
+            color: var(--cvc-azul);
+            font-weight: 600;
         }
         
         /* Dashboard por vendedores */
@@ -371,6 +414,12 @@
                             <i class="fas fa-clipboard-list"></i> Controle de Orbiuns
                         </a>
                     </li>
+                    <!-- NOVO: Link para Importação -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="importacao.html">
+                            <i class="fas fa-cloud-upload-alt"></i> Importação
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -449,6 +498,16 @@
                             </div>
                             <div class="action-title">Gerenciar Vendas</div>
                             <div class="action-desc">Embarques e pós-venda</div>
+                        </a>
+                        
+                        <!-- 🔥 NOVO CARD DE IMPORTAÇÃO -->
+                        <a href="importacao.html" class="action-card importacao">
+                            <div class="action-badge">NOVO</div>
+                            <div class="action-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="action-title">🔥 Importação Automática</div>
+                            <div class="action-desc">Upload CSV/PDF - 90% automação</div>
                         </a>
                         
                         <a href="embarques.html" class="action-card">
@@ -683,7 +742,7 @@
             console.log('   ✅ Dashboard por vendedores (vendas, check-ins, pós-vendas)');
             console.log('   ✅ Login Google e por senha');
             console.log('   ✅ Interface responsiva');
-            console.log('   ✅ Dados simulados para demonstração');
+            console.log('   ✅ 🔥 NOVO: Importação Automática de Embarques');
         });
     </script>
 </body>
