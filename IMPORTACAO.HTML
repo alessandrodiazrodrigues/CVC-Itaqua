@@ -28,7 +28,7 @@
         }
 
         .status-dashboard {
-            background: linear-gradient(135deg, #0A00B4, #1B365D);
+            background: linear-gradient(135deg, var(--cvc-azul), var(--cvc-azul-escuro));
             border-radius: 15px;
             padding: 25px;
             color: white;
@@ -54,7 +54,7 @@
         .stat-number {
             font-size: 2.5rem;
             font-weight: 900;
-            color: #FFE600;
+            color: var(--cvc-amarelo);
             line-height: 1;
             margin-bottom: 5px;
         }
@@ -65,55 +65,55 @@
         }
 
         .upload-section {
-            background: white;
+            background: var(--cvc-branco);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-shadow: var(--cvc-sombra-media);
             margin-bottom: 30px;
         }
 
         .upload-card {
-            border: 2px dashed #0A00B4;
+            border: 2px dashed var(--cvc-azul);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
             transition: all 0.3s ease;
-            background: #f8f9fa;
+            background: var(--cvc-cinza-claro);
         }
 
         .upload-card.priority {
-            border-color: #FFE600;
-            background: linear-gradient(135deg, #fff8e1, #ffffff);
+            border-color: var(--cvc-amarelo);
+            background: linear-gradient(135deg, #fff8e1, var(--cvc-branco));
             border-style: solid;
         }
 
         .upload-card.secondary {
-            border-color: #6c757d;
+            border-color: var(--cvc-cinza);
             opacity: 0.8;
         }
 
         .upload-card:hover {
             border-style: solid;
-            box-shadow: 0 4px 12px rgba(10, 0, 180, 0.1);
+            box-shadow: var(--cvc-sombra-suave);
             transform: translateY(-2px);
         }
 
         .upload-header {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
 
         .upload-header h3 {
             margin: 0;
-            color: #0A00B4;
+            color: var(--cvc-azul);
             font-weight: 700;
         }
 
         .upload-status {
-            background: #6c757d;
-            color: white;
+            background: var(--cvc-cinza);
+            color: var(--cvc-branco);
             padding: 4px 12px;
             border-radius: 20px;
             font-size: 0.8rem;
@@ -142,20 +142,20 @@
 
         .drag-drop-zone.dragover {
             background: rgba(10, 0, 180, 0.1);
-            border-color: #0A00B4;
+            border-color: var(--cvc-azul);
         }
 
         .drag-drop-zone i {
             font-size: 3rem;
-            color: #0A00B4;
+            color: var(--cvc-azul);
             margin-bottom: 15px;
         }
 
         .verificacao-section {
-            background: white;
+            background: var(--cvc-branco);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-shadow: var(--cvc-sombra-media);
             margin-bottom: 30px;
         }
 
@@ -167,14 +167,14 @@
         }
 
         .verificacao-card {
-            background: white;
+            background: var(--cvc-branco);
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: var(--cvc-sombra-suave);
             display: flex;
             align-items: center;
             gap: 15px;
-            border-left: 4px solid #0A00B4;
+            border-left: 4px solid var(--cvc-azul);
         }
 
         .verificacao-card.novos {
@@ -186,18 +186,18 @@
         }
 
         .verificacao-card.automacao {
-            border-left-color: #FFE600;
+            border-left-color: var(--cvc-amarelo);
         }
 
         .verificacao-icon {
             font-size: 2rem;
-            color: #0A00B4;
+            color: var(--cvc-azul);
         }
 
         .verificacao-number {
             font-size: 2rem;
             font-weight: bold;
-            color: #0A00B4;
+            color: var(--cvc-azul);
             line-height: 1;
         }
 
@@ -209,14 +209,14 @@
 
         .verificacao-desc {
             font-size: 0.85rem;
-            color: #6c757d;
+            color: var(--cvc-cinza);
         }
 
         .preview-section {
-            background: white;
+            background: var(--cvc-branco);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-shadow: var(--cvc-sombra-media);
             margin-bottom: 30px;
         }
 
@@ -233,14 +233,14 @@
             padding: 10px 20px;
             border-radius: 8px 8px 0 0;
             font-weight: 600;
-            color: #6c757d;
+            color: var(--cvc-cinza);
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
         .tab-btn.active {
-            background: #0A00B4;
-            color: white;
+            background: var(--cvc-azul);
+            color: var(--cvc-branco);
         }
 
         .preview-table {
@@ -253,10 +253,10 @@
         }
 
         .acoes-section {
-            background: white;
+            background: var(--cvc-branco);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-shadow: var(--cvc-sombra-media);
             text-align: center;
         }
 
@@ -268,7 +268,7 @@
         }
 
         .progress-area {
-            background: #f8f9fa;
+            background: var(--cvc-cinza-claro);
             border-radius: 12px;
             padding: 20px;
             margin-top: 20px;
@@ -285,7 +285,7 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #0A00B4, #FFE600);
+            background: var(--cvc-gradiente-azul);
             width: 0%;
             transition: width 0.3s ease;
             border-radius: 10px;
@@ -293,11 +293,11 @@
 
         .progress-text {
             font-weight: 600;
-            color: #0A00B4;
+            color: var(--cvc-azul);
         }
 
         .file-preview {
-            background: #f8f9fa;
+            background: var(--cvc-cinza-claro);
             border-radius: 8px;
             padding: 15px;
             margin-top: 15px;
@@ -313,17 +313,17 @@
 
         .file-name {
             font-weight: 600;
-            color: #0A00B4;
+            color: var(--cvc-azul);
         }
 
         .file-size {
-            color: #6c757d;
+            color: var(--cvc-cinza);
             font-size: 0.9rem;
         }
 
         .btn-remove-file {
             background: #dc3545;
-            color: white;
+            color: var(--cvc-branco);
             border: none;
             border-radius: 20px;
             padding: 5px 12px;
@@ -839,3 +839,293 @@
             // Resultados simulados
             const novos = csvData.filter((_, index) => index % 3 !== 0).length;
             const existentes = csvData.length - novos;
+            const automacao = Math.floor((novos * 80 + existentes * 95) / csvData.length);
+            
+            // Atualizar contadores
+            document.getElementById('contadorNovos').textContent = novos;
+            document.getElementById('contadorExistentes').textContent = existentes;
+            document.getElementById('percentualPreenchimento').textContent = automacao + '%';
+            
+            // Atualizar dashboard principal
+            document.getElementById('totalProcessados').textContent = csvData.length;
+            document.getElementById('novosRecibos').textContent = novos;
+            document.getElementById('recibosExistentes').textContent = existentes;
+            document.getElementById('percentualAutomacao').textContent = automacao + '%';
+            
+            verificacaoResultado = { novos, existentes, automacao };
+            
+            // Habilitar processamento
+            document.getElementById('btnProcessar').disabled = false;
+        }
+        
+        // ================================================================================
+        // SISTEMA DE PREVIEW
+        // ================================================================================
+        
+        function mostrarPreview() {
+            const section = document.getElementById('previewSection');
+            section.style.display = 'block';
+            section.classList.add('fade-in-up');
+            
+            // Configurar tabs
+            setupPreviewTabs();
+            
+            // Mostrar dados novos por padrão
+            mostrarDadosNovos();
+        }
+        
+        function setupPreviewTabs() {
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remover ativo de todos
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Ativar clicado
+                    tab.classList.add('active');
+                    
+                    // Mostrar conteúdo correspondente
+                    const tabType = tab.dataset.tab;
+                    switch(tabType) {
+                        case 'novos':
+                            mostrarDadosNovos();
+                            break;
+                        case 'existentes':
+                            mostrarDadosExistentes();
+                            break;
+                        case 'completos':
+                            mostrarDadosCompletos();
+                            break;
+                    }
+                });
+            });
+        }
+        
+        function mostrarDadosNovos() {
+            const table = document.getElementById('previewTable');
+            const novosData = csvData.filter((_, index) => index % 3 !== 0);
+            
+            let html = `
+                <table class="table table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Recibo</th>
+                            <th>Vendedor</th>
+                            <th>Produto</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            novosData.forEach(item => {
+                html += `
+                    <tr>
+                        <td><strong>${item.Recibo}</strong></td>
+                        <td>${item.Vendedor}</td>
+                        <td><span class="badge bg-primary">${item.Produto}</span></td>
+                        <td>R$ ${parseFloat(item.TotalVendido).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                        <td><span class="badge bg-success">Novo Cadastro</span></td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            table.innerHTML = html;
+        }
+        
+        function mostrarDadosExistentes() {
+            const table = document.getElementById('previewTable');
+            const existentesData = csvData.filter((_, index) => index % 3 === 0);
+            
+            let html = `
+                <table class="table table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Recibo</th>
+                            <th>Vendedor</th>
+                            <th>Dados Financeiros</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            existentesData.forEach(item => {
+                html += `
+                    <tr>
+                        <td><strong>${item.Recibo}</strong></td>
+                        <td>${item.Vendedor}</td>
+                        <td>Comissão: R$ ${parseFloat(item.ValorComissao).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                        <td><span class="badge bg-info">Atualizar Financeiro</span></td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            table.innerHTML = html;
+        }
+        
+        function mostrarDadosCompletos() {
+            const table = document.getElementById('previewTable');
+            
+            let html = `
+                <table class="table table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Recibo</th>
+                            <th>Vendedor</th>
+                            <th>Produto</th>
+                            <th>Valor Total</th>
+                            <th>Comissão</th>
+                            <th>Automação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            csvData.forEach((item, index) => {
+                const automacaoPerc = index % 3 === 0 ? '95%' : '80%';
+                const badgeClass = index % 3 === 0 ? 'bg-success' : 'bg-warning';
+                
+                html += `
+                    <tr>
+                        <td><strong>${item.Recibo}</strong></td>
+                        <td>${item.Vendedor}</td>
+                        <td><span class="badge bg-primary">${item.Produto}</span></td>
+                        <td>R$ ${parseFloat(item.TotalVendido).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                        <td>R$ ${parseFloat(item.ValorComissao).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                        <td><span class="badge ${badgeClass}">${automacaoPerc}</span></td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            table.innerHTML = html;
+        }
+        
+        // ================================================================================
+        // PROCESSAMENTO FINAL
+        // ================================================================================
+        
+        async function processarImportacao() {
+            if (processandoImportacao) return;
+            
+            processandoImportacao = true;
+            
+            // Mostrar área de progresso
+            const progressArea = document.getElementById('progressArea');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            progressArea.style.display = 'block';
+            
+            // Desabilitar botão
+            const btnProcessar = document.getElementById('btnProcessar');
+            btnProcessar.disabled = true;
+            btnProcessar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+            
+            try {
+                // Simular processamento com progresso
+                const totalSteps = csvData.length;
+                
+                for (let i = 0; i < totalSteps; i++) {
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                    
+                    const progresso = ((i + 1) / totalSteps) * 100;
+                    progressFill.style.width = progresso + '%';
+                    progressText.textContent = `Processando recibo ${i + 1} de ${totalSteps}...`;
+                }
+                
+                // Finalização
+                progressText.textContent = 'Finalizando importação...';
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Sucesso
+                progressFill.style.width = '100%';
+                progressText.textContent = 'Importação concluída com sucesso!';
+                
+                // Mostrar botão finalizar
+                document.getElementById('btnFinalizar').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Erro no processamento:', error);
+                progressText.textContent = 'Erro no processamento. Tente novamente.';
+                btnProcessar.disabled = false;
+                btnProcessar.innerHTML = '<i class="fas fa-rocket"></i> Processar Importação';
+            }
+            
+            processandoImportacao = false;
+        }
+        
+        // ================================================================================
+        // FUNÇÕES AUXILIARES
+        // ================================================================================
+        
+        function removeCSV() {
+            csvData = null;
+            document.getElementById('csvFile').value = '';
+            document.getElementById('csvPreview').style.display = 'none';
+            document.getElementById('csvStatus').textContent = 'Aguardando arquivo';
+            document.getElementById('csvStatus').className = 'upload-status';
+            
+            // Ocultar seções dependentes
+            document.getElementById('verificacaoSection').style.display = 'none';
+            document.getElementById('previewSection').style.display = 'none';
+            
+            // Desabilitar botões
+            document.getElementById('btnPreview').disabled = true;
+            document.getElementById('btnProcessar').disabled = true;
+            
+            // Resetar dashboard
+            document.getElementById('totalProcessados').textContent = '0';
+            document.getElementById('novosRecibos').textContent = '0';
+            document.getElementById('recibosExistentes').textContent = '0';
+            document.getElementById('percentualAutomacao').textContent = '0%';
+        }
+        
+        function removePDF(index) {
+            pdfFiles.splice(index, 1);
+            if (pdfFiles.length === 0) {
+                document.getElementById('pdfFile').value = '';
+                document.getElementById('pdfPreview').style.display = 'none';
+            } else {
+                showPDFPreview(pdfFiles);
+            }
+        }
+        
+        function finalizarImportacao() {
+            // Redirecionar para a página de embarques ou dashboard
+            if (confirm('Importação finalizada! Deseja ir para a página de embarques para visualizar os dados?')) {
+                window.location.href = 'embarques.html';
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+        
+        // ================================================================================
+        // EVENT LISTENERS
+        // ================================================================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Página de Importação CVC Itaquá carregada');
+            
+            // Inicializar uploads
+            initializeUploads();
+            
+            // Event listeners dos botões
+            document.getElementById('btnPreview').addEventListener('click', mostrarPreview);
+            document.getElementById('btnProcessar').addEventListener('click', processarImportacao);
+            document.getElementById('btnFinalizar').addEventListener('click', finalizarImportacao);
+            
+            console.log('✅ Sistema de importação inicializado');
+            console.log('📊 Recursos disponíveis:');
+            console.log('   • Upload CSV Resumovendedor (80% automação)');
+            console.log('   • Upload PDF Consulta Roteiro (95% automação)');
+            console.log('   • Verificação automática de duplicatas');
+            console.log('   • Preview inteligente dos dados');
+            console.log('   • Processamento em lote com progress bar');
+        });
+    </script>
+</body>
+</html>
