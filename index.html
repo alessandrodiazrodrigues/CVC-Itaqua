@@ -200,7 +200,22 @@
             font-size: 0.9rem;
         }
         
-        .action-card.importacao .action-desc {
+        /* Card Automatizado - NOVO */
+        .action-card.automatizado {
+            background: linear-gradient(135deg, #00D4AA, #E8F0FE);
+            border: 2px solid #00D4AA;
+        }
+        
+        .action-card.automatizado:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 212, 170, 0.2);
+        }
+        
+        .action-card.automatizado .action-icon {
+            color: var(--cvc-azul);
+        }
+        
+        .action-card.automatizado .action-desc {
             color: var(--cvc-azul);
             font-weight: 600;
         }
@@ -405,6 +420,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="vendas-automatizado.html">
+                            <i class="fas fa-robot"></i> Informe Automatizado
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="embarques.html">
                             <i class="fas fa-plane-departure"></i> Controle de Embarques
                         </a>
@@ -496,8 +516,17 @@
                             <div class="action-icon">
                                 <i class="fas fa-chart-line"></i>
                             </div>
-                            <div class="action-title">Gerenciar Vendas</div>
-                            <div class="action-desc">Embarques e pós-venda</div>
+                            <div class="action-title">Informe de Vendas</div>
+                            <div class="action-desc">Cadastro manual tradicional</div>
+                        </a>
+                        
+                        <!-- NOVA ABA: INFORME AUTOMATIZADO -->
+                        <a href="vendas-automatizado.html" class="action-card automatizado">
+                            <div class="action-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="action-title">Informe Automatizado</div>
+                            <div class="action-desc">Complete suas vendas pendentes</div>
                         </a>
                         
                         <!-- 🔥 NOVO CARD DE IMPORTAÇÃO -->
