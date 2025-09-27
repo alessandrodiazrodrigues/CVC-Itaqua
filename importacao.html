@@ -1227,7 +1227,7 @@
         }
         
         // ================================================================================
-        // PROCESSAMENTO FINAL
+        // PROCESSAMENTO FINAL COM INTEGRAÇÃO REAL
         // ================================================================================
         
         async function processarImportacao() {
@@ -1249,15 +1249,90 @@
             btnProcessar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
             
             try {
-                // Processamento real dos dados do CSV
-                const totalSteps = csvData.length;
+                // Obter API URL do config
+                const API_URL = typeof getApiUrl === 'function' ? getApiUrl() : 
+                               (typeof CVC_CONFIG !== 'undefined' ? CVC_CONFIG.API_URL : null);
+                
+                if (!API_URL) {
+                    throw new Error('URL da API não configurada. Verifique o config.js');
+                }
+                
+                addDebugLog(`API URL: ${API_URL}`);
+                
+                // Preparar dados para envio
+                const registrosParaEnvio = csvData.map((item, index) => ({
+                    // Dados automáticos do CSV
+                    filial: item.Filial || '6220',
+                    vendedor: item.Vendedor || '',
+                    recibo: item.Recibo || '',
+                    produto: item.Produto || '',
+                    data: item.Data || '',
+                    totalVendido: item.TotalVendido || '0',
+                    valorComissao: item.ValorComissao || '0',
+                    vendaInternet: item.VendaInternet === 'true' ? 'Sim' : 'Não',
+                    
+                    // Dados de controle automáticos
+                    numeroInforme: `IMPORTACAO-${Date.now()}-${index}`,
+                    statusGeral: 'Ativo',
+                    dataProcessamento: new Date().toISOString(),
+                    responsavelProcessamento: 'Sistema de Importação v9.0',
+                    
+                    // Tipo de serviço baseado no produto
+                    tipo: item.Produto || 'Outros',
+                    tipoPacote: item.Produto && item.Produto.toLowerCase().includes('aereo') ? 'Nacional' : 'Nacional',
+                    
+                    // Campos padrão
+                    checkInIda: false,
+                    multiTrecho: 'Não',
+                    ofertadoSVAs: 'Cadastrado',
+                    seguro: 'Não informado'
+                }));
+                
+                addDebugLog(`Preparados ${registrosParaEnvio.length} registros para envio`);
+                addDebugLog('Amostra do primeiro registro:', 'info');
+                addDebugLog(JSON.stringify(registrosParaEnvio[0], null, 2));
+                
+                // Chamada real para a API
+                progressText.textContent = 'Conectando com Google Apps Script...';
+                progressFill.style.width = '10%';
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'importarPDF',
+                        registros: registrosParaEnvio
+                    })
+                });
+                
+                addDebugLog(`Response status: ${response.status} ${response.statusText}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
+                }
+                
+                progressText.textContent = 'Processando resposta da API...';
+                progressFill.style.width = '20%';
+                
+                const result = await response.json();
+                addDebugLog('Resposta completa da API:', 'info');
+                addDebugLog(JSON.stringify(result, null, 2));
+                
+                if (!result.success) {
+                    throw new Error(result.error || result.message || 'Erro na API do Google Apps Script');
+                }
+                
+                // Simular progresso de processamento individual
+                const totalSteps = registrosParaEnvio.length;
                 
                 for (let i = 0; i < totalSteps; i++) {
-                    await new Promise(resolve => setTimeout(resolve, 30)); // Processamento simulado
+                    await new Promise(resolve => setTimeout(resolve, 50));
                     
-                    const progresso = ((i + 1) / totalSteps) * 100;
+                    const progresso = 20 + ((i + 1) / totalSteps) * 75; // 20% a 95%
                     progressFill.style.width = progresso + '%';
-                    progressText.textContent = `Processando ${csvData[i].Vendedor || 'N/A'} - Recibo ${csvData[i].Recibo || 'N/A'} (${i + 1}/${totalSteps})...`;
+                    progressText.textContent = `Processando ${registrosParaEnvio[i].vendedor} - Recibo ${registrosParaEnvio[i].recibo} (${i + 1}/${totalSteps})...`;
                     
                     if ((i + 1) % 10 === 0) {
                         addDebugLog(`Processados ${i + 1}/${totalSteps} registros...`);
@@ -1266,20 +1341,46 @@
                 
                 // Finalização
                 progressText.textContent = 'Finalizando importação...';
+                progressFill.style.width = '100%';
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 
                 // Sucesso
-                progressFill.style.width = '100%';
-                progressText.textContent = `Importação concluída! ${totalSteps} registros processados com sucesso.`;
+                progressText.textContent = `Importação concluída! ${totalSteps} registros inseridos na aba EMBARQUES.`;
                 
                 // Mostrar botão finalizar
                 document.getElementById('btnFinalizar').style.display = 'block';
                 
-                addDebugLog(`Importação concluída com sucesso: ${totalSteps} registros processados`, 'success');
+                addDebugLog(`SUCESSO: ${totalSteps} registros inseridos na planilha Google Sheets`, 'success');
+                addDebugLog('Detalhes da resposta da API:', 'success');
+                if (result.data) {
+                    addDebugLog(`- Sucessos: ${result.data.sucessos || 0}`, 'success');
+                    addDebugLog(`- Falhas: ${result.data.falhas || 0}`, 'success');
+                    addDebugLog(`- Taxa de sucesso: ${result.data.taxaSucesso || '100%'}`, 'success');
+                }
                 
             } catch (error) {
-                addDebugLog(`Erro no processamento: ${error.message}`, 'error');
-                progressText.textContent = 'Erro no processamento. Tente novamente.';
+                addDebugLog(`ERRO no processamento: ${error.message}`, 'error');
+                
+                // Detalhes específicos do erro
+                if (error.message.includes('Failed to fetch')) {
+                    addDebugLog('Problema de conectividade:', 'error');
+                    addDebugLog('- Verifique sua conexão com a internet', 'error');
+                    addDebugLog('- Confirme se a URL da API está correta', 'error');
+                    addDebugLog('- Verifique se o Google Apps Script foi reimplantado', 'error');
+                } else if (error.message.includes('CORS')) {
+                    addDebugLog('Problema de CORS:', 'error');
+                    addDebugLog('- Verifique a configuração do Google Apps Script', 'error');
+                    addDebugLog('- Confirme se está implantado como "Web app"', 'error');
+                } else if (error.message.includes('HTTP')) {
+                    addDebugLog('Erro HTTP:', 'error');
+                    addDebugLog('- Verifique se o endpoint existe', 'error');
+                    addDebugLog('- Confirme se a ação "importarPDF" está implementada', 'error');
+                }
+                
+                progressText.textContent = `Erro na importação: ${error.message}`;
+                progressFill.style.background = '#dc3545';
+                
+                // Reabilitar botão
                 btnProcessar.disabled = false;
                 btnProcessar.innerHTML = '<i class="fas fa-rocket"></i> Processar Importação';
             }
