@@ -1292,14 +1292,16 @@
                 addDebugLog('Amostra do primeiro registro:', 'info');
                 addDebugLog(JSON.stringify(registrosParaEnvio[0], null, 2));
                 
-                // Chamada real para a API
+                // Chamada real para a API usando a MESMA abordagem do vendas.html
                 progressText.textContent = 'Conectando com Google Apps Script...';
                 progressFill.style.width = '10%';
                 
+                // CORREÇÃO CRÍTICA: Headers idênticos ao vendas.html que funciona
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'text/plain;charset=utf-8',
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify({
                         action: 'importarPDF',
