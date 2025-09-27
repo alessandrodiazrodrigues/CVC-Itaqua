@@ -1422,7 +1422,7 @@
         }
 
         // ================================================================================
-        // PROCESSAMENTO FINAL COM JSONP
+        // PROCESSAMENTO FINAL COM JSONP OTIMIZADO - CORREÇÃO URL LONGA
         // ================================================================================
         
         async function processarImportacao() {
@@ -1453,7 +1453,7 @@
                 
                 // Preparar dados para envio
                 const registrosParaEnvio = csvData.map((item, index) => ({
-                    // Dados automáticos do CSV
+                    // Dados essenciais apenas para reduzir tamanho da URL
                     filial: item.Filial || '6220',
                     vendedor: item.Vendedor || '',
                     recibo: item.Recibo || '',
@@ -1461,96 +1461,142 @@
                     data: item.Data || '',
                     totalVendido: item.TotalVendido || '0',
                     valorComissao: item.ValorComissao || '0',
-                    vendaInternet: item.VendaInternet === 'true' ? 'Sim' : 'Não',
                     
-                    // Dados de controle automáticos
-                    numeroInforme: `IMPORTACAO-${Date.now()}-${index}`,
-                    statusGeral: 'Ativo',
-                    dataProcessamento: new Date().toISOString(),
-                    responsavelProcessamento: 'Sistema de Importação v9.0',
-                    
-                    // Tipo de serviço baseado no produto
-                    tipo: item.Produto || 'Outros',
-                    tipoPacote: item.Produto && item.Produto.toLowerCase().includes('aereo') ? 'Nacional' : 'Nacional',
-                    
-                    // Campos padrão
-                    checkInIda: false,
-                    multiTrecho: 'Não',
-                    ofertadoSVAs: 'Cadastrado',
-                    seguro: 'Não informado'
+                    // ID único simplificado
+                    numeroInforme: `CSV-${Date.now()}-${index}`,
+                    tipo: item.Produto || 'Outros'
                 }));
                 
                 addDebugLog(`📋 Preparados ${registrosParaEnvio.length} registros para envio`, 'info');
+                
+                // CORREÇÃO: Dividir em lotes para evitar URL muito longa
+                const TAMANHO_LOTE = 10; // Máximo 10 registros por vez
+                const lotes = [];
+                
+                for (let i = 0; i < registrosParaEnvio.length; i += TAMANHO_LOTE) {
+                    lotes.push(registrosParaEnvio.slice(i, i + TAMANHO_LOTE));
+                }
+                
+                addDebugLog(`📦 Dividido em ${lotes.length} lote(s) de até ${TAMANHO_LOTE} registros`, 'info');
                 
                 // Progresso inicial
                 progressText.textContent = 'Conectando com Google Apps Script...';
                 progressFill.style.width = '10%';
                 
-                // IMPLEMENTAÇÃO JSONP (bypass CORS)
-                addDebugLog('🔄 Usando JSONP para bypass de CORS...', 'info');
+                // Processar lotes sequencialmente
+                let totalSucessos = 0;
+                let totalFalhas = 0;
+                let detalhesCompletos = [];
                 
-                // Criar callback único
-                const callbackName = 'importacaoCallback_' + Date.now();
-                
-                // Definir callback global
-                window[callbackName] = function(result) {
+                for (let i = 0; i < lotes.length; i++) {
+                    const lote = lotes[i];
+                    const progresso = 10 + ((i / lotes.length) * 80);
+                    
+                    progressFill.style.width = progresso + '%';
+                    progressText.textContent = `Processando lote ${i + 1}/${lotes.length} (${lote.length} registros)...`;
+                    
+                    addDebugLog(`📦 Processando lote ${i + 1}/${lotes.length} com ${lote.length} registros`, 'info');
+                    
                     try {
-                        addDebugLog('📡 Resposta JSONP recebida', 'success');
-                        addDebugLog(`Resultado: ${JSON.stringify(result, null, 2)}`, 'info');
+                        const resultado = await processarLoteJSONP(lote, i + 1);
                         
-                        // Limpar callback
-                        delete window[callbackName];
-                        
-                        if (!result.success) {
-                            throw new Error(result.error || result.message || 'Erro na API do Google Apps Script');
+                        if (resultado.success) {
+                            totalSucessos += resultado.data.sucessos || 0;
+                            totalFalhas += resultado.data.falhas || 0;
+                            detalhesCompletos = detalhesCompletos.concat(resultado.data.detalhes || []);
+                            
+                            addDebugLog(`✅ Lote ${i + 1} processado: ${resultado.data.sucessos} sucessos, ${resultado.data.falhas} falhas`, 'success');
+                        } else {
+                            totalFalhas += lote.length;
+                            addDebugLog(`❌ Erro no lote ${i + 1}: ${resultado.message}`, 'error');
                         }
                         
-                        // Processar sucesso
-                        processarSucessoImportacao(result, registrosParaEnvio.length);
-                        
                     } catch (error) {
-                        processarErroImportacao(error);
+                        totalFalhas += lote.length;
+                        addDebugLog(`❌ Erro ao processar lote ${i + 1}: ${error.message}`, 'error');
                     }
-                };
-                
-                // Criar script JSONP
-                const script = document.createElement('script');
-                const dadosJsonp = {
-                    action: 'importarPDF',
-                    registros: registrosParaEnvio
-                };
-                
-                const params = new URLSearchParams({
-                    callback: callbackName,
-                    action: 'importarPDF',
-                    dados: JSON.stringify(dadosJsonp)
-                });
-                
-                script.src = `${API_URL}?${params.toString()}`;
-                script.onerror = function() {
-                    delete window[callbackName];
-                    processarErroImportacao(new Error('Erro ao carregar script JSONP'));
-                };
-                
-                // Timeout de segurança
-                setTimeout(() => {
-                    if (window[callbackName]) {
-                        delete window[callbackName];
-                        script.remove();
-                        processarErroImportacao(new Error('Timeout na requisição JSONP (30s)'));
+                    
+                    // Pausa entre lotes para não sobrecarregar
+                    if (i < lotes.length - 1) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
                     }
-                }, 30000);
+                }
                 
-                document.head.appendChild(script);
+                // Resultado final
+                progressFill.style.width = '100%';
+                progressText.textContent = `✅ Importação concluída! ${totalSucessos} sucessos, ${totalFalhas} falhas de ${registrosParaEnvio.length} total.`;
                 
-                addDebugLog(`🔗 Script JSONP criado: ${script.src.substring(0, 100)}...`, 'info');
+                // Mostrar botão finalizar
+                document.getElementById('btnFinalizar').style.display = 'block';
                 
-                // Simular progresso enquanto aguarda resposta
-                await simularProgressoEnvio(registrosParaEnvio.length);
+                addDebugLog(`🎉 IMPORTAÇÃO CONCLUÍDA: ${totalSucessos} sucessos, ${totalFalhas} falhas`, 'success');
                 
             } catch (error) {
                 processarErroImportacao(error);
             }
+        }
+        
+        // Função para processar um lote via JSONP
+        async function processarLoteJSONP(lote, numeroLote) {
+            return new Promise((resolve, reject) => {
+                const callbackName = `loteCallback_${numeroLote}_${Date.now()}`;
+                
+                // Definir callback global
+                window[callbackName] = function(result) {
+                    try {
+                        // Limpar callback
+                        delete window[callbackName];
+                        
+                        addDebugLog(`📡 Resposta do lote ${numeroLote}: ${result.success ? 'sucesso' : 'erro'}`, result.success ? 'success' : 'error');
+                        
+                        resolve(result);
+                        
+                    } catch (error) {
+                        delete window[callbackName];
+                        reject(error);
+                    }
+                };
+                
+                // Criar script JSONP com dados compactos
+                const script = document.createElement('script');
+                
+                // URL mais curta - enviar apenas dados essenciais
+                const params = new URLSearchParams({
+                    callback: callbackName,
+                    action: 'importarPDF',
+                    lote: numeroLote,
+                    total_lotes: Math.ceil(csvData.length / 10),
+                    registros: JSON.stringify(lote)
+                });
+                
+                const urlCompleta = `${API_URL}?${params.toString()}`;
+                
+                // Verificar tamanho da URL
+                if (urlCompleta.length > 8000) {
+                    delete window[callbackName];
+                    reject(new Error(`URL muito longa (${urlCompleta.length} chars). Reduza o tamanho do lote.`));
+                    return;
+                }
+                
+                script.src = urlCompleta;
+                script.onerror = function() {
+                    delete window[callbackName];
+                    reject(new Error(`Erro ao carregar script JSONP do lote ${numeroLote}`));
+                };
+                
+                // Timeout específico para cada lote
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                        script.remove();
+                        reject(new Error(`Timeout no lote ${numeroLote} (15s)`));
+                    }
+                }, 15000);
+                
+                document.head.appendChild(script);
+                
+                addDebugLog(`🔗 Script JSONP lote ${numeroLote} criado (${urlCompleta.length} chars)`, 'info');
+            });
         }
 
         // ================================================================================
