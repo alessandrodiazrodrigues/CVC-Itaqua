@@ -26,6 +26,92 @@
             margin: 0 auto;
             padding: 20px;
         }
+        
+        // ================================================================================
+        // FUNÇÕES AUXILIARES PARA JSONP
+        // ================================================================================
+        
+        async function simularProgressoEnvio(totalRegistros) {
+            // Simular progresso de envio
+            for (let i = 0; i < 10; i++) {
+                await new Promise(resolve => setTimeout(resolve, 200));
+                const progresso = 10 + (i * 2); // 10% a 30%
+                document.getElementById('progressFill').style.width = progresso + '%';
+                document.getElementById('progressText').textContent = 'Enviando dados via JSONP...';
+            }
+        }
+        
+        function processarSucessoImportacao(result, totalRegistros) {
+            // Simular progresso de processamento individual
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            processarProgressoDetalhado(totalRegistros).then(() => {
+                // Finalização
+                progressText.textContent = 'Finalizando importação...';
+                progressFill.style.width = '100%';
+                
+                setTimeout(() => {
+                    // Sucesso
+                    progressText.textContent = `Importação concluída! ${totalRegistros} registros inseridos na aba EMBARQUES.`;
+                    
+                    // Mostrar botão finalizar
+                    document.getElementById('btnFinalizar').style.display = 'block';
+                    
+                    addDebugLog(`SUCESSO: ${totalRegistros} registros inseridos na planilha Google Sheets`, 'success');
+                    addDebugLog('Detalhes da resposta da API:', 'success');
+                    if (result.data) {
+                        addDebugLog(`- Sucessos: ${result.data.sucessos || totalRegistros}`, 'success');
+                        addDebugLog(`- Falhas: ${result.data.falhas || 0}`, 'success');
+                        addDebugLog(`- Taxa de sucesso: ${result.data.taxaSucesso || '100%'}`, 'success');
+                    }
+                }, 1000);
+            });
+        }
+        
+        async function processarProgressoDetalhado(totalRegistros) {
+            const registrosParaExibir = csvData.slice(0, totalRegistros);
+            
+            for (let i = 0; i < registrosParaExibir.length; i++) {
+                await new Promise(resolve => setTimeout(resolve, 50));
+                
+                const progresso = 30 + ((i + 1) / registrosParaExibir.length) * 65; // 30% a 95%
+                document.getElementById('progressFill').style.width = progresso + '%';
+                document.getElementById('progressText').textContent = `Processando ${registrosParaExibir[i].Vendedor || 'N/A'} - Recibo ${registrosParaExibir[i].Recibo || 'N/A'} (${i + 1}/${totalRegistros})...`;
+                
+                if ((i + 1) % 10 === 0) {
+                    addDebugLog(`Processados ${i + 1}/${totalRegistros} registros...`);
+                }
+            }
+        }
+        
+        function processarErroImportacao(error) {
+            addDebugLog(`ERRO no processamento JSONP: ${error.message}`, 'error');
+            
+            // Detalhes específicos do erro
+            if (error.message.includes('timeout') || error.message.includes('Timeout')) {
+                addDebugLog('Problema de timeout:', 'error');
+                addDebugLog('- A requisição demorou mais de 30 segundos', 'error');
+                addDebugLog('- Verifique se o Google Apps Script está ativo', 'error');
+                addDebugLog('- Tente novamente com menos registros', 'error');
+            } else if (error.message.includes('script')) {
+                addDebugLog('Problema no carregamento do script:', 'error');
+                addDebugLog('- Verifique se a URL da API está correta', 'error');
+                addDebugLog('- Confirme se o Google Apps Script foi reimplantado', 'error');
+            }
+            
+            const progressText = document.getElementById('progressText');
+            const progressFill = document.getElementById('progressFill');
+            
+            progressText.textContent = `Erro na importação: ${error.message}`;
+            progressFill.style.background = '#dc3545';
+            
+            // Reabilitar botão
+            const btnProcessar = document.getElementById('btnProcessar');
+            btnProcessar.disabled = false;
+            btnProcessar.innerHTML = '<i class="fas fa-rocket"></i> Processar Importação';
+            
+            processandoImportacao = false;
 
         .status-dashboard {
             background: linear-gradient(135deg, var(--cvc-azul), var(--cvc-azul-escuro));
@@ -1296,69 +1382,71 @@
                 progressText.textContent = 'Conectando com Google Apps Script...';
                 progressFill.style.width = '10%';
                 
-                // CORREÇÃO CRÍTICA: Headers idênticos ao vendas.html que funciona
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        action: 'importarPDF',
-                        registros: registrosParaEnvio
-                    })
+                // SOLUÇÃO JSONP - Mesma abordagem que funcionou no projeto
+                progressText.textContent = 'Conectando via JSONP (bypass CORS)...';
+                progressFill.style.width = '10%';
+                
+                addDebugLog('Usando JSONP para bypass de CORS (conforme projeto)');
+                
+                // Preparar dados para JSONP
+                const dadosJsonp = {
+                    action: 'importarPDF',
+                    registros: registrosParaEnvio
+                };
+                
+                // Criar callback único
+                const callbackName = 'importacaoCallback_' + Date.now();
+                
+                // Definir callback global
+                window[callbackName] = function(result) {
+                    try {
+                        addDebugLog('Resposta JSONP recebida:', 'info');
+                        addDebugLog(JSON.stringify(result, null, 2));
+                        
+                        // Limpar callback
+                        delete window[callbackName];
+                        
+                        if (!result.success) {
+                            throw new Error(result.error || result.message || 'Erro na API do Google Apps Script');
+                        }
+                        
+                        // Continuar processamento com sucesso
+                        processarSucessoImportacao(result, registrosParaEnvio.length);
+                        
+                    } catch (error) {
+                        processarErroImportacao(error);
+                    }
+                };
+                
+                // Criar script JSONP
+                const script = document.createElement('script');
+                const params = new URLSearchParams({
+                    callback: callbackName,
+                    action: 'importarPDF',
+                    dados: JSON.stringify(dadosJsonp)
                 });
                 
-                addDebugLog(`Response status: ${response.status} ${response.statusText}`);
+                script.src = `${API_URL}?${params.toString()}`;
+                script.onerror = function() {
+                    delete window[callbackName];
+                    processarErroImportacao(new Error('Erro ao carregar script JSONP'));
+                };
                 
-                if (!response.ok) {
-                    throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
-                }
-                
-                progressText.textContent = 'Processando resposta da API...';
-                progressFill.style.width = '20%';
-                
-                const result = await response.json();
-                addDebugLog('Resposta completa da API:', 'info');
-                addDebugLog(JSON.stringify(result, null, 2));
-                
-                if (!result.success) {
-                    throw new Error(result.error || result.message || 'Erro na API do Google Apps Script');
-                }
-                
-                // Simular progresso de processamento individual
-                const totalSteps = registrosParaEnvio.length;
-                
-                for (let i = 0; i < totalSteps; i++) {
-                    await new Promise(resolve => setTimeout(resolve, 50));
-                    
-                    const progresso = 20 + ((i + 1) / totalSteps) * 75; // 20% a 95%
-                    progressFill.style.width = progresso + '%';
-                    progressText.textContent = `Processando ${registrosParaEnvio[i].vendedor} - Recibo ${registrosParaEnvio[i].recibo} (${i + 1}/${totalSteps})...`;
-                    
-                    if ((i + 1) % 10 === 0) {
-                        addDebugLog(`Processados ${i + 1}/${totalSteps} registros...`);
+                // Timeout de segurança
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                        script.remove();
+                        processarErroImportacao(new Error('Timeout na requisição JSONP'));
                     }
-                }
+                }, 30000);
                 
-                // Finalização
-                progressText.textContent = 'Finalizando importação...';
-                progressFill.style.width = '100%';
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                document.head.appendChild(script);
                 
-                // Sucesso
-                progressText.textContent = `Importação concluída! ${totalSteps} registros inseridos na aba EMBARQUES.`;
+                addDebugLog(`Script JSONP criado: ${script.src.substring(0, 100)}...`);
                 
-                // Mostrar botão finalizar
-                document.getElementById('btnFinalizar').style.display = 'block';
-                
-                addDebugLog(`SUCESSO: ${totalSteps} registros inseridos na planilha Google Sheets`, 'success');
-                addDebugLog('Detalhes da resposta da API:', 'success');
-                if (result.data) {
-                    addDebugLog(`- Sucessos: ${result.data.sucessos || 0}`, 'success');
-                    addDebugLog(`- Falhas: ${result.data.falhas || 0}`, 'success');
-                    addDebugLog(`- Taxa de sucesso: ${result.data.taxaSucesso || '100%'}`, 'success');
-                }
+                // Simular progresso enquanto aguarda resposta
+                await simularProgressoEnvio(registrosParaEnvio.length);
                 
             } catch (error) {
                 addDebugLog(`ERRO no processamento: ${error.message}`, 'error');
