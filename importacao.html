@@ -825,6 +825,26 @@
                             addDebugLog(`Erros no parse: ${results.errors.map(e => e.message).join(', ')}`, 'error');
                         }
                         
+                        // DIAGNÓSTICO CRÍTICO: Verificar se há dados além dos headers
+                        if (results.data.length === 0) {
+                            addDebugLog('❌ PROBLEMA IDENTIFICADO: CSV contém apenas headers, sem dados!', 'error');
+                            addDebugLog('Possíveis causas:', 'error');
+                            addDebugLog('  1. Arquivo CSV exportado sem dados', 'error');
+                            addDebugLog('  2. Filtros aplicados que removeram todos os dados', 'error');
+                            addDebugLog('  3. Arquivo corrompido ou truncado', 'error');
+                            addDebugLog('Soluções:', 'error');
+                            addDebugLog('  1. Verificar se há dados na planilha original', 'error');
+                            addDebugLog('  2. Exportar novamente o CSV com dados', 'error');
+                            addDebugLog('  3. Verificar se o período/filtro está correto', 'error');
+                            
+                            // Mostrar conteúdo completo do arquivo para debug
+                            addDebugLog(`Conteúdo completo do arquivo (${csv.length} chars):`, 'error');
+                            addDebugLog(`"${csv}"`, 'error');
+                            
+                            reject(new Error('CSV contém apenas headers, sem dados. Verifique se há dados na planilha original e exporte novamente.'));
+                            return;
+                        }
+                        
                         // Primeira linha para debug
                         if (results.data.length > 0) {
                             addDebugLog(`Primeira linha bruta: ${JSON.stringify(results.data[0])}`);
