@@ -5,7 +5,7 @@
 
 const CVC_CONFIG = {
     // ✅ URL PRINCIPAL - ALTERAR APENAS AQUI quando reimplantar
-    API_URL: 'https://script.google.com/macros/s/AKfycbzH-oy2kHGN98Mc2UZxXS-tlg6fiAqZWiaCD6_w0VS0vCZ5SewzlAeqUKsLpV9zoBoVFQ/exec',
+    API_URL: 'https://script.google.com/macros/s/AKfycbyMPRmqoxIISJnlzx8pUFRbHi3uzrosScFC2fqAri73jr9V8uE2ZJCZ0G7EFAmXQ5eg_g/exec',
     
     // 📊 INFORMAÇÕES DO SISTEMA
     VERSION: '8.05',
