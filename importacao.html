@@ -128,6 +128,10 @@
             background: #17a2b8;
         }
 
+        .upload-status.error {
+            background: #dc3545;
+        }
+
         .drag-drop-zone {
             text-align: center;
             padding: 40px;
@@ -331,6 +335,25 @@
             cursor: pointer;
         }
 
+        .debug-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .debug-header {
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+
         /* Animações */
         @keyframes fadeInUp {
             from {
@@ -496,6 +519,10 @@
                     <div class="upload-preview" id="csvPreview" style="display:none">
                         <!-- Preview dos dados será inserido aqui -->
                     </div>
+                    <div class="debug-section" id="csvDebug" style="display:none">
+                        <div class="debug-header">Debug do Processamento CSV:</div>
+                        <div id="csvDebugContent"></div>
+                    </div>
                 </div>
 
                 <!-- Upload PDF Consulta Roteiro -->
@@ -609,12 +636,47 @@
         let pdfFiles = [];
         let verificacaoResultado = null;
         let processandoImportacao = false;
+        let debugLogs = [];
+
+        // ================================================================================
+        // SISTEMA DE DEBUG
+        // ================================================================================
+        
+        function addDebugLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            debugLogs.push({ timestamp, message, type });
+            console.log(`[${type.toUpperCase()}] ${message}`);
+            updateDebugDisplay();
+        }
+        
+        function updateDebugDisplay() {
+            const debugContent = document.getElementById('csvDebugContent');
+            if (!debugContent) return;
+            
+            const html = debugLogs.slice(-20).map(log => {
+                const color = log.type === 'error' ? '#dc3545' : 
+                             log.type === 'success' ? '#28a745' : '#495057';
+                return `<div style="color: ${color}; margin-bottom: 5px;">
+                    [${log.timestamp}] ${log.message}
+                </div>`;
+            }).join('');
+            
+            debugContent.innerHTML = html;
+            debugContent.scrollTop = debugContent.scrollHeight;
+        }
+        
+        function showDebugSection() {
+            const debugSection = document.getElementById('csvDebug');
+            debugSection.style.display = 'block';
+        }
 
         // ================================================================================
         // SISTEMA DE UPLOAD
         // ================================================================================
         
         function initializeUploads() {
+            addDebugLog('Inicializando sistema de uploads...');
+            
             // CSV Upload
             const csvFile = document.getElementById('csvFile');
             const csvUploadArea = document.getElementById('csvUploadArea');
@@ -630,6 +692,8 @@
             // Drag and Drop para CSV
             setupDragAndDrop(csvUploadArea, csvFile);
             setupDragAndDrop(pdfUploadArea, pdfFile);
+            
+            addDebugLog('Sistema de uploads inicializado com sucesso', 'success');
         }
         
         function setupDragAndDrop(area, input) {
@@ -668,14 +732,15 @@
         }
 
         // ================================================================================
-        // PROCESSAMENTO DE ARQUIVOS
+        // PROCESSAMENTO DE ARQUIVOS CORRIGIDO
         // ================================================================================
         
         async function handleCSVUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
             
-            console.log('📄 Processando CSV:', file.name);
+            addDebugLog(`Processando CSV: ${file.name}`);
+            showDebugSection();
             
             // Atualizar status
             const status = document.getElementById('csvStatus');
@@ -683,29 +748,32 @@
             status.className = 'upload-status processing';
             
             try {
-                // Simular processamento
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                // Parse do CSV (simulado)
+                // Parse do CSV
                 csvData = await parseCSV(file);
                 
-                // Mostrar preview
-                showCSVPreview(file, csvData);
-                
-                // Verificar duplicatas
-                await verificarDuplicatas();
-                
-                // Atualizar status
-                status.textContent = 'Processado com sucesso';
-                status.className = 'upload-status success';
-                
-                // Habilitar botões
-                document.getElementById('btnPreview').disabled = false;
+                if (csvData && csvData.length > 0) {
+                    // Mostrar preview
+                    showCSVPreview(file, csvData);
+                    
+                    // Verificar duplicatas
+                    await verificarDuplicatas();
+                    
+                    // Atualizar status
+                    status.textContent = 'Processado com sucesso';
+                    status.className = 'upload-status success';
+                    
+                    // Habilitar botões
+                    document.getElementById('btnPreview').disabled = false;
+                    
+                    addDebugLog(`CSV processado com sucesso: ${csvData.length} registros`, 'success');
+                } else {
+                    throw new Error('Nenhum registro válido encontrado no CSV');
+                }
                 
             } catch (error) {
-                console.error('❌ Erro ao processar CSV:', error);
+                addDebugLog(`Erro ao processar CSV: ${error.message}`, 'error');
                 status.textContent = 'Erro no processamento';
-                status.className = 'upload-status';
+                status.className = 'upload-status error';
             }
         }
         
@@ -713,7 +781,7 @@
             const files = Array.from(event.target.files);
             if (!files.length) return;
             
-            console.log('📋 Processando PDFs:', files.length, 'arquivos');
+            addDebugLog(`Processando PDFs: ${files.length} arquivos`);
             
             pdfFiles = files;
             showPDFPreview(files);
@@ -725,52 +793,127 @@
         }
         
         async function parseCSV(file) {
-            // Parse real do CSV usando Papa Parse
             return new Promise((resolve, reject) => {
+                addDebugLog('Iniciando leitura do arquivo CSV...');
+                
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const csv = e.target.result;
-                    
-                    // Parse com Papa Parse (biblioteca já importada via CDN)
-                    const results = Papa.parse(csv, {
-                        header: true,
-                        dynamicTyping: true,
-                        skipEmptyLines: true,
-                        encoding: 'windows-1252',
-                        delimiter: ',',
-                        quoteChar: '"'
-                    });
-                    
-                    if (results.errors.length > 0) {
-                        console.error('Erros no parse do CSV:', results.errors);
+                    try {
+                        const csv = e.target.result;
+                        addDebugLog(`Arquivo lido. Tamanho: ${csv.length} caracteres`);
+                        addDebugLog(`Primeiros 200 chars: "${csv.substring(0, 200)}..."`);
+                        
+                        // Parse com Papa Parse com configurações robustas
+                        const results = Papa.parse(csv, {
+                            header: true,
+                            dynamicTyping: false, // Manter como texto para debug
+                            skipEmptyLines: true,
+                            delimiter: '',  // Auto-detect
+                            quoteChar: '"',
+                            escapeChar: '"',
+                            transformHeader: function(header) {
+                                // Limpar headers de espaços e caracteres especiais
+                                return header.trim().replace(/\s+/g, ' ');
+                            }
+                        });
+                        
+                        addDebugLog(`Papa Parse concluído. Meta: ${JSON.stringify(results.meta)}`);
+                        addDebugLog(`Headers encontrados: [${results.meta.fields?.join(', ') || 'nenhum'}]`);
+                        addDebugLog(`Total de linhas parseadas: ${results.data.length}`);
+                        
+                        if (results.errors.length > 0) {
+                            addDebugLog(`Erros no parse: ${results.errors.map(e => e.message).join(', ')}`, 'error');
+                        }
+                        
+                        // Primeira linha para debug
+                        if (results.data.length > 0) {
+                            addDebugLog(`Primeira linha bruta: ${JSON.stringify(results.data[0])}`);
+                        }
+                        
+                        // Mapear com headers flexíveis
+                        const mappedData = results.data.map((row, index) => {
+                            // Buscar campos por aproximação
+                            const findColumn = (searchTerms) => {
+                                const headers = results.meta.fields || Object.keys(row);
+                                for (const term of searchTerms) {
+                                    const found = headers.find(h => 
+                                        h.toLowerCase().includes(term.toLowerCase()) ||
+                                        term.toLowerCase().includes(h.toLowerCase())
+                                    );
+                                    if (found && row[found] !== undefined && row[found] !== null) {
+                                        return String(row[found] || '').trim();
+                                    }
+                                }
+                                return '';
+                            };
+                            
+                            const mapped = {
+                                Filial: findColumn(['Filial', 'filial']),
+                                Vendedor: findColumn(['Vendedor', 'vendedor']),
+                                Produto: findColumn(['Produto', 'produto']),
+                                Data: findColumn(['Data', 'data']),
+                                Recibo: findColumn(['Recibo', 'recibo']),
+                                TotalVendido: findColumn(['Total Vendido', 'total', 'vendido', 'valor']),
+                                Desconto: findColumn(['Desconto', 'desconto']),
+                                Taxa: findColumn(['Taxa', 'taxa']),
+                                ValorLiquido: findColumn(['Valor Liquido', 'liquido', 'valor liquido', 'líquido']),
+                                ComissaoPadrao: findColumn(['Comissão Padrão', 'comissao padrao', 'perc', 'padrão']),
+                                ComissaoAplicada: findColumn(['Comissão Aplicada', 'comissao aplicada', 'aplicada']),
+                                ValorComissao: findColumn(['Valor da Comissão', 'valor comissao', 'comissao', 'comissão']),
+                                VendaInternet: findColumn(['Venda Internet', 'internet', 'online'])
+                            };
+                            
+                            // Log da primeira linha mapeada para debug
+                            if (index === 0) {
+                                addDebugLog(`Primeira linha mapeada: ${JSON.stringify(mapped)}`);
+                            }
+                            
+                            return mapped;
+                        });
+                        
+                        // Filtrar apenas linhas com pelo menos um campo significativo preenchido
+                        const validData = mappedData.filter((row, index) => {
+                            const hasSignificantData = row.Recibo || row.Vendedor || row.TotalVendido;
+                            
+                            if (index < 3) { // Log das primeiras 3 linhas para debug
+                                addDebugLog(`Linha ${index + 1} válida: ${hasSignificantData ? 'SIM' : 'NÃO'} - Recibo: "${row.Recibo}", Vendedor: "${row.Vendedor}"`);
+                            }
+                            
+                            return hasSignificantData;
+                        });
+                        
+                        addDebugLog(`Filtragem concluída: ${validData.length} registros válidos de ${mappedData.length} totais`, 'success');
+                        
+                        if (validData.length === 0) {
+                            addDebugLog('NENHUM REGISTRO VÁLIDO ENCONTRADO!', 'error');
+                            addDebugLog('Dados originais para debug:', 'error');
+                            results.data.slice(0, 3).forEach((row, i) => {
+                                addDebugLog(`  Linha ${i + 1}: ${JSON.stringify(row)}`, 'error');
+                            });
+                            addDebugLog('Headers disponíveis:', 'error');
+                            if (results.meta.fields) {
+                                results.meta.fields.forEach(header => {
+                                    addDebugLog(`  "${header}"`, 'error');
+                                });
+                            }
+                        }
+                        
+                        resolve(validData);
+                        
+                    } catch (error) {
+                        addDebugLog(`Erro no processamento: ${error.message}`, 'error');
+                        reject(error);
                     }
-                    
-                    // Mapear para o formato interno
-                    const mappedData = results.data.map(row => ({
-                        Filial: String(row.Filial || ''),
-                        Vendedor: String(row.Vendedor || ''),
-                        Produto: String(row.Produto || ''),
-                        Data: row.Data ? String(row.Data) : '',
-                        Recibo: String(row.Recibo || ''),
-                        TotalVendido: String(row['Total Vendido'] || '0'),
-                        Desconto: String(row.Desconto || '0'),
-                        Taxa: String(row.Taxa || '0'),
-                        ValorLiquido: String(row['Valor Liquido'] || '0'),
-                        ComissaoPadrao: String(row['Perc. Comissão Padrão'] || '0'),
-                        ComissaoAplicada: String(row['Perc. de Comissão Aplicada'] || '0'),
-                        ValorComissao: String(row['Valor da Comissão (R$)'] || '0'),
-                        VendaInternet: Boolean(row['Venda Internet'])
-                    })).filter(row => row.Recibo && row.Recibo.trim() !== '');
-                    
-                    console.log(`CSV parseado: ${mappedData.length} registros válidos`);
-                    resolve(mappedData);
                 };
                 
-                reader.onerror = function() {
+                reader.onerror = function(error) {
+                    addDebugLog(`Erro ao ler arquivo: ${error}`, 'error');
                     reject(new Error('Erro ao ler o arquivo CSV'));
                 };
                 
-                reader.readAsText(file, 'windows-1252');
+                // Tentar diferentes encodings
+                addDebugLog('Tentando ler arquivo com encoding UTF-8...');
+                reader.readAsText(file, 'UTF-8');
             });
         }
         
@@ -833,7 +976,7 @@
         async function verificarDuplicatas() {
             if (!csvData || csvData.length === 0) return;
             
-            console.log(`🔍 Verificando duplicatas em ${csvData.length} registros...`);
+            addDebugLog(`Verificando duplicatas em ${csvData.length} registros...`);
             
             // Mostrar seção de verificação
             const section = document.getElementById('verificacaoSection');
@@ -841,22 +984,21 @@
             section.classList.add('fade-in-up');
             
             // Simular verificação (aqui seria uma chamada real ao Google Sheets)
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, 1000));
             
             // Análise real dos dados
             const recibosUnicos = new Set();
             const duplicatasInternas = [];
             
             csvData.forEach((item, index) => {
-                if (recibosUnicos.has(item.Recibo)) {
+                if (item.Recibo && recibosUnicos.has(item.Recibo)) {
                     duplicatasInternas.push(item.Recibo);
-                } else {
+                } else if (item.Recibo) {
                     recibosUnicos.add(item.Recibo);
                 }
             });
             
             // Para simulação, assumimos que alguns já existem no sistema
-            // Em produção, isso seria verificado no Google Sheets
             const existentesSimulados = Math.floor(csvData.length * 0.2); // 20% já existem
             const novos = csvData.length - existentesSimulados;
             const existentes = existentesSimulados;
@@ -879,11 +1021,13 @@
             verificacaoResultado = { novos, existentes, automacao, duplicatasInternas };
             
             if (duplicatasInternas.length > 0) {
-                console.warn(`⚠️ Encontradas ${duplicatasInternas.length} duplicatas internas:`, duplicatasInternas);
+                addDebugLog(`Encontradas ${duplicatasInternas.length} duplicatas internas: ${duplicatasInternas.join(', ')}`, 'error');
             }
             
             // Habilitar processamento
             document.getElementById('btnProcessar').disabled = false;
+            
+            addDebugLog(`Verificação concluída: ${novos} novos, ${existentes} existentes`, 'success');
         }
         
         // ================================================================================
@@ -900,6 +1044,8 @@
             
             // Mostrar dados novos por padrão
             mostrarDadosNovos();
+            
+            addDebugLog('Preview dos dados exibido');
         }
         
         function setupPreviewTabs() {
@@ -952,18 +1098,22 @@
                     <tbody>
             `;
             
-            novosData.forEach(item => {
-                const valor = parseFloat(item.TotalVendido || 0);
+            novosData.slice(0, 10).forEach(item => { // Mostrar apenas primeiros 10
+                const valor = parseFloat(item.TotalVendido || 0) || 0;
                 html += `
                     <tr>
-                        <td><strong>${item.Recibo}</strong></td>
-                        <td>${item.Vendedor}</td>
-                        <td><span class="badge bg-primary">${item.Produto}</span></td>
+                        <td><strong>${item.Recibo || 'N/A'}</strong></td>
+                        <td>${item.Vendedor || 'N/A'}</td>
+                        <td><span class="badge bg-primary">${item.Produto || 'N/A'}</span></td>
                         <td>R$ ${valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                         <td><span class="badge bg-success">Novo Cadastro</span></td>
                     </tr>
                 `;
             });
+            
+            if (novosData.length > 10) {
+                html += `<tr><td colspan="5" class="text-center text-muted">... e mais ${novosData.length - 10} registros</td></tr>`;
+            }
             
             html += '</tbody></table>';
             table.innerHTML = html;
@@ -993,11 +1143,11 @@
             `;
             
             existentesData.forEach(item => {
-                const comissao = parseFloat(item.ValorComissao || 0);
+                const comissao = parseFloat(item.ValorComissao || 0) || 0;
                 html += `
                     <tr>
-                        <td><strong>${item.Recibo}</strong></td>
-                        <td>${item.Vendedor}</td>
+                        <td><strong>${item.Recibo || 'N/A'}</strong></td>
+                        <td>${item.Vendedor || 'N/A'}</td>
                         <td>Comissão: R$ ${comissao.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                         <td><span class="badge bg-info">Atualizar Financeiro</span></td>
                     </tr>
@@ -1030,23 +1180,27 @@
                     <tbody>
             `;
             
-            csvData.forEach((item, index) => {
-                const valorTotal = parseFloat(item.TotalVendido || 0);
-                const comissao = parseFloat(item.ValorComissao || 0);
+            csvData.slice(0, 20).forEach((item, index) => { // Mostrar primeiros 20
+                const valorTotal = parseFloat(item.TotalVendido || 0) || 0;
+                const comissao = parseFloat(item.ValorComissao || 0) || 0;
                 const automacaoPerc = index % 5 === 0 ? '95%' : '80%'; // 95% se existente, 80% se novo
                 const badgeClass = index % 5 === 0 ? 'bg-success' : 'bg-warning';
                 
                 html += `
                     <tr>
-                        <td><strong>${item.Recibo}</strong></td>
-                        <td>${item.Vendedor}</td>
-                        <td><span class="badge bg-primary">${item.Produto}</span></td>
+                        <td><strong>${item.Recibo || 'N/A'}</strong></td>
+                        <td>${item.Vendedor || 'N/A'}</td>
+                        <td><span class="badge bg-primary">${item.Produto || 'N/A'}</span></td>
                         <td>R$ ${valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                         <td>R$ ${comissao.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                         <td><span class="badge ${badgeClass}">${automacaoPerc}</span></td>
                     </tr>
                 `;
             });
+            
+            if (csvData.length > 20) {
+                html += `<tr><td colspan="6" class="text-center text-muted">... e mais ${csvData.length - 20} registros</td></tr>`;
+            }
             
             html += '</tbody></table>';
             table.innerHTML = html;
@@ -1060,6 +1214,7 @@
             if (processandoImportacao || !csvData || csvData.length === 0) return;
             
             processandoImportacao = true;
+            addDebugLog('Iniciando processamento da importação...');
             
             // Mostrar área de progresso
             const progressArea = document.getElementById('progressArea');
@@ -1078,11 +1233,15 @@
                 const totalSteps = csvData.length;
                 
                 for (let i = 0; i < totalSteps; i++) {
-                    await new Promise(resolve => setTimeout(resolve, 50)); // Mais rápido para muitos registros
+                    await new Promise(resolve => setTimeout(resolve, 30)); // Processamento simulado
                     
                     const progresso = ((i + 1) / totalSteps) * 100;
                     progressFill.style.width = progresso + '%';
-                    progressText.textContent = `Processando ${csvData[i].Vendedor} - Recibo ${csvData[i].Recibo} (${i + 1}/${totalSteps})...`;
+                    progressText.textContent = `Processando ${csvData[i].Vendedor || 'N/A'} - Recibo ${csvData[i].Recibo || 'N/A'} (${i + 1}/${totalSteps})...`;
+                    
+                    if ((i + 1) % 10 === 0) {
+                        addDebugLog(`Processados ${i + 1}/${totalSteps} registros...`);
+                    }
                 }
                 
                 // Finalização
@@ -1096,8 +1255,10 @@
                 // Mostrar botão finalizar
                 document.getElementById('btnFinalizar').style.display = 'block';
                 
+                addDebugLog(`Importação concluída com sucesso: ${totalSteps} registros processados`, 'success');
+                
             } catch (error) {
-                console.error('Erro no processamento:', error);
+                addDebugLog(`Erro no processamento: ${error.message}`, 'error');
                 progressText.textContent = 'Erro no processamento. Tente novamente.';
                 btnProcessar.disabled = false;
                 btnProcessar.innerHTML = '<i class="fas fa-rocket"></i> Processar Importação';
@@ -1112,8 +1273,10 @@
         
         function removeCSV() {
             csvData = null;
+            debugLogs = [];
             document.getElementById('csvFile').value = '';
             document.getElementById('csvPreview').style.display = 'none';
+            document.getElementById('csvDebug').style.display = 'none';
             document.getElementById('csvStatus').textContent = 'Aguardando arquivo';
             document.getElementById('csvStatus').className = 'upload-status';
             
@@ -1130,6 +1293,8 @@
             document.getElementById('novosRecibos').textContent = '0';
             document.getElementById('recibosExistentes').textContent = '0';
             document.getElementById('percentualAutomacao').textContent = '0%';
+            
+            addDebugLog('CSV removido e sistema resetado');
         }
         
         function removePDF(index) {
@@ -1140,6 +1305,8 @@
             } else {
                 showPDFPreview(pdfFiles);
             }
+            
+            addDebugLog(`PDF removido. Restam ${pdfFiles.length} arquivos`);
         }
         
         function finalizarImportacao() {
@@ -1156,7 +1323,7 @@
         // ================================================================================
         
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Página de Importação CVC Itaquá carregada');
+            addDebugLog('Página de Importação CVC Itaquá carregada');
             
             // Inicializar uploads
             initializeUploads();
@@ -1166,13 +1333,14 @@
             document.getElementById('btnProcessar').addEventListener('click', processarImportacao);
             document.getElementById('btnFinalizar').addEventListener('click', finalizarImportacao);
             
-            console.log('✅ Sistema de importação inicializado');
-            console.log('📊 Recursos disponíveis:');
-            console.log('   • Upload CSV Resumovendedor (80% automação)');
-            console.log('   • Upload PDF Consulta Roteiro (95% automação)');
-            console.log('   • Verificação automática de duplicatas');
-            console.log('   • Preview inteligente dos dados');
-            console.log('   • Processamento em lote com progress bar');
+            addDebugLog('Sistema de importação inicializado', 'success');
+            addDebugLog('Recursos disponíveis:');
+            addDebugLog('  • Upload CSV Resumovendedor (80% automação)');
+            addDebugLog('  • Upload PDF Consulta Roteiro (95% automação)');
+            addDebugLog('  • Verificação automática de duplicatas');
+            addDebugLog('  • Preview inteligente dos dados');
+            addDebugLog('  • Processamento em lote com progress bar');
+            addDebugLog('  • Sistema de debug detalhado');
         });
     </script>
 </body>
