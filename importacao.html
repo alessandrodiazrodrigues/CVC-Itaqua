@@ -847,7 +847,7 @@
                 </div>
                 <h3>Erro ao carregar dados</h3>
                 <p id="errorMessage">Não foi possível conectar com a planilha</p>
-                <button class="btn btn-cvc-primary" onclick="carregarRecibosCSV()">
+                <button class="btn btn-cvc-primary" onclick="carregarDadosInicial()">
                     <i class="fas fa-redo"></i> Tentar Novamente
                 </button>
             </div>
@@ -857,7 +857,7 @@
                 <h2><i class="fas fa-filter"></i> Filtros Inteligentes</h2>
                 <p class="text-muted mb-3">Filtre os dados por prioridade, vendedor ou status de complementação</p>
                 <div class="filtros-grid">
-                    <div class="filtro-card" data-filtro="todos" onclick="aplicarFiltro('todos')">
+                    <div class="filtro-card active" data-filtro="todos" onclick="aplicarFiltro('todos')">
                         <div class="filtro-titulo">
                             <i class="fas fa-list"></i> Todos os Recibos
                         </div>
@@ -1083,6 +1083,7 @@
         // ================================================================================
         // SISTEMA DE VENDAS AUTOMATIZADO CVC ITAQUÁ v9.0 - CORS CORRIGIDO COM JSONP
         // Sistema completo que busca dados reais da planilha e exibe para os vendedores
+        // ANÁLISE COMPLETA: ZERO FETCH() - APENAS JSONP
         // ================================================================================
         
         console.log('🤖 CVC Portal Itaquá - Sistema de Vendas Automatizado v9.0 JSONP Iniciado');
@@ -1163,12 +1164,13 @@
             showDebugSection();
             addDebugLog('✅ Sistema inicializado com sucesso!', 'success');
             addDebugLog('🔧 Utilizando bypass CORS com JSONP conforme v9.0', 'info');
+            addDebugLog('🚫 ZERO fetch() - APENAS JSONP para total bypass CORS', 'info');
             
             // Configurar eventos
             configurarEventos();
             
-            // Carregar dados
-            carregarRecibosCSV();
+            // Carregar dados iniciais
+            carregarDadosInicial();
         }
 
         // ================================================================================
@@ -1197,58 +1199,61 @@
         }
 
         // ================================================================================
-        // CARREGAMENTO DE DADOS VIA JSONP - CORREÇÃO CORS v9.0
+        // CARREGAMENTO DE DADOS VIA JSONP - CORREÇÃO CORS v9.0 - FUNÇÃO RENOMEADA
         // ================================================================================
         
-        async function carregarRecibosCSV() {
-            addDebugLog('📊 Carregando recibos do servidor via JSONP...', 'info');
+        function carregarDadosInicial() {
+            addDebugLog('📊 JSONP: Carregando recibos do servidor...', 'info');
             
             // Mostrar loading
             document.getElementById('loadingContainer').style.display = 'block';
             document.getElementById('errorContainer').style.display = 'none';
             ocultarTodasSecoes();
             
-            try {
-                if (!API_URL) {
-                    throw new Error('URL da API não configurada. Verifique o config.js');
-                }
-                
-                addDebugLog(`🔗 Conectando via JSONP: ${API_URL}`, 'info');
-                
-                // CORREÇÃO CRÍTICA: Usar JSONP em vez de fetch() para evitar CORS
-                const resultado = await chamarAPIJsonp('listar_vendas_pendentes');
-                
-                addDebugLog('📡 Resposta recebida via JSONP', 'success');
-                
-                if (resultado.success) {
-                    if (resultado.data && resultado.data.recibos) {
-                        recibosDataOriginal = resultado.data.recibos;
-                        recibosData = [...recibosDataOriginal];
-                        addDebugLog(`✅ ${recibosData.length} recibos carregados`, 'success');
-                        
-                        processarDadosVendedores();
-                        atualizarDashboard();
-                        gerarAnalises();
-                        exibirDados();
-                        
-                    } else {
-                        addDebugLog('⚠️ Estrutura de resposta inesperada', 'warning');
-                        throw new Error('Estrutura de dados inválida na resposta');
-                    }
-                } else {
-                    throw new Error(resultado.message || 'Erro desconhecido na API');
-                }
-                
-            } catch (error) {
-                addDebugLog(`❌ Erro ao carregar recibos: ${error.message}`, 'error');
-                mostrarErro(error.message);
+            if (!API_URL) {
+                addDebugLog('❌ ERRO: API URL não configurada!', 'error');
+                mostrarErro('Configuração inválida. Verifique o arquivo config.js');
+                return;
             }
+            
+            addDebugLog(`🔗 JSONP: Conectando: ${API_URL}`, 'info');
+            
+            // CORREÇÃO CRÍTICA: Usar JSONP PURO - ZERO fetch()
+            chamarAPIJsonp('listar_vendas_pendentes')
+                .then(resultado => {
+                    addDebugLog('📡 JSONP: Resposta recebida', 'success');
+                    
+                    if (resultado.success) {
+                        if (resultado.data && resultado.data.recibos) {
+                            recibosDataOriginal = resultado.data.recibos;
+                            recibosData = [...recibosDataOriginal];
+                            addDebugLog(`✅ JSONP: ${recibosData.length} recibos carregados`, 'success');
+                            
+                            processarDadosVendedores();
+                            atualizarDashboard();
+                            gerarAnalises();
+                            exibirDados();
+                            
+                        } else {
+                            addDebugLog('⚠️ JSONP: Estrutura de resposta inesperada', 'warning');
+                            throw new Error('Estrutura de dados inválida na resposta');
+                        }
+                    } else {
+                        throw new Error(resultado.message || 'Erro desconhecido na API');
+                    }
+                })
+                .catch(error => {
+                    addDebugLog(`❌ JSONP: Erro: ${error.message}`, 'error');
+                    mostrarErro(error.message);
+                });
         }
         
-        // FUNÇÃO JSONP ESPECÍFICA PARA BYPASS CORS v9.0
+        // FUNÇÃO JSONP ESPECÍFICA PARA BYPASS CORS v9.0 - ZERO FETCH
         function chamarAPIJsonp(action, parametros = {}) {
             return new Promise((resolve, reject) => {
-                const callbackName = `vendas_auto_callback_${Date.now()}`;
+                const callbackName = `vendas_auto_callback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                
+                addDebugLog(`🔗 JSONP: Criando callback ${callbackName}`, 'info');
                 
                 // Definir callback global
                 window[callbackName] = function(result) {
@@ -1256,7 +1261,7 @@
                         // Limpar callback
                         delete window[callbackName];
                         
-                        addDebugLog(`📡 Callback JSONP executado: ${result.success ? 'sucesso' : 'erro'}`, result.success ? 'success' : 'error');
+                        addDebugLog(`📡 JSONP: Callback executado: ${result.success ? 'sucesso' : 'erro'}`, result.success ? 'success' : 'error');
                         
                         resolve(result);
                         
@@ -1266,7 +1271,7 @@
                     }
                 };
                 
-                // Criar script JSONP
+                // Criar script JSONP - ZERO fetch()
                 const script = document.createElement('script');
                 
                 const params = new URLSearchParams({
@@ -1278,23 +1283,28 @@
                 const urlCompleta = `${API_URL}?${params.toString()}`;
                 script.src = urlCompleta;
                 
+                addDebugLog(`📡 JSONP: URL criada (${urlCompleta.length} chars)`, 'info');
+                
                 script.onerror = function() {
                     delete window[callbackName];
+                    script.remove();
                     reject(new Error('Erro ao carregar script JSONP. Verifique se o Google Apps Script está funcionando.'));
                 };
                 
-                // Timeout
+                // Timeout específico
                 setTimeout(() => {
                     if (window[callbackName]) {
                         delete window[callbackName];
-                        script.remove();
+                        if (script.parentNode) {
+                            script.remove();
+                        }
                         reject(new Error('Timeout na requisição JSONP (30s). Verifique a conexão.'));
                     }
                 }, 30000);
                 
                 document.head.appendChild(script);
                 
-                addDebugLog(`🔗 Script JSONP criado: ${action}`, 'info');
+                addDebugLog(`🔗 JSONP: Script adicionado ao DOM`, 'info');
             });
         }
 
@@ -1331,11 +1341,11 @@
                     vendedoresData[vendedor].normais++;
                 }
 
-                if (!recibo.cpfCliente) {
+                if (!recibo.cpfCliente || recibo.cpfCliente.trim() === '') {
                     vendedoresData[vendedor].semCPF++;
                 }
 
-                if (!recibo.whatsappCliente) {
+                if (!recibo.whatsappCliente || recibo.whatsappCliente.trim() === '') {
                     vendedoresData[vendedor].semWhatsApp++;
                 }
             });
@@ -1358,8 +1368,8 @@
             // Atualizar contadores de filtros
             document.getElementById('filtroTodos').textContent = totalRecibos;
             document.getElementById('filtroUrgente').textContent = urgentesCount;
-            document.getElementById('filtroSemCPF').textContent = recibosData.filter(r => !r.cpfCliente).length;
-            document.getElementById('filtroSemWhatsApp').textContent = recibosData.filter(r => !r.whatsappCliente).length;
+            document.getElementById('filtroSemCPF').textContent = recibosData.filter(r => !r.cpfCliente || r.cpfCliente.trim() === '').length;
+            document.getElementById('filtroSemWhatsApp').textContent = recibosData.filter(r => !r.whatsappCliente || r.whatsappCliente.trim() === '').length;
 
             // Atualizar progresso
             atualizarProgresso();
@@ -1839,7 +1849,7 @@
         
         function atualizarDados() {
             addDebugLog('🔄 Atualizando dados...', 'info');
-            carregarRecibosCSV();
+            carregarDadosInicial();
         }
 
         // ================================================================================
@@ -1862,7 +1872,8 @@
             console.log('🤖 CVC Portal Itaquá - Sistema de Vendas Automatizado v9.0');
             console.log('📋 Funcionalidades disponíveis:');
             console.log('   • Dados reais da planilha de embarques');
-            console.log('   • Bypass CORS com JSONP v9.0');
+            console.log('   • Bypass CORS com JSONP v9.0 PURO');
+            console.log('   • ZERO fetch() - APENAS JSONP');
             console.log('   • Interface completa por vendedores');
             console.log('   • Filtros dinâmicos e busca');
             console.log('   • Análise de dados e relatórios');
@@ -1873,7 +1884,7 @@
             // Inicializar sistema
             inicializarSistema();
             
-            addDebugLog('🎯 Sistema de vendas automatizado v9.0 carregado e pronto!', 'success');
+            console.log('🎯 Sistema de vendas automatizado v9.0 carregado e pronto!');
         });
     </script>
 </body>
