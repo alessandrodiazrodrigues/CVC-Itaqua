@@ -1258,6 +1258,11 @@
                 // Definir callback global
                 window[callbackName] = function(result) {
                     try {
+                        // Limpar script
+                        if (script && script.parentNode) {
+                            script.remove();
+                        }
+                        
                         // Limpar callback
                         delete window[callbackName];
                         
@@ -1284,23 +1289,42 @@
                 script.src = urlCompleta;
                 
                 addDebugLog(`📡 JSONP: URL criada (${urlCompleta.length} chars)`, 'info');
+                addDebugLog(`🔍 JSONP: URL completa: ${urlCompleta}`, 'info');
                 
-                script.onerror = function() {
+                script.onerror = function(event) {
                     delete window[callbackName];
-                    script.remove();
-                    reject(new Error('Erro ao carregar script JSONP. Verifique se o Google Apps Script está funcionando.'));
+                    if (script.parentNode) {
+                        script.remove();
+                    }
+                    
+                    addDebugLog('❌ JSONP: Erro ao carregar script', 'error');
+                    addDebugLog('🔍 JSONP: Possíveis causas:', 'error');
+                    addDebugLog('  1. URL do Google Apps Script incorreta', 'error');
+                    addDebugLog('  2. Script não implantado como Web App', 'error');
+                    addDebugLog('  3. Endpoint listar_vendas_pendentes não existe', 'error');
+                    addDebugLog('  4. Permissões do script incorretas', 'error');
+                    
+                    reject(new Error('Erro ao carregar script JSONP. Verifique:\n1. URL do Google Apps Script\n2. Endpoint listar_vendas_pendentes existe\n3. Script está implantado como Web App\n4. Permissões corretas (Anyone, even anonymous)'));
                 };
                 
                 // Timeout específico
-                setTimeout(() => {
+                const timeoutId = setTimeout(() => {
                     if (window[callbackName]) {
                         delete window[callbackName];
-                        if (script.parentNode) {
+                        if (script && script.parentNode) {
                             script.remove();
                         }
-                        reject(new Error('Timeout na requisição JSONP (30s). Verifique a conexão.'));
+                        addDebugLog('⏱️ JSONP: Timeout de 30 segundos', 'error');
+                        reject(new Error('Timeout na requisição JSONP (30s). O servidor não respondeu.'));
                     }
                 }, 30000);
+                
+                // Sucesso: limpar timeout
+                const originalCallback = window[callbackName];
+                window[callbackName] = function(result) {
+                    clearTimeout(timeoutId);
+                    originalCallback(result);
+                };
                 
                 document.head.appendChild(script);
                 
