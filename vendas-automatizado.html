@@ -1287,113 +1287,119 @@
         // ================================================================================
         
         function carregarDadosInicial() {
-            console.log('📊 Carregando vendas pendentes...');
+            console.log('📊 Carregando vendas pendentes da API...');
             
             document.getElementById('loadingContainer').style.display = 'block';
             document.getElementById('errorContainer').style.display = 'none';
             document.getElementById('mainContent').style.display = 'none';
             
-            // Simular carregamento - na implementação real, buscar vendas pendentes
-            chamarAPIJsonp('listar_vendas_pendentes')
+            // Chamar API real para buscar vendas pendentes - usando endpoint existente
+            chamarAPIJsonp('listar', { aba: 'EMBARQUES' })
                 .then(resultado => {
-                    console.log('📡 Resposta recebida');
+                    console.log('📡 Resposta recebida da API');
                     
                     if (resultado.success) {
-                        if (resultado.data && resultado.data.vendas) {
-                            // Usar dados reais da API
-                            vendasDataOriginal = resultado.data.vendas.filter(venda => 
-                                venda.status === 'pendente' || !venda.cpfCliente || !venda.whatsappCliente
-                            );
+                        if (resultado.data && Array.isArray(resultado.data)) {
+                            // Usar dados reais da API - dados vem da aba EMBARQUES
+                            // Filtrar vendas que ainda precisam ser completadas
+                            vendasDataOriginal = resultado.data.filter(embarque => {
+                                // Considerar pendente se não tem CPF ou WhatsApp preenchidos
+                                return !embarque.K || !embarque.G || // K=CPF, G=WhatsApp (conforme estrutura EMBARQUES)
+                                       embarque.K === '' || embarque.G === '' ||
+                                       embarque.K === 'PENDENTE' || embarque.G === 'PENDENTE';
+                            }).map(embarque => {
+                                // Mapear estrutura EMBARQUES para estrutura do sistema
+                                return {
+                                    recibo: embarque.N || '', // N = Recibo
+                                    vendedor: embarque.E || '', // E = Vendedor
+                                    nomeCliente: embarque.L || '', // L = Nome Cliente
+                                    cpfCliente: embarque.K || '', // K = CPF
+                                    whatsappCliente: embarque.G || '', // G = WhatsApp
+                                    dataIda: embarque.F || '', // F = Data Ida
+                                    destino: embarque.I || '', // I = Destino
+                                    tipoProduto: embarque.Q || '', // Q = Tipo
+                                    valorTotal: embarque.H || '', // H = Valor
+                                    status: 'pendente',
+                                    dataImportacao: new Date().toISOString().split('T')[0]
+                                };
+                            });
+                            
+                            vendasData = [...vendasDataOriginal];
+                            console.log(`✅ ${vendasData.length} vendas pendentes carregadas da planilha EMBARQUES`);
+                            
+                            if (vendasData.length === 0) {
+                                mostrarSemDados();
+                                return;
+                            }
+                            
+                            processarDadosVendedores();
+                            atualizarDashboard();
+                            exibirDados();
+                            showToast(`${vendasData.length} vendas carregadas da planilha!`, 'success');
+                            
                         } else {
-                            // Dados simulados para demonstração
-                            vendasDataOriginal = criarDadosSimulados();
+                            throw new Error('Formato de dados inválido retornado pela API');
                         }
-                        
-                        vendasData = [...vendasDataOriginal];
-                        console.log(`✅ ${vendasData.length} vendas pendentes carregadas`);
-                        
-                        processarDadosVendedores();
-                        atualizarDashboard();
-                        exibirDados();
-                        showToast(`${vendasData.length} vendas carregadas para complementação!`, 'success');
-                        
                     } else {
-                        throw new Error(resultado.message || 'Erro desconhecido na API');
+                        throw new Error(resultado.message || 'Erro retornado pela API');
                     }
                 })
                 .catch(error => {
-                    console.error(`❌ Erro: ${error.message}`);
-                    
-                    // Usar dados simulados em caso de erro
-                    vendasDataOriginal = criarDadosSimulados();
-                    vendasData = [...vendasDataOriginal];
-                    
-                    processarDadosVendedores();
-                    atualizarDashboard();
-                    exibirDados();
-                    showToast('Modo demonstração ativado - usando dados simulados', 'warning');
+                    console.error(`❌ Erro ao carregar dados: ${error.message}`);
+                    mostrarErro(`Erro ao conectar com a planilha: ${error.message}`);
+                    showToast('Erro ao carregar dados da planilha', 'error');
                 });
         }
 
-        function criarDadosSimulados() {
-            return [
-                {
-                    recibo: '6220-0000128069',
-                    vendedor: 'Alessandro',
-                    status: 'pendente',
-                    nomeCliente: '',
-                    cpfCliente: '',
-                    whatsappCliente: '',
-                    dataImportacao: '2025-01-01',
-                    dataIda: '2025-12-05',
-                    destino: 'Panama City',
-                    tipoProduto: 'AEREO',
-                    valorTotal: 'R$ 842,77'
-                },
-                {
-                    recibo: '6220-0000128138',
-                    vendedor: 'Adrielly',
-                    status: 'pendente',
-                    nomeCliente: '',
-                    cpfCliente: '',
-                    whatsappCliente: '',
-                    dataImportacao: '2025-01-01',
-                    dataIda: '2025-12-08',
-                    destino: 'Punta Cana',
-                    tipoProduto: 'AEREO',
-                    valorTotal: 'R$ 12.603,96'
-                },
-                {
-                    recibo: '6220-0000128226',
-                    vendedor: 'Ana Paula',
-                    status: 'pendente',
-                    nomeCliente: '',
-                    cpfCliente: '',
-                    whatsappCliente: '',
-                    dataImportacao: '2025-01-01',
-                    dataIda: '2025-12-15',
-                    destino: 'Fortaleza',
-                    tipoProduto: 'AEREO',
-                    valorTotal: 'R$ 1.250,00'
-                }
-            ];
+        function mostrarSemDados() {
+            document.getElementById('loadingContainer').style.display = 'none';
+            document.getElementById('errorContainer').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            
+            // Exibir interface vazia
+            document.getElementById('vendedoresList').innerHTML = `
+                <div class="text-center py-5">
+                    <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                    <h4>Nenhuma venda pendente!</h4>
+                    <p class="text-muted">Todas as vendas foram completadas ou não há dados na planilha</p>
+                    <button class="btn btn-primary" onclick="carregarDadosInicial()">
+                        <i class="fas fa-sync-alt"></i> Recarregar Dados
+                    </button>
+                </div>
+            `;
+            
+            // Zerar estatísticas
+            document.getElementById('statTotal').textContent = '0';
+            document.getElementById('statPendentes').textContent = '0';
+            document.getElementById('statCompletas').textContent = '0';
+            document.getElementById('statVendedores').textContent = '0';
         }
-        
+
         function chamarAPIJsonp(action, parametros = {}) {
             return new Promise((resolve, reject) => {
                 const callbackName = `vendas_completo_callback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
                 
                 console.log(`🔗 JSONP: Criando callback ${callbackName}`);
+                console.log(`🔗 JSONP: Action: ${action}`);
                 
                 window[callbackName] = function(result) {
                     try {
                         script.remove();
                         delete window[callbackName];
                         
-                        console.log(`📡 JSONP: Callback executado: ${result.success ? 'sucesso' : 'erro'}`);
+                        console.log(`📡 JSONP: Callback executado`);
+                        console.log(`📡 JSONP: Success: ${result.success}`);
+                        
+                        if (result.success) {
+                            console.log(`📡 JSONP: Dados recebidos: ${result.data ? result.data.length : 0} registros`);
+                        } else {
+                            console.log(`📡 JSONP: Erro retornado: ${result.message}`);
+                        }
+                        
                         resolve(result);
                         
                     } catch (error) {
+                        console.error(`❌ JSONP: Erro no callback: ${error.message}`);
                         delete window[callbackName];
                         reject(error);
                     }
@@ -1409,7 +1415,7 @@
                 const urlCompleta = `${API_URL}?${params.toString()}`;
                 script.src = urlCompleta;
                 
-                console.log(`📡 JSONP: URL criada (${urlCompleta.length} chars)`);
+                console.log(`📡 JSONP: URL: ${urlCompleta}`);
                 
                 script.onerror = function(event) {
                     delete window[callbackName];
@@ -1418,7 +1424,9 @@
                     }
                     
                     console.error('❌ JSONP: Erro ao carregar script');
-                    reject(new Error('Erro ao carregar script JSONP. Verifique a configuração da API.'));
+                    console.error('❌ JSONP: Verifique se a API está funcionando');
+                    console.error('❌ JSONP: URL testada:', urlCompleta);
+                    reject(new Error('Falha na conexão com a API. Verifique se o Google Apps Script está funcionando.'));
                 };
                 
                 document.head.appendChild(script);
@@ -1430,7 +1438,7 @@
                             script.remove();
                         }
                         console.error('⏱️ JSONP: Timeout de 30 segundos');
-                        reject(new Error('Timeout na requisição JSONP (30s). O servidor não respondeu.'));
+                        reject(new Error('Timeout na conexão com a API (30s). O servidor não respondeu.'));
                     }
                 }, 30000);
             });
@@ -2036,7 +2044,7 @@
         // ================================================================================
         
         function salvarVendaCompleta() {
-            console.log('💾 Salvando venda completa...');
+            console.log('💾 Salvando venda completa na planilha...');
             
             // Coletar dados do formulário
             const dadosCompletos = coletarDadosFormulario();
@@ -2046,25 +2054,48 @@
                 return;
             }
             
-            // Simular salvamento
-            showToast('Salvando venda...', 'info');
+            // Mostrar loading no botão
+            const btnSalvar = document.querySelector('[onclick="salvarVendaCompleta()"]');
+            const textoOriginal = btnSalvar.innerHTML;
+            btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+            btnSalvar.disabled = true;
             
-            setTimeout(() => {
-                // Atualizar venda local
-                Object.assign(vendaAtual, dadosCompletos);
-                vendaAtual.status = 'completa';
-                
-                // Fechar modal
-                bootstrap.Modal.getInstance(document.getElementById('modalComplementar')).hide();
-                
-                // Atualizar interface
-                processarDadosVendedores();
-                atualizarDashboard();
-                filtrarEExibirVendas();
-                
-                showToast('Venda salva com sucesso!', 'success');
-                
-            }, 2000);
+            showToast('Salvando venda na planilha...', 'info');
+            
+            // Chamar API real para salvar - usando endpoint de cadastro de embarque
+            chamarAPIJsonp('cadastrar', {
+                aba: 'EMBARQUES',
+                dados: JSON.stringify(dadosCompletos)
+            })
+            .then(resultado => {
+                if (resultado.success) {
+                    // Atualizar venda local
+                    Object.assign(vendaAtual, dadosCompletos);
+                    vendaAtual.status = 'completa';
+                    
+                    // Fechar modal
+                    bootstrap.Modal.getInstance(document.getElementById('modalComplementar')).hide();
+                    
+                    // Atualizar interface
+                    processarDadosVendedores();
+                    atualizarDashboard();
+                    filtrarEExibirVendas();
+                    
+                    showToast('Venda salva com sucesso na planilha!', 'success');
+                    
+                } else {
+                    throw new Error(resultado.message || 'Erro ao salvar na planilha');
+                }
+            })
+            .catch(error => {
+                console.error('❌ Erro ao salvar:', error);
+                showToast(`Erro ao salvar: ${error.message}`, 'error');
+            })
+            .finally(() => {
+                // Restaurar botão
+                btnSalvar.innerHTML = textoOriginal;
+                btnSalvar.disabled = false;
+            });
         }
         
         function coletarDadosFormulario() {
