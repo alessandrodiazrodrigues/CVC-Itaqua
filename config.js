@@ -5,7 +5,7 @@
 
 const CVC_CONFIG = {
     // ✅ URL PRINCIPAL - ATUALIZADA COM A NOVA API
-    API_URL: 'https://script.google.com/macros/s/AKfycbzqttRJjK4PbznHnEfviHZ9LPOITVm_pc0sswGUNVHpGpio5oCdaB2c68s6fVHuN6LL3w/exec',
+    API_URL: 'https://script.google.com/macros/s/AKfycbxxvt5eY2L5DpI2yFCyqvHBA_sYkteDPCkxgEyb4QeF597J-CP0WE7hHJWCWlsBGLRCrA/exec',
     
     // 📊 INFORMAÇÕES DO SISTEMA
     VERSION: '10.0',
