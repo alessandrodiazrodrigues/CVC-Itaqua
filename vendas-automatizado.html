@@ -3,176 +3,310 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CVC Portal Itaquá - Informe Automatizado de Vendas v10.0</title>
+    <title>CVC Itaquá - Portal de Gestão da Loja - Informe Automatizado</title>
     
-    <!-- Meta Tags CVC Padrão -->
-    <meta name="description" content="CVC Portal Itaquá - Sistema Automatizado de Vendas com IA integrada">
-    <meta name="keywords" content="CVC, Itaquaquecetuba, vendas, automatizado, embarques, recibos, IA">
+    <!-- Meta Tags -->
+    <meta name="description" content="CVC Itaquá - Informe Automatizado de Vendas - Dados Reais da Planilha">
+    <meta name="keywords" content="CVC, Itaquaquecetuba, vendas, automatizado, embarques, recibos">
     <meta name="author" content="CVC Itaquaquecetuba">
     <meta name="robots" content="noindex, nofollow">
     
-    <!-- Open Graph -->
-    <meta property="og:title" content="CVC Portal Itaquá - Informe Automatizado">
-    <meta property="og:description" content="Sistema automatizado de vendas com dados em tempo real">
-    <meta property="og:type" content="website">
-    
-    <!-- CSS Dependencies -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="assets/css/cvc-styles.css" rel="stylesheet">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/images/cvc-favicon.ico">
     
     <style>
-        /* ===== MELHORIAS v10.0 - VENDAS AUTOMATIZADO ===== */
+        /* ===== ESTILOS ESPECÍFICOS DA PÁGINA VENDAS AUTOMATIZADO v10.0 ===== */
+        
+        :root {
+            --cvc-amarelo: #FFE600;
+            --cvc-azul: #0A00B4;
+            --cvc-branco: #FFFFFF;
+            --cvc-verde: #00D4AA;
+            --cvc-azul-escuro: #1B365D;
+            --cvc-cinza: #6C757D;
+            --cvc-fundo-card: #f8f9fa;
+            --cvc-sombra-suave: 0 4px 6px rgba(0,0,0,0.1);
+            --cvc-sombra-media: 0 8px 15px rgba(0,0,0,0.2);
+        }
         
         .vendas-auto-container {
-            max-width: 1600px; /* MELHORIA: Container mais amplo */
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
-            animation: fadeInContainer 0.8s ease-out;
         }
 
-        @keyframes fadeInContainer {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* MELHORIA: Dashboard Status com gradiente modernizado */
+        /* Dashboard Status */
         .status-dashboard {
-            background: linear-gradient(135deg, var(--cvc-azul) 0%, var(--cvc-azul-escuro) 50%, var(--cvc-verde) 100%);
-            border-radius: 25px;
-            padding: 35px;
+            background: linear-gradient(135deg, var(--cvc-azul), var(--cvc-azul-escuro));
+            border-radius: 20px;
+            padding: 30px;
             color: white;
             margin-bottom: 30px;
             position: relative;
             overflow: hidden;
-            box-shadow: var(--cvc-sombra-forte);
+            animation: fadeIn 0.8s ease-out;
         }
 
         .status-dashboard::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(255,230,0,0.15) 0%, transparent 70%);
-            animation: float 6s ease-in-out infinite;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 230, 0, 0.1);
+            border-radius: 50%;
+            transform: translate(30px, -30px);
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
-
-        /* MELHORIA: Stats Grid responsivo aprimorado */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.18);
-            border-radius: 20px;
-            padding: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 25px;
             text-align: center;
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255, 255, 255, 0.25);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            animation: slideInUp 0.6s ease-out;
         }
 
         .stat-card:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
 
         .stat-number {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 900;
             color: var(--cvc-amarelo);
             line-height: 1;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: countUp 1.5s ease-out;
-        }
-
-        @keyframes countUp {
-            from { transform: scale(0.5); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            counter-reset: count;
+            animation: countUp 2s ease-out;
         }
 
         .stat-label {
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-size: 0.9rem;
             opacity: 0.95;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-weight: 500;
         }
 
-        /* MELHORIA: Loading modernizado */
+        /* Loading e Error */
         .loading-container {
-            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+            background: linear-gradient(135deg, var(--cvc-azul), var(--cvc-amarelo));
             border-radius: 20px;
-            padding: 60px 40px;
+            padding: 50px;
             text-align: center;
-            margin: 40px 0;
-            box-shadow: var(--cvc-sombra-media);
+            color: white;
+            margin: 50px 0;
+            animation: pulse 2s infinite;
         }
 
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 6px solid var(--cvc-cinza-claro);
-            border-top: 6px solid var(--cvc-azul);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 25px;
+        .error-container {
+            background: linear-gradient(135deg, #dc3545, #ff6b6b);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            color: white;
+            margin: 50px 0;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* MELHORIA: Cards de vendedores aprimorados */
-        .vendedor-card {
+        /* Filtros Section */
+        .filtros-section {
             background: var(--cvc-fundo-card);
-            border-radius: 15px;
-            padding: 25px;
-            margin: 15px 0;
-            box-shadow: var(--cvc-sombra-suave);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--cvc-sombra-media);
+            margin-bottom: 30px;
             border-left: 5px solid var(--cvc-amarelo);
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        .filtros-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .filtro-card {
+            background: var(--cvc-branco);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--cvc-sombra-suave);
+            border: 2px solid transparent;
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
             overflow: hidden;
         }
 
-        .vendedor-card::before {
+        .filtro-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,230,0,0.1), transparent);
-            transition: left 0.5s ease;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            transition: left 0.6s;
         }
 
-        .vendedor-card:hover::before {
+        .filtro-card:hover::before {
             left: 100%;
         }
 
-        .vendedor-card:hover {
-            transform: translateX(5px);
+        .filtro-card.active {
+            border-color: var(--cvc-azul);
+            background: linear-gradient(135deg, rgba(10, 0, 180, 0.05), rgba(255, 230, 0, 0.05));
+            transform: scale(1.02);
+        }
+
+        .filtro-card:hover {
+            transform: translateY(-2px);
             box-shadow: var(--cvc-sombra-media);
-            border-left-color: var(--cvc-azul);
+        }
+
+        .filtro-titulo {
+            font-weight: 700;
+            color: var(--cvc-azul);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filtro-desc {
+            font-size: 0.9rem;
+            color: var(--cvc-cinza);
+            margin-bottom: 15px;
+        }
+
+        .filtro-count {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--cvc-azul);
+            animation: countUp 1.5s ease-out;
+        }
+
+        /* Ações Rápidas */
+        .acoes-rapidas {
+            background: var(--cvc-fundo-card);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--cvc-sombra-media);
+            margin-bottom: 30px;
+            border-left: 5px solid var(--cvc-verde);
+            animation: slideInRight 0.8s ease-out;
+        }
+
+        .acoes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .acao-card {
+            background: var(--cvc-branco);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: var(--cvc-sombra-suave);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .acao-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(10, 0, 180, 0.1);
+            transition: all 0.6s;
+            transform: translate(-50%, -50%);
+        }
+
+        .acao-card:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .acao-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--cvc-sombra-media);
+            border-color: var(--cvc-azul);
+        }
+
+        .acao-icon {
+            font-size: 2.5rem;
+            color: var(--cvc-azul);
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .acao-titulo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--cvc-azul);
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .acao-desc {
+            font-size: 0.9rem;
+            color: var(--cvc-cinza);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Seção de Vendedores */
+        .vendedores-section {
+            background: var(--cvc-fundo-card);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--cvc-sombra-media);
+            margin-bottom: 30px;
+            border-left: 5px solid var(--cvc-verde);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .vendedor-card {
+            background: var(--cvc-branco);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--cvc-sombra-suave);
+            margin-bottom: 20px;
+            border-left: 5px solid var(--cvc-azul);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .vendedor-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--cvc-sombra-media);
         }
 
         .vendedor-header {
@@ -180,309 +314,286 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        .vendedor-name {
+        .vendedor-nome {
             font-size: 1.3rem;
             font-weight: 700;
             color: var(--cvc-azul);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        }
+
+        .vendedor-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .vendedor-status.ativo {
+            background: #28a745;
+            color: white;
+        }
+
+        .vendedor-status.pendente {
+            background: #ffc107;
+            color: #000;
         }
 
         .vendedor-stats {
             display: flex;
             gap: 20px;
-            margin-top: 15px;
+            flex-wrap: wrap;
         }
 
         .vendedor-stat {
             text-align: center;
-            flex: 1;
+            min-width: 80px;
         }
 
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
+        .vendedor-stat-number {
+            font-size: 1.8rem;
+            font-weight: 800;
             color: var(--cvc-azul);
+            line-height: 1;
         }
 
-        .stat-label-small {
-            font-size: 0.9rem;
+        .vendedor-stat-label {
+            font-size: 0.8rem;
             color: var(--cvc-cinza);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            margin-top: 2px;
         }
 
-        /* MELHORIA: Filtros e busca modernizados */
-        .filters-section {
-            background: var(--cvc-fundo-card);
+        /* Busca */
+        .search-container {
+            background: var(--cvc-branco);
             border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
+            padding: 20px;
+            margin-bottom: 20px;
             box-shadow: var(--cvc-sombra-suave);
         }
 
         .search-input {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid var(--cvc-cinza-claro);
+            border: 2px solid var(--cvc-azul);
             border-radius: 10px;
+            padding: 12px 20px;
             font-size: 1rem;
+            width: 100%;
             transition: all 0.3s ease;
-            background: white;
         }
 
         .search-input:focus {
             outline: none;
-            border-color: var(--cvc-azul);
-            box-shadow: 0 0 0 3px rgba(10, 0, 180, 0.1);
-        }
-
-        .filter-tabs {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .filter-tab {
-            padding: 12px 24px;
-            border: 2px solid var(--cvc-cinza-claro);
-            border-radius: 25px;
-            background: white;
-            color: var(--cvc-azul);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .filter-tab:hover {
-            border-color: var(--cvc-azul);
-            background: var(--cvc-azul-claro);
-        }
-
-        .filter-tab.active {
-            background: var(--cvc-gradiente-principal);
             border-color: var(--cvc-amarelo);
-            color: var(--cvc-azul);
-            transform: scale(1.05);
+            box-shadow: 0 0 0 3px rgba(255, 230, 0, 0.3);
         }
 
-        /* MELHORIA: Recibos grid modernizado */
-        .recibos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
+        /* Recibos */
+        .recibos-container {
+            background: var(--cvc-fundo-card);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--cvc-sombra-media);
+            margin-bottom: 30px;
+            animation: fadeIn 1.2s ease-out;
         }
 
         .recibo-card {
-            background: var(--cvc-fundo-card);
-            border-radius: 15px;
-            padding: 25px;
+            background: var(--cvc-branco);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
             box-shadow: var(--cvc-sombra-suave);
+            border-left: 4px solid var(--cvc-azul);
             transition: all 0.3s ease;
-            border: 1px solid var(--cvc-cinza-claro);
-            position: relative;
-            overflow: hidden;
+            animation: slideInUp 0.5s ease-out;
         }
 
         .recibo-card:hover {
-            transform: translateY(-5px);
+            transform: translateX(5px);
             box-shadow: var(--cvc-sombra-media);
-        }
-
-        .recibo-urgente {
-            border-left: 5px solid #ff4757;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { border-left-color: #ff4757; }
-            50% { border-left-color: #ff3742; }
         }
 
         .recibo-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-        }
-
-        .recibo-numero {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: var(--cvc-azul);
-        }
-
-        .recibo-status {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-pendente {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
-        }
-
-        .status-urgente {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .status-completo {
-            background: #d1f2eb;
-            color: #0c5460;
-            border: 1px solid #b7e4c7;
-        }
-
-        /* MELHORIA: Debug section aprimorada */
-        .debug-section {
-            background: #1e1e1e;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 30px 0;
-            box-shadow: var(--cvc-sombra-media);
-            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
-        }
-
-        .debug-header {
-            color: #61dafb;
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            display: flex;
             align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
             gap: 10px;
         }
 
-        .debug-content {
+        .recibo-numero {
+            font-weight: 700;
+            color: var(--cvc-azul);
+            font-size: 1.1rem;
+        }
+
+        .recibo-urgencia {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .recibo-urgencia.urgente {
+            background: #dc3545;
+            color: white;
+        }
+
+        .recibo-urgencia.normal {
+            background: #28a745;
+            color: white;
+        }
+
+        .recibo-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .recibo-campo {
+            font-size: 0.9rem;
+        }
+
+        .recibo-label {
+            font-weight: 600;
+            color: var(--cvc-cinza);
+        }
+
+        .recibo-valor {
+            color: var(--cvc-azul);
+            font-weight: 500;
+        }
+
+        /* Debug Section */
+        .debug-section {
+            background: #1e1e1e;
+            color: #00ff00;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            font-family: 'Courier New', monospace;
             max-height: 400px;
             overflow-y: auto;
-            background: #000;
-            border-radius: 8px;
-            padding: 15px;
-            font-size: 0.9rem;
+            border: 2px solid var(--cvc-azul);
+        }
+
+        .debug-header {
+            color: var(--cvc-amarelo);
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--cvc-azul);
+            padding-bottom: 10px;
+        }
+
+        .debug-content {
             line-height: 1.4;
-        }
-
-        .debug-content::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .debug-content::-webkit-scrollbar-track {
-            background: #333;
-            border-radius: 4px;
-        }
-
-        .debug-content::-webkit-scrollbar-thumb {
-            background: var(--cvc-azul);
-            border-radius: 4px;
-        }
-
-        .debug-content .info {
-            color: #8be9fd;
         }
 
         .debug-content .success {
             color: #50fa7b;
         }
 
-        .debug-content .warning {
-            color: #f1fa8c;
-        }
-
         .debug-content .error {
             color: #ff5555;
         }
 
-        /* MELHORIA: Actions section */
-        .actions-section {
-            background: var(--cvc-fundo-card);
-            border-radius: 15px;
-            padding: 25px;
-            margin: 30px 0;
-            box-shadow: var(--cvc-sombra-suave);
+        .debug-content .warning {
+            color: #f1fa8c;
         }
 
-        .actions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+        .debug-content .info {
+            color: #8be9fd;
         }
 
-        .action-btn {
-            background: var(--cvc-gradiente-principal);
-            border: none;
-            border-radius: 12px;
-            padding: 20px;
-            color: var(--cvc-azul);
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
         }
 
-        .action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(10, 0, 180, 0.2);
-            color: var(--cvc-azul);
+        .toast-notification {
+            background: var(--cvc-branco);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            box-shadow: var(--cvc-sombra-media);
+            border-left: 4px solid var(--cvc-azul);
+            min-width: 300px;
+            animation: slideInRight 0.5s ease-out;
         }
 
-        .action-btn i {
-            font-size: 1.3rem;
+        .toast-success {
+            border-left-color: #28a745;
         }
 
-        /* MELHORIA: Responsividade aprimorada */
+        .toast-error {
+            border-left-color: #dc3545;
+        }
+
+        .toast-warning {
+            border-left-color: #ffc107;
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Responsivo */
         @media (max-width: 768px) {
             .vendas-auto-container {
-                padding: 15px;
-            }
-
-            .status-dashboard {
-                padding: 25px;
+                padding: 10px;
             }
 
             .stats-grid {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                grid-template-columns: repeat(2, 1fr);
                 gap: 15px;
             }
 
             .stat-number {
-                font-size: 2.2rem;
+                font-size: 2rem;
             }
 
-            .recibos-grid {
+            .filtros-grid {
                 grid-template-columns: 1fr;
-                gap: 15px;
             }
 
-            .actions-grid {
+            .acoes-grid {
                 grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .filter-tabs {
-                justify-content: center;
             }
 
             .vendedor-header {
@@ -492,108 +603,89 @@
             }
 
             .vendedor-stats {
+                justify-content: space-around;
+                width: 100%;
+            }
+
+            .recibo-header {
                 flex-direction: column;
-                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .recibo-info {
+                grid-template-columns: 1fr;
             }
         }
 
-        /* MELHORIA: Animações de carregamento */
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+
+            .stat-card {
+                padding: 20px;
             }
-        }
 
-        /* MELHORIA: Toast notifications */
-        .toast-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-        }
-
-        .toast-notification {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 10px;
-            box-shadow: var(--cvc-sombra-forte);
-            border-left: 5px solid var(--cvc-amarelo);
-            min-width: 300px;
-            animation: slideInRight 0.4s ease-out;
-        }
-
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
+            .stat-number {
+                font-size: 1.8rem;
             }
-            to {
-                transform: translateX(0);
-                opacity: 1;
+
+            .toast-notification {
+                min-width: 250px;
             }
-        }
-
-        .toast-success {
-            border-left-color: #50fa7b;
-        }
-
-        .toast-error {
-            border-left-color: #ff5555;
-        }
-
-        .toast-warning {
-            border-left-color: #f1fa8c;
         }
     </style>
 </head>
-
 <body>
     <!-- HEADER CVC PADRÃO -->
     <header class="cvc-header">
         <div class="container-fluid">
-            <div class="cvc-logo">
-                <div class="cvc-logo-symbol">CVC</div>
-                <div>
-                    <div class="cvc-logo-text">Portal Itaquá</div>
-                    <div class="cvc-subtitle">Informe Automatizado v10.0</div>
+            <div class="row align-items-center py-3">
+                <!-- Logo CVC -->
+                <div class="col-md-4">
+                    <div class="cvc-logo">
+                        <div class="cvc-logo-symbol">CVC</div>
+                        <div>
+                            <div class="cvc-logo-text">CVC Itaquá</div>
+                            <p class="cvc-subtitle">Portal de Gestão da Loja</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Título da Página -->
+                <div class="col-md-4 text-center">
+                    <h1 class="page-title mb-0" style="border: none; padding: 0; color: var(--cvc-branco); font-size: 1.8rem;">
+                        <i class="fas fa-robot"></i> Informe Automatizado
+                    </h1>
+                </div>
+                
+                <!-- Voltar ao Dashboard -->
+                <div class="col-md-4 text-end">
+                    <a href="index.html" class="btn btn-cvc-outline">
+                        <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
+                    </a>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- NAVEGAÇÃO -->
+    <!-- NAVEGAÇÃO CVC PADRÃO -->
     <nav class="cvc-nav">
         <div class="container-fluid">
-            <ul class="nav justify-content-center">
+            <ul class="nav nav-pills justify-content-center mb-0">
                 <li class="nav-item">
                     <a class="nav-link" href="index.html">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="orcamentos.html">
+                        <i class="fas fa-calculator"></i> Padronizador de Orçamentos
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="vendas.html">
-                        <i class="fas fa-chart-line"></i> Informe Manual
+                        <i class="fas fa-chart-line"></i> Informe de Vendas
                     </a>
                 </li>
                 <li class="nav-item">
@@ -603,215 +695,277 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="embarques.html">
-                        <i class="fas fa-plane-departure"></i> Embarques
+                        <i class="fas fa-plane-departure"></i> Controle de Embarques
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="importacao.html">
-                        <i class="fas fa-cloud-upload-alt"></i> Importação
+                    <a class="nav-link" href="orbiuns.html">
+                        <i class="fas fa-clipboard-list"></i> Controle de Orbiuns
                     </a>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <!-- ÁREA DE CONTEÚDO -->
-    <div class="content-area">
-        <div class="vendas-auto-container">
+    <!-- CONTAINER PRINCIPAL -->
+    <div class="vendas-auto-container">
+        
+        <!-- LOADING CONTAINER -->
+        <div class="loading-container" id="loadingContainer">
+            <div class="text-center">
+                <div class="spinner-border text-white mb-3" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Carregando...</span>
+                </div>
+                <h3><i class="fas fa-robot"></i> CVC Portal Itaquá - Vendas Automatizado</h3>
+                <p class="mb-0">Carregando dados em tempo real da planilha de embarques...</p>
+                <div class="mt-3">
+                    <small>✨ Sistema JSONP v10.0 - Bypass CORS Total</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- ERROR CONTAINER -->
+        <div class="error-container" id="errorContainer" style="display:none;">
+            <div class="text-center">
+                <div class="error-icon mb-3">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem;"></i>
+                </div>
+                <h3>Erro no Sistema</h3>
+                <p id="errorMessage">Não foi possível conectar com a planilha</p>
+                <button class="btn btn-light btn-lg" onclick="carregarDadosInicial()">
+                    <i class="fas fa-redo"></i> Tentar Novamente
+                </button>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div id="mainContent" style="display:none;">
             
-            <!-- STATUS DASHBOARD -->
-            <section class="status-dashboard fade-in-up">
-                <h1><i class="fas fa-robot"></i> Sistema Automatizado de Vendas</h1>
-                <p class="mb-0 opacity-90">Análise inteligente em tempo real com dados da planilha de embarques</p>
-                <div class="stats-grid">
+            <!-- DASHBOARD STATUS -->
+            <div class="status-dashboard" id="statusDashboard">
+                <div class="text-center">
+                    <h2><i class="fas fa-chart-bar"></i> Dashboard de Vendas Automatizado</h2>
+                    <p class="mb-0">Dados atualizados em tempo real da planilha de embarques</p>
+                    <small id="ultimaAtualizacao">Última atualização: Aguardando dados...</small>
+                </div>
+                
+                <div class="stats-grid" id="statsGrid">
                     <div class="stat-card">
-                        <div class="stat-number" id="totalRecibos">0</div>
-                        <div class="stat-label">Recibos Pendentes</div>
+                        <div class="stat-number" id="statTotal">0</div>
+                        <div class="stat-label">Total de Recibos</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" id="totalVendedores">0</div>
+                        <div class="stat-number" id="statUrgentes">0</div>
+                        <div class="stat-label">Urgentes (≤3 dias)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="statSemCPF">0</div>
+                        <div class="stat-label">Sem CPF</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="statSemWhatsApp">0</div>
+                        <div class="stat-label">Sem WhatsApp</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="statVendedores">0</div>
                         <div class="stat-label">Vendedores Ativos</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" id="urgentesCount">0</div>
-                        <div class="stat-label">Casos Urgentes</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="percentualCompleto">0%</div>
+                        <div class="stat-number" id="statCompletos">0</div>
                         <div class="stat-label">Dados Completos</div>
                     </div>
                 </div>
-            </section>
-
-            <!-- LOADING -->
-            <div id="loadingContainer" class="loading-container">
-                <div class="loading-spinner"></div>
-                <h3>🔄 Carregando dados da planilha...</h3>
-                <p class="text-muted">Conectando com Google Apps Script via JSONP v10.0</p>
-                <div class="mt-3">
-                    <small class="text-info">
-                        <i class="fas fa-info-circle"></i>
-                        Sistema otimizado para bypass total de CORS
-                    </small>
-                </div>
             </div>
 
-            <!-- ERROR CONTAINER -->
-            <div id="errorContainer" class="alert alert-danger" style="display:none;">
-                <h4><i class="fas fa-exclamation-triangle"></i> Erro no Sistema</h4>
-                <p id="errorMessage"></p>
-                <div class="mt-3">
-                    <button class="btn btn-primary" onclick="atualizarDados()">
-                        <i class="fas fa-sync-alt"></i> Tentar Novamente
-                    </button>
-                    <button class="btn btn-secondary" onclick="mostrarDebugSection()">
-                        <i class="fas fa-bug"></i> Ver Debug
-                    </button>
-                </div>
-            </div>
-
-            <!-- FILTROS E BUSCA -->
-            <section class="filters-section" id="filtersSection" style="display:none;">
-                <h2><i class="fas fa-search"></i> Filtros e Busca</h2>
-                <div class="row">
-                    <div class="col-md-8">
-                        <input type="text" class="search-input" id="searchInput" 
-                               placeholder="🔍 Buscar por recibo, cliente, vendedor...">
+            <!-- FILTROS INTELIGENTES -->
+            <section class="filtros-section" id="filtrosSection">
+                <h2><i class="fas fa-filter"></i> Filtros Inteligentes</h2>
+                <p class="text-muted mb-3">Filtre os dados por prioridade, vendedor ou status de complementação</p>
+                
+                <div class="search-container">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control search-input" id="searchInput" 
+                               placeholder="Buscar por nome do cliente, recibo ou vendedor...">
                     </div>
-                    <div class="col-md-4">
-                        <div class="filter-tabs">
-                            <div class="filter-tab active" data-filter="todos">Todos</div>
-                            <div class="filter-tab" data-filter="urgentes">Urgentes</div>
-                            <div class="filter-tab" data-filter="pendentes">Pendentes</div>
-                            <div class="filter-tab" data-filter="completos">Completos</div>
+                </div>
+                
+                <div class="filtros-grid">
+                    <div class="filtro-card active" data-filtro="todos" onclick="aplicarFiltro('todos')">
+                        <div class="filtro-titulo">
+                            <i class="fas fa-list"></i> Todos os Recibos
                         </div>
+                        <div class="filtro-desc">Visualizar todos os recibos pendentes</div>
+                        <div class="filtro-count" id="filtroTodos">0</div>
                     </div>
-                </div>
-            </section>
-
-            <!-- RESUMO POR VENDEDORES -->
-            <section id="vendedoresSection" style="display:none;">
-                <h2><i class="fas fa-users"></i> Resumo por Vendedores</h2>
-                <p class="text-muted">Clique em um vendedor para visualizar seus recibos pendentes</p>
-                <div id="vendedoresList">
-                    <!-- Vendedores serão inseridos dinamicamente -->
-                </div>
-            </section>
-
-            <!-- GRID DE RECIBOS -->
-            <section id="recibosSection" style="display:none;">
-                <h2><i class="fas fa-receipt"></i> Recibos Pendentes</h2>
-                <div id="recibosGrid" class="recibos-grid">
-                    <!-- Recibos serão inseridos dinamicamente -->
+                    <div class="filtro-card" data-filtro="urgente" onclick="aplicarFiltro('urgente')">
+                        <div class="filtro-titulo">
+                            <i class="fas fa-exclamation-triangle"></i> Urgentes
+                        </div>
+                        <div class="filtro-desc">Embarques em até 3 dias</div>
+                        <div class="filtro-count" id="filtroUrgente">0</div>
+                    </div>
+                    <div class="filtro-card" data-filtro="semCPF" onclick="aplicarFiltro('semCPF')">
+                        <div class="filtro-titulo">
+                            <i class="fas fa-id-card"></i> Sem CPF
+                        </div>
+                        <div class="filtro-desc">Recibos que precisam de CPF</div>
+                        <div class="filtro-count" id="filtroSemCPF">0</div>
+                    </div>
+                    <div class="filtro-card" data-filtro="semWhatsApp" onclick="aplicarFiltro('semWhatsApp')">
+                        <div class="filtro-titulo">
+                            <i class="fas fa-phone"></i> Sem WhatsApp
+                        </div>
+                        <div class="filtro-desc">Recibos que precisam de telefone</div>
+                        <div class="filtro-count" id="filtroSemWhatsApp">0</div>
+                    </div>
                 </div>
             </section>
 
             <!-- AÇÕES RÁPIDAS -->
-            <section class="actions-section" id="actionsSection" style="display:none;">
+            <section class="acoes-rapidas" id="acoesSection">
                 <h2><i class="fas fa-bolt"></i> Ações Rápidas</h2>
-                <div class="actions-grid">
-                    <a href="vendas.html" class="action-btn" target="_blank">
-                        <i class="fas fa-plus-circle"></i>
-                        Nova Venda
-                    </a>
-                    <a href="embarques.html" class="action-btn" target="_blank">
-                        <i class="fas fa-edit"></i>
-                        Editar Embarques
-                    </a>
-                    <button class="action-btn" onclick="exportarDados()">
-                        <i class="fas fa-download"></i>
-                        Exportar Dados
-                    </button>
-                    <button class="action-btn" onclick="atualizarDados()">
-                        <i class="fas fa-sync-alt"></i>
-                        Atualizar
-                    </button>
+                <p class="text-muted mb-3">Acesse funcionalidades relacionadas para completar os dados</p>
+                <div class="acoes-grid">
+                    <div class="acao-card" onclick="window.open('vendas.html', '_blank')">
+                        <div class="acao-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <div class="acao-titulo">Cadastrar Nova Venda</div>
+                        <div class="acao-desc">Adicionar novos recibos ao sistema</div>
+                    </div>
+                    <div class="acao-card" onclick="window.open('embarques.html', '_blank')">
+                        <div class="acao-icon">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <div class="acao-titulo">Editar Embarques</div>
+                        <div class="acao-desc">Completar dados diretamente na planilha</div>
+                    </div>
+                    <div class="acao-card" onclick="exportarDados()">
+                        <div class="acao-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="acao-titulo">Exportar Relatório</div>
+                        <div class="acao-desc">Baixar lista de recibos pendentes</div>
+                    </div>
+                    <div class="acao-card" onclick="atualizarDados()">
+                        <div class="acao-icon">
+                            <i class="fas fa-sync-alt"></i>
+                        </div>
+                        <div class="acao-titulo">Atualizar Dados</div>
+                        <div class="acao-desc">Recarregar informações da planilha</div>
+                    </div>
                 </div>
             </section>
 
-            <!-- DEBUG SECTION -->
-            <section class="debug-section" id="debugSection" style="display:none;">
-                <div class="debug-header">
-                    <i class="fas fa-terminal"></i>
-                    Console de Debug v10.0
-                </div>
-                <div class="debug-content" id="debugContent">
-                    <!-- Debug logs aparecerão aqui -->
+            <!-- SEÇÃO DE VENDEDORES -->
+            <section class="vendedores-section" id="vendedoresSection">
+                <h2><i class="fas fa-users"></i> Resumo por Vendedores</h2>
+                <p class="text-muted mb-3">Clique em um vendedor para ver seus recibos pendentes</p>
+                <div id="vendedoresList">
+                    <!-- Vendedores serão inseridos aqui -->
                 </div>
             </section>
+
+            <!-- CONTAINER DE RECIBOS -->
+            <div class="recibos-container" id="recibosContainer">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2><i class="fas fa-receipt"></i> Lista de Recibos</h2>
+                    <div>
+                        <button class="btn btn-outline-primary btn-sm" onclick="exportarDados()">
+                            <i class="fas fa-download"></i> Exportar
+                        </button>
+                        <button class="btn btn-primary btn-sm" onclick="atualizarDados()">
+                            <i class="fas fa-sync-alt"></i> Atualizar
+                        </button>
+                    </div>
+                </div>
+                <div id="recibosList">
+                    <!-- Recibos serão inseridos aqui -->
+                </div>
+            </div>
 
         </div>
+
+        <!-- DEBUG SECTION -->
+        <div class="debug-section" id="debugSection" style="display:none;">
+            <div class="debug-header">
+                <i class="fas fa-terminal"></i> Debug do Sistema JSONP v10.0:
+            </div>
+            <div class="debug-content" id="debugContent"></div>
+        </div>
+
     </div>
 
-    <!-- TOAST NOTIFICATIONS -->
+    <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- JAVASCRIPT INCORPORADO v10.0 -->
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- 🚨 CORREÇÃO CRÍTICA: Script ANTES do config.js -->
+    <script>
+        // Garantir que getApiUrl() esteja disponível ANTES de tudo
+        window.getApiUrl = window.getApiUrl || function() {
+            return 'https://script.google.com/macros/s/AKfycbzqttRJjK4PbznHnEfviHZ9LPOITVm_pc0sswGUNVHpGpio5oCdaB2c68s6fVHuN6LL3w/exec';
+        };
+
+        // Definir CVC_CONFIG temporário se não existir
+        window.CVC_CONFIG = window.CVC_CONFIG || {
+            API_URL: 'https://script.google.com/macros/s/AKfycbzqttRJjK4PbznHnEfviHZ9LPOITVm_pc0sswGUNVHpGpio5oCdaB2c68s6fVHuN6LL3w/exec',
+            VERSION: '10.0',
+            SYSTEM_NAME: 'CVC Itaquá - Portal de Gestão da Loja',
+            VENDEDORES: ['Alessandro', 'Ana Paula', 'Adriana', 'Adrielly', 'Bia', 'Conceição', 'Jhully'],
+            DEBUG_MODE: true
+        };
+
+        console.log('🔧 CORREÇÃO: getApiUrl() e CVC_CONFIG definidos temporariamente');
+        console.log('🎯 API URL:', window.getApiUrl());
+    </script>
+
+    <!-- Config original -->
+    <script src="config.js"></script>
+    
     <script>
         // ================================================================================
-        // 🚀 CVC PORTAL ITAQUÁ - VENDAS AUTOMATIZADO v10.0
-        // Melhorias: UX/UI aprimorada, performance otimizada, debug avançado
+        // 🚀 CVC PORTAL ITAQUÁ - VENDAS AUTOMATIZADO v10.0 COMPLETO
+        // Sistema completo que busca dados reais da planilha e exibe para os vendedores
+        // CORREÇÃO TOTAL: Bypass CORS com JSONP + Interface Moderna + Debug Avançado
         // ================================================================================
         
+        console.log('🚀 CVC Portal Itaquá - Vendas Automatizado v10.0');
+        console.log('✨ Melhorias v10.0:');
+        console.log('   • Interface modernizada com animações fluidas');
+        console.log('   • Sistema de toast notifications');
+        console.log('   • Performance otimizada e debug avançado');
+        console.log('   • Filtros inteligentes e busca melhorada');
+        console.log('   • UX/UI responsiva aprimorada');
+        console.log('   • Shortcuts de teclado (Ctrl+R, F5)');
+        console.log('   • Animações de contagem nos stats');
+        console.log('   • Sistema de skeleton loading');
+        console.log('');
+        console.log('🎯 Sistema pronto para uso!');
+        
+        // ================================================================================
+        // VARIÁVEIS GLOBAIS
+        // ================================================================================
+        
+        let recibosData = [];
         let recibosDataOriginal = [];
-        let recibosDataFiltrada = [];
         let vendedoresData = {};
         let debugLogs = [];
         let API_URL = null;
         let filtroAtivo = 'todos';
         let termoBusca = '';
-        let isLoading = false;
 
         // ================================================================================
-        // 🎨 SISTEMA DE TOAST NOTIFICATIONS (NOVO v10.0)
-        // ================================================================================
-        
-        function showToast(message, type = 'info', duration = 4000) {
-            const toastContainer = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast-notification toast-${type}`;
-            
-            const icon = {
-                success: 'fas fa-check-circle',
-                error: 'fas fa-exclamation-circle',
-                warning: 'fas fa-exclamation-triangle',
-                info: 'fas fa-info-circle'
-            }[type] || 'fas fa-info-circle';
-            
-            toast.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <i class="${icon}" style="font-size: 1.2rem; color: var(--cvc-azul);"></i>
-                    <span style="flex: 1; font-weight: 600;">${message}</span>
-                    <button onclick="this.parentElement.parentElement.remove()" 
-                            style="background: none; border: none; color: var(--cvc-cinza); cursor: pointer;">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `;
-            
-            toastContainer.appendChild(toast);
-            
-            setTimeout(() => {
-                if (toast.parentElement) {
-                    toast.style.animation = 'slideOutRight 0.4s ease-out';
-                    setTimeout(() => toast.remove(), 400);
-                }
-            }, duration);
-        }
-
-        // ================================================================================
-        // 🐛 SISTEMA DE DEBUG AVANÇADO v10.0
+        // SISTEMA DE DEBUG AVANÇADO
         // ================================================================================
         
         function addDebugLog(message, type = 'info') {
             const timestamp = new Date().toLocaleTimeString('pt-BR');
             const logEntry = { timestamp, message, type };
             debugLogs.push(logEntry);
-            
-            // Limitar logs (performance)
-            if (debugLogs.length > 200) {
-                debugLogs = debugLogs.slice(-150);
-            }
             
             // Console log com cores
             const colors = {
@@ -829,8 +983,9 @@
             const debugContent = document.getElementById('debugContent');
             if (!debugContent) return;
             
-            const html = debugLogs.slice(-50).map(log => {
-                return `<div class="${log.type}">
+            const html = debugLogs.slice(-25).map(log => {
+                const typeClass = log.type;
+                return `<div class="${typeClass}">
                     [${log.timestamp}] ${log.message}
                 </div>`;
             }).join('');
@@ -839,35 +994,72 @@
             debugContent.scrollTop = debugContent.scrollHeight;
         }
         
-        function mostrarDebugSection() {
+        function showDebugSection() {
             const debugSection = document.getElementById('debugSection');
             debugSection.style.display = 'block';
-            debugSection.scrollIntoView({ behavior: 'smooth' });
         }
 
         // ================================================================================
-        // ⚙️ INICIALIZAÇÃO SEGURA DO SISTEMA v10.0
+        // SISTEMA DE TOAST NOTIFICATIONS
+        // ================================================================================
+        
+        function showToast(message, type = 'info', duration = 4000) {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast-notification toast-${type}`;
+            
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+            
+            toast.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="fas ${icons[type]} me-2"></i>
+                    <span>${message}</span>
+                    <button class="btn-close btn-close-sm ms-auto" onclick="this.parentElement.parentElement.remove()"></button>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.remove();
+                }
+            }, duration);
+        }
+
+        // ================================================================================
+        // INICIALIZAÇÃO SEGURA DO SISTEMA
         // ================================================================================
         
         function inicializarSistema() {
             addDebugLog('🚀 Iniciando CVC Portal Itaquá - Vendas Automatizado v10.0...', 'info');
             
-            // Verificar configurações
+            // 🔧 CORREÇÃO: Verificação mais robusta da configuração
             if (typeof getApiUrl === 'function') {
                 API_URL = getApiUrl();
-                addDebugLog(`🌐 API URL configurada via função: ${API_URL}`, 'success');
+                addDebugLog(`🌐 API URL via getApiUrl(): ${API_URL}`, 'success');
             } else if (typeof CVC_CONFIG !== 'undefined' && CVC_CONFIG.API_URL) {
                 API_URL = CVC_CONFIG.API_URL;
-                addDebugLog(`🌐 API URL via config: ${API_URL}`, 'success');
+                addDebugLog(`🌐 API URL via CVC_CONFIG: ${API_URL}`, 'success');
             } else {
-                addDebugLog('❌ ERRO: API URL não configurada!', 'error');
-                mostrarErro('Configuração inválida. Verifique o arquivo config.js');
-                showToast('Erro de configuração detectado', 'error');
+                // 🔧 FALLBACK: URL hardcoded como último recurso
+                API_URL = 'https://script.google.com/macros/s/AKfycbzqttRJjK4PbznHnEfviHZ9LPOITVm_pc0sswGUNVHpGpio5oCdaB2c68s6fVHuN6LL3w/exec';
+                addDebugLog('⚠️ Usando API URL fallback', 'warning');
+            }
+            
+            if (!API_URL || !API_URL.includes('script.google.com')) {
+                addDebugLog('❌ ERRO: API URL inválida!', 'error');
+                mostrarErro('API URL inválida. Verifique a configuração.');
                 return;
             }
             
+            showDebugSection();
             addDebugLog('✅ Sistema inicializado com sucesso!', 'success');
-            addDebugLog('🔧 Melhorias v10.0: UX aprimorada, toast notifications, performance otimizada', 'info');
             
             // Configurar eventos
             configurarEventos();
@@ -877,12 +1069,10 @@
         }
 
         // ================================================================================
-        // 🎮 CONFIGURAÇÃO DE EVENTOS v10.0
+        // CONFIGURAÇÃO DE EVENTOS
         // ================================================================================
         
         function configurarEventos() {
-            addDebugLog('🎮 Configurando eventos da interface...', 'info');
-            
             // Search input com debounce
             const searchInput = document.getElementById('searchInput');
             if (searchInput) {
@@ -892,25 +1082,13 @@
                     debounceTimer = setTimeout(() => {
                         termoBusca = e.target.value.toLowerCase();
                         filtrarEExibirRecibos();
-                        addDebugLog(`🔍 Busca aplicada: "${termoBusca}"`, 'info');
                     }, 300);
                 });
             }
 
-            // Filter tabs
-            document.querySelectorAll('.filter-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    filtroAtivo = tab.dataset.filter;
-                    filtrarEExibirRecibos();
-                    addDebugLog(`🏷️ Filtro aplicado: ${filtroAtivo}`, 'info');
-                });
-            });
-
-            // Keyboard shortcuts
+            // Shortcuts de teclado
             document.addEventListener('keydown', (e) => {
-                if (e.ctrlKey && e.key === 'r') {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
                     e.preventDefault();
                     atualizarDados();
                 } else if (e.key === 'F5') {
@@ -919,82 +1097,108 @@
                 }
             });
 
-            addDebugLog('✅ Eventos configurados com sucesso', 'success');
+            addDebugLog('✅ Eventos configurados com shortcuts', 'success');
         }
 
         // ================================================================================
-        // 📊 CARREGAMENTO DE DADOS VIA JSONP v10.0
+        // CARREGAMENTO DE DADOS VIA JSONP
         // ================================================================================
         
         function carregarDadosInicial() {
-            if (isLoading) {
-                addDebugLog('⚠️ Carregamento já em andamento, ignorando...', 'warning');
-                return;
-            }
+            addDebugLog('📊 JSONP: Carregando dados da planilha...', 'info');
             
-            isLoading = true;
-            addDebugLog('📊 Iniciando carregamento de dados via JSONP v10.0...', 'info');
-            
-            // UI Feedback
             document.getElementById('loadingContainer').style.display = 'block';
             document.getElementById('errorContainer').style.display = 'none';
-            ocultarTodasSecoes();
+            document.getElementById('mainContent').style.display = 'none';
             
-            if (!API_URL) {
-                addDebugLog('❌ ERRO: API URL não configurada!', 'error');
-                mostrarErro('Configuração inválida. Verifique config.js');
-                isLoading = false;
-                return;
-            }
-            
-            // Fazer requisição JSONP
-            fazerRequisicaoJSONP('listar_vendas_pendentes', {})
-                .then(response => {
-                    addDebugLog('✅ Dados recebidos via JSONP', 'success');
-                    processarDadosRecebidos(response);
-                    showToast('Dados atualizados com sucesso!', 'success');
+            // Testar conexão primeiro
+            testarConexaoAPI()
+                .then(() => {
+                    addDebugLog('✅ Conexão com API estabelecida!', 'success');
+                    showToast('Conectado com sucesso à planilha!', 'success');
+                    return chamarAPIJsonp('listar_vendas_pendentes');
+                })
+                .then(resultado => {
+                    addDebugLog('📡 JSONP: Resposta recebida', 'success');
+                    
+                    if (resultado.success) {
+                        if (resultado.data && resultado.data.recibos) {
+                            recibosDataOriginal = resultado.data.recibos;
+                            recibosData = [...recibosDataOriginal];
+                            addDebugLog(`✅ JSONP: ${recibosData.length} recibos carregados`, 'success');
+                            
+                            processarDadosVendedores();
+                            atualizarDashboard();
+                            exibirDados();
+                            showToast(`${recibosData.length} recibos carregados com sucesso!`, 'success');
+                            
+                        } else {
+                            addDebugLog('⚠️ JSONP: Estrutura de resposta inesperada', 'warning');
+                            throw new Error('Estrutura de dados inválida na resposta');
+                        }
+                    } else {
+                        throw new Error(resultado.message || 'Erro desconhecido na API');
+                    }
                 })
                 .catch(error => {
-                    addDebugLog(`❌ Erro no carregamento: ${error.message}`, 'error');
+                    addDebugLog(`❌ JSONP: Erro: ${error.message}`, 'error');
                     mostrarErro(error.message);
-                    showToast('Erro ao carregar dados', 'error');
-                })
-                .finally(() => {
-                    isLoading = false;
-                    document.getElementById('loadingContainer').style.display = 'none';
+                    showToast(`Erro: ${error.message}`, 'error');
                 });
         }
-
-        // ================================================================================
-        // 🌐 SISTEMA JSONP OTIMIZADO v10.0
-        // ================================================================================
         
-        function fazerRequisicaoJSONP(action, parametros = {}) {
+        function testarConexaoAPI() {
             return new Promise((resolve, reject) => {
-                const callbackName = `jsonp_callback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-                const timeoutId = setTimeout(() => {
-                    cleanup();
-                    reject(new Error('Timeout da requisição JSONP (30s)'));
-                }, 30000);
+                const callbackName = `test_${Date.now()}`;
                 
-                function cleanup() {
-                    clearTimeout(timeoutId);
+                window[callbackName] = function(result) {
+                    script.remove();
                     delete window[callbackName];
-                    if (script && script.parentNode) {
-                        script.remove();
-                    }
-                }
-                
-                window[callbackName] = function(response) {
-                    cleanup();
                     
-                    if (response && response.success) {
-                        addDebugLog(`✅ JSONP callback executado: ${response.success ? 'sucesso' : 'erro'}`, 'success');
-                        resolve(response);
+                    if (result && result.success) {
+                        addDebugLog(`✅ API Status: ${result.status}`, 'success');
+                        resolve(result);
                     } else {
-                        const errorMsg = response?.error || 'Resposta inválida do servidor';
-                        addDebugLog(`❌ Erro na resposta: ${errorMsg}`, 'error');
-                        reject(new Error(errorMsg));
+                        reject(new Error('API retornou erro'));
+                    }
+                };
+                
+                const script = document.createElement('script');
+                script.src = `${API_URL}?callback=${callbackName}`;
+                script.onerror = () => {
+                    delete window[callbackName];
+                    reject(new Error('Erro ao conectar com a API'));
+                };
+                
+                document.head.appendChild(script);
+                
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        script.remove();
+                        delete window[callbackName];
+                        reject(new Error('Timeout de 10 segundos'));
+                    }
+                }, 10000);
+            });
+        }
+        
+        function chamarAPIJsonp(action, parametros = {}) {
+            return new Promise((resolve, reject) => {
+                const callbackName = `vendas_auto_callback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                
+                addDebugLog(`🔗 JSONP: Criando callback ${callbackName}`, 'info');
+                
+                window[callbackName] = function(result) {
+                    try {
+                        script.remove();
+                        delete window[callbackName];
+                        
+                        addDebugLog(`📡 JSONP: Callback executado: ${result.success ? 'sucesso' : 'erro'}`, result.success ? 'success' : 'error');
+                        resolve(result);
+                        
+                    } catch (error) {
+                        delete window[callbackName];
+                        reject(error);
                     }
                 };
                 
@@ -1008,460 +1212,427 @@
                 const urlCompleta = `${API_URL}?${params.toString()}`;
                 script.src = urlCompleta;
                 
-                addDebugLog(`📡 JSONP URL: ${urlCompleta.substring(0, 100)}...`, 'info');
+                addDebugLog(`📡 JSONP: URL criada (${urlCompleta.length} chars)`, 'info');
                 
-                script.onerror = function() {
-                    cleanup();
-                    reject(new Error('Erro ao carregar script JSONP. Verifique a configuração.'));
+                script.onerror = function(event) {
+                    delete window[callbackName];
+                    if (script.parentNode) {
+                        script.remove();
+                    }
+                    
+                    addDebugLog('❌ JSONP: Erro ao carregar script', 'error');
+                    reject(new Error('Erro ao carregar script JSONP. Verifique a configuração da API.'));
                 };
                 
                 document.head.appendChild(script);
+                
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                        if (script && script.parentNode) {
+                            script.remove();
+                        }
+                        addDebugLog('⏱️ JSONP: Timeout de 30 segundos', 'error');
+                        reject(new Error('Timeout na requisição JSONP (30s). O servidor não respondeu.'));
+                    }
+                }, 30000);
             });
         }
 
         // ================================================================================
-        // 📈 PROCESSAMENTO DE DADOS v10.0
+        // PROCESSAMENTO DE DADOS
         // ================================================================================
         
-        function processarDadosRecebidos(response) {
-            addDebugLog('📈 Processando dados recebidos...', 'info');
+        function processarDadosVendedores() {
+            vendedoresData = {};
             
-            if (!response.data || !Array.isArray(response.data)) {
-                throw new Error('Dados inválidos recebidos do servidor');
-            }
-            
-            recibosDataOriginal = response.data;
-            
-            // Processar estatísticas
-            const stats = calcularEstatisticas(recibosDataOriginal);
-            atualizarEstatisticas(stats);
-            
-            // Processar vendedores
-            vendedoresData = processarVendedores(recibosDataOriginal);
-            
-            // Aplicar filtros iniciais
-            filtrarEExibirRecibos();
-            
-            // Exibir seções
-            exibirSecoes();
-            
-            addDebugLog(`✅ Processamento concluído: ${recibosDataOriginal.length} recibos`, 'success');
-        }
-        
-        function calcularEstatisticas(dados) {
-            const stats = {
-                totalRecibos: dados.length,
-                totalVendedores: new Set(dados.map(r => r.vendedor)).size,
-                urgentesCount: dados.filter(r => r.urgencia === 'Urgente').length,
-                percentualCompleto: 0
-            };
-            
-            const completos = dados.filter(r => 
-                r.cpfCliente && r.whatsappCliente && r.dataIda
-            ).length;
-            
-            stats.percentualCompleto = dados.length > 0 
-                ? Math.round((completos / dados.length) * 100) 
-                : 0;
-            
-            return stats;
-        }
-        
-        function atualizarEstatisticas(stats) {
-            const elements = {
-                'totalRecibos': stats.totalRecibos,
-                'totalVendedores': stats.totalVendedores,
-                'urgentesCount': stats.urgentesCount,
-                'percentualCompleto': `${stats.percentualCompleto}%`
-            };
-            
-            Object.entries(elements).forEach(([id, value]) => {
-                const element = document.getElementById(id);
-                if (element) {
-                    // Animação de contagem
-                    animateNumber(element, value);
-                }
-            });
-        }
-        
-        function animateNumber(element, finalValue) {
-            const isPercentage = typeof finalValue === 'string' && finalValue.includes('%');
-            const numericValue = parseInt(finalValue);
-            const start = parseInt(element.textContent) || 0;
-            const duration = 1000;
-            const stepTime = 16;
-            const steps = duration / stepTime;
-            const increment = (numericValue - start) / steps;
-            
-            let current = start;
-            const timer = setInterval(() => {
-                current += increment;
-                const displayValue = Math.round(current);
-                element.textContent = isPercentage ? `${displayValue}%` : displayValue;
+            recibosData.forEach(recibo => {
+                const vendedor = recibo.vendedor || 'Não Informado';
                 
-                if ((increment > 0 && current >= numericValue) || 
-                    (increment < 0 && current <= numericValue)) {
-                    element.textContent = finalValue;
-                    clearInterval(timer);
-                }
-            }, stepTime);
-        }
-
-        // ================================================================================
-        // 🏷️ SISTEMA DE FILTROS v10.0
-        // ================================================================================
-        
-        function filtrarEExibirRecibos() {
-            addDebugLog(`🏷️ Aplicando filtros: ${filtroAtivo}, busca: "${termoBusca}"`, 'info');
-            
-            let dadosFiltrados = [...recibosDataOriginal];
-            
-            // Filtro por categoria
-            switch (filtroAtivo) {
-                case 'urgentes':
-                    dadosFiltrados = dadosFiltrados.filter(r => r.urgencia === 'Urgente');
-                    break;
-                case 'pendentes':
-                    dadosFiltrados = dadosFiltrados.filter(r => 
-                        !r.cpfCliente || !r.whatsappCliente || !r.dataIda
-                    );
-                    break;
-                case 'completos':
-                    dadosFiltrados = dadosFiltrados.filter(r => 
-                        r.cpfCliente && r.whatsappCliente && r.dataIda
-                    );
-                    break;
-            }
-            
-            // Filtro por busca
-            if (termoBusca) {
-                dadosFiltrados = dadosFiltrados.filter(recibo => {
-                    const searchFields = [
-                        recibo.recibo,
-                        recibo.nomeCliente,
-                        recibo.vendedor,
-                        recibo.cpfCliente,
-                        recibo.whatsappCliente
-                    ].map(field => (field || '').toLowerCase());
-                    
-                    return searchFields.some(field => field.includes(termoBusca));
-                });
-            }
-            
-            recibosDataFiltrada = dadosFiltrados;
-            
-            // Atualizar displays
-            exibirVendedores(dadosFiltrados);
-            exibirRecibos(dadosFiltrados);
-            
-            addDebugLog(`✅ Filtros aplicados: ${dadosFiltrados.length} recibos exibidos`, 'success');
-        }
-
-        // ================================================================================
-        // 👥 EXIBIÇÃO DE VENDEDORES v10.0
-        // ================================================================================
-        
-        function processarVendedores(dados) {
-            const vendedores = {};
-            
-            dados.forEach(recibo => {
-                const vendedor = recibo.vendedor || 'Sem Vendedor';
-                
-                if (!vendedores[vendedor]) {
-                    vendedores[vendedor] = {
+                if (!vendedoresData[vendedor]) {
+                    vendedoresData[vendedor] = {
                         nome: vendedor,
-                        recibos: [],
                         total: 0,
                         urgentes: 0,
-                        completos: 0
+                        semCPF: 0,
+                        semWhatsApp: 0,
+                        recibos: []
                     };
                 }
                 
-                vendedores[vendedor].recibos.push(recibo);
-                vendedores[vendedor].total++;
+                vendedoresData[vendedor].total++;
+                vendedoresData[vendedor].recibos.push(recibo);
                 
-                if (recibo.urgencia === 'Urgente') {
-                    vendedores[vendedor].urgentes++;
+                // Verificar urgência (embarque em até 3 dias)
+                const dataEmbarque = new Date(recibo.dataIda || recibo.dataEmbarque);
+                const hoje = new Date();
+                const diffDias = Math.ceil((dataEmbarque - hoje) / (1000 * 60 * 60 * 24));
+                
+                if (diffDias <= 3) {
+                    vendedoresData[vendedor].urgentes++;
                 }
                 
-                if (recibo.cpfCliente && recibo.whatsappCliente && recibo.dataIda) {
-                    vendedores[vendedor].completos++;
+                // Verificar CPF
+                if (!recibo.cpf || recibo.cpf.length < 11) {
+                    vendedoresData[vendedor].semCPF++;
+                }
+                
+                // Verificar WhatsApp
+                if (!recibo.whatsapp || recibo.whatsapp.length < 10) {
+                    vendedoresData[vendedor].semWhatsApp++;
                 }
             });
             
-            return vendedores;
-        }
-        
-        function exibirVendedores(dados) {
-            const vendedoresContainer = document.getElementById('vendedoresList');
-            if (!vendedoresContainer) return;
-            
-            const vendedoresFiltrados = processarVendedores(dados);
-            
-            const html = Object.values(vendedoresFiltrados)
-                .sort((a, b) => b.total - a.total)
-                .map(vendedor => {
-                    const percentualCompleto = vendedor.total > 0 
-                        ? Math.round((vendedor.completos / vendedor.total) * 100) 
-                        : 0;
-                    
-                    return `
-                        <div class="vendedor-card fade-in-up" onclick="filtrarPorVendedor('${vendedor.nome}')">
-                            <div class="vendedor-header">
-                                <div class="vendedor-name">
-                                    <i class="fas fa-user"></i>
-                                    ${vendedor.nome}
-                                </div>
-                                <div class="badge bg-primary">${vendedor.total} recibos</div>
-                            </div>
-                            <div class="vendedor-stats">
-                                <div class="vendedor-stat">
-                                    <div class="stat-value">${vendedor.urgentes}</div>
-                                    <div class="stat-label-small">Urgentes</div>
-                                </div>
-                                <div class="vendedor-stat">
-                                    <div class="stat-value">${vendedor.completos}</div>
-                                    <div class="stat-label-small">Completos</div>
-                                </div>
-                                <div class="vendedor-stat">
-                                    <div class="stat-value">${percentualCompleto}%</div>
-                                    <div class="stat-label-small">Taxa Conclusão</div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                })
-                .join('');
-            
-            vendedoresContainer.innerHTML = html;
+            addDebugLog(`📊 Processados ${Object.keys(vendedoresData).length} vendedores`, 'success');
         }
 
         // ================================================================================
-        // 🧾 EXIBIÇÃO DE RECIBOS v10.0
+        // ATUALIZAÇÃO DA INTERFACE
         // ================================================================================
         
-        function exibirRecibos(dados) {
-            const recibosContainer = document.getElementById('recibosGrid');
-            if (!recibosContainer) return;
+        function atualizarDashboard() {
+            const stats = calcularEstatisticas();
             
-            if (dados.length === 0) {
-                recibosContainer.innerHTML = `
-                    <div class="col-12 text-center py-5">
-                        <i class="fas fa-search" style="font-size: 3rem; color: var(--cvc-cinza); margin-bottom: 20px;"></i>
-                        <h3>Nenhum recibo encontrado</h3>
-                        <p class="text-muted">Tente ajustar os filtros ou o termo de busca</p>
+            // Atualizar stats com animação
+            animarContador('statTotal', stats.total);
+            animarContador('statUrgentes', stats.urgentes);
+            animarContador('statSemCPF', stats.semCPF);
+            animarContador('statSemWhatsApp', stats.semWhatsApp);
+            animarContador('statVendedores', stats.vendedores);
+            animarContador('statCompletos', stats.completos);
+            
+            // Atualizar última atualização
+            document.getElementById('ultimaAtualizacao').textContent = 
+                `Última atualização: ${new Date().toLocaleString('pt-BR')}`;
+            
+            // Atualizar contadores dos filtros
+            document.getElementById('filtroTodos').textContent = stats.total;
+            document.getElementById('filtroUrgente').textContent = stats.urgentes;
+            document.getElementById('filtroSemCPF').textContent = stats.semCPF;
+            document.getElementById('filtroSemWhatsApp').textContent = stats.semWhatsApp;
+            
+            addDebugLog('📊 Dashboard atualizado com animações', 'success');
+        }
+        
+        function animarContador(elementId, valorFinal) {
+            const elemento = document.getElementById(elementId);
+            if (!elemento) return;
+            
+            const valorInicial = 0;
+            const duracao = 1500;
+            const inicio = Date.now();
+            
+            function atualizar() {
+                const agora = Date.now();
+                const progresso = Math.min((agora - inicio) / duracao, 1);
+                
+                // Easing function para suavizar a animação
+                const easeOut = 1 - Math.pow(1 - progresso, 3);
+                const valorAtual = Math.round(valorInicial + (valorFinal - valorInicial) * easeOut);
+                
+                elemento.textContent = valorAtual.toLocaleString('pt-BR');
+                
+                if (progresso < 1) {
+                    requestAnimationFrame(atualizar);
+                }
+            }
+            
+            requestAnimationFrame(atualizar);
+        }
+        
+        function calcularEstatisticas() {
+            const hoje = new Date();
+            let urgentes = 0;
+            let semCPF = 0;
+            let semWhatsApp = 0;
+            let completos = 0;
+            
+            recibosData.forEach(recibo => {
+                // Verificar urgência
+                const dataEmbarque = new Date(recibo.dataIda || recibo.dataEmbarque);
+                const diffDias = Math.ceil((dataEmbarque - hoje) / (1000 * 60 * 60 * 24));
+                
+                if (diffDias <= 3) urgentes++;
+                
+                // Verificar CPF
+                if (!recibo.cpf || recibo.cpf.length < 11) {
+                    semCPF++;
+                }
+                
+                // Verificar WhatsApp
+                if (!recibo.whatsapp || recibo.whatsapp.length < 10) {
+                    semWhatsApp++;
+                }
+                
+                // Verificar se está completo
+                if (recibo.cpf && recibo.cpf.length >= 11 && 
+                    recibo.whatsapp && recibo.whatsapp.length >= 10) {
+                    completos++;
+                }
+            });
+            
+            return {
+                total: recibosData.length,
+                urgentes,
+                semCPF,
+                semWhatsApp,
+                vendedores: Object.keys(vendedoresData).length,
+                completos
+            };
+        }
+
+        // ================================================================================
+        // EXIBIÇÃO DOS DADOS
+        // ================================================================================
+        
+        function exibirDados() {
+            document.getElementById('loadingContainer').style.display = 'none';
+            document.getElementById('errorContainer').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            
+            exibirVendedores();
+            filtrarEExibirRecibos();
+            
+            addDebugLog('✅ Interface atualizada e dados exibidos', 'success');
+        }
+        
+        function exibirVendedores() {
+            const vendedoresList = document.getElementById('vendedoresList');
+            let html = '';
+            
+            Object.values(vendedoresData).forEach(vendedor => {
+                const statusClass = vendedor.urgentes > 0 ? 'pendente' : 'ativo';
+                
+                html += `
+                    <div class="vendedor-card" onclick="filtrarPorVendedor('${vendedor.nome}')">
+                        <div class="vendedor-header">
+                            <div class="vendedor-nome">${vendedor.nome}</div>
+                            <div class="vendedor-status ${statusClass}">
+                                ${vendedor.urgentes > 0 ? 'Urgências Pendentes' : 'Em Dia'}
+                            </div>
+                        </div>
+                        <div class="vendedor-stats">
+                            <div class="vendedor-stat">
+                                <div class="vendedor-stat-number">${vendedor.total}</div>
+                                <div class="vendedor-stat-label">Total</div>
+                            </div>
+                            <div class="vendedor-stat">
+                                <div class="vendedor-stat-number">${vendedor.urgentes}</div>
+                                <div class="vendedor-stat-label">Urgentes</div>
+                            </div>
+                            <div class="vendedor-stat">
+                                <div class="vendedor-stat-number">${vendedor.semCPF}</div>
+                                <div class="vendedor-stat-label">Sem CPF</div>
+                            </div>
+                            <div class="vendedor-stat">
+                                <div class="vendedor-stat-number">${vendedor.semWhatsApp}</div>
+                                <div class="vendedor-stat-label">Sem WhatsApp</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            vendedoresList.innerHTML = html;
+        }
+        
+        function filtrarEExibirRecibos() {
+            let recibosFiltrados = [...recibosData];
+            
+            // Aplicar filtro ativo
+            switch (filtroAtivo) {
+                case 'urgente':
+                    recibosFiltrados = recibosFiltrados.filter(recibo => {
+                        const dataEmbarque = new Date(recibo.dataIda || recibo.dataEmbarque);
+                        const hoje = new Date();
+                        const diffDias = Math.ceil((dataEmbarque - hoje) / (1000 * 60 * 60 * 24));
+                        return diffDias <= 3;
+                    });
+                    break;
+                case 'semCPF':
+                    recibosFiltrados = recibosFiltrados.filter(recibo => 
+                        !recibo.cpf || recibo.cpf.length < 11
+                    );
+                    break;
+                case 'semWhatsApp':
+                    recibosFiltrados = recibosFiltrados.filter(recibo => 
+                        !recibo.whatsapp || recibo.whatsapp.length < 10
+                    );
+                    break;
+            }
+            
+            // Aplicar busca por texto
+            if (termoBusca) {
+                recibosFiltrados = recibosFiltrados.filter(recibo => 
+                    (recibo.nomeCliente || '').toLowerCase().includes(termoBusca) ||
+                    (recibo.recibo || '').toLowerCase().includes(termoBusca) ||
+                    (recibo.vendedor || '').toLowerCase().includes(termoBusca)
+                );
+            }
+            
+            exibirRecibos(recibosFiltrados);
+        }
+        
+        function exibirRecibos(recibos) {
+            const recibosList = document.getElementById('recibosList');
+            
+            if (recibos.length === 0) {
+                recibosList.innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h4>Nenhum recibo encontrado</h4>
+                        <p class="text-muted">Tente ajustar os filtros ou termo de busca</p>
                     </div>
                 `;
                 return;
             }
             
-            const html = dados.map(recibo => {
-                const isUrgente = recibo.urgencia === 'Urgente';
-                const isCompleto = recibo.cpfCliente && recibo.whatsappCliente && recibo.dataIda;
+            let html = '';
+            
+            recibos.forEach((recibo, index) => {
+                const dataEmbarque = new Date(recibo.dataIda || recibo.dataEmbarque);
+                const hoje = new Date();
+                const diffDias = Math.ceil((dataEmbarque - hoje) / (1000 * 60 * 60 * 24));
+                const urgenciaClass = diffDias <= 3 ? 'urgente' : 'normal';
                 
-                let statusClass = 'status-pendente';
-                let statusText = 'Pendente';
-                
-                if (isUrgente) {
-                    statusClass = 'status-urgente';
-                    statusText = 'Urgente';
-                } else if (isCompleto) {
-                    statusClass = 'status-completo';
-                    statusText = 'Completo';
-                }
-                
-                return `
-                    <div class="recibo-card fade-in-up ${isUrgente ? 'recibo-urgente' : ''}">
+                html += `
+                    <div class="recibo-card" style="animation-delay: ${index * 0.1}s">
                         <div class="recibo-header">
-                            <div class="recibo-numero">#${recibo.recibo || 'N/A'}</div>
-                            <div class="recibo-status ${statusClass}">${statusText}</div>
+                            <div class="recibo-numero">📄 ${recibo.recibo || 'N/A'}</div>
+                            <div class="recibo-urgencia ${urgenciaClass}">
+                                ${diffDias <= 3 ? `Urgente (${diffDias} dias)` : 'Normal'}
+                            </div>
                         </div>
-                        
                         <div class="recibo-info">
-                            <div class="mb-2">
-                                <strong><i class="fas fa-user"></i> Cliente:</strong>
-                                <span>${recibo.nomeCliente || 'Não informado'}</span>
+                            <div class="recibo-campo">
+                                <span class="recibo-label">Cliente:</span>
+                                <span class="recibo-valor">${recibo.nomeCliente || 'Não informado'}</span>
                             </div>
-                            
-                            <div class="mb-2">
-                                <strong><i class="fas fa-user-tie"></i> Vendedor:</strong>
-                                <span>${recibo.vendedor || 'Não informado'}</span>
+                            <div class="recibo-campo">
+                                <span class="recibo-label">Vendedor:</span>
+                                <span class="recibo-valor">${recibo.vendedor || 'Não informado'}</span>
                             </div>
-                            
-                            <div class="mb-2">
-                                <strong><i class="fas fa-calendar"></i> Data Ida:</strong>
-                                <span>${recibo.dataIda || 'Não informada'}</span>
+                            <div class="recibo-campo">
+                                <span class="recibo-label">Embarque:</span>
+                                <span class="recibo-valor">${dataEmbarque.toLocaleDateString('pt-BR')}</span>
                             </div>
-                            
-                            <div class="mb-2">
-                                <strong><i class="fas fa-plane"></i> Tipo:</strong>
-                                <span class="badge bg-info">${recibo.tipo || 'N/A'}</span>
+                            <div class="recibo-campo">
+                                <span class="recibo-label">CPF:</span>
+                                <span class="recibo-valor ${!recibo.cpf || recibo.cpf.length < 11 ? 'text-danger' : 'text-success'}">
+                                    ${recibo.cpf || '❌ Pendente'}
+                                </span>
                             </div>
-                            
-                            ${recibo.cpfCliente ? `
-                                <div class="mb-2">
-                                    <strong><i class="fas fa-id-card"></i> CPF:</strong>
-                                    <span>${recibo.cpfCliente}</span>
-                                </div>
-                            ` : ''}
-                            
-                            ${recibo.whatsappCliente ? `
-                                <div class="mb-2">
-                                    <strong><i class="fab fa-whatsapp"></i> WhatsApp:</strong>
-                                    <span>${recibo.whatsappCliente}</span>
-                                </div>
-                            ` : ''}
-                        </div>
-                        
-                        <div class="recibo-actions mt-3">
-                            <button class="btn btn-sm btn-primary" onclick="editarRecibo('${recibo.recibo}')">
-                                <i class="fas fa-edit"></i> Editar
-                            </button>
-                            <button class="btn btn-sm btn-success" onclick="marcarCompleto('${recibo.recibo}')">
-                                <i class="fas fa-check"></i> Concluir
-                            </button>
+                            <div class="recibo-campo">
+                                <span class="recibo-label">WhatsApp:</span>
+                                <span class="recibo-valor ${!recibo.whatsapp || recibo.whatsapp.length < 10 ? 'text-danger' : 'text-success'}">
+                                    ${recibo.whatsapp || '❌ Pendente'}
+                                </span>
+                            </div>
+                            <div class="recibo-campo">
+                                <span class="recibo-label">Tipo:</span>
+                                <span class="recibo-valor">${recibo.tipo || 'N/A'}</span>
+                            </div>
                         </div>
                     </div>
                 `;
-            }).join('');
+            });
             
-            recibosContainer.innerHTML = html;
+            recibosList.innerHTML = html;
         }
 
         // ================================================================================
-        // 🎛️ CONTROLES E AÇÕES v10.0
+        // FILTROS E AÇÕES
         // ================================================================================
+        
+        function aplicarFiltro(filtro) {
+            // Remover classe active de todos os cards
+            document.querySelectorAll('.filtro-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Adicionar classe active ao card clicado
+            document.querySelector(`[data-filtro="${filtro}"]`).classList.add('active');
+            
+            filtroAtivo = filtro;
+            filtrarEExibirRecibos();
+            
+            addDebugLog(`🔍 Filtro aplicado: ${filtro}`, 'info');
+            showToast(`Filtro "${filtro}" aplicado`, 'info', 2000);
+        }
         
         function filtrarPorVendedor(vendedor) {
             const searchInput = document.getElementById('searchInput');
-            if (searchInput) {
-                searchInput.value = vendedor;
-                termoBusca = vendedor.toLowerCase();
-                filtrarEExibirRecibos();
-                
-                // Scroll para recibos
-                const recibosSection = document.getElementById('recibosSection');
-                if (recibosSection) {
-                    recibosSection.scrollIntoView({ behavior: 'smooth' });
-                }
-            }
+            searchInput.value = vendedor;
+            termoBusca = vendedor.toLowerCase();
             
-            showToast(`Filtro aplicado: ${vendedor}`, 'info');
+            filtrarEExibirRecibos();
+            
+            addDebugLog(`👤 Filtrado por vendedor: ${vendedor}`, 'info');
+            showToast(`Exibindo recibos de ${vendedor}`, 'info', 2000);
         }
-        
-        function editarRecibo(reciboId) {
-            addDebugLog(`✏️ Solicitada edição do recibo: ${reciboId}`, 'info');
-            showToast('Redirecionando para edição...', 'info');
-            window.open(`embarques.html?recibo=${reciboId}`, '_blank');
-        }
-        
-        function marcarCompleto(reciboId) {
-            addDebugLog(`✅ Marcando recibo como completo: ${reciboId}`, 'info');
-            showToast('Funcionalidade em desenvolvimento', 'warning');
-        }
-        
-        function atualizarDados() {
-            addDebugLog('🔄 Solicitada atualização manual dos dados', 'info');
-            showToast('Atualizando dados...', 'info');
-            carregarDadosInicial();
-        }
+
+        // ================================================================================
+        // FUNÇÕES DE AÇÃO
+        // ================================================================================
         
         function exportarDados() {
-            addDebugLog('📁 Iniciando exportação de dados...', 'info');
+            addDebugLog('📤 Exportando dados...', 'info');
             
-            const headers = ['Recibo', 'Cliente', 'Vendedor', 'Data Ida', 'Tipo', 'CPF', 'WhatsApp', 'Status'];
-            const csvContent = [
-                headers.join(','),
-                ...recibosDataFiltrada.map(recibo => [
-                    recibo.recibo || '',
-                    `"${recibo.nomeCliente || ''}"`,
-                    recibo.vendedor || '',
-                    recibo.dataIda || '',
-                    recibo.tipo || '',
-                    recibo.cpfCliente || '',
-                    recibo.whatsappCliente || '',
-                    recibo.urgencia || 'Pendente'
-                ].join(','))
+            const dados = recibosData.map(recibo => ({
+                'Recibo': recibo.recibo || '',
+                'Cliente': recibo.nomeCliente || '',
+                'Vendedor': recibo.vendedor || '',
+                'Data Embarque': recibo.dataIda || recibo.dataEmbarque || '',
+                'CPF': recibo.cpf || 'PENDENTE',
+                'WhatsApp': recibo.whatsapp || 'PENDENTE',
+                'Tipo': recibo.tipo || ''
+            }));
+            
+            const csv = [
+                Object.keys(dados[0]).join(','),
+                ...dados.map(row => Object.values(row).join(','))
             ].join('\n');
             
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
-            link.setAttribute('download', `vendas_automatizado_${new Date().toISOString().split('T')[0]}.csv`);
+            link.setAttribute('download', `vendas-automatizado-${new Date().toISOString().split('T')[0]}.csv`);
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             
-            addDebugLog(`✅ Arquivo CSV exportado com ${recibosDataFiltrada.length} registros`, 'success');
-            showToast(`Dados exportados (${recibosDataFiltrada.length} registros)`, 'success');
+            addDebugLog('📤 Dados exportados em CSV', 'success');
+            showToast('Dados exportados com sucesso!', 'success');
+        }
+        
+        function atualizarDados() {
+            addDebugLog('🔄 Atualizando dados...', 'info');
+            showToast('Atualizando dados...', 'info', 2000);
+            carregarDadosInicial();
         }
 
         // ================================================================================
-        // 🎯 UTILITÁRIOS v10.0
+        // TRATAMENTO DE ERROS
         // ================================================================================
-        
-        function ocultarTodasSecoes() {
-            const secoes = ['filtersSection', 'vendedoresSection', 'recibosSection', 'actionsSection'];
-            secoes.forEach(id => {
-                const element = document.getElementById(id);
-                if (element) element.style.display = 'none';
-            });
-        }
-        
-        function exibirSecoes() {
-            const secoes = ['filtersSection', 'vendedoresSection', 'recibosSection', 'actionsSection'];
-            secoes.forEach(id => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.style.display = 'block';
-                    element.classList.add('fade-in-up');
-                }
-            });
-        }
         
         function mostrarErro(mensagem) {
             document.getElementById('loadingContainer').style.display = 'none';
             document.getElementById('errorContainer').style.display = 'block';
+            document.getElementById('mainContent').style.display = 'none';
             document.getElementById('errorMessage').textContent = mensagem;
             
             addDebugLog(`❌ Erro exibido: ${mensagem}`, 'error');
         }
 
         // ================================================================================
-        // 🚀 INICIALIZAÇÃO DO SISTEMA v10.0
+        // INICIALIZAÇÃO DO SISTEMA
         // ================================================================================
         
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('%c🚀 CVC Portal Itaquá - Vendas Automatizado v10.0', 'color: #0A00B4; font-size: 18px; font-weight: bold;');
-            console.log('%c✨ Melhorias v10.0:', 'color: #FFE600; background: #0A00B4; padding: 4px 8px; font-weight: bold;');
-            console.log('   • Interface modernizada com animações fluidas');
-            console.log('   • Sistema de toast notifications');
-            console.log('   • Performance otimizada e debug avançado');
-            console.log('   • Filtros inteligentes e busca melhorada');
-            console.log('   • UX/UI responsiva aprimorada');
-            console.log('   • Shortcuts de teclado (Ctrl+R, F5)');
-            console.log('   • Animações de contagem nos stats');
-            console.log('   • Sistema de skeleton loading');
-            
-            // Inicializar sistema
-            setTimeout(inicializarSistema, 300);
-            
-            console.log('%c🎯 Sistema pronto para uso!', 'color: #50fa7b; font-weight: bold;');
+            inicializarSistema();
         });
-
-        // ================================================================================
-        // 🌍 EXPOSIÇÃO DE FUNÇÕES GLOBAIS
-        // ================================================================================
-        
-        window.atualizarDados = atualizarDados;
-        window.exportarDados = exportarDados;
-        window.filtrarPorVendedor = filtrarPorVendedor;
-        window.editarRecibo = editarRecibo;
-        window.marcarCompleto = marcarCompleto;
-        window.mostrarDebugSection = mostrarDebugSection;
-        
     </script>
 </body>
 </html>
