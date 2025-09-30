@@ -561,8 +561,11 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-warning" onclick="salvarEdicoes('conferencia')">
+                        <i class="fas fa-save"></i> Salvar Edições
+                    </button>
                     <button type="button" class="btn btn-primary" onclick="confirmarConferencia()">
-                        <i class="fas fa-check"></i> Confirmar Conferência
+                        <i class="fas fa-check"></i> Conferir Informe
                     </button>
                 </div>
             </div>
@@ -586,8 +589,11 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-warning" onclick="salvarEdicoes('checkin')">
+                        <i class="fas fa-save"></i> Salvar Edições
+                    </button>
                     <button type="button" class="btn btn-warning" onclick="confirmarCheckin()">
-                        <i class="fas fa-check"></i> Confirmar Check-in
+                        <i class="fas fa-check"></i> Fazer Check-in
                     </button>
                 </div>
             </div>
@@ -787,19 +793,123 @@
                 
                 dadosEmbarques = dados.data.embarques || [];
                 
-                console.log(`✅ ${dadosEmbarques.length} embarques carregados`);
-                
-                // Processar e renderizar dashboards
-                processarDashboards();
-                
-                // Atualizar timestamp
-                document.getElementById('ultimaAtualizacao').textContent = 
-                    new Date().toLocaleString('pt-BR');
+                console.log(`✅ ${dadosEmbarques.length} embarques carregados da API`);
                 
             } catch (error) {
-                console.error('❌ Erro ao carregar embarques:', error);
-                throw error;
+                console.warn('⚠️ API não disponível, usando dados simulados para teste:', error.message);
+                
+                // Fallback com dados simulados para teste
+                dadosEmbarques = gerarDadosSimulados();
+                console.log(`🧪 ${dadosEmbarques.length} embarques simulados carregados para teste`);
+                
+                mostrarAlerta('Sistema em modo de teste - conecte com a planilha para dados reais', 'warning');
             }
+            
+            // Processar e renderizar dashboards
+            processarDashboards();
+            
+            // Atualizar timestamp
+            document.getElementById('ultimaAtualizacao').textContent = 
+                new Date().toLocaleString('pt-BR');
+        }
+        
+        // Função para gerar dados simulados para teste
+        function gerarDadosSimulados() {
+            const vendedores = ['Alessandro', 'Ana Paula', 'Adriana', 'Adrielly', 'Bia'];
+            const nomes = ['Maria Silva', 'João Santos', 'Ana Costa', 'Carlos Lima', 'Fernanda Oliveira'];
+            const cias = ['GOL', 'LATAM', 'AZUL', 'INTER'];
+            
+            const dados = [];
+            const hoje = new Date();
+            
+            // Gerar dados para conferências (pendentes)
+            for (let i = 0; i < 8; i++) {
+                const dataIda = new Date(hoje);
+                dataIda.setDate(hoje.getDate() + Math.floor(Math.random() * 20) + 5); // 5-25 dias futuros
+                
+                dados.push({
+                    id: 1000 + i,
+                    numeroInforme: `MIGRADO-036-33282${i}`,
+                    vendedor: vendedores[i % vendedores.length],
+                    nomeCliente: nomes[i % nomes.length],
+                    cpfCliente: `123.456.789-0${i}`,
+                    whatsappCliente: `(11) 99999-999${i}`,
+                    dataIda: dataIda.toISOString().split('T')[0],
+                    dataVolta: null,
+                    tipo: 'Aéreo',
+                    cia: cias[i % cias.length],
+                    tipoAereo: 'OW',
+                    conferenciaFeita: false,
+                    checkinFeito: false,
+                    posVendaFeita: false,
+                    observacoes: '',
+                    locGds: '',
+                    locCia: '',
+                    temBagagem: 'Não informado',
+                    temAssento: 'Não informado'
+                });
+            }
+            
+            // Gerar dados para check-ins (próximos)
+            for (let i = 0; i < 5; i++) {
+                const dataIda = new Date(hoje);
+                dataIda.setDate(hoje.getDate() + Math.floor(Math.random() * 3)); // 0-3 dias
+                
+                dados.push({
+                    id: 2000 + i,
+                    numeroInforme: `CHECKIN-00${i}`,
+                    vendedor: vendedores[i % vendedores.length],
+                    nomeCliente: nomes[i % nomes.length] + ' (Check-in)',
+                    cpfCliente: `987.654.321-0${i}`,
+                    whatsappCliente: `(11) 88888-888${i}`,
+                    dataIda: dataIda.toISOString().split('T')[0],
+                    dataVolta: null,
+                    tipo: 'Aéreo',
+                    cia: cias[i % cias.length],
+                    tipoAereo: 'OW',
+                    conferenciaFeita: true, // Já conferido
+                    checkinFeito: false, // Pendente
+                    posVendaFeita: false,
+                    observacoes: '',
+                    locGds: `LOC${i}GDS`,
+                    locCia: `LOC${i}CIA`,
+                    temBagagem: i % 2 === 0 ? 'Sim' : 'Não',
+                    temAssento: i % 2 === 0 ? 'Sim' : 'Não'
+                });
+            }
+            
+            // Gerar dados para pós-vendas (retornados)
+            for (let i = 0; i < 3; i++) {
+                const dataIda = new Date(hoje);
+                dataIda.setDate(hoje.getDate() - Math.floor(Math.random() * 10) - 5); // 5-15 dias atrás
+                
+                const dataVolta = new Date(dataIda);
+                dataVolta.setDate(dataIda.getDate() + 7); // 7 dias de viagem
+                
+                dados.push({
+                    id: 3000 + i,
+                    numeroInforme: `POSVENDA-00${i}`,
+                    vendedor: vendedores[i % vendedores.length],
+                    nomeCliente: nomes[i % nomes.length] + ' (Retornado)',
+                    cpfCliente: `555.666.777-0${i}`,
+                    whatsappCliente: `(11) 77777-777${i}`,
+                    dataIda: dataIda.toISOString().split('T')[0],
+                    dataVolta: dataVolta.toISOString().split('T')[0],
+                    tipo: 'A+H',
+                    cia: cias[i % cias.length],
+                    tipoAereo: 'RT',
+                    conferenciaFeita: true,
+                    checkinFeito: true,
+                    posVendaFeita: false, // Pendente
+                    observacoes: '',
+                    locGds: `PSLOC${i}`,
+                    locCia: `PSCIA${i}`,
+                    temBagagem: 'Sim',
+                    temAssento: 'Sim'
+                });
+            }
+            
+            return dados;
         }
         
         // Função JSONP para compatibilidade com Google Apps Script
@@ -810,29 +920,52 @@
                 // Criar função callback global temporária
                 window[callbackName] = function(data) {
                     delete window[callbackName];
-                    document.body.removeChild(script);
+                    if (script.parentNode) {
+                        document.body.removeChild(script);
+                    }
                     resolve(data);
                 };
                 
                 // Adicionar callback aos parâmetros
-                const urlParams = new URLSearchParams(params);
+                const urlParams = new URLSearchParams();
+                Object.keys(params).forEach(key => {
+                    urlParams.append(key, params[key]);
+                });
                 urlParams.append('callback', callbackName);
                 
                 // Criar script tag
                 const script = document.createElement('script');
                 script.src = url + '?' + urlParams.toString();
+                
                 script.onerror = () => {
                     delete window[callbackName];
-                    document.body.removeChild(script);
-                    reject(new Error('Falha na requisição JSONP'));
+                    if (script.parentNode) {
+                        document.body.removeChild(script);
+                    }
+                    reject(new Error('Falha na requisição JSONP - Verifique se a API está funcionando'));
                 };
                 
-                // Timeout
+                script.onload = () => {
+                    // Script carregou, aguardar callback
+                    setTimeout(() => {
+                        if (window[callbackName]) {
+                            delete window[callbackName];
+                            if (script.parentNode) {
+                                document.body.removeChild(script);
+                            }
+                            reject(new Error('API não retornou dados válidos'));
+                        }
+                    }, 10000);
+                };
+                
+                // Timeout geral
                 setTimeout(() => {
                     if (window[callbackName]) {
                         delete window[callbackName];
-                        document.body.removeChild(script);
-                        reject(new Error('Timeout na requisição JSONP'));
+                        if (script.parentNode) {
+                            document.body.removeChild(script);
+                        }
+                        reject(new Error('Timeout na requisição JSONP (30s)'));
                     }
                 }, 30000);
                 
@@ -1293,6 +1426,43 @@
                         <p><strong>Status:</strong> <span class="priority-badge ${informe.prioridade}">${informe.prioridade}</span></p>
                     </div>
                 </div>
+                
+                <!-- Seção Editável -->
+                <hr>
+                <h6><i class="fas fa-edit"></i> Dados Editáveis dos Voos</h6>
+                <div class="row g-3">
+                    ${informe.voos.map((voo, index) => `
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    <small><strong>Voo ${index + 1}:</strong> ${voo.nomeCliente} - ${formatarData(voo.dataIda)}</small>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-2">
+                                        <label class="form-label">CPF</label>
+                                        <input type="text" class="form-control form-control-sm" 
+                                               value="${voo.cpfCliente || ''}" 
+                                               data-voo-id="${voo.id}" data-campo="cpfCliente"
+                                               placeholder="000.000.000-00">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">WhatsApp</label>
+                                        <input type="text" class="form-control form-control-sm" 
+                                               value="${voo.whatsappCliente || ''}" 
+                                               data-voo-id="${voo.id}" data-campo="whatsappCliente"
+                                               placeholder="(11) 99999-9999">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">Observações</label>
+                                        <textarea class="form-control form-control-sm" rows="2" 
+                                                  data-voo-id="${voo.id}" data-campo="observacoes"
+                                                  placeholder="Observações específicas">${voo.observacoes || ''}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
             `;
             
             new bootstrap.Modal(document.getElementById('modalConferencia')).show();
@@ -1342,6 +1512,43 @@
                         <p><strong>Companhia:</strong> ${voo.cia || 'N/A'}</p>
                         <p><strong>Tipo:</strong> ${voo.tipoAereo || voo.tipo}</p>
                         <p><strong>Status:</strong> <span class="priority-badge ${voo.prioridade}">${voo.prioridade}</span></p>
+                    </div>
+                </div>
+                
+                <!-- Campos Editáveis -->
+                <hr>
+                <h6><i class="fas fa-edit"></i> Dados do Check-in</h6>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">LOC GDS</label>
+                        <input type="text" class="form-control" id="editLocGds" 
+                               value="${voo.locGds || ''}" placeholder="Localizador GDS">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">LOC CIA</label>
+                        <input type="text" class="form-control" id="editLocCia" 
+                               value="${voo.locCia || ''}" placeholder="Localizador CIA">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Tem Bagagem?</label>
+                        <select class="form-select" id="editTemBagagem">
+                            <option value="Não informado" ${(voo.temBagagem || 'Não informado') === 'Não informado' ? 'selected' : ''}>Não informado</option>
+                            <option value="Sim" ${voo.temBagagem === 'Sim' ? 'selected' : ''}>Sim</option>
+                            <option value="Não" ${voo.temBagagem === 'Não' ? 'selected' : ''}>Não</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Tem Assento?</label>
+                        <select class="form-select" id="editTemAssento">
+                            <option value="Não informado" ${(voo.temAssento || 'Não informado') === 'Não informado' ? 'selected' : ''}>Não informado</option>
+                            <option value="Sim" ${voo.temAssento === 'Sim' ? 'selected' : ''}>Sim</option>
+                            <option value="Não" ${voo.temAssento === 'Não' ? 'selected' : ''}>Não</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Observações do Check-in</label>
+                        <textarea class="form-control" id="editObservacoesCheckin" rows="3" 
+                                  placeholder="Observações específicas do check-in">${voo.observacoes || ''}</textarea>
                     </div>
                 </div>
             `;
@@ -1632,6 +1839,58 @@
                 mostrarAlerta(`❌ Falha na conectividade: ${error.message}`, 'danger');
             } finally {
                 mostrarLoading(false);
+            }
+        }
+        
+        // Função para salvar edições dos modais
+        async function salvarEdicoes(tipo) {
+            try {
+                if (tipo === 'conferencia') {
+                    const informe = modalData.conferencia;
+                    const edicoes = [];
+                    
+                    // Capturar edições de todos os voos do informe
+                    informe.voos.forEach(voo => {
+                        const cpfInput = document.querySelector(`[data-voo-id="${voo.id}"][data-campo="cpfCliente"]`);
+                        const whatsappInput = document.querySelector(`[data-voo-id="${voo.id}"][data-campo="whatsappCliente"]`);
+                        const obsInput = document.querySelector(`[data-voo-id="${voo.id}"][data-campo="observacoes"]`);
+                        
+                        if (cpfInput || whatsappInput || obsInput) {
+                            edicoes.push({
+                                id: voo.id,
+                                cpfCliente: cpfInput ? cpfInput.value : voo.cpfCliente,
+                                whatsappCliente: whatsappInput ? whatsappInput.value : voo.whatsappCliente,
+                                observacoes: obsInput ? obsInput.value : voo.observacoes
+                            });
+                        }
+                    });
+                    
+                    if (edicoes.length > 0) {
+                        console.log('💾 Salvando edições da conferência:', edicoes);
+                        // TODO: Implementar salvamento via API
+                        mostrarAlerta('Edições salvas com sucesso! (Implementação pendente)', 'success');
+                    }
+                    
+                } else if (tipo === 'checkin') {
+                    const voo = modalData.checkin;
+                    
+                    const edicoes = {
+                        id: voo.id,
+                        locGds: document.getElementById('editLocGds').value,
+                        locCia: document.getElementById('editLocCia').value,
+                        temBagagem: document.getElementById('editTemBagagem').value,
+                        temAssento: document.getElementById('editTemAssento').value,
+                        observacoes: document.getElementById('editObservacoesCheckin').value
+                    };
+                    
+                    console.log('💾 Salvando edições do check-in:', edicoes);
+                    // TODO: Implementar salvamento via API
+                    mostrarAlerta('Edições salvas com sucesso! (Implementação pendente)', 'success');
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro ao salvar edições:', error);
+                mostrarAlerta('Erro ao salvar edições: ' + error.message, 'danger');
             }
         }
     </script>
