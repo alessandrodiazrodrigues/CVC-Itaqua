@@ -546,18 +546,17 @@
 
     <!-- Modal de Conferência -->
     <div class="modal fade" id="modalConferencia" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-xl" style="max-width: 95vw;">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title">
                         <i class="fas fa-clipboard-check me-2"></i>
-                        Confirmar Conferência
+                        Conferência de Informe
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
                     <div id="conferencia-info"></div>
-                    <p class="text-muted mt-3">Esta ação irá marcar todos os voos deste informe como conferidos.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -574,18 +573,17 @@
 
     <!-- Modal de Check-in -->
     <div class="modal fade" id="modalCheckin" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-xl" style="max-width: 95vw;">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-warning text-dark">
                     <h5 class="modal-title">
                         <i class="fas fa-plane-departure me-2"></i>
-                        Confirmar Check-in
+                        Check-in de Voo
                     </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
                     <div id="checkin-info"></div>
-                    <p class="text-muted mt-3">Esta ação irá marcar este voo específico como check-in realizado.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -602,16 +600,16 @@
 
     <!-- Modal de Pós-venda -->
     <div class="modal fade" id="modalPosVenda" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl" style="max-width: 95vw;">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-success text-white">
                     <h5 class="modal-title">
                         <i class="fas fa-star me-2"></i>
                         Pós-venda
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
                     <div id="pos-venda-info" class="mb-3"></div>
                     
                     <form id="formPosVenda">
@@ -1106,10 +1104,17 @@
                 };
             });
             
-            // Ordenar por prioridade
+            // Ordenar por prioridade E por data (vendas mais antigas primeiro)
             dadosFiltrados.conferencias.sort((a, b) => {
                 const ordemPrioridade = { 'ATRASADO': 0, 'URGENTE': 1, 'PROXIMO': 2, 'NORMAL': 3 };
-                return ordemPrioridade[a.prioridade] - ordemPrioridade[b.prioridade];
+                const prioridadeDiff = ordemPrioridade[a.prioridade] - ordemPrioridade[b.prioridade];
+                
+                // Se mesma prioridade, ordenar por data (mais próxima primeiro = mais antiga)
+                if (prioridadeDiff === 0) {
+                    return new Date(a.primeiraData) - new Date(b.primeiraData);
+                }
+                
+                return prioridadeDiff;
             });
         }
         
@@ -1134,10 +1139,17 @@
                 };
             });
             
-            // Ordenar por prioridade
+            // Ordenar por prioridade E por data (mais urgentes primeiro)
             dadosFiltrados.checkins.sort((a, b) => {
                 const ordemPrioridade = { 'ATRASADO': 0, 'URGENTE': 1, 'PROXIMO': 2, 'NORMAL': 3 };
-                return ordemPrioridade[a.prioridade] - ordemPrioridade[b.prioridade];
+                const prioridadeDiff = ordemPrioridade[a.prioridade] - ordemPrioridade[b.prioridade];
+                
+                // Se mesma prioridade, ordenar por data de voo (mais próxima primeiro)
+                if (prioridadeDiff === 0) {
+                    return new Date(a.dataIda) - new Date(b.dataIda);
+                }
+                
+                return prioridadeDiff;
             });
         }
         
@@ -1194,7 +1206,7 @@
                 };
             });
             
-            // Ordenar por data (mais antigos primeiro)
+            // Ordenar por data (retornos mais antigos primeiro = mais dias após retorno)
             dadosFiltrados.posVendas.sort((a, b) => b.diasAposRetorno - a.diasAposRetorno);
         }
         
@@ -2362,7 +2374,7 @@
         function mostrarModalOrbiuns(orbiuns, whatsapp, simulado = false) {
             const modalHtml = `
                 <div class="modal fade" id="modalOrbiuns" tabindex="-1">
-                    <div class="modal-dialog modal-lg">
+                    <div class="modal-dialog modal-xl" style="max-width: 90vw;">
                         <div class="modal-content">
                             <div class="modal-header bg-info text-white">
                                 <h5 class="modal-title">
@@ -2370,7 +2382,7 @@
                                 </h5>
                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
                                 <div class="alert alert-info">
                                     <strong>WhatsApp pesquisado:</strong> ${whatsapp}
                                     ${simulado ? '<br><small class="text-muted">Dados simulados - conecte com a API real</small>' : ''}
