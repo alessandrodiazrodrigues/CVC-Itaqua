@@ -1,14 +1,14 @@
 // ================================================================================
-// CVC ITAQUÁ - PORTAL DE GESTÃO DA LOJA - CONFIGURAÇÃO CENTRAL v8.05
+// 🏢 CVC ITAQUÁ - PORTAL DE GESTÃO DA LOJA - CONFIGURAÇÃO CENTRAL v10.0
 // ================================================================================
-// ⚡ CORREÇÃO: Adicionados TIPOS_SERVICO e outras listas em falta
+// 🚨 CORREÇÃO CRÍTICA: Compatibilidade total com vendas-automatizado.html v10.0
 
 const CVC_CONFIG = {
-    // ✅ URL PRINCIPAL - ALTERAR APENAS AQUI quando reimplantar
+    // ✅ URL PRINCIPAL - ATUALIZADA COM A NOVA API
     API_URL: 'https://script.google.com/macros/s/AKfycbzqttRJjK4PbznHnEfviHZ9LPOITVm_pc0sswGUNVHpGpio5oCdaB2c68s6fVHuN6LL3w/exec',
     
     // 📊 INFORMAÇÕES DO SISTEMA
-    VERSION: '8.05',
+    VERSION: '10.0',
     SYSTEM_NAME: 'CVC Itaquá - Portal de Gestão da Loja',
     SYSTEM_FULL_NAME: 'CVC Itaquá - Portal de Gestão da Loja - Sistema de Gestão Integrado',
     SYSTEM_SHORT_NAME: 'Portal Itaquá',
@@ -21,7 +21,7 @@ const CVC_CONFIG = {
     FILIAL_NOME_COMPLETO: 'CVC Itaquaquecetuba',
     FILIAL_UNICA: true,
     
-    // 👥 VENDEDORES ATIVOS
+    // 👥 VENDEDORES ATIVOS - OBRIGATÓRIO PARA O SISTEMA
     VENDEDORES: [
         'Alessandro',
         'Ana Paula', 
@@ -115,6 +115,12 @@ const CVC_CONFIG = {
             icon: 'fas fa-chart-line',
             file: 'vendas.html'
         },
+        VENDAS_AUTOMATIZADO: {
+            title: 'Vendas Automatizado',
+            subtitle: 'Sistema de vendas com dados em tempo real',
+            icon: 'fas fa-robot',
+            file: 'vendas-automatizado.html'
+        },
         EMBARQUES: {
             title: 'Controle de Embarques',
             subtitle: 'Gestão de check-ins e conferências de viagem',
@@ -126,6 +132,12 @@ const CVC_CONFIG = {
             subtitle: 'Gestão e acompanhamento de processos internos',
             icon: 'fas fa-clipboard-list',
             file: 'orbiuns.html'
+        },
+        IMPORTACAO: {
+            title: 'Sistema de Importação',
+            subtitle: 'Importação inteligente de dados com IA',
+            icon: 'fas fa-upload',
+            file: 'importacao.html'
         },
         ADMIN: {
             title: 'Área do Gestor',
@@ -162,7 +174,7 @@ const CVC_CONFIG = {
     },
     
     // 🔧 CONFIGURAÇÕES TÉCNICAS
-    DEBUG_MODE: false,
+    DEBUG_MODE: true, // ✅ ATIVADO PARA DIAGNÓSTICO
     CACHE_TIMEOUT: 300000,
     REQUEST_TIMEOUT: 30000,
     
@@ -176,13 +188,17 @@ const CVC_CONFIG = {
 };
 
 // ================================================================================
-// 🔧 FUNÇÕES UTILITÁRIAS
+// 🔧 FUNÇÕES UTILITÁRIAS OBRIGATÓRIAS
 // ================================================================================
 
 /**
- * 🌐 Obter URL da API (compatibilidade)
+ * 🌐 Obter URL da API (FUNÇÃO PRINCIPAL)
  */
 function getApiUrl() {
+    if (!CVC_CONFIG.API_URL) {
+        console.error('❌ API_URL não definida no CVC_CONFIG!');
+        return null;
+    }
     return CVC_CONFIG.API_URL;
 }
 
@@ -281,11 +297,10 @@ function getCurrentPageInfo() {
 }
 
 /**
- * 🔧 Sistema de debug
+ * 🔧 Sistema de debug OBRIGATÓRIO
  */
 function debugLog(message, level = 'log', data = null) {
-    if (!CVC_CONFIG.DEBUG_MODE && level !== 'error') return;
-    
+    // ✅ SEMPRE EXIBIR LOGS PARA DIAGNÓSTICO
     const timestamp = new Date().toLocaleTimeString();
     const prefix = `🏢 [CVC-${timestamp}]`;
     
@@ -322,39 +337,53 @@ function debugLog(message, level = 'log', data = null) {
 }
 
 /**
- * ✅ Validar configuração - CORRIGIDA
+ * ✅ Validar configuração - VERSÃO RIGOROSA
  */
 function validateConfig() {
     const errors = [];
     
-    if (!CVC_CONFIG.API_URL || !CVC_CONFIG.API_URL.includes('script.google.com')) {
-        errors.push('URL da API inválida ou não configurada');
+    // Verificação obrigatória da API
+    if (!CVC_CONFIG.API_URL) {
+        errors.push('API_URL não está definida');
+    } else if (!CVC_CONFIG.API_URL.includes('script.google.com')) {
+        errors.push('URL da API deve ser do Google Apps Script');
     }
     
-    if (!CVC_CONFIG.VENDEDORES || CVC_CONFIG.VENDEDORES.length === 0) {
-        errors.push('Lista de vendedores vazia');
+    // Verificação obrigatória dos vendedores
+    if (!CVC_CONFIG.VENDEDORES || !Array.isArray(CVC_CONFIG.VENDEDORES) || CVC_CONFIG.VENDEDORES.length === 0) {
+        errors.push('Lista de VENDEDORES vazia ou inválida');
     }
     
-    // CORREÇÃO: Verificar se TIPOS_SERVICO existe
-    if (!CVC_CONFIG.TIPOS_SERVICO || CVC_CONFIG.TIPOS_SERVICO.length === 0) {
-        errors.push('Lista TIPOS_SERVICO não encontrada - isso causará erro no vendas.html');
+    // Verificação obrigatória dos tipos de serviço
+    if (!CVC_CONFIG.TIPOS_SERVICO || !Array.isArray(CVC_CONFIG.TIPOS_SERVICO) || CVC_CONFIG.TIPOS_SERVICO.length === 0) {
+        errors.push('Lista TIPOS_SERVICO vazia ou inválida');
     }
     
-    // CORREÇÃO: Verificar se DEPARTAMENTOS existe
-    if (!CVC_CONFIG.DEPARTAMENTOS || CVC_CONFIG.DEPARTAMENTOS.length === 0) {
-        errors.push('Lista DEPARTAMENTOS não encontrada - isso causará erro no orbiuns.html');
+    // Verificação obrigatória dos departamentos
+    if (!CVC_CONFIG.DEPARTAMENTOS || !Array.isArray(CVC_CONFIG.DEPARTAMENTOS) || CVC_CONFIG.DEPARTAMENTOS.length === 0) {
+        errors.push('Lista DEPARTAMENTOS vazia ou inválida');
     }
     
+    // Verificação do nome do sistema
     if (!CVC_CONFIG.SYSTEM_NAME) {
-        errors.push('Nome do sistema não definido');
+        errors.push('SYSTEM_NAME não está definido');
     }
+    
+    // Log detalhado dos resultados
+    debugLog('🔍 Iniciando validação da configuração...', 'info');
+    debugLog(`📊 API_URL: ${CVC_CONFIG.API_URL ? 'DEFINIDA' : 'INDEFINIDA'}`, CVC_CONFIG.API_URL ? 'success' : 'error');
+    debugLog(`👥 VENDEDORES: ${CVC_CONFIG.VENDEDORES?.length || 0} itens`, CVC_CONFIG.VENDEDORES?.length > 0 ? 'success' : 'error');
+    debugLog(`🎫 TIPOS_SERVICO: ${CVC_CONFIG.TIPOS_SERVICO?.length || 0} itens`, CVC_CONFIG.TIPOS_SERVICO?.length > 0 ? 'success' : 'error');
+    debugLog(`🏢 DEPARTAMENTOS: ${CVC_CONFIG.DEPARTAMENTOS?.length || 0} itens`, CVC_CONFIG.DEPARTAMENTOS?.length > 0 ? 'success' : 'error');
+    debugLog(`📋 SYSTEM_NAME: ${CVC_CONFIG.SYSTEM_NAME ? 'DEFINIDO' : 'INDEFINIDO'}`, CVC_CONFIG.SYSTEM_NAME ? 'success' : 'error');
     
     if (errors.length > 0) {
+        debugLog('❌ CONFIGURAÇÃO INVÁLIDA!', 'error', errors);
         console.error('❌ Erros na configuração:', errors);
         return { valid: false, errors };
     }
     
-    debugLog('✅ Configuração validada com sucesso', 'success');
+    debugLog('✅ Configuração validada com sucesso!', 'success');
     return { valid: true, errors: [] };
 }
 
@@ -395,61 +424,71 @@ function setActiveNavigation() {
 }
 
 // ================================================================================
-// 🚀 INICIALIZAÇÃO AUTOMÁTICA
+// 🚀 INICIALIZAÇÃO AUTOMÁTICA E CRÍTICA
 // ================================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
+    debugLog('🚀 Iniciando sistema CVC Portal Itaquá...', 'info');
+    
     const validation = validateConfig();
     const config = getConfig();
     
-    debugLog(`🚀 ${CVC_CONFIG.SYSTEM_NAME} v${CVC_CONFIG.VERSION} carregado`, 'success');
-    debugLog(`🌍 Ambiente detectado: ${config.current_environment}`, 'info');
-    debugLog(`📱 Dispositivo móvel: ${config.is_mobile ? 'Sim' : 'Não'}`, 'info');
+    debugLog(`🏢 ${CVC_CONFIG.SYSTEM_NAME} v${CVC_CONFIG.VERSION}`, 'info');
+    debugLog(`🌍 Ambiente: ${config.current_environment}`, 'info');
+    debugLog(`📱 Mobile: ${config.is_mobile ? 'Sim' : 'Não'}`, 'info');
     debugLog(`🌐 Navegador: ${config.browser_info.name}`, 'info');
     debugLog(`🔗 API URL: ${CVC_CONFIG.API_URL}`, 'info');
     debugLog(`🏪 Filial: ${CVC_CONFIG.FILIAL_PADRAO} - ${CVC_CONFIG.NOME_FILIAL}`, 'info');
     
-    // CORREÇÃO: Verificar listas essenciais
-    debugLog(`🎫 TIPOS_SERVICO: ${CVC_CONFIG.TIPOS_SERVICO?.length || 0} itens`, 'info');
-    debugLog(`🏢 DEPARTAMENTOS: ${CVC_CONFIG.DEPARTAMENTOS?.length || 0} itens`, 'info');
-    debugLog(`👥 VENDEDORES: ${CVC_CONFIG.VENDEDORES?.length || 0} itens`, 'info');
-    
     if (!validation.valid) {
+        debugLog('❌ FALHA NA CONFIGURAÇÃO!', 'error');
         console.error('❌ Configuração inválida:', validation.errors);
-        alert('Erro na configuração do sistema. Verifique o console.');
-    } else {
-        applyTheme();
-        updatePageTitle();
-        
-        setTimeout(() => {
-            setActiveNavigation();
-        }, 100);
+        alert('❌ Erro crítico na configuração do sistema!\n\nVerifique o console para detalhes.');
+        return;
     }
+    
+    debugLog('✅ Sistema configurado corretamente!', 'success');
+    
+    // Aplicar tema e configurações
+    applyTheme();
+    updatePageTitle();
+    
+    setTimeout(() => {
+        setActiveNavigation();
+    }, 100);
 });
 
 // ================================================================================
-// 🎨 COMPATIBILIDADE
+// 🎨 EXPOSIÇÃO GLOBAL OBRIGATÓRIA
 // ================================================================================
 
+// Tornar tudo disponível globalmente
 window.CVC_CONFIG = CVC_CONFIG;
 window.getApiUrl = getApiUrl;
 window.getConfig = getConfig;
 window.debugLog = debugLog;
+window.validateConfig = validateConfig;
+window.updatePageTitle = updatePageTitle;
+window.setActiveNavigation = setActiveNavigation;
+window.applyTheme = applyTheme;
+window.getCurrentPageInfo = getCurrentPageInfo;
 
-// Aliases para compatibilidade
+// Aliases para compatibilidade com versões antigas
 window.obterApiUrl = getApiUrl;
 window.validarConfig = validateConfig;
 window.atualizarTituloPagina = updatePageTitle;
 
 // ================================================================================
-// 📝 LOGS INFORMATIVOS
+// 📝 LOGS INFORMATIVOS DE INICIALIZAÇÃO
 // ================================================================================
 
-console.log('%c🏢 CVC ITAQUÁ - PORTAL DE GESTÃO DA LOJA', 'color: #0A00B4; font-size: 16px; font-weight: bold;');
-console.log('%c📊 Config v8.05 carregado com TIPOS_SERVICO!', 'color: #FFE600; background: #0A00B4; padding: 4px 8px; font-weight: bold;');
+console.log('%c🏢 CVC ITAQUÁ - PORTAL DE GESTÃO DA LOJA v10.0', 'color: #0A00B4; font-size: 16px; font-weight: bold;');
+console.log('%c📊 Config v10.0 - COMPATÍVEL COM VENDAS-AUTOMATIZADO!', 'color: #FFE600; background: #0A00B4; padding: 4px 8px; font-weight: bold;');
 console.log('🔧 Para alterar a URL da API, edite apenas este arquivo (config.js)');
 console.log('🎯 URL atual:', CVC_CONFIG.API_URL);
 console.log('🏪 Filial:', CVC_CONFIG.FILIAL_PADRAO, '-', CVC_CONFIG.NOME_FILIAL);
 console.log('📋 Sistema:', CVC_CONFIG.SYSTEM_NAME);
-console.log('🎫 TIPOS_SERVICO adicionados:', CVC_CONFIG.TIPOS_SERVICO?.length || 0, 'itens');
-console.log('🏢 DEPARTAMENTOS adicionados:', CVC_CONFIG.DEPARTAMENTOS?.length || 0, 'itens');
+console.log('🎫 TIPOS_SERVICO:', CVC_CONFIG.TIPOS_SERVICO?.length || 0, 'itens');
+console.log('🏢 DEPARTAMENTOS:', CVC_CONFIG.DEPARTAMENTOS?.length || 0, 'itens');
+console.log('👥 VENDEDORES:', CVC_CONFIG.VENDEDORES?.length || 0, 'itens');
+console.log('✅ Todas as funções expostas globalmente para compatibilidade');
