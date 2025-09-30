@@ -25,13 +25,448 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="assets/css/cvc-styles.css" rel="stylesheet">
+    
+    <!-- CSS Específico Dashboard Prioridades -->
+    <style>
+        /* ===== DASHBOARD DE PRIORIDADES - CORES CVC ===== */
+        .search-section {
+            background: var(--cvc-fundo-card);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--cvc-sombra-suave);
+        }
+        
+        .search-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .search-input {
+            border-radius: 25px;
+            border: 2px solid var(--cvc-azul-claro);
+            padding: 12px 20px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: var(--cvc-azul);
+            box-shadow: 0 0 0 3px rgba(10, 0, 180, 0.1);
+        }
+        
+        .btn-search {
+            background: var(--cvc-amarelo);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            color: var(--cvc-azul);
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-search:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(255, 230, 0, 0.4);
+        }
+        
+        .quick-filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-pill {
+            background: var(--cvc-cinza-claro);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            padding: 8px 16px;
+            color: var(--cvc-azul);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .filter-pill:hover {
+            background: var(--cvc-azul-claro);
+            border-color: var(--cvc-azul);
+        }
+        
+        .filter-pill.active {
+            background: var(--cvc-amarelo);
+            border-color: var(--cvc-azul);
+            color: var(--cvc-azul);
+        }
+        
+        .advanced-toggle {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* ===== FILTROS AVANÇADOS ===== */
+        .filters-section {
+            background: var(--cvc-fundo-card);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--cvc-sombra-suave);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .filters-section.collapsed {
+            max-height: 0;
+            padding: 0 20px;
+            margin-bottom: 0;
+            opacity: 0;
+        }
+        
+        .filter-label {
+            font-weight: 600;
+            color: var(--cvc-azul);
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        
+        /* ===== SEÇÕES DE PRIORIDADE ===== */
+        .priority-dashboard {
+            margin-bottom: 30px;
+        }
+        
+        .priority-section {
+            margin-bottom: 25px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--cvc-sombra-suave);
+        }
+        
+        .section-header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .section-header.vencidos {
+            background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
+            animation: pulse-urgent 3s infinite;
+        }
+        
+        .section-header.urgentes {
+            background: linear-gradient(135deg, #ff4757 0%, var(--cvc-amarelo) 100%);
+        }
+        
+        .section-header.importantes {
+            background: linear-gradient(135deg, var(--cvc-amarelo) 0%, #ffe000 100%);
+            color: var(--cvc-azul);
+        }
+        
+        .section-header.normais {
+            background: linear-gradient(135deg, var(--cvc-verde) 0%, #00c49a 100%);
+        }
+        
+        .section-count {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: 800;
+        }
+        
+        .cards-container {
+            padding: 20px;
+            background: var(--cvc-fundo-area);
+        }
+        
+        /* ===== CARDS DE AÇÃO ===== */
+        .action-card {
+            background: var(--cvc-fundo-card);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--cvc-sombra-media);
+        }
+        
+        .action-card.vencido {
+            border-left: 6px solid #ff4757;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
+            animation: pulse-urgent 2s infinite;
+        }
+        
+        .action-card.urgente {
+            border-left: 6px solid #ff4757;
+            background: linear-gradient(135deg, var(--cvc-amarelo-claro) 0%, #fff9cc 100%);
+        }
+        
+        .action-card.importante {
+            border-left: 6px solid var(--cvc-amarelo);
+            background: linear-gradient(135deg, var(--cvc-amarelo-claro) 0%, #fff9cc 100%);
+        }
+        
+        .action-card.normal {
+            border-left: 6px solid var(--cvc-verde);
+            background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
+        }
+        
+        @keyframes pulse-urgent {
+            0%, 100% { 
+                box-shadow: 0 0 0 rgba(255, 71, 87, 0.7); 
+                border-left-color: #ff4757;
+            }
+            50% { 
+                box-shadow: 0 0 20px rgba(255, 71, 87, 0.4); 
+                border-left-color: #ff3742;
+            }
+        }
+        
+        .card-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-badge.vencido {
+            background: #ff4757;
+            color: white;
+        }
+        
+        .status-badge.urgente {
+            background: linear-gradient(135deg, #ff4757 0%, var(--cvc-amarelo) 100%);
+            color: var(--cvc-azul);
+        }
+        
+        .status-badge.importante {
+            background: var(--cvc-amarelo);
+            color: var(--cvc-azul);
+        }
+        
+        .status-badge.normal {
+            background: var(--cvc-verde);
+            color: white;
+        }
+        
+        .informe-info {
+            flex: 1;
+        }
+        
+        .informe-numero {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--cvc-azul);
+            margin-bottom: 5px;
+        }
+        
+        .cliente-principal {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--cvc-azul-escuro);
+            margin-bottom: 5px;
+        }
+        
+        .vendedor-info {
+            font-size: 14px;
+            color: var(--cvc-cinza);
+            margin-bottom: 10px;
+        }
+        
+        .acao-info {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 3px solid;
+        }
+        
+        .acao-info.conferencia {
+            border-left-color: #17a2b8;
+        }
+        
+        .acao-info.checkin {
+            border-left-color: #28a745;
+        }
+        
+        .acao-info.pos-venda {
+            border-left-color: #dc3545;
+        }
+        
+        .acao-tipo {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .acao-detalhes {
+            font-size: 13px;
+            color: var(--cvc-cinza-escuro);
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-acao {
+            padding: 10px 16px;
+            border-radius: 20px;
+            border: none;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn-acao.vencido {
+            background: #ff4757;
+            color: white;
+        }
+        
+        .btn-acao.urgente {
+            background: linear-gradient(135deg, #ff4757 0%, var(--cvc-amarelo) 100%);
+            color: var(--cvc-azul);
+        }
+        
+        .btn-acao.importante {
+            background: var(--cvc-amarelo);
+            color: var(--cvc-azul);
+        }
+        
+        .btn-acao.normal {
+            background: var(--cvc-verde);
+            color: white;
+        }
+        
+        .btn-acao.secundario {
+            background: var(--cvc-cinza-claro);
+            color: var(--cvc-azul);
+        }
+        
+        .btn-acao:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* ===== EMPTY STATES ===== */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--cvc-cinza);
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .empty-state p {
+            margin: 0;
+            font-size: 16px;
+        }
+        
+        /* ===== ABAS TRADICIONAIS ===== */
+        .traditional-tabs {
+            background: var(--cvc-fundo-card);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--cvc-sombra-suave);
+        }
+        
+        .traditional-content {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .traditional-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+            padding: 0;
+        }
+        
+        /* ===== RESPONSIVIDADE ===== */
+        @media (max-width: 768px) {
+            .search-box {
+                flex-direction: column;
+            }
+            
+            .quick-filters {
+                justify-content: center;
+            }
+            
+            .card-header-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .card-actions {
+                justify-content: center;
+            }
+            
+            .section-header h4 {
+                font-size: 16px;
+            }
+        }
+        
+        /* ===== ESTATÍSTICAS ATUALIZADAS ===== */
+        .stats-container .stat-card.urgente {
+            background: linear-gradient(135deg, #ff4757 0%, var(--cvc-amarelo) 100%);
+            color: var(--cvc-azul);
+        }
+        
+        .stats-container .stat-card.importante {
+            background: linear-gradient(135deg, var(--cvc-amarelo) 0%, #ffe000 100%);
+            color: var(--cvc-azul);
+        }
+        
+        .stats-container .stat-card.normal {
+            background: linear-gradient(135deg, var(--cvc-verde) 0%, #00c49a 100%);
+            color: white;
+        }
+        
+        .stats-container .stat-card.produtividade {
+            background: linear-gradient(135deg, var(--cvc-azul) 0%, var(--cvc-azul-escuro) 100%);
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="text-center text-white">
             <div class="loading-spinner"></div>
-            <div class="mt-3">Carregando embarques v8.06...</div>
+            <div class="mt-3">Carregando Dashboard de Prioridades v12.0...</div>
         </div>
     </div>
 
@@ -60,7 +495,7 @@
                         <div class="col-md-4 text-end">
                             <div class="d-flex align-items-center justify-content-end">
                                 <div class="me-3">
-                                    <small class="text-muted">Sistema v8.06 - Gestão de check-ins e conferências de viagem</small><br>
+                                    <small class="text-muted">Dashboard v12.0 - Prioridades Inteligentes</small><br>
                                     <small class="text-success" id="statusSistema">
                                         <i class="fas fa-check-circle"></i> Sistema Online
                                     </small>
@@ -104,38 +539,38 @@
                 </div>
             </nav>
 
-            <!-- Estatísticas -->
+            <!-- Estatísticas Inteligentes -->
             <div class="stats-container">
                 <div class="row g-3">
                     <div class="col-md-3">
-                        <div class="stat-card embarques-stat">
-                            <div class="stat-number" id="statConferencias">0</div>
+                        <div class="stat-card urgente">
+                            <div class="stat-number" id="statUrgente">0</div>
                             <div class="stat-label">
-                                <i class="fas fa-clipboard-check"></i> Conferências
+                                <i class="fas fa-exclamation-triangle"></i> Urgente HOJE
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="stat-card embarques-stat">
-                            <div class="stat-number" id="statCheckins">0</div>
+                        <div class="stat-card importante">
+                            <div class="stat-number" id="statImportante">0</div>
                             <div class="stat-label">
-                                <i class="fas fa-plane"></i> Check-ins
+                                <i class="fas fa-clock"></i> Próximos 3 Dias
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="stat-card embarques-stat">
-                            <div class="stat-number" id="statPosVendas">0</div>
+                        <div class="stat-card normal">
+                            <div class="stat-number" id="statNormal">0</div>
                             <div class="stat-label">
-                                <i class="fas fa-phone"></i> Pós-vendas
+                                <i class="fas fa-calendar-alt"></i> Planejamento
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="stat-card embarques-stat">
-                            <div class="stat-number" id="statTotal">0</div>
+                        <div class="stat-card produtividade">
+                            <div class="stat-number" id="statProdutividade">0%</div>
                             <div class="stat-label">
-                                <i class="fas fa-chart-bar"></i> Total
+                                <i class="fas fa-chart-line"></i> Produtividade
                             </div>
                         </div>
                     </div>
@@ -144,193 +579,218 @@
             
             <!-- Conteúdo Principal -->
             <div class="content-section">
-                <!-- Filtros Avançados -->
-                <div class="filters-section">
-                    <h5 class="mb-3"><i class="fas fa-filter"></i> Filtros Avançados v8.06</h5>
+                <!-- Busca Simplificada -->
+                <div class="search-section">
+                    <div class="search-container">
+                        <div class="search-box">
+                            <input type="text" class="form-control search-input" id="buscaRapida" 
+                                   placeholder="🔍 Buscar por CPF, nome, recibo, informe...">
+                            <button class="btn-search" id="btnBuscar">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="quick-filters">
+                            <button class="filter-pill active" data-filter="todos">Todos</button>
+                            <button class="filter-pill" data-filter="alessandro">Alessandro</button>
+                            <button class="filter-pill" data-filter="ana-paula">Ana Paula</button>
+                            <button class="filter-pill" data-filter="hoje">Hoje</button>
+                            <button class="filter-pill" data-filter="vencidos">Vencidos</button>
+                            <button class="filter-pill" data-filter="urgentes">Urgentes</button>
+                        </div>
+                        
+                        <div class="advanced-toggle">
+                            <button class="btn btn-outline-secondary btn-sm" id="toggleFiltrosAvancados">
+                                <i class="fas fa-cog"></i> Filtros Avançados
+                            </button>
+                            <button class="btn btn-success btn-sm ms-2" id="btnRecarregar">
+                                <i class="fas fa-sync-alt"></i> Recarregar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filtros Avançados (Colapsável) -->
+                <div class="filters-section collapsed" id="filtrosAvancados">
+                    <h6 class="mb-3"><i class="fas fa-filter"></i> Filtros Avançados</h6>
                     
                     <div class="row g-3">
                         <div class="col-md-2">
-                            <div class="filter-group">
-                                <label class="filter-label">Vendedor</label>
-                                <select class="form-select" id="filtroVendedor">
-                                    <option value="">Todos os Vendedores</option>
-                                </select>
-                            </div>
+                            <label class="filter-label">Vendedor</label>
+                            <select class="form-select form-select-sm" id="filtroVendedor">
+                                <option value="">Todos</option>
+                            </select>
                         </div>
-                        
                         <div class="col-md-2">
-                            <div class="filter-group">
-                                <label class="filter-label">Status</label>
-                                <select class="form-select" id="filtroStatus">
-                                    <option value="">Todos os Status</option>
-                                    <option value="conferencia">Conferências</option>
-                                    <option value="checkin">Check-ins</option>
-                                    <option value="pos-venda">Pós-vendas</option>
-                                    <option value="concluido">Concluídos</option>
-                                </select>
-                            </div>
+                            <label class="filter-label">Status</label>
+                            <select class="form-select form-select-sm" id="filtroStatus">
+                                <option value="">Todos</option>
+                                <option value="conferencia">Conferências</option>
+                                <option value="checkin">Check-ins</option>
+                                <option value="pos-venda">Pós-vendas</option>
+                            </select>
                         </div>
-                        
                         <div class="col-md-2">
-                            <div class="filter-group">
-                                <label class="filter-label">Cliente Ale</label>
-                                <select class="form-select" id="filtroClienteAle">
-                                    <option value="">Todos</option>
-                                    <option value="Sim">Apenas Cliente Ale</option>
-                                    <option value="Não">Não Cliente Ale</option>
-                                </select>
-                            </div>
+                            <label class="filter-label">CPF</label>
+                            <input type="text" class="form-control form-control-sm" id="filtroCPF" placeholder="CPF">
                         </div>
-                        
                         <div class="col-md-2">
-                            <div class="filter-group">
-                                <label class="filter-label">CPF</label>
-                                <input type="text" class="form-control" id="filtroCPF" placeholder="Digite o CPF" maxlength="14">
-                            </div>
+                            <label class="filter-label">WhatsApp</label>
+                            <input type="text" class="form-control form-control-sm" id="filtroWhatsApp" placeholder="WhatsApp">
                         </div>
-                        
                         <div class="col-md-2">
-                            <div class="filter-group">
-                                <label class="filter-label">WhatsApp</label>
-                                <input type="text" class="form-control" id="filtroWhatsApp" placeholder="Digite o WhatsApp">
-                            </div>
+                            <label class="filter-label">Data Início</label>
+                            <input type="date" class="form-control form-control-sm" id="filtroDataInicio">
                         </div>
-                        
                         <div class="col-md-2">
-                            <div class="filter-group">
-                                <label class="filter-label">Recibo</label>
-                                <input type="text" class="form-control" id="filtroRecibo" placeholder="Número do recibo">
+                            <div class="d-flex gap-1 mt-4">
+                                <button class="btn btn-cvc-primary btn-sm" id="btnAplicarFiltros">
+                                    <i class="fas fa-filter"></i> Aplicar
+                                </button>
+                                <button class="btn btn-secondary btn-sm" id="btnLimparFiltros">
+                                    <i class="fas fa-times"></i> Limpar
+                                </button>
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- Dashboard de Prioridades -->
+                <div class="priority-dashboard" id="priorityDashboard">
                     
-                    <div class="row g-3 mt-2">
-                        <div class="col-md-2">
-                            <div class="filter-group">
-                                <label class="filter-label">Reserva</label>
-                                <input type="text" class="form-control" id="filtroReserva" placeholder="Código da reserva">
-                            </div>
+                    <!-- 1. VENCIDOS - Sempre no topo -->
+                    <div class="priority-section section-vencidos" id="sectionVencidos">
+                        <div class="section-header vencidos">
+                            <h4>🚨 VENCIDOS - Ação Imediata Necessária</h4>
+                            <span class="section-count" id="countVencidos">0</span>
                         </div>
-                        
-                        <div class="col-md-2">
-                            <div class="filter-group">
-                                <label class="filter-label">LOC GDS</label>
-                                <input type="text" class="form-control" id="filtroLocGds" placeholder="Localizador GDS">
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-2">
-                            <div class="filter-group">
-                                <label class="filter-label">LOC CIA</label>
-                                <input type="text" class="form-control" id="filtroLocCia" placeholder="Localizador CIA">
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-2">
-                            <div class="filter-group">
-                                <label class="filter-label">Data Início</label>
-                                <input type="date" class="form-control" id="filtroDataInicio">
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-2">
-                            <div class="filter-group">
-                                <label class="filter-label">Data Check-in</label>
-                                <input type="date" class="form-control" id="filtroDataCheckin">
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-2">
-                            <div class="filter-group">
-                                <label class="filter-label">&nbsp;</label>
-                                <div class="d-flex gap-2">
-                                    <button class="btn btn-cvc-primary" id="btnAplicarFiltros">
-                                        <i class="fas fa-filter"></i> Aplicar
-                                    </button>
-                                    <button class="btn btn-cvc-secondary" id="btnLimparFiltros">
-                                        <i class="fas fa-times"></i> Limpar
-                                    </button>
-                                </div>
+                        <div class="cards-container" id="cardsVencidos">
+                            <div class="empty-state">
+                                <i class="fas fa-check-circle text-success"></i>
+                                <p>Nenhum item vencido! 🎉</p>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="mt-3 text-center">
-                        <button class="btn btn-success me-2" id="btnRecarregar">
-                            <i class="fas fa-sync-alt"></i> Recarregar Dados
+
+                    <!-- 2. URGENTES - Hoje/Amanhã -->
+                    <div class="priority-section section-urgentes" id="sectionUrgentes">
+                        <div class="section-header urgentes">
+                            <h4>🔥 URGENTE - Hoje/Amanhã</h4>
+                            <span class="section-count" id="countUrgentes">0</span>
+                        </div>
+                        <div class="cards-container" id="cardsUrgentes">
+                            <div class="empty-state">
+                                <i class="fas fa-clock text-warning"></i>
+                                <p>Nenhuma ação urgente</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. IMPORTANTES - Próximos dias -->
+                    <div class="priority-section section-importantes" id="sectionImportantes">
+                        <div class="section-header importantes">
+                            <h4>⏰ IMPORTANTE - Próximos Dias</h4>
+                            <span class="section-count" id="countImportantes">0</span>
+                        </div>
+                        <div class="cards-container" id="cardsImportantes">
+                            <div class="empty-state">
+                                <i class="fas fa-calendar-alt text-info"></i>
+                                <p>Nenhuma ação importante</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. NORMAIS - Planejamento -->
+                    <div class="priority-section section-normais" id="sectionNormais">
+                        <div class="section-header normais">
+                            <h4>📅 NORMAL - Planejamento</h4>
+                            <span class="section-count" id="countNormais">0</span>
+                        </div>
+                        <div class="cards-container" id="cardsNormais">
+                            <div class="empty-state">
+                                <i class="fas fa-list-alt text-muted"></i>
+                                <p>Nenhuma ação programada</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Abas Tradicionais (Mantidas para compatibilidade) -->
+                <div class="traditional-tabs mt-5" id="traditionalTabs">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5><i class="fas fa-list"></i> Visualização Tradicional</h5>
+                        <button class="btn btn-outline-secondary btn-sm" id="toggleTraditionalView">
+                            <i class="fas fa-eye"></i> Mostrar Abas Tradicionais
                         </button>
                     </div>
-                </div>
-
-                <!-- Abas de Navegação -->
-                <div class="nav nav-tabs" id="navTabs" role="tablist">
-                    <button class="nav-link active" id="tab-conferencias" data-bs-toggle="tab" data-bs-target="#tabConferencias" type="button" role="tab">
-                        <i class="fas fa-clipboard-check"></i> Conferências <span class="badge bg-warning" id="badgeConferencias">0</span>
-                    </button>
-                    <button class="nav-link" id="tab-checkins" data-bs-toggle="tab" data-bs-target="#tabCheckins" type="button" role="tab">
-                        <i class="fas fa-plane"></i> Check-ins <span class="badge bg-success" id="badgeCheckins">0</span>
-                    </button>
-                    <button class="nav-link" id="tab-pos-vendas" data-bs-toggle="tab" data-bs-target="#tabPosVendas" type="button" role="tab">
-                        <i class="fas fa-phone"></i> Pós-vendas <span class="badge bg-danger" id="badgePosVendas">0</span>
-                    </button>
-                    <button class="nav-link" id="tab-concluido" data-bs-toggle="tab" data-bs-target="#tabConcluido" type="button" role="tab">
-                        <i class="fas fa-check-double"></i> Concluídos <span class="badge bg-secondary" id="badgeConcluidos">0</span>
-                    </button>
-                </div>
-
-                <!-- Conteúdo das Abas -->
-                <div class="tab-content" id="tabContent">
-                    <div class="tab-pane fade show active" id="tabConferencias" role="tabpanel">
-                        <div class="mt-3">
-                            <h5><i class="fas fa-clipboard-check"></i> Conferências por Número de Informe</h5>
-                            <p class="text-muted">12-8 dias: Verde | 7-5 dias: Amarelo | 4-0 dias: Vermelho (ATRASO) | Máximo 12 dias</p>
-                            <div id="listaConferencias">
-                                <div class="empty-state">
-                                    <i class="fas fa-clipboard-check"></i>
-                                    <h5>Carregando conferências...</h5>
-                                    <small>Aguarde enquanto buscamos os dados</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade" id="tabCheckins" role="tabpanel">
-                        <div class="mt-3">
-                            <h5><i class="fas fa-plane"></i> Check-ins por Voo Individual</h5>
-                            <p class="text-muted">ATRASO (passados): Vermelho | 3 dias: Verde | 2 dias: Amarelo | 1-0 dias: Vermelho</p>
-                            <div id="listaCheckins">
-                                <div class="empty-state">
-                                    <i class="fas fa-plane"></i>
-                                    <h5>Nenhum check-in próximo</h5>
-                                    <small>Voos nos próximos 3 dias aparecerão aqui</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade" id="tabPosVendas" role="tabpanel">
-                        <div class="mt-3">
-                            <h5><i class="fas fa-phone"></i> Pós-vendas (1 dia após retorno)</h5>
-                            <p class="text-muted">1-5 dias: Verde | 6-10 dias: Amarelo | 11+ dias: Vermelho</p>
-                            <div id="listaPosVendas">
-                                <div class="empty-state">
-                                    <i class="fas fa-phone"></i>
-                                    <h5>Nenhum pós-venda pendente</h5>
-                                    <small>Clientes que retornaram após 21/08 aparecerão aqui</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     
-                    <div class="tab-pane fade" id="tabConcluido" role="tabpanel">
-                        <div class="mt-3">
-                            <h5><i class="fas fa-check-double"></i> Embarques Concluídos</h5>
-                            <p class="text-muted">Visualizar todas as conferências, check-ins e pós-vendas já realizados</p>
-                            <div id="listaConcluidos">
-                                <div class="empty-state">
-                                    <i class="fas fa-check-double"></i>
-                                    <h5>Nenhum embarque concluído</h5>
-                                    <small>Aguardando a primeira ação...</small>
+                    <div class="traditional-content collapsed" id="traditionalContent">
+                        <div class="nav nav-tabs" id="navTabs" role="tablist">
+                            <button class="nav-link active" id="tab-conferencias" data-bs-toggle="tab" data-bs-target="#tabConferencias" type="button" role="tab">
+                                <i class="fas fa-clipboard-check"></i> Conferências <span class="badge bg-warning" id="badgeConferencias">0</span>
+                            </button>
+                            <button class="nav-link" id="tab-checkins" data-bs-toggle="tab" data-bs-target="#tabCheckins" type="button" role="tab">
+                                <i class="fas fa-plane"></i> Check-ins <span class="badge bg-success" id="badgeCheckins">0</span>
+                            </button>
+                            <button class="nav-link" id="tab-pos-vendas" data-bs-toggle="tab" data-bs-target="#tabPosVendas" type="button" role="tab">
+                                <i class="fas fa-phone"></i> Pós-vendas <span class="badge bg-danger" id="badgePosVendas">0</span>
+                            </button>
+                            <button class="nav-link" id="tab-concluido" data-bs-toggle="tab" data-bs-target="#tabConcluido" type="button" role="tab">
+                                <i class="fas fa-check-double"></i> Concluídos <span class="badge bg-secondary" id="badgeConcluidos">0</span>
+                            </button>
+                        </div>
+
+                        <div class="tab-content" id="tabContent">
+                            <div class="tab-pane fade show active" id="tabConferencias" role="tabpanel">
+                                <div class="mt-3">
+                                    <h6><i class="fas fa-clipboard-check"></i> Conferências por Número de Informe</h6>
+                                    <p class="text-muted small">10-6 dias: Verde | 5-3 dias: Amarelo | 2-0 dias: Urgente | Vencido: Vermelho</p>
+                                    <div id="listaConferencias">
+                                        <div class="empty-state">
+                                            <i class="fas fa-clipboard-check"></i>
+                                            <h6>Carregando conferências...</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="tabCheckins" role="tabpanel">
+                                <div class="mt-3">
+                                    <h6><i class="fas fa-plane"></i> Check-ins por Voo Individual</h6>
+                                    <p class="text-muted small">2 dias: Normal | 1 dia: Urgente | Vencido: Vermelho</p>
+                                    <div id="listaCheckins">
+                                        <div class="empty-state">
+                                            <i class="fas fa-plane"></i>
+                                            <h6>Nenhum check-in próximo</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="tabPosVendas" role="tabpanel">
+                                <div class="mt-3">
+                                    <h6><i class="fas fa-phone"></i> Pós-vendas (1 dia após retorno)</h6>
+                                    <p class="text-muted small">1-5 dias: Normal | 6-10 dias: Importante | 11+ dias: Urgente</p>
+                                    <div id="listaPosVendas">
+                                        <div class="empty-state">
+                                            <i class="fas fa-phone"></i>
+                                            <h6>Nenhum pós-venda pendente</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tab-pane fade" id="tabConcluido" role="tabpanel">
+                                <div class="mt-3">
+                                    <h6><i class="fas fa-check-double"></i> Embarques Concluídos</h6>
+                                    <p class="text-muted small">Todas as ações já realizadas</p>
+                                    <div id="listaConcluidos">
+                                        <div class="empty-state">
+                                            <i class="fas fa-check-double"></i>
+                                            <h6>Nenhum embarque concluído</h6>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -340,13 +800,13 @@
         </div>
     </div>
 
-    <!-- Modal de Detalhes -->
+    <!-- Modal de Detalhes Aprimorado -->
     <div class="modal fade modal-cvc" id="modalDetalhes" tabindex="-1">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">
-                        <i class="fas fa-info-circle"></i> Detalhes Agrupados por Recibo
+                        <i class="fas fa-info-circle"></i> Detalhes do Informe
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
@@ -354,7 +814,7 @@
                     <!-- Conteúdo dinâmico -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-cvc-secondary" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times"></i> Fechar
                     </button>
                     <button type="button" class="btn btn-info" id="btnBuscarOrbiuns">
@@ -374,6 +834,6 @@
     <!-- JavaScript Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="config.js"></script>
-    <script src="embarques-logic.js"></script>
+    <script src="embarques-logic-v12.js"></script>
 </body>
 </html>
