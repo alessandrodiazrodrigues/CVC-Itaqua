@@ -742,9 +742,19 @@
                 </div>
                 <h3>Erro no Sistema</h3>
                 <p id="errorMessage">Não foi possível conectar com a planilha</p>
-                <button class="btn btn-light btn-lg" onclick="carregarDadosInicial()">
-                    <i class="fas fa-redo"></i> Tentar Novamente
-                </button>
+                <div class="mt-3">
+                    <button class="btn btn-light btn-lg" onclick="carregarDadosInicial()">
+                        <i class="fas fa-redo"></i> Tentar Novamente
+                    </button>
+                    <button class="btn btn-warning btn-lg ms-2" onclick="testarConexaoAPI()">
+                        <i class="fas fa-bug"></i> Testar API
+                    </button>
+                </div>
+                <div class="mt-3">
+                    <small class="text-light">
+                        Abra o Console (F12) para ver detalhes técnicos do erro
+                    </small>
+                </div>
             </div>
         </div>
 
@@ -1286,6 +1296,26 @@
         // CARREGAMENTO DE DADOS VIA JSONP
         // ================================================================================
         
+        function testarConexaoAPI() {
+            console.log('🔧 Testando conexão com a API...');
+            
+            // Primeiro, testar conexão básica
+            chamarAPIJsonp('status')
+                .then(resultado => {
+                    console.log('✅ Teste de status da API:', resultado);
+                    
+                    // Depois testar listar embarques
+                    return chamarAPIJsonp('listar', { aba: 'EMBARQUES' });
+                })
+                .then(resultado => {
+                    console.log('✅ Teste listar EMBARQUES:', resultado);
+                    console.log('📊 Estrutura completa dos dados:', JSON.stringify(resultado, null, 2));
+                })
+                .catch(error => {
+                    console.error('❌ Erro no teste:', error);
+                });
+        }
+
         function carregarDadosInicial() {
             console.log('📊 Carregando vendas pendentes da API...');
             
@@ -1297,48 +1327,86 @@
             chamarAPIJsonp('listar', { aba: 'EMBARQUES' })
                 .then(resultado => {
                     console.log('📡 Resposta recebida da API');
+                    console.log('📊 Resultado completo:', resultado);
+                    console.log('📊 Success:', resultado.success);
+                    console.log('📊 Data type:', typeof resultado.data);
+                    console.log('📊 Data content:', resultado.data);
                     
                     if (resultado.success) {
-                        if (resultado.data && Array.isArray(resultado.data)) {
-                            // Usar dados reais da API - dados vem da aba EMBARQUES
+                        // Verificar diferentes possíveis estruturas de retorno
+                        let dadosEmbarques = null;
+                        
+                        if (Array.isArray(resultado.data)) {
+                            dadosEmbarques = resultado.data;
+                            console.log('📊 Dados diretos como array:', dadosEmbarques.length, 'registros');
+                        } else if (resultado.data && Array.isArray(resultado.data.embarques)) {
+                            dadosEmbarques = resultado.data.embarques;
+                            console.log('📊 Dados em resultado.data.embarques:', dadosEmbarques.length, 'registros');
+                        } else if (resultado.data && Array.isArray(resultado.data.data)) {
+                            dadosEmbarques = resultado.data.data;
+                            console.log('📊 Dados em resultado.data.data:', dadosEmbarques.length, 'registros');
+                        } else if (resultado.data && typeof resultado.data === 'object') {
+                            // Tentar encontrar array em qualquer propriedade
+                            for (const [key, value] of Object.entries(resultado.data)) {
+                                if (Array.isArray(value) && value.length > 0) {
+                                    dadosEmbarques = value;
+                                    console.log(`📊 Dados encontrados em resultado.data.${key}:`, dadosEmbarques.length, 'registros');
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        if (dadosEmbarques && dadosEmbarques.length > 0) {
+                            console.log('📊 Exemplo do primeiro registro:', dadosEmbarques[0]);
+                            
+                            // Usar dados reais da API - dados da aba EMBARQUES
                             // Filtrar vendas que ainda precisam ser completadas
-                            vendasDataOriginal = resultado.data.filter(embarque => {
+                            vendasDataOriginal = dadosEmbarques.filter(embarque => {
                                 // Considerar pendente se não tem CPF ou WhatsApp preenchidos
-                                return !embarque.K || !embarque.G || // K=CPF, G=WhatsApp (conforme estrutura EMBARQUES)
-                                       embarque.K === '' || embarque.G === '' ||
-                                       embarque.K === 'PENDENTE' || embarque.G === 'PENDENTE';
+                                const cpf = embarque.K || embarque.cpf || embarque.CPF || '';
+                                const whatsapp = embarque.G || embarque.whatsapp || embarque.telefone || '';
+                                
+                                return !cpf || !whatsapp || 
+                                       cpf === '' || whatsapp === '' ||
+                                       cpf === 'PENDENTE' || whatsapp === 'PENDENTE';
                             }).map(embarque => {
                                 // Mapear estrutura EMBARQUES para estrutura do sistema
                                 return {
-                                    recibo: embarque.N || '', // N = Recibo
-                                    vendedor: embarque.E || '', // E = Vendedor
-                                    nomeCliente: embarque.L || '', // L = Nome Cliente
-                                    cpfCliente: embarque.K || '', // K = CPF
-                                    whatsappCliente: embarque.G || '', // G = WhatsApp
-                                    dataIda: embarque.F || '', // F = Data Ida
-                                    destino: embarque.I || '', // I = Destino
-                                    tipoProduto: embarque.Q || '', // Q = Tipo
-                                    valorTotal: embarque.H || '', // H = Valor
+                                    recibo: embarque.N || embarque.recibo || '',
+                                    vendedor: embarque.E || embarque.vendedor || '',
+                                    nomeCliente: embarque.L || embarque.nomeCliente || embarque.cliente || '',
+                                    cpfCliente: embarque.K || embarque.cpf || embarque.CPF || '',
+                                    whatsappCliente: embarque.G || embarque.whatsapp || embarque.telefone || '',
+                                    dataIda: embarque.F || embarque.dataIda || embarque.data || '',
+                                    destino: embarque.I || embarque.destino || '',
+                                    tipoProduto: embarque.Q || embarque.tipo || embarque.produto || '',
+                                    valorTotal: embarque.H || embarque.valor || '',
                                     status: 'pendente',
-                                    dataImportacao: new Date().toISOString().split('T')[0]
+                                    dataImportacao: new Date().toISOString().split('T')[0],
+                                    // Manter dados originais para debug
+                                    _original: embarque
                                 };
                             });
                             
                             vendasData = [...vendasDataOriginal];
-                            console.log(`✅ ${vendasData.length} vendas pendentes carregadas da planilha EMBARQUES`);
+                            console.log(`✅ ${vendasData.length} vendas pendentes encontradas na planilha EMBARQUES`);
                             
                             if (vendasData.length === 0) {
+                                console.log('ℹ️ Nenhuma venda pendente encontrada');
                                 mostrarSemDados();
                                 return;
                             }
                             
+                            console.log('📊 Exemplo de venda mapeada:', vendasData[0]);
+                            
                             processarDadosVendedores();
                             atualizarDashboard();
                             exibirDados();
-                            showToast(`${vendasData.length} vendas carregadas da planilha!`, 'success');
+                            showToast(`${vendasData.length} vendas pendentes carregadas!`, 'success');
                             
                         } else {
-                            throw new Error('Formato de dados inválido retornado pela API');
+                            console.log('ℹ️ Nenhum dado encontrado na planilha ou planilha vazia');
+                            mostrarSemDados();
                         }
                     } else {
                         throw new Error(resultado.message || 'Erro retornado pela API');
@@ -2188,6 +2256,21 @@
             console.log('🎯 DOM carregado, inicializando sistema...');
             inicializarSistema();
         });
+
+        // ================================================================================
+        // EXPOSIÇÃO DE FUNÇÕES GLOBAIS PARA DEBUG
+        // ================================================================================
+        
+        window.atualizarDados = atualizarDados;
+        window.testarConexaoAPI = testarConexaoAPI;
+        window.completarDados = completarDados;
+        window.visualizarVenda = visualizarVenda;
+        window.selecionarVendedor = selecionarVendedor;
+        window.voltarVendedores = voltarVendedores;
+        window.aplicarFiltro = aplicarFiltro;
+        window.proximoPasso = proximoPasso;
+        window.voltarPasso = voltarPasso;
+        window.salvarVendaCompleta = salvarVendaCompleta;
     </script>
 </body>
 </html>
