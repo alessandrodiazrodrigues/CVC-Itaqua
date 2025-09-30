@@ -426,8 +426,11 @@
                             <button class="btn btn-outline-light btn-sm me-2" onclick="voltarDashboard()">
                                 <i class="fas fa-arrow-left"></i> Voltar
                             </button>
-                            <button class="btn btn-light btn-sm" onclick="recarregarEmbarques()">
+                            <button class="btn btn-light btn-sm me-2" onclick="recarregarEmbarques()">
                                 <i class="fas fa-sync-alt"></i> Atualizar
+                            </button>
+                            <button class="btn btn-warning btn-sm" onclick="testarConectividade()">
+                                <i class="fas fa-wifi"></i> Testar API
                             </button>
                         </div>
                     </div>
@@ -711,16 +714,28 @@
         
         async function inicializarSistema() {
             try {
+                console.log('🚀 CVC Portal Itaquá - Embarques v12.0 iniciando...');
+                console.log('🔧 API URL:', CVC_CONFIG.API_URL);
+                console.log('🏪 Filial:', CVC_CONFIG.FILIAL_PADRAO);
+                
                 mostrarLoading(true);
+                
+                // Verificar se config está carregado
+                if (typeof CVC_CONFIG === 'undefined' || !CVC_CONFIG.API_URL) {
+                    throw new Error('Configuração CVC_CONFIG não encontrada. Verifique se config.js está carregado.');
+                }
                 
                 // Carregar vendedores no filtro
                 await carregarVendedores();
+                console.log('✅ Vendedores carregados');
                 
                 // Carregar dados dos embarques
                 await carregarEmbarques();
+                console.log('✅ Embarques carregados');
                 
                 // Configurar auto-refresh
                 configurarAutoRefresh();
+                console.log('✅ Auto-refresh configurado');
                 
                 mostrarLoading(false);
                 console.log('✅ Sistema inicializado com sucesso');
@@ -729,6 +744,12 @@
                 console.error('❌ Erro na inicialização:', error);
                 mostrarAlerta('Erro ao carregar o sistema: ' + error.message, 'danger');
                 mostrarLoading(false);
+                
+                // Mostrar informações de debug
+                console.error('🔍 Debug Info:');
+                console.error('- CVC_CONFIG existe:', typeof CVC_CONFIG !== 'undefined');
+                console.error('- API_URL:', typeof CVC_CONFIG !== 'undefined' ? CVC_CONFIG.API_URL : 'undefined');
+                console.error('- Erro completo:', error);
             }
         }
         
@@ -754,19 +775,11 @@
             try {
                 console.log('📊 Carregando embarques da API...');
                 
-                const response = await fetch(
-                    `${CVC_CONFIG.API_URL}?action=listarEmbarques&t=${Date.now()}`,
-                    {
-                        method: 'GET',
-                        mode: 'cors'
-                    }
-                );
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
-                const dados = await response.json();
+                // Usar JSONP como o modelo antigo que funcionava
+                const dados = await fazerRequisicaoJSONP(CVC_CONFIG.API_URL, {
+                    action: 'listarEmbarques',
+                    t: Date.now()
+                });
                 
                 if (!dados.success) {
                     throw new Error(dados.message || 'Erro desconhecido na API');
@@ -789,12 +802,58 @@
             }
         }
         
+        // Função JSONP para compatibilidade com Google Apps Script
+        function fazerRequisicaoJSONP(url, params) {
+            return new Promise((resolve, reject) => {
+                const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+                
+                // Criar função callback global temporária
+                window[callbackName] = function(data) {
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                    resolve(data);
+                };
+                
+                // Adicionar callback aos parâmetros
+                const urlParams = new URLSearchParams(params);
+                urlParams.append('callback', callbackName);
+                
+                // Criar script tag
+                const script = document.createElement('script');
+                script.src = url + '?' + urlParams.toString();
+                script.onerror = () => {
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                    reject(new Error('Falha na requisição JSONP'));
+                };
+                
+                // Timeout
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                        document.body.removeChild(script);
+                        reject(new Error('Timeout na requisição JSONP'));
+                    }
+                }, 30000);
+                
+                document.body.appendChild(script);
+            });
+        }
+        
         // ================================================================================
         // PROCESSAMENTO DE DASHBOARDS
         // ================================================================================
         
         function processarDashboards() {
             console.log('⚙️ Processando dashboards...');
+            console.log('📊 Total de embarques recebidos:', dadosEmbarques.length);
+            
+            // Verificar se há dados válidos
+            if (!Array.isArray(dadosEmbarques) || dadosEmbarques.length === 0) {
+                console.warn('⚠️ Nenhum dado de embarque disponível');
+                mostrarEmptyStates();
+                return;
+            }
             
             // Resetar dados filtrados
             dadosFiltrados = {
@@ -805,15 +864,48 @@
             
             // Processar conferências (agrupadas por informe)
             processarConferencias();
+            console.log('✅ Conferências processadas:', dadosFiltrados.conferencias.length);
             
             // Processar check-ins (individuais por voo)
             processarCheckins();
+            console.log('✅ Check-ins processados:', dadosFiltrados.checkins.length);
             
             // Processar pós-vendas (agrupadas, ativadas por data)
             processarPosVendas();
+            console.log('✅ Pós-vendas processadas:', dadosFiltrados.posVendas.length);
             
             // Renderizar dashboards
             renderizarDashboards();
+        }
+        
+        function mostrarEmptyStates() {
+            // Mostrar estados vazios em todos os dashboards
+            document.getElementById('conferenciasContent').innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-clipboard-check"></i>
+                    <p>Conectando com a planilha...</p>
+                    <small>Verifique sua conexão com a internet</small>
+                </div>
+            `;
+            
+            document.getElementById('checkinsContent').innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-plane-departure"></i>
+                    <p>Conectando com a planilha...</p>
+                    <small>Verifique sua conexão com a internet</small>
+                </div>
+            `;
+            
+            document.getElementById('posVendasContent').innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-star"></i>
+                    <p>Conectando com a planilha...</p>
+                    <small>Verifique sua conexão com a internet</small>
+                </div>
+            `;
+            
+            // Zerar contadores
+            atualizarContadores();
         }
         
         function processarConferencias() {
@@ -1354,19 +1446,75 @@
         // ================================================================================
         
         async function enviarAcao(dados) {
-            const response = await fetch(CVC_CONFIG.API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(dados)
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            try {
+                // Para ações POST, usar formulário oculto como o modelo antigo
+                return await fazerRequisicaoPOST(CVC_CONFIG.API_URL, dados);
+            } catch (error) {
+                console.error('❌ Erro na ação:', error);
+                throw error;
             }
-            
-            return await response.json();
+        }
+        
+        // Função para enviar POST via formulário (compatível com Google Apps Script)
+        function fazerRequisicaoPOST(url, dados) {
+            return new Promise((resolve, reject) => {
+                const callbackName = 'jsonp_callback_post_' + Math.round(100000 * Math.random());
+                
+                // Criar função callback global temporária
+                window[callbackName] = function(data) {
+                    delete window[callbackName];
+                    resolve(data);
+                };
+                
+                // Adicionar callback aos dados
+                dados.callback = callbackName;
+                
+                // Criar formulário oculto
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = url;
+                form.target = callbackName + '_iframe';
+                form.style.display = 'none';
+                
+                // Adicionar campos do formulário
+                Object.keys(dados).forEach(key => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = typeof dados[key] === 'object' ? JSON.stringify(dados[key]) : dados[key];
+                    form.appendChild(input);
+                });
+                
+                // Criar iframe oculto para receber resposta
+                const iframe = document.createElement('iframe');
+                iframe.name = callbackName + '_iframe';
+                iframe.style.display = 'none';
+                
+                // Usar JSONP para POST
+                const script = document.createElement('script');
+                const urlParams = new URLSearchParams();
+                Object.keys(dados).forEach(key => {
+                    urlParams.append(key, typeof dados[key] === 'object' ? JSON.stringify(dados[key]) : dados[key]);
+                });
+                script.src = url + '?' + urlParams.toString();
+                
+                script.onerror = () => {
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                    reject(new Error('Falha na requisição POST'));
+                };
+                
+                // Timeout
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                        if (script.parentNode) document.body.removeChild(script);
+                        reject(new Error('Timeout na requisição POST'));
+                    }
+                }, 30000);
+                
+                document.body.appendChild(script);
+            });
         }
         
         function atualizarContadores() {
@@ -1458,6 +1606,33 @@
         function exportarRelatorio() {
             // TODO: Implementar exportação para Excel/PDF
             mostrarAlerta('Funcionalidade de exportação em desenvolvimento', 'warning');
+        }
+        
+        // Função de teste de conectividade
+        async function testarConectividade() {
+            try {
+                mostrarLoading(true);
+                console.log('🧪 Testando conectividade com a API...');
+                
+                const dados = await fazerRequisicaoJSONP(CVC_CONFIG.API_URL, {
+                    action: 'ping',
+                    teste: 'conectividade'
+                });
+                
+                console.log('📡 Resposta do teste:', dados);
+                
+                if (dados.success) {
+                    mostrarAlerta(`✅ API funcionando! Versão: ${dados.versao || 'N/A'}`, 'success');
+                } else {
+                    mostrarAlerta(`⚠️ API respondeu mas com erro: ${dados.message}`, 'warning');
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro no teste de conectividade:', error);
+                mostrarAlerta(`❌ Falha na conectividade: ${error.message}`, 'danger');
+            } finally {
+                mostrarLoading(false);
+            }
         }
     </script>
 </body>
