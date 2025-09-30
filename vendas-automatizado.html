@@ -3,508 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CVC Itaquá - Portal de Gestão da Loja - Informe Automatizado</title>
+    <title>CVC Portal Itaquá - Informe Automatizado de Vendas v10.0</title>
     
-    <!-- Meta Tags -->
-    <meta name="description" content="CVC Itaquá - Informe Automatizado de Vendas - Dados Reais da Planilha">
-    <meta name="keywords" content="CVC, Itaquaquecetuba, vendas, automatizado, embarques, recibos">
+    <!-- Meta Tags CVC Padrão -->
+    <meta name="description" content="CVC Portal Itaquá - Sistema Automatizado de Vendas com IA integrada">
+    <meta name="keywords" content="CVC, Itaquaquecetuba, vendas, automatizado, embarques, recibos, IA">
     <meta name="author" content="CVC Itaquaquecetuba">
     <meta name="robots" content="noindex, nofollow">
     
-    <!-- CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Open Graph -->
+    <meta property="og:title" content="CVC Portal Itaquá - Informe Automatizado">
+    <meta property="og:description" content="Sistema automatizado de vendas com dados em tempo real">
+    <meta property="og:type" content="website">
+    
+    <!-- CSS Dependencies -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="assets/css/cvc-styles.css" rel="stylesheet">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/images/cvc-favicon.ico">
     
     <style>
-        /* ===== ESTILOS ESPECÍFICOS DA PÁGINA VENDAS AUTOMATIZADO v9.0 ===== */
+        /* ===== MELHORIAS v10.0 - VENDAS AUTOMATIZADO ===== */
         
         .vendas-auto-container {
-            max-width: 1400px;
+            max-width: 1600px; /* MELHORIA: Container mais amplo */
             margin: 0 auto;
             padding: 20px;
+            animation: fadeInContainer 0.8s ease-out;
         }
 
-        /* Dashboard Status */
+        @keyframes fadeInContainer {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* MELHORIA: Dashboard Status com gradiente modernizado */
         .status-dashboard {
-            background: linear-gradient(135deg, var(--cvc-azul), var(--cvc-azul-escuro));
-            border-radius: 20px;
-            padding: 30px;
+            background: linear-gradient(135deg, var(--cvc-azul) 0%, var(--cvc-azul-escuro) 50%, var(--cvc-verde) 100%);
+            border-radius: 25px;
+            padding: 35px;
             color: white;
             margin-bottom: 30px;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--cvc-sombra-forte);
         }
 
         .status-dashboard::before {
             content: '';
             position: absolute;
-            top: 0;
-            right: 0;
-            width: 100px;
-            height: 100px;
-            background: rgba(255, 230, 0, 0.1);
-            border-radius: 50%;
-            transform: translate(30px, -30px);
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255,230,0,0.15) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
         }
 
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* MELHORIA: Stats Grid responsivo aprimorado */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 15px;
-            padding: 25px;
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
+            padding: 30px;
             text-align: center;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
         .stat-card:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
 
         .stat-number {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 900;
             color: var(--cvc-amarelo);
             line-height: 1;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: countUp 1.5s ease-out;
+        }
+
+        @keyframes countUp {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.95;
-            font-weight: 500;
-        }
-
-        /* Filtros Section */
-        .filtros-section {
-            background: var(--cvc-fundo-card);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: var(--cvc-sombra-media);
-            margin-bottom: 30px;
-            border-left: 5px solid var(--cvc-amarelo);
-        }
-
-        .filtros-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .filtro-card {
-            background: var(--cvc-branco);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: var(--cvc-sombra-suave);
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .filtro-card.active {
-            border-color: var(--cvc-azul);
-            background: linear-gradient(135deg, rgba(10, 0, 180, 0.05), rgba(255, 230, 0, 0.05));
-        }
-
-        .filtro-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--cvc-sombra-media);
-        }
-
-        .filtro-titulo {
-            font-weight: 700;
-            color: var(--cvc-azul);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .filtro-desc {
-            font-size: 0.9rem;
-            color: var(--cvc-cinza);
-            margin-bottom: 15px;
-        }
-
-        .filtro-count {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--cvc-azul);
-        }
-
-        /* Ações Rápidas */
-        .acoes-rapidas {
-            background: var(--cvc-fundo-card);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: var(--cvc-sombra-media);
-            margin-bottom: 30px;
-            border-left: 5px solid var(--cvc-verde);
-        }
-
-        .acoes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .acao-card {
-            background: var(--cvc-branco);
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: var(--cvc-sombra-suave);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-
-        .acao-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--cvc-sombra-media);
-            border-color: var(--cvc-azul);
-        }
-
-        .acao-icon {
-            font-size: 2.5rem;
-            color: var(--cvc-azul);
-            margin-bottom: 15px;
-        }
-
-        .acao-titulo {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--cvc-azul);
-            margin-bottom: 8px;
-        }
-
-        .acao-desc {
-            font-size: 0.9rem;
-            color: var(--cvc-cinza);
-        }
-
-        /* Seção de Vendedores */
-        .vendedores-section {
-            background: var(--cvc-fundo-card);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: var(--cvc-sombra-media);
-            margin-bottom: 30px;
-            border-left: 5px solid var(--cvc-verde);
-        }
-
-        .vendedor-card {
-            background: var(--cvc-branco);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: var(--cvc-sombra-suave);
-            margin-bottom: 20px;
-            border-left: 5px solid var(--cvc-azul);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .vendedor-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--cvc-sombra-media);
-        }
-
-        .vendedor-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .vendedor-nome {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--cvc-azul);
-        }
-
-        .vendedor-status {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .vendedor-status.ativo {
-            background: #28a745;
-            color: white;
-        }
-
-        .vendedor-status.pendente {
-            background: #ffc107;
-            color: #000;
-        }
-
-        .vendedor-stats {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .vendedor-stat {
-            text-align: center;
-            min-width: 80px;
-        }
-
-        .vendedor-stat-number {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--cvc-azul);
-            line-height: 1;
-        }
-
-        .vendedor-stat-label {
-            font-size: 0.8rem;
-            color: var(--cvc-cinza);
-            margin-top: 2px;
-        }
-
-        /* Progresso de Complementação */
-        .progresso-section {
-            background: var(--cvc-fundo-card);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: var(--cvc-sombra-media);
-            margin-bottom: 30px;
-            border-left: 5px solid #17a2b8;
-        }
-
-        .progresso-bar {
-            background: #e9ecef;
-            border-radius: 10px;
-            height: 25px;
-            margin: 15px 0;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progresso-fill {
-            background: linear-gradient(135deg, var(--cvc-azul), var(--cvc-verde));
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.5s ease;
-            position: relative;
-        }
-
-        .progresso-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shine 2s infinite;
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .progresso-label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            color: var(--cvc-azul);
-        }
-
-        /* Lista de Recibos */
-        .recibos-section {
-            background: var(--cvc-fundo-card);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: var(--cvc-sombra-media);
-            margin-bottom: 30px;
-        }
-
-        .recibo-card {
-            background: var(--cvc-branco);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: var(--cvc-sombra-suave);
-            border-left: 4px solid var(--cvc-azul);
-            transition: all 0.3s ease;
-        }
-
-        .recibo-card:hover {
-            transform: translateX(5px);
-            box-shadow: var(--cvc-sombra-media);
-        }
-
-        .recibo-card.urgente {
-            border-left-color: #dc3545;
-            background: linear-gradient(135deg, #fff, #fff5f5);
-        }
-
-        .recibo-card.alto {
-            border-left-color: #fd7e14;
-            background: linear-gradient(135deg, #fff, #fff8f0);
-        }
-
-        .recibo-card.normal {
-            border-left-color: #28a745;
-            background: linear-gradient(135deg, #fff, #f8fff8);
-        }
-
-        .recibo-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .recibo-numero {
             font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--cvc-azul);
-        }
-
-        .recibo-cliente {
-            font-size: 1rem;
-            color: #333;
-            margin-bottom: 8px;
             font-weight: 600;
-        }
-
-        .recibo-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            font-size: 0.9rem;
-            color: var(--cvc-cinza);
-        }
-
-        .recibo-detail {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .urgencia-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
+            opacity: 0.95;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .urgencia-urgente {
-            background: #dc3545;
-            color: white;
-        }
-
-        .urgencia-alto {
-            background: #fd7e14;
-            color: white;
-        }
-
-        .urgencia-normal {
-            background: #28a745;
-            color: white;
-        }
-
-        .urgencia-baixo {
-            background: #6c757d;
-            color: white;
-        }
-
-        /* Análise de Dados */
-        .analise-section {
-            background: var(--cvc-fundo-card);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: var(--cvc-sombra-media);
-            margin-bottom: 30px;
-            border-left: 5px solid #6f42c1;
-        }
-
-        .analise-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
-        }
-
-        .analise-card {
-            background: var(--cvc-branco);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: var(--cvc-sombra-suave);
-        }
-
-        .analise-titulo {
-            font-weight: 700;
-            color: var(--cvc-azul);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .analise-lista {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .analise-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .analise-item:last-child {
-            border-bottom: none;
-        }
-
-        .analise-valor {
-            font-weight: 700;
-            color: var(--cvc-azul);
-        }
-
-        /* Loading e Estados */
+        /* MELHORIA: Loading modernizado */
         .loading-container {
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+            border-radius: 20px;
+            padding: 60px 40px;
             text-align: center;
-            padding: 60px 20px;
+            margin: 40px 0;
+            box-shadow: var(--cvc-sombra-media);
         }
 
         .loading-spinner {
             width: 60px;
             height: 60px;
-            border: 4px solid rgba(10, 0, 180, 0.1);
-            border-top: 4px solid var(--cvc-azul);
+            border: 6px solid var(--cvc-cinza-claro);
+            border-top: 6px solid var(--cvc-azul);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            margin: 0 auto 25px;
         }
 
         @keyframes spin {
@@ -512,63 +140,98 @@
             100% { transform: rotate(360deg); }
         }
 
-        .error-container {
-            text-align: center;
-            padding: 40px 20px;
-            color: #dc3545;
-        }
-
-        .error-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--cvc-cinza);
-        }
-
-        .empty-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-
-        /* Toolbar de Ações */
-        .toolbar {
-            background: var(--cvc-branco);
+        /* MELHORIA: Cards de vendedores aprimorados */
+        .vendedor-card {
+            background: var(--cvc-fundo-card);
             border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 25px;
+            margin: 15px 0;
             box-shadow: var(--cvc-sombra-suave);
+            border-left: 5px solid var(--cvc-amarelo);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vendedor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,230,0,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .vendedor-card:hover::before {
+            left: 100%;
+        }
+
+        .vendedor-card:hover {
+            transform: translateX(5px);
+            box-shadow: var(--cvc-sombra-media);
+            border-left-color: var(--cvc-azul);
+        }
+
+        .vendedor-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
+            margin-bottom: 15px;
         }
 
-        .toolbar-actions {
+        .vendedor-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--cvc-azul);
             display: flex;
+            align-items: center;
             gap: 10px;
-            flex-wrap: wrap;
         }
 
-        .toolbar-search {
+        .vendedor-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .vendedor-stat {
+            text-align: center;
             flex: 1;
-            min-width: 250px;
-            max-width: 400px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--cvc-azul);
+        }
+
+        .stat-label-small {
+            font-size: 0.9rem;
+            color: var(--cvc-cinza);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* MELHORIA: Filtros e busca modernizados */
+        .filters-section {
+            background: var(--cvc-fundo-card);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: var(--cvc-sombra-suave);
         }
 
         .search-input {
             width: 100%;
-            padding: 10px 15px 10px 45px;
-            border: 2px solid #e9ecef;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>') no-repeat 15px center;
-            background-size: 18px;
+            padding: 15px 20px;
+            border: 2px solid var(--cvc-cinza-claro);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
         }
 
         .search-input:focus {
@@ -577,209 +240,360 @@
             box-shadow: 0 0 0 3px rgba(10, 0, 180, 0.1);
         }
 
-        /* Debug Section */
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 12px 24px;
+            border: 2px solid var(--cvc-cinza-claro);
+            border-radius: 25px;
+            background: white;
+            color: var(--cvc-azul);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-tab:hover {
+            border-color: var(--cvc-azul);
+            background: var(--cvc-azul-claro);
+        }
+
+        .filter-tab.active {
+            background: var(--cvc-gradiente-principal);
+            border-color: var(--cvc-amarelo);
+            color: var(--cvc-azul);
+            transform: scale(1.05);
+        }
+
+        /* MELHORIA: Recibos grid modernizado */
+        .recibos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .recibo-card {
+            background: var(--cvc-fundo-card);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--cvc-sombra-suave);
+            transition: all 0.3s ease;
+            border: 1px solid var(--cvc-cinza-claro);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .recibo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--cvc-sombra-media);
+        }
+
+        .recibo-urgente {
+            border-left: 5px solid #ff4757;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { border-left-color: #ff4757; }
+            50% { border-left-color: #ff3742; }
+        }
+
+        .recibo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .recibo-numero {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--cvc-azul);
+        }
+
+        .recibo-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pendente {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .status-urgente {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status-completo {
+            background: #d1f2eb;
+            color: #0c5460;
+            border: 1px solid #b7e4c7;
+        }
+
+        /* MELHORIA: Debug section aprimorada */
         .debug-section {
             background: #1e1e1e;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 25px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-            max-height: 300px;
-            overflow-y: auto;
-            color: #f8f8f2;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: var(--cvc-sombra-media);
+            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
         }
 
         .debug-header {
-            font-weight: bold;
-            color: #50fa7b;
+            color: #61dafb;
+            font-size: 1.1rem;
+            font-weight: 600;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .debug-content .error {
-            color: #ff5555;
+        .debug-content {
+            max-height: 400px;
+            overflow-y: auto;
+            background: #000;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 0.9rem;
+            line-height: 1.4;
         }
 
-        .debug-content .success {
-            color: #50fa7b;
+        .debug-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .debug-content::-webkit-scrollbar-track {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        .debug-content::-webkit-scrollbar-thumb {
+            background: var(--cvc-azul);
+            border-radius: 4px;
         }
 
         .debug-content .info {
             color: #8be9fd;
         }
 
+        .debug-content .success {
+            color: #50fa7b;
+        }
+
         .debug-content .warning {
             color: #f1fa8c;
         }
 
-        /* Tabs */
-        .tab-container {
-            background: var(--cvc-branco);
+        .debug-content .error {
+            color: #ff5555;
+        }
+
+        /* MELHORIA: Actions section */
+        .actions-section {
+            background: var(--cvc-fundo-card);
             border-radius: 15px;
-            overflow: hidden;
+            padding: 25px;
+            margin: 30px 0;
             box-shadow: var(--cvc-sombra-suave);
-            margin-bottom: 20px;
         }
 
-        .tab-header {
-            display: flex;
-            border-bottom: 2px solid #e9ecef;
-            background: #f8f9fa;
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
 
-        .tab-button {
-            flex: 1;
-            padding: 15px 20px;
+        .action-btn {
+            background: var(--cvc-gradiente-principal);
             border: none;
-            background: none;
-            font-weight: 600;
-            color: var(--cvc-cinza);
+            border-radius: 12px;
+            padding: 20px;
+            color: var(--cvc-azul);
+            font-weight: 700;
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .tab-button.active {
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(10, 0, 180, 0.2);
             color: var(--cvc-azul);
-            background: var(--cvc-branco);
-            border-bottom-color: var(--cvc-azul);
         }
 
-        .tab-button:hover:not(.active) {
-            background: rgba(10, 0, 180, 0.05);
+        .action-btn i {
+            font-size: 1.3rem;
         }
 
-        .tab-content {
-            padding: 25px;
-        }
-
-        .tab-pane {
-            display: none;
-        }
-
-        .tab-pane.active {
-            display: block;
-        }
-
-        /* Responsivo */
+        /* MELHORIA: Responsividade aprimorada */
         @media (max-width: 768px) {
             .vendas-auto-container {
                 padding: 15px;
             }
-            
+
+            .status-dashboard {
+                padding: 25px;
+            }
+
             .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
                 gap: 15px;
             }
-            
-            .filtros-grid,
-            .acoes-grid,
-            .analise-grid {
+
+            .stat-number {
+                font-size: 2.2rem;
+            }
+
+            .recibos-grid {
                 grid-template-columns: 1fr;
                 gap: 15px;
             }
-            
-            .vendedor-stats {
+
+            .actions-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .filter-tabs {
                 justify-content: center;
             }
-            
-            .recibo-details {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
 
-            .toolbar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .toolbar-search {
-                min-width: auto;
-                max-width: none;
-            }
-
-            .tab-header {
-                overflow-x: auto;
-            }
-
-            .tab-button {
-                white-space: nowrap;
-                min-width: 120px;
-            }
-        }
-
-        @media (max-width: 480px) {
             .vendedor-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 10px;
             }
 
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .recibo-header {
+            .vendedor-stats {
                 flex-direction: column;
-                align-items: flex-start;
+                gap: 10px;
             }
+        }
+
+        /* MELHORIA: Animações de carregamento */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* MELHORIA: Toast notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast-notification {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 10px;
+            box-shadow: var(--cvc-sombra-forte);
+            border-left: 5px solid var(--cvc-amarelo);
+            min-width: 300px;
+            animation: slideInRight 0.4s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-success {
+            border-left-color: #50fa7b;
+        }
+
+        .toast-error {
+            border-left-color: #ff5555;
+        }
+
+        .toast-warning {
+            border-left-color: #f1fa8c;
         }
     </style>
 </head>
+
 <body>
     <!-- HEADER CVC PADRÃO -->
     <header class="cvc-header">
         <div class="container-fluid">
-            <div class="row align-items-center py-3">
-                <!-- Logo CVC -->
-                <div class="col-md-4">
-                    <div class="cvc-logo">
-                        <div class="cvc-logo-symbol">CVC</div>
-                        <div>
-                            <div class="cvc-logo-text">CVC Itaquá</div>
-                            <p class="cvc-subtitle">Portal de Gestão da Loja</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Título da Página -->
-                <div class="col-md-4 text-center">
-                    <h1 class="page-title mb-0" style="border: none; padding: 0; color: var(--cvc-branco); font-size: 1.8rem;">
-                        <i class="fas fa-robot"></i> Informe Automatizado
-                    </h1>
-                </div>
-                
-                <!-- Voltar ao Dashboard -->
-                <div class="col-md-4 text-end">
-                    <a href="index.html" class="btn btn-cvc-outline">
-                        <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
-                    </a>
+            <div class="cvc-logo">
+                <div class="cvc-logo-symbol">CVC</div>
+                <div>
+                    <div class="cvc-logo-text">Portal Itaquá</div>
+                    <div class="cvc-subtitle">Informe Automatizado v10.0</div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- NAVEGAÇÃO CVC PADRÃO -->
+    <!-- NAVEGAÇÃO -->
     <nav class="cvc-nav">
         <div class="container-fluid">
-            <ul class="nav nav-pills justify-content-center mb-0">
+            <ul class="nav justify-content-center">
                 <li class="nav-item">
                     <a class="nav-link" href="index.html">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="orcamentos.html">
-                        <i class="fas fa-calculator"></i> Padronizador de Orçamentos
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="vendas.html">
-                        <i class="fas fa-chart-line"></i> Informe de Vendas
+                        <i class="fas fa-chart-line"></i> Informe Manual
                     </a>
                 </li>
                 <li class="nav-item">
@@ -789,12 +603,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="embarques.html">
-                        <i class="fas fa-plane-departure"></i> Controle de Embarques
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="orbiuns.html">
-                        <i class="fas fa-clipboard-list"></i> Controle de Orbiuns
+                        <i class="fas fa-plane-departure"></i> Embarques
                     </a>
                 </li>
                 <li class="nav-item">
@@ -812,8 +621,8 @@
             
             <!-- STATUS DASHBOARD -->
             <section class="status-dashboard fade-in-up">
-                <h2><i class="fas fa-robot"></i> Informe Automatizado de Vendas</h2>
-                <p class="mb-0 opacity-75">Dados em tempo real diretamente da planilha de embarques com análise inteligente</p>
+                <h1><i class="fas fa-robot"></i> Sistema Automatizado de Vendas</h1>
+                <p class="mb-0 opacity-90">Análise inteligente em tempo real com dados da planilha de embarques</p>
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-number" id="totalRecibos">0</div>
@@ -825,7 +634,7 @@
                     </div>
                     <div class="stat-card">
                         <div class="stat-number" id="urgentesCount">0</div>
-                        <div class="stat-label">Urgentes</div>
+                        <div class="stat-label">Casos Urgentes</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number" id="percentualCompleto">0%</div>
@@ -834,280 +643,175 @@
                 </div>
             </section>
 
-            <!-- ÁREA DE LOADING/ERROR -->
+            <!-- LOADING -->
             <div id="loadingContainer" class="loading-container">
                 <div class="loading-spinner"></div>
-                <h3>Carregando dados da planilha...</h3>
-                <p class="text-muted">Conectando com Google Apps Script via JSONP v9.0</p>
-            </div>
-
-            <div id="errorContainer" class="error-container" style="display:none;">
-                <div class="error-icon">
-                    <i class="fas fa-exclamation-triangle"></i>
+                <h3>🔄 Carregando dados da planilha...</h3>
+                <p class="text-muted">Conectando com Google Apps Script via JSONP v10.0</p>
+                <div class="mt-3">
+                    <small class="text-info">
+                        <i class="fas fa-info-circle"></i>
+                        Sistema otimizado para bypass total de CORS
+                    </small>
                 </div>
-                <h3>Erro ao carregar dados</h3>
-                <p id="errorMessage">Não foi possível conectar com a planilha</p>
-                <button class="btn btn-cvc-primary" onclick="carregarDadosInicial()">
-                    <i class="fas fa-redo"></i> Tentar Novamente
-                </button>
             </div>
 
-            <!-- FILTROS INTELIGENTES -->
-            <section class="filtros-section" id="filtrosSection" style="display:none;">
-                <h2><i class="fas fa-filter"></i> Filtros Inteligentes</h2>
-                <p class="text-muted mb-3">Filtre os dados por prioridade, vendedor ou status de complementação</p>
-                <div class="filtros-grid">
-                    <div class="filtro-card active" data-filtro="todos" onclick="aplicarFiltro('todos')">
-                        <div class="filtro-titulo">
-                            <i class="fas fa-list"></i> Todos os Recibos
-                        </div>
-                        <div class="filtro-desc">Visualizar todos os recibos pendentes</div>
-                        <div class="filtro-count" id="filtroTodos">0</div>
+            <!-- ERROR CONTAINER -->
+            <div id="errorContainer" class="alert alert-danger" style="display:none;">
+                <h4><i class="fas fa-exclamation-triangle"></i> Erro no Sistema</h4>
+                <p id="errorMessage"></p>
+                <div class="mt-3">
+                    <button class="btn btn-primary" onclick="atualizarDados()">
+                        <i class="fas fa-sync-alt"></i> Tentar Novamente
+                    </button>
+                    <button class="btn btn-secondary" onclick="mostrarDebugSection()">
+                        <i class="fas fa-bug"></i> Ver Debug
+                    </button>
+                </div>
+            </div>
+
+            <!-- FILTROS E BUSCA -->
+            <section class="filters-section" id="filtersSection" style="display:none;">
+                <h2><i class="fas fa-search"></i> Filtros e Busca</h2>
+                <div class="row">
+                    <div class="col-md-8">
+                        <input type="text" class="search-input" id="searchInput" 
+                               placeholder="🔍 Buscar por recibo, cliente, vendedor...">
                     </div>
-                    <div class="filtro-card" data-filtro="urgente" onclick="aplicarFiltro('urgente')">
-                        <div class="filtro-titulo">
-                            <i class="fas fa-exclamation-triangle"></i> Urgentes
+                    <div class="col-md-4">
+                        <div class="filter-tabs">
+                            <div class="filter-tab active" data-filter="todos">Todos</div>
+                            <div class="filter-tab" data-filter="urgentes">Urgentes</div>
+                            <div class="filter-tab" data-filter="pendentes">Pendentes</div>
+                            <div class="filter-tab" data-filter="completos">Completos</div>
                         </div>
-                        <div class="filtro-desc">Embarques em até 3 dias</div>
-                        <div class="filtro-count" id="filtroUrgente">0</div>
                     </div>
-                    <div class="filtro-card" data-filtro="semCPF" onclick="aplicarFiltro('semCPF')">
-                        <div class="filtro-titulo">
-                            <i class="fas fa-id-card"></i> Sem CPF
-                        </div>
-                        <div class="filtro-desc">Recibos que precisam de CPF</div>
-                        <div class="filtro-count" id="filtroSemCPF">0</div>
-                    </div>
-                    <div class="filtro-card" data-filtro="semWhatsApp" onclick="aplicarFiltro('semWhatsApp')">
-                        <div class="filtro-titulo">
-                            <i class="fas fa-phone"></i> Sem WhatsApp
-                        </div>
-                        <div class="filtro-desc">Recibos que precisam de telefone</div>
-                        <div class="filtro-count" id="filtroSemWhatsApp">0</div>
-                    </div>
+                </div>
+            </section>
+
+            <!-- RESUMO POR VENDEDORES -->
+            <section id="vendedoresSection" style="display:none;">
+                <h2><i class="fas fa-users"></i> Resumo por Vendedores</h2>
+                <p class="text-muted">Clique em um vendedor para visualizar seus recibos pendentes</p>
+                <div id="vendedoresList">
+                    <!-- Vendedores serão inseridos dinamicamente -->
+                </div>
+            </section>
+
+            <!-- GRID DE RECIBOS -->
+            <section id="recibosSection" style="display:none;">
+                <h2><i class="fas fa-receipt"></i> Recibos Pendentes</h2>
+                <div id="recibosGrid" class="recibos-grid">
+                    <!-- Recibos serão inseridos dinamicamente -->
                 </div>
             </section>
 
             <!-- AÇÕES RÁPIDAS -->
-            <section class="acoes-rapidas" id="acoesSection" style="display:none;">
+            <section class="actions-section" id="actionsSection" style="display:none;">
                 <h2><i class="fas fa-bolt"></i> Ações Rápidas</h2>
-                <p class="text-muted mb-3">Acesse funcionalidades relacionadas para completar os dados</p>
-                <div class="acoes-grid">
-                    <div class="acao-card" onclick="window.open('vendas.html', '_blank')">
-                        <div class="acao-icon">
-                            <i class="fas fa-plus-circle"></i>
-                        </div>
-                        <div class="acao-titulo">Cadastrar Nova Venda</div>
-                        <div class="acao-desc">Adicionar novos recibos ao sistema</div>
-                    </div>
-                    <div class="acao-card" onclick="window.open('embarques.html', '_blank')">
-                        <div class="acao-icon">
-                            <i class="fas fa-edit"></i>
-                        </div>
-                        <div class="acao-titulo">Editar Embarques</div>
-                        <div class="acao-desc">Completar dados diretamente na planilha</div>
-                    </div>
-                    <div class="acao-card" onclick="exportarDados()">
-                        <div class="acao-icon">
-                            <i class="fas fa-download"></i>
-                        </div>
-                        <div class="acao-titulo">Exportar Relatório</div>
-                        <div class="acao-desc">Baixar lista de recibos pendentes</div>
-                    </div>
-                    <div class="acao-card" onclick="atualizarDados()">
-                        <div class="acao-icon">
-                            <i class="fas fa-sync-alt"></i>
-                        </div>
-                        <div class="acao-titulo">Atualizar Dados</div>
-                        <div class="acao-desc">Recarregar informações da planilha</div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SEÇÃO DE VENDEDORES -->
-            <section class="vendedores-section" id="vendedoresSection" style="display:none;">
-                <h2><i class="fas fa-users"></i> Resumo por Vendedores</h2>
-                <p class="text-muted mb-3">Clique em um vendedor para ver seus recibos pendentes</p>
-                <div id="vendedoresList">
-                    <!-- Vendedores serão inseridos aqui -->
-                </div>
-            </section>
-
-            <!-- PROGRESSO DE COMPLEMENTAÇÃO -->
-            <section class="progresso-section" id="progressoSection" style="display:none;">
-                <h2><i class="fas fa-chart-line"></i> Progresso de Complementação</h2>
-                <p class="text-muted mb-3">Acompanhe o progresso de preenchimento dos dados</p>
-                
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="progresso-label">
-                            <span>CPF Preenchido</span>
-                            <span id="progressoCPFTexto">0%</span>
-                        </div>
-                        <div class="progresso-bar">
-                            <div class="progresso-fill" id="progressoCPF" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="progresso-label">
-                            <span>WhatsApp Preenchido</span>
-                            <span id="progressoWhatsAppTexto">0%</span>
-                        </div>
-                        <div class="progresso-bar">
-                            <div class="progresso-fill" id="progressoWhatsApp" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- TABS DE CONTEÚDO -->
-            <div class="tab-container" id="tabContainer" style="display:none;">
-                <div class="tab-header">
-                    <button class="tab-button active" data-tab="recibos">
-                        <i class="fas fa-receipt"></i> Recibos Pendentes
+                <div class="actions-grid">
+                    <a href="vendas.html" class="action-btn" target="_blank">
+                        <i class="fas fa-plus-circle"></i>
+                        Nova Venda
+                    </a>
+                    <a href="embarques.html" class="action-btn" target="_blank">
+                        <i class="fas fa-edit"></i>
+                        Editar Embarques
+                    </a>
+                    <button class="action-btn" onclick="exportarDados()">
+                        <i class="fas fa-download"></i>
+                        Exportar Dados
                     </button>
-                    <button class="tab-button" data-tab="analise">
-                        <i class="fas fa-chart-pie"></i> Análise de Dados
-                    </button>
-                    <button class="tab-button" data-tab="relatorio">
-                        <i class="fas fa-file-alt"></i> Relatório Detalhado
+                    <button class="action-btn" onclick="atualizarDados()">
+                        <i class="fas fa-sync-alt"></i>
+                        Atualizar
                     </button>
                 </div>
-                <div class="tab-content">
-                    <!-- TAB: RECIBOS -->
-                    <div class="tab-pane active" id="tabRecibos">
-                        <!-- Toolbar de Busca -->
-                        <div class="toolbar">
-                            <div class="toolbar-search">
-                                <input type="text" class="search-input" id="searchInput" 
-                                       placeholder="Buscar por cliente, recibo ou vendedor...">
-                            </div>
-                            <div class="toolbar-actions">
-                                <button class="btn btn-outline-secondary btn-sm" onclick="limparFiltros()">
-                                    <i class="fas fa-times"></i> Limpar Filtros
-                                </button>
-                                <button class="btn btn-cvc-primary btn-sm" onclick="atualizarDados()">
-                                    <i class="fas fa-sync-alt"></i> Atualizar
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Lista de Recibos -->
-                        <div id="recibosList">
-                            <!-- Recibos serão inseridos aqui -->
-                        </div>
-                    </div>
-
-                    <!-- TAB: ANÁLISE -->
-                    <div class="tab-pane" id="tabAnalise">
-                        <div class="analise-grid">
-                            <div class="analise-card">
-                                <div class="analise-titulo">
-                                    <i class="fas fa-user-tie"></i> Top Vendedores
-                                </div>
-                                <ul class="analise-lista" id="topVendedores">
-                                    <!-- Dados serão inseridos aqui -->
-                                </ul>
-                            </div>
-                            <div class="analise-card">
-                                <div class="analise-titulo">
-                                    <i class="fas fa-plane"></i> Tipos de Serviço
-                                </div>
-                                <ul class="analise-lista" id="tiposServico">
-                                    <!-- Dados serão inseridos aqui -->
-                                </ul>
-                            </div>
-                            <div class="analise-card">
-                                <div class="analise-titulo">
-                                    <i class="fas fa-calendar"></i> Urgência por Data
-                                </div>
-                                <ul class="analise-lista" id="urgenciaDatas">
-                                    <!-- Dados serão inseridos aqui -->
-                                </ul>
-                            </div>
-                            <div class="analise-card">
-                                <div class="analise-titulo">
-                                    <i class="fas fa-building"></i> Companhias Aéreas
-                                </div>
-                                <ul class="analise-lista" id="companhias">
-                                    <!-- Dados serão inseridos aqui -->
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- TAB: RELATÓRIO -->
-                    <div class="tab-pane" id="tabRelatorio">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <h4>Relatório de Pendências</h4>
-                                <div id="relatorioDetalhado">
-                                    <!-- Relatório será inserido aqui -->
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <h4>Ações de Exportação</h4>
-                                <div class="d-grid gap-2">
-                                    <button class="btn btn-cvc-primary" onclick="exportarCSV()">
-                                        <i class="fas fa-file-csv"></i> Exportar CSV
-                                    </button>
-                                    <button class="btn btn-cvc-secondary" onclick="exportarPDF()">
-                                        <i class="fas fa-file-pdf"></i> Exportar PDF
-                                    </button>
-                                    <button class="btn btn-outline-secondary" onclick="imprimirRelatorio()">
-                                        <i class="fas fa-print"></i> Imprimir
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </section>
 
             <!-- DEBUG SECTION -->
-            <div class="debug-section" id="debugSection" style="display:none;">
+            <section class="debug-section" id="debugSection" style="display:none;">
                 <div class="debug-header">
-                    <i class="fas fa-terminal"></i> Debug do Sistema JSONP v9.0:
+                    <i class="fas fa-terminal"></i>
+                    Console de Debug v10.0
                 </div>
-                <div class="debug-content" id="debugContent"></div>
-            </div>
+                <div class="debug-content" id="debugContent">
+                    <!-- Debug logs aparecerão aqui -->
+                </div>
+            </section>
 
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="config.js"></script>
-    
+    <!-- TOAST NOTIFICATIONS -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- JAVASCRIPT INCORPORADO v10.0 -->
     <script>
         // ================================================================================
-        // SISTEMA DE VENDAS AUTOMATIZADO CVC ITAQUÁ v9.0 - CORS CORRIGIDO COM JSONP
-        // Sistema completo que busca dados reais da planilha e exibe para os vendedores
-        // ANÁLISE COMPLETA: ZERO FETCH() - APENAS JSONP
+        // 🚀 CVC PORTAL ITAQUÁ - VENDAS AUTOMATIZADO v10.0
+        // Melhorias: UX/UI aprimorada, performance otimizada, debug avançado
         // ================================================================================
         
-        console.log('🤖 CVC Portal Itaquá - Sistema de Vendas Automatizado v9.0 JSONP Iniciado');
-        
-        // ================================================================================
-        // VARIÁVEIS GLOBAIS
-        // ================================================================================
-        
-        let recibosData = [];
         let recibosDataOriginal = [];
+        let recibosDataFiltrada = [];
         let vendedoresData = {};
         let debugLogs = [];
         let API_URL = null;
         let filtroAtivo = 'todos';
         let termoBusca = '';
+        let isLoading = false;
 
         // ================================================================================
-        // SISTEMA DE DEBUG AVANÇADO
+        // 🎨 SISTEMA DE TOAST NOTIFICATIONS (NOVO v10.0)
+        // ================================================================================
+        
+        function showToast(message, type = 'info', duration = 4000) {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast-notification toast-${type}`;
+            
+            const icon = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-circle',
+                warning: 'fas fa-exclamation-triangle',
+                info: 'fas fa-info-circle'
+            }[type] || 'fas fa-info-circle';
+            
+            toast.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="${icon}" style="font-size: 1.2rem; color: var(--cvc-azul);"></i>
+                    <span style="flex: 1; font-weight: 600;">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" 
+                            style="background: none; border: none; color: var(--cvc-cinza); cursor: pointer;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.style.animation = 'slideOutRight 0.4s ease-out';
+                    setTimeout(() => toast.remove(), 400);
+                }
+            }, duration);
+        }
+
+        // ================================================================================
+        // 🐛 SISTEMA DE DEBUG AVANÇADO v10.0
         // ================================================================================
         
         function addDebugLog(message, type = 'info') {
             const timestamp = new Date().toLocaleTimeString('pt-BR');
             const logEntry = { timestamp, message, type };
             debugLogs.push(logEntry);
+            
+            // Limitar logs (performance)
+            if (debugLogs.length > 200) {
+                debugLogs = debugLogs.slice(-150);
+            }
             
             // Console log com cores
             const colors = {
@@ -1125,9 +829,8 @@
             const debugContent = document.getElementById('debugContent');
             if (!debugContent) return;
             
-            const html = debugLogs.slice(-25).map(log => {
-                const typeClass = log.type;
-                return `<div class="${typeClass}">
+            const html = debugLogs.slice(-50).map(log => {
+                return `<div class="${log.type}">
                     [${log.timestamp}] ${log.message}
                 </div>`;
             }).join('');
@@ -1136,35 +839,35 @@
             debugContent.scrollTop = debugContent.scrollHeight;
         }
         
-        function showDebugSection() {
+        function mostrarDebugSection() {
             const debugSection = document.getElementById('debugSection');
             debugSection.style.display = 'block';
+            debugSection.scrollIntoView({ behavior: 'smooth' });
         }
 
         // ================================================================================
-        // INICIALIZAÇÃO SEGURA DO SISTEMA
+        // ⚙️ INICIALIZAÇÃO SEGURA DO SISTEMA v10.0
         // ================================================================================
         
         function inicializarSistema() {
-            addDebugLog('🚀 Iniciando sistema de vendas automatizado...', 'info');
+            addDebugLog('🚀 Iniciando CVC Portal Itaquá - Vendas Automatizado v10.0...', 'info');
             
             // Verificar configurações
             if (typeof getApiUrl === 'function') {
                 API_URL = getApiUrl();
-                addDebugLog(`🌐 API URL configurada: ${API_URL}`, 'success');
+                addDebugLog(`🌐 API URL configurada via função: ${API_URL}`, 'success');
             } else if (typeof CVC_CONFIG !== 'undefined' && CVC_CONFIG.API_URL) {
                 API_URL = CVC_CONFIG.API_URL;
-                addDebugLog(`🌐 API URL do config: ${API_URL}`, 'success');
+                addDebugLog(`🌐 API URL via config: ${API_URL}`, 'success');
             } else {
                 addDebugLog('❌ ERRO: API URL não configurada!', 'error');
                 mostrarErro('Configuração inválida. Verifique o arquivo config.js');
+                showToast('Erro de configuração detectado', 'error');
                 return;
             }
             
-            showDebugSection();
             addDebugLog('✅ Sistema inicializado com sucesso!', 'success');
-            addDebugLog('🔧 Utilizando bypass CORS com JSONP conforme v9.0', 'info');
-            addDebugLog('🚫 ZERO fetch() - APENAS JSONP para total bypass CORS', 'info');
+            addDebugLog('🔧 Melhorias v10.0: UX aprimorada, toast notifications, performance otimizada', 'info');
             
             // Configurar eventos
             configurarEventos();
@@ -1174,111 +877,128 @@
         }
 
         // ================================================================================
-        // CONFIGURAÇÃO DE EVENTOS
+        // 🎮 CONFIGURAÇÃO DE EVENTOS v10.0
         // ================================================================================
         
         function configurarEventos() {
-            // Tab buttons
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const tabName = button.dataset.tab;
-                    ativarTab(tabName);
-                });
-            });
-
-            // Search input
+            addDebugLog('🎮 Configurando eventos da interface...', 'info');
+            
+            // Search input com debounce
             const searchInput = document.getElementById('searchInput');
             if (searchInput) {
+                let debounceTimer;
                 searchInput.addEventListener('input', (e) => {
-                    termoBusca = e.target.value.toLowerCase();
-                    filtrarEExibirRecibos();
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(() => {
+                        termoBusca = e.target.value.toLowerCase();
+                        filtrarEExibirRecibos();
+                        addDebugLog(`🔍 Busca aplicada: "${termoBusca}"`, 'info');
+                    }, 300);
                 });
             }
 
-            addDebugLog('✅ Eventos configurados', 'success');
+            // Filter tabs
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    filtroAtivo = tab.dataset.filter;
+                    filtrarEExibirRecibos();
+                    addDebugLog(`🏷️ Filtro aplicado: ${filtroAtivo}`, 'info');
+                });
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.key === 'r') {
+                    e.preventDefault();
+                    atualizarDados();
+                } else if (e.key === 'F5') {
+                    e.preventDefault();
+                    atualizarDados();
+                }
+            });
+
+            addDebugLog('✅ Eventos configurados com sucesso', 'success');
         }
 
         // ================================================================================
-        // CARREGAMENTO DE DADOS VIA JSONP - CORREÇÃO CORS v9.0 - FUNÇÃO RENOMEADA
+        // 📊 CARREGAMENTO DE DADOS VIA JSONP v10.0
         // ================================================================================
         
         function carregarDadosInicial() {
-            addDebugLog('📊 JSONP: Carregando recibos do servidor...', 'info');
+            if (isLoading) {
+                addDebugLog('⚠️ Carregamento já em andamento, ignorando...', 'warning');
+                return;
+            }
             
-            // Mostrar loading
+            isLoading = true;
+            addDebugLog('📊 Iniciando carregamento de dados via JSONP v10.0...', 'info');
+            
+            // UI Feedback
             document.getElementById('loadingContainer').style.display = 'block';
             document.getElementById('errorContainer').style.display = 'none';
             ocultarTodasSecoes();
             
             if (!API_URL) {
                 addDebugLog('❌ ERRO: API URL não configurada!', 'error');
-                mostrarErro('Configuração inválida. Verifique o arquivo config.js');
+                mostrarErro('Configuração inválida. Verifique config.js');
+                isLoading = false;
                 return;
             }
             
-            addDebugLog(`🔗 JSONP: Conectando: ${API_URL}`, 'info');
-            
-            // CORREÇÃO CRÍTICA: Usar JSONP PURO - ZERO fetch()
-            chamarAPIJsonp('listar_vendas_pendentes')
-                .then(resultado => {
-                    addDebugLog('📡 JSONP: Resposta recebida', 'success');
-                    
-                    if (resultado.success) {
-                        if (resultado.data && resultado.data.recibos) {
-                            recibosDataOriginal = resultado.data.recibos;
-                            recibosData = [...recibosDataOriginal];
-                            addDebugLog(`✅ JSONP: ${recibosData.length} recibos carregados`, 'success');
-                            
-                            processarDadosVendedores();
-                            atualizarDashboard();
-                            gerarAnalises();
-                            exibirDados();
-                            
-                        } else {
-                            addDebugLog('⚠️ JSONP: Estrutura de resposta inesperada', 'warning');
-                            throw new Error('Estrutura de dados inválida na resposta');
-                        }
-                    } else {
-                        throw new Error(resultado.message || 'Erro desconhecido na API');
-                    }
+            // Fazer requisição JSONP
+            fazerRequisicaoJSONP('listar_vendas_pendentes', {})
+                .then(response => {
+                    addDebugLog('✅ Dados recebidos via JSONP', 'success');
+                    processarDadosRecebidos(response);
+                    showToast('Dados atualizados com sucesso!', 'success');
                 })
                 .catch(error => {
-                    addDebugLog(`❌ JSONP: Erro: ${error.message}`, 'error');
+                    addDebugLog(`❌ Erro no carregamento: ${error.message}`, 'error');
                     mostrarErro(error.message);
+                    showToast('Erro ao carregar dados', 'error');
+                })
+                .finally(() => {
+                    isLoading = false;
+                    document.getElementById('loadingContainer').style.display = 'none';
                 });
         }
+
+        // ================================================================================
+        // 🌐 SISTEMA JSONP OTIMIZADO v10.0
+        // ================================================================================
         
-        // FUNÇÃO JSONP ESPECÍFICA PARA BYPASS CORS v9.0 - ZERO FETCH
-        function chamarAPIJsonp(action, parametros = {}) {
+        function fazerRequisicaoJSONP(action, parametros = {}) {
             return new Promise((resolve, reject) => {
-                const callbackName = `vendas_auto_callback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                const callbackName = `jsonp_callback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                const timeoutId = setTimeout(() => {
+                    cleanup();
+                    reject(new Error('Timeout da requisição JSONP (30s)'));
+                }, 30000);
                 
-                addDebugLog(`🔗 JSONP: Criando callback ${callbackName}`, 'info');
+                function cleanup() {
+                    clearTimeout(timeoutId);
+                    delete window[callbackName];
+                    if (script && script.parentNode) {
+                        script.remove();
+                    }
+                }
                 
-                // Definir callback global
-                window[callbackName] = function(result) {
-                    try {
-                        // Limpar script
-                        if (script && script.parentNode) {
-                            script.remove();
-                        }
-                        
-                        // Limpar callback
-                        delete window[callbackName];
-                        
-                        addDebugLog(`📡 JSONP: Callback executado: ${result.success ? 'sucesso' : 'erro'}`, result.success ? 'success' : 'error');
-                        
-                        resolve(result);
-                        
-                    } catch (error) {
-                        delete window[callbackName];
-                        reject(error);
+                window[callbackName] = function(response) {
+                    cleanup();
+                    
+                    if (response && response.success) {
+                        addDebugLog(`✅ JSONP callback executado: ${response.success ? 'sucesso' : 'erro'}`, 'success');
+                        resolve(response);
+                    } else {
+                        const errorMsg = response?.error || 'Resposta inválida do servidor';
+                        addDebugLog(`❌ Erro na resposta: ${errorMsg}`, 'error');
+                        reject(new Error(errorMsg));
                     }
                 };
                 
-                // Criar script JSONP - ZERO fetch()
                 const script = document.createElement('script');
-                
                 const params = new URLSearchParams({
                     callback: callbackName,
                     action: action,
@@ -1288,559 +1008,379 @@
                 const urlCompleta = `${API_URL}?${params.toString()}`;
                 script.src = urlCompleta;
                 
-                addDebugLog(`📡 JSONP: URL criada (${urlCompleta.length} chars)`, 'info');
-                addDebugLog(`🔍 JSONP: URL completa: ${urlCompleta}`, 'info');
+                addDebugLog(`📡 JSONP URL: ${urlCompleta.substring(0, 100)}...`, 'info');
                 
-                script.onerror = function(event) {
-                    delete window[callbackName];
-                    if (script.parentNode) {
-                        script.remove();
-                    }
-                    
-                    addDebugLog('❌ JSONP: Erro ao carregar script', 'error');
-                    addDebugLog('🔍 JSONP: Possíveis causas:', 'error');
-                    addDebugLog('  1. URL do Google Apps Script incorreta', 'error');
-                    addDebugLog('  2. Script não implantado como Web App', 'error');
-                    addDebugLog('  3. Endpoint listar_vendas_pendentes não existe', 'error');
-                    addDebugLog('  4. Permissões do script incorretas', 'error');
-                    
-                    reject(new Error('Erro ao carregar script JSONP. Verifique:\n1. URL do Google Apps Script\n2. Endpoint listar_vendas_pendentes existe\n3. Script está implantado como Web App\n4. Permissões corretas (Anyone, even anonymous)'));
-                };
-                
-                // Timeout específico
-                const timeoutId = setTimeout(() => {
-                    if (window[callbackName]) {
-                        delete window[callbackName];
-                        if (script && script.parentNode) {
-                            script.remove();
-                        }
-                        addDebugLog('⏱️ JSONP: Timeout de 30 segundos', 'error');
-                        reject(new Error('Timeout na requisição JSONP (30s). O servidor não respondeu.'));
-                    }
-                }, 30000);
-                
-                // Sucesso: limpar timeout
-                const originalCallback = window[callbackName];
-                window[callbackName] = function(result) {
-                    clearTimeout(timeoutId);
-                    originalCallback(result);
+                script.onerror = function() {
+                    cleanup();
+                    reject(new Error('Erro ao carregar script JSONP. Verifique a configuração.'));
                 };
                 
                 document.head.appendChild(script);
-                
-                addDebugLog(`🔗 JSONP: Script adicionado ao DOM`, 'info');
             });
         }
 
         // ================================================================================
-        // PROCESSAMENTO DE DADOS
+        // 📈 PROCESSAMENTO DE DADOS v10.0
         // ================================================================================
         
-        function processarDadosVendedores() {
-            addDebugLog('👥 Processando dados por vendedores...', 'info');
+        function processarDadosRecebidos(response) {
+            addDebugLog('📈 Processando dados recebidos...', 'info');
             
-            vendedoresData = {};
+            if (!response.data || !Array.isArray(response.data)) {
+                throw new Error('Dados inválidos recebidos do servidor');
+            }
             
-            recibosData.forEach(recibo => {
-                const vendedor = recibo.vendedor || 'Não informado';
+            recibosDataOriginal = response.data;
+            
+            // Processar estatísticas
+            const stats = calcularEstatisticas(recibosDataOriginal);
+            atualizarEstatisticas(stats);
+            
+            // Processar vendedores
+            vendedoresData = processarVendedores(recibosDataOriginal);
+            
+            // Aplicar filtros iniciais
+            filtrarEExibirRecibos();
+            
+            // Exibir seções
+            exibirSecoes();
+            
+            addDebugLog(`✅ Processamento concluído: ${recibosDataOriginal.length} recibos`, 'success');
+        }
+        
+        function calcularEstatisticas(dados) {
+            const stats = {
+                totalRecibos: dados.length,
+                totalVendedores: new Set(dados.map(r => r.vendedor)).size,
+                urgentesCount: dados.filter(r => r.urgencia === 'Urgente').length,
+                percentualCompleto: 0
+            };
+            
+            const completos = dados.filter(r => 
+                r.cpfCliente && r.whatsappCliente && r.dataIda
+            ).length;
+            
+            stats.percentualCompleto = dados.length > 0 
+                ? Math.round((completos / dados.length) * 100) 
+                : 0;
+            
+            return stats;
+        }
+        
+        function atualizarEstatisticas(stats) {
+            const elements = {
+                'totalRecibos': stats.totalRecibos,
+                'totalVendedores': stats.totalVendedores,
+                'urgentesCount': stats.urgentesCount,
+                'percentualCompleto': `${stats.percentualCompleto}%`
+            };
+            
+            Object.entries(elements).forEach(([id, value]) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    // Animação de contagem
+                    animateNumber(element, value);
+                }
+            });
+        }
+        
+        function animateNumber(element, finalValue) {
+            const isPercentage = typeof finalValue === 'string' && finalValue.includes('%');
+            const numericValue = parseInt(finalValue);
+            const start = parseInt(element.textContent) || 0;
+            const duration = 1000;
+            const stepTime = 16;
+            const steps = duration / stepTime;
+            const increment = (numericValue - start) / steps;
+            
+            let current = start;
+            const timer = setInterval(() => {
+                current += increment;
+                const displayValue = Math.round(current);
+                element.textContent = isPercentage ? `${displayValue}%` : displayValue;
                 
-                if (!vendedoresData[vendedor]) {
-                    vendedoresData[vendedor] = {
+                if ((increment > 0 && current >= numericValue) || 
+                    (increment < 0 && current <= numericValue)) {
+                    element.textContent = finalValue;
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+
+        // ================================================================================
+        // 🏷️ SISTEMA DE FILTROS v10.0
+        // ================================================================================
+        
+        function filtrarEExibirRecibos() {
+            addDebugLog(`🏷️ Aplicando filtros: ${filtroAtivo}, busca: "${termoBusca}"`, 'info');
+            
+            let dadosFiltrados = [...recibosDataOriginal];
+            
+            // Filtro por categoria
+            switch (filtroAtivo) {
+                case 'urgentes':
+                    dadosFiltrados = dadosFiltrados.filter(r => r.urgencia === 'Urgente');
+                    break;
+                case 'pendentes':
+                    dadosFiltrados = dadosFiltrados.filter(r => 
+                        !r.cpfCliente || !r.whatsappCliente || !r.dataIda
+                    );
+                    break;
+                case 'completos':
+                    dadosFiltrados = dadosFiltrados.filter(r => 
+                        r.cpfCliente && r.whatsappCliente && r.dataIda
+                    );
+                    break;
+            }
+            
+            // Filtro por busca
+            if (termoBusca) {
+                dadosFiltrados = dadosFiltrados.filter(recibo => {
+                    const searchFields = [
+                        recibo.recibo,
+                        recibo.nomeCliente,
+                        recibo.vendedor,
+                        recibo.cpfCliente,
+                        recibo.whatsappCliente
+                    ].map(field => (field || '').toLowerCase());
+                    
+                    return searchFields.some(field => field.includes(termoBusca));
+                });
+            }
+            
+            recibosDataFiltrada = dadosFiltrados;
+            
+            // Atualizar displays
+            exibirVendedores(dadosFiltrados);
+            exibirRecibos(dadosFiltrados);
+            
+            addDebugLog(`✅ Filtros aplicados: ${dadosFiltrados.length} recibos exibidos`, 'success');
+        }
+
+        // ================================================================================
+        // 👥 EXIBIÇÃO DE VENDEDORES v10.0
+        // ================================================================================
+        
+        function processarVendedores(dados) {
+            const vendedores = {};
+            
+            dados.forEach(recibo => {
+                const vendedor = recibo.vendedor || 'Sem Vendedor';
+                
+                if (!vendedores[vendedor]) {
+                    vendedores[vendedor] = {
                         nome: vendedor,
                         recibos: [],
                         total: 0,
                         urgentes: 0,
-                        normais: 0,
-                        semCPF: 0,
-                        semWhatsApp: 0
+                        completos: 0
                     };
                 }
                 
-                vendedoresData[vendedor].recibos.push(recibo);
-                vendedoresData[vendedor].total++;
+                vendedores[vendedor].recibos.push(recibo);
+                vendedores[vendedor].total++;
                 
-                if (recibo.urgencia === 'URGENTE' || recibo.urgencia === 'ALTO') {
-                    vendedoresData[vendedor].urgentes++;
-                } else {
-                    vendedoresData[vendedor].normais++;
+                if (recibo.urgencia === 'Urgente') {
+                    vendedores[vendedor].urgentes++;
                 }
-
-                if (!recibo.cpfCliente || recibo.cpfCliente.trim() === '') {
-                    vendedoresData[vendedor].semCPF++;
-                }
-
-                if (!recibo.whatsappCliente || recibo.whatsappCliente.trim() === '') {
-                    vendedoresData[vendedor].semWhatsApp++;
-                }
-            });
-            
-            addDebugLog(`📊 Dados processados para ${Object.keys(vendedoresData).length} vendedores`, 'success');
-        }
-        
-        function atualizarDashboard() {
-            const totalRecibos = recibosData.length;
-            const totalVendedores = Object.keys(vendedoresData).length;
-            const urgentesCount = recibosData.filter(r => r.urgencia === 'URGENTE' || r.urgencia === 'ALTO').length;
-            const completosCount = recibosData.filter(r => r.cpfCliente && r.whatsappCliente).length;
-            const percentualCompleto = totalRecibos > 0 ? Math.round((completosCount / totalRecibos) * 100) : 0;
-            
-            document.getElementById('totalRecibos').textContent = totalRecibos;
-            document.getElementById('totalVendedores').textContent = totalVendedores;
-            document.getElementById('urgentesCount').textContent = urgentesCount;
-            document.getElementById('percentualCompleto').textContent = percentualCompleto + '%';
-
-            // Atualizar contadores de filtros
-            document.getElementById('filtroTodos').textContent = totalRecibos;
-            document.getElementById('filtroUrgente').textContent = urgentesCount;
-            document.getElementById('filtroSemCPF').textContent = recibosData.filter(r => !r.cpfCliente || r.cpfCliente.trim() === '').length;
-            document.getElementById('filtroSemWhatsApp').textContent = recibosData.filter(r => !r.whatsappCliente || r.whatsappCliente.trim() === '').length;
-
-            // Atualizar progresso
-            atualizarProgresso();
-            
-            addDebugLog(`📊 Dashboard atualizado: ${totalRecibos} recibos, ${totalVendedores} vendedores`, 'info');
-        }
-
-        function atualizarProgresso() {
-            const totalRecibos = recibosData.length;
-            if (totalRecibos === 0) return;
-
-            const comCPF = recibosData.filter(r => r.cpfCliente && r.cpfCliente.trim() !== '').length;
-            const comWhatsApp = recibosData.filter(r => r.whatsappCliente && r.whatsappCliente.trim() !== '').length;
-
-            const percentualCPF = Math.round((comCPF / totalRecibos) * 100);
-            const percentualWhatsApp = Math.round((comWhatsApp / totalRecibos) * 100);
-
-            document.getElementById('progressoCPF').style.width = percentualCPF + '%';
-            document.getElementById('progressoCPFTexto').textContent = percentualCPF + '%';
-            
-            document.getElementById('progressoWhatsApp').style.width = percentualWhatsApp + '%';
-            document.getElementById('progressoWhatsAppTexto').textContent = percentualWhatsApp + '%';
-        }
-
-        // ================================================================================
-        // SISTEMA DE FILTROS
-        // ================================================================================
-        
-        function aplicarFiltro(tipo) {
-            addDebugLog(`🔍 Aplicando filtro: ${tipo}`, 'info');
-            
-            filtroAtivo = tipo;
-            
-            // Atualizar visual dos filtros
-            document.querySelectorAll('.filtro-card').forEach(card => {
-                card.classList.remove('active');
-            });
-            
-            document.querySelector(`[data-filtro="${tipo}"]`).classList.add('active');
-            
-            filtrarEExibirRecibos();
-        }
-
-        function filtrarEExibirRecibos() {
-            let recibosParaExibir = [...recibosDataOriginal];
-            
-            // Aplicar filtro por tipo
-            switch (filtroAtivo) {
-                case 'urgente':
-                    recibosParaExibir = recibosParaExibir.filter(r => 
-                        r.urgencia === 'URGENTE' || r.urgencia === 'ALTO'
-                    );
-                    break;
-                case 'semCPF':
-                    recibosParaExibir = recibosParaExibir.filter(r => 
-                        !r.cpfCliente || r.cpfCliente.trim() === ''
-                    );
-                    break;
-                case 'semWhatsApp':
-                    recibosParaExibir = recibosParaExibir.filter(r => 
-                        !r.whatsappCliente || r.whatsappCliente.trim() === ''
-                    );
-                    break;
-                default:
-                    // 'todos' - não filtra
-                    break;
-            }
-            
-            // Aplicar filtro por busca
-            if (termoBusca) {
-                recibosParaExibir = recibosParaExibir.filter(r => 
-                    (r.nomeCliente && r.nomeCliente.toLowerCase().includes(termoBusca)) ||
-                    (r.recibo && r.recibo.toLowerCase().includes(termoBusca)) ||
-                    (r.vendedor && r.vendedor.toLowerCase().includes(termoBusca))
-                );
-            }
-            
-            recibosData = recibosParaExibir;
-            exibirRecibos();
-            
-            addDebugLog(`📋 ${recibosData.length} recibos após filtros`, 'info');
-        }
-
-        function limparFiltros() {
-            filtroAtivo = 'todos';
-            termoBusca = '';
-            document.getElementById('searchInput').value = '';
-            
-            document.querySelectorAll('.filtro-card').forEach(card => {
-                card.classList.remove('active');
-            });
-            document.querySelector('[data-filtro="todos"]').classList.add('active');
-            
-            recibosData = [...recibosDataOriginal];
-            exibirRecibos();
-            
-            addDebugLog('🧹 Filtros limpos', 'info');
-        }
-
-        // ================================================================================
-        // EXIBIÇÃO DOS DADOS
-        // ================================================================================
-        
-        function exibirDados() {
-            document.getElementById('loadingContainer').style.display = 'none';
-            mostrarTodasSecoes();
-            
-            exibirVendedores();
-            exibirRecibos();
-            
-            addDebugLog('✅ Interface atualizada com dados reais', 'success');
-        }
-        
-        function mostrarTodasSecoes() {
-            document.getElementById('filtrosSection').style.display = 'block';
-            document.getElementById('acoesSection').style.display = 'block';
-            document.getElementById('vendedoresSection').style.display = 'block';
-            document.getElementById('progressoSection').style.display = 'block';
-            document.getElementById('tabContainer').style.display = 'block';
-        }
-
-        function ocultarTodasSecoes() {
-            document.getElementById('filtrosSection').style.display = 'none';
-            document.getElementById('acoesSection').style.display = 'none';
-            document.getElementById('vendedoresSection').style.display = 'none';
-            document.getElementById('progressoSection').style.display = 'none';
-            document.getElementById('tabContainer').style.display = 'none';
-        }
-        
-        function exibirVendedores() {
-            const vendedoresList = document.getElementById('vendedoresList');
-            let html = '';
-            
-            Object.values(vendedoresData).forEach(vendedor => {
-                const status = vendedor.urgentes > 0 ? 'pendente' : 'ativo';
-                const statusText = vendedor.urgentes > 0 ? 'Pendências' : 'OK';
                 
-                html += `
-                    <div class="vendedor-card" onclick="filtrarPorVendedor('${vendedor.nome}')">
-                        <div class="vendedor-header">
-                            <div class="vendedor-nome">
-                                <i class="fas fa-user"></i> ${vendedor.nome}
-                            </div>
-                            <div class="vendedor-status ${status}">${statusText}</div>
-                        </div>
-                        <div class="vendedor-stats">
-                            <div class="vendedor-stat">
-                                <div class="vendedor-stat-number">${vendedor.total}</div>
-                                <div class="vendedor-stat-label">Total</div>
-                            </div>
-                            <div class="vendedor-stat">
-                                <div class="vendedor-stat-number" style="color: #dc3545;">${vendedor.urgentes}</div>
-                                <div class="vendedor-stat-label">Urgentes</div>
-                            </div>
-                            <div class="vendedor-stat">
-                                <div class="vendedor-stat-number" style="color: #28a745;">${vendedor.normais}</div>
-                                <div class="vendedor-stat-label">Normais</div>
-                            </div>
-                            <div class="vendedor-stat">
-                                <div class="vendedor-stat-number" style="color: #17a2b8;">${vendedor.semCPF}</div>
-                                <div class="vendedor-stat-label">Sem CPF</div>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                if (recibo.cpfCliente && recibo.whatsappCliente && recibo.dataIda) {
+                    vendedores[vendedor].completos++;
+                }
             });
             
-            vendedoresList.innerHTML = html;
+            return vendedores;
         }
         
-        function exibirRecibos() {
-            const recibosList = document.getElementById('recibosList');
-            let html = '';
+        function exibirVendedores(dados) {
+            const vendedoresContainer = document.getElementById('vendedoresList');
+            if (!vendedoresContainer) return;
             
-            if (recibosData.length === 0) {
-                html = `
-                    <div class="empty-state">
-                        <div class="empty-icon">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <h3>Nenhum recibo encontrado!</h3>
-                        <p>Todos os dados estão completos ou não há recibos com os filtros aplicados.</p>
-                    </div>
-                `;
-            } else {
-                recibosData.forEach(recibo => {
-                    const urgenciaClass = `urgencia-${recibo.urgencia.toLowerCase()}`;
-                    const cardClass = recibo.urgencia.toLowerCase();
-                    
-                    html += `
-                        <div class="recibo-card ${cardClass}">
-                            <div class="recibo-header">
-                                <div class="recibo-numero">
-                                    <i class="fas fa-receipt"></i> ${recibo.recibo}
-                                </div>
-                                <span class="urgencia-badge ${urgenciaClass}">${recibo.urgencia}</span>
-                            </div>
-                            <div class="recibo-cliente">
-                                <strong>${recibo.nomeCliente}</strong>
-                            </div>
-                            <div class="recibo-details">
-                                <div class="recibo-detail">
-                                    <i class="fas fa-user"></i> <strong>Vendedor:</strong> ${recibo.vendedor}
-                                </div>
-                                <div class="recibo-detail">
-                                    <i class="fas fa-calendar"></i> <strong>Data:</strong> ${recibo.dataIda || 'N/A'}
-                                </div>
-                                <div class="recibo-detail">
-                                    <i class="fas fa-plane"></i> <strong>Tipo:</strong> ${recibo.tipo}
-                                </div>
-                                <div class="recibo-detail">
-                                    <i class="fas fa-building"></i> <strong>CIA:</strong> ${recibo.cia || 'N/A'}
-                                </div>
-                                <div class="recibo-detail">
-                                    <i class="fas fa-id-card"></i> <strong>CPF:</strong> 
-                                    ${recibo.cpfCliente ? recibo.cpfCliente : '<span style="color: #dc3545;">❌ Faltando</span>'}
-                                </div>
-                                <div class="recibo-detail">
-                                    <i class="fas fa-phone"></i> <strong>WhatsApp:</strong> 
-                                    ${recibo.whatsappCliente ? recibo.whatsappCliente : '<span style="color: #dc3545;">❌ Faltando</span>'}
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
+            const vendedoresFiltrados = processarVendedores(dados);
             
-            recibosList.innerHTML = html;
-        }
-
-        // ================================================================================
-        // SISTEMA DE TABS
-        // ================================================================================
-        
-        function ativarTab(tabName) {
-            // Atualizar botões
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-            
-            // Atualizar conteúdo
-            document.querySelectorAll('.tab-pane').forEach(pane => {
-                pane.classList.remove('active');
-            });
-            document.getElementById(`tab${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`).classList.add('active');
-            
-            // Carregar conteúdo específico da tab
-            if (tabName === 'analise') {
-                gerarAnalises();
-            } else if (tabName === 'relatorio') {
-                gerarRelatorio();
-            }
-            
-            addDebugLog(`📋 Tab ativada: ${tabName}`, 'info');
-        }
-
-        // ================================================================================
-        // ANÁLISE DE DADOS
-        // ================================================================================
-        
-        function gerarAnalises() {
-            gerarTopVendedores();
-            gerarTiposServico();
-            gerarUrgenciaDatas();
-            gerarCompanhias();
-        }
-        
-        function gerarTopVendedores() {
-            const vendedoresOrdenados = Object.values(vendedoresData)
+            const html = Object.values(vendedoresFiltrados)
                 .sort((a, b) => b.total - a.total)
-                .slice(0, 5);
-            
-            let html = '';
-            vendedoresOrdenados.forEach(vendedor => {
-                html += `
-                    <li class="analise-item">
-                        <span>${vendedor.nome}</span>
-                        <span class="analise-valor">${vendedor.total}</span>
-                    </li>
-                `;
-            });
-            
-            document.getElementById('topVendedores').innerHTML = html;
-        }
-        
-        function gerarTiposServico() {
-            const tipos = {};
-            recibosDataOriginal.forEach(recibo => {
-                const tipo = recibo.tipo || 'Não informado';
-                tipos[tipo] = (tipos[tipo] || 0) + 1;
-            });
-            
-            let html = '';
-            Object.entries(tipos)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 5)
-                .forEach(([tipo, count]) => {
-                    html += `
-                        <li class="analise-item">
-                            <span>${tipo}</span>
-                            <span class="analise-valor">${count}</span>
-                        </li>
-                    `;
-                });
-            
-            document.getElementById('tiposServico').innerHTML = html;
-        }
-        
-        function gerarUrgenciaDatas() {
-            const urgencias = {};
-            recibosDataOriginal.forEach(recibo => {
-                const urgencia = recibo.urgencia || 'Indefinido';
-                urgencias[urgencia] = (urgencias[urgencia] || 0) + 1;
-            });
-            
-            let html = '';
-            Object.entries(urgencias)
-                .sort((a, b) => b[1] - a[1])
-                .forEach(([urgencia, count]) => {
-                    html += `
-                        <li class="analise-item">
-                            <span>${urgencia}</span>
-                            <span class="analise-valor">${count}</span>
-                        </li>
-                    `;
-                });
-            
-            document.getElementById('urgenciaDatas').innerHTML = html;
-        }
-        
-        function gerarCompanhias() {
-            const companhias = {};
-            recibosDataOriginal.forEach(recibo => {
-                const cia = recibo.cia || 'Não informado';
-                companhias[cia] = (companhias[cia] || 0) + 1;
-            });
-            
-            let html = '';
-            Object.entries(companhias)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 5)
-                .forEach(([cia, count]) => {
-                    html += `
-                        <li class="analise-item">
-                            <span>${cia}</span>
-                            <span class="analise-valor">${count}</span>
-                        </li>
-                    `;
-                });
-            
-            document.getElementById('companhias').innerHTML = html;
-        }
-
-        // ================================================================================
-        // RELATÓRIO DETALHADO
-        // ================================================================================
-        
-        function gerarRelatorio() {
-            const totalRecibos = recibosDataOriginal.length;
-            const comCPF = recibosDataOriginal.filter(r => r.cpfCliente && r.cpfCliente.trim() !== '').length;
-            const comWhatsApp = recibosDataOriginal.filter(r => r.whatsappCliente && r.whatsappCliente.trim() !== '').length;
-            const urgentes = recibosDataOriginal.filter(r => r.urgencia === 'URGENTE').length;
-            const altos = recibosDataOriginal.filter(r => r.urgencia === 'ALTO').length;
-            
-            const html = `
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Resumo Geral</h5>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <ul class="list-unstyled">
-                                    <li><strong>Total de Recibos:</strong> ${totalRecibos}</li>
-                                    <li><strong>Com CPF:</strong> ${comCPF} (${Math.round((comCPF/totalRecibos)*100)}%)</li>
-                                    <li><strong>Com WhatsApp:</strong> ${comWhatsApp} (${Math.round((comWhatsApp/totalRecibos)*100)}%)</li>
-                                </ul>
+                .map(vendedor => {
+                    const percentualCompleto = vendedor.total > 0 
+                        ? Math.round((vendedor.completos / vendedor.total) * 100) 
+                        : 0;
+                    
+                    return `
+                        <div class="vendedor-card fade-in-up" onclick="filtrarPorVendedor('${vendedor.nome}')">
+                            <div class="vendedor-header">
+                                <div class="vendedor-name">
+                                    <i class="fas fa-user"></i>
+                                    ${vendedor.nome}
+                                </div>
+                                <div class="badge bg-primary">${vendedor.total} recibos</div>
                             </div>
-                            <div class="col-md-6">
-                                <ul class="list-unstyled">
-                                    <li><strong>Urgentes:</strong> ${urgentes}</li>
-                                    <li><strong>Alta Prioridade:</strong> ${altos}</li>
-                                    <li><strong>Vendedores Ativos:</strong> ${Object.keys(vendedoresData).length}</li>
-                                </ul>
+                            <div class="vendedor-stats">
+                                <div class="vendedor-stat">
+                                    <div class="stat-value">${vendedor.urgentes}</div>
+                                    <div class="stat-label-small">Urgentes</div>
+                                </div>
+                                <div class="vendedor-stat">
+                                    <div class="stat-value">${vendedor.completos}</div>
+                                    <div class="stat-label-small">Completos</div>
+                                </div>
+                                <div class="vendedor-stat">
+                                    <div class="stat-value">${percentualCompleto}%</div>
+                                    <div class="stat-label-small">Taxa Conclusão</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Recomendações</h5>
-                        <ul>
-                            <li>Priorizar recibos com urgência "URGENTE" e "ALTO"</li>
-                            <li>Completar dados de CPF para ${totalRecibos - comCPF} recibos</li>
-                            <li>Adicionar WhatsApp para ${totalRecibos - comWhatsApp} recibos</li>
-                            <li>Focar nos vendedores com mais pendências</li>
-                        </ul>
-                    </div>
-                </div>
-            `;
+                    `;
+                })
+                .join('');
             
-            document.getElementById('relatorioDetalhado').innerHTML = html;
+            vendedoresContainer.innerHTML = html;
         }
 
         // ================================================================================
-        // FILTROS E INTERAÇÕES
+        // 🧾 EXIBIÇÃO DE RECIBOS v10.0
+        // ================================================================================
+        
+        function exibirRecibos(dados) {
+            const recibosContainer = document.getElementById('recibosGrid');
+            if (!recibosContainer) return;
+            
+            if (dados.length === 0) {
+                recibosContainer.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-search" style="font-size: 3rem; color: var(--cvc-cinza); margin-bottom: 20px;"></i>
+                        <h3>Nenhum recibo encontrado</h3>
+                        <p class="text-muted">Tente ajustar os filtros ou o termo de busca</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const html = dados.map(recibo => {
+                const isUrgente = recibo.urgencia === 'Urgente';
+                const isCompleto = recibo.cpfCliente && recibo.whatsappCliente && recibo.dataIda;
+                
+                let statusClass = 'status-pendente';
+                let statusText = 'Pendente';
+                
+                if (isUrgente) {
+                    statusClass = 'status-urgente';
+                    statusText = 'Urgente';
+                } else if (isCompleto) {
+                    statusClass = 'status-completo';
+                    statusText = 'Completo';
+                }
+                
+                return `
+                    <div class="recibo-card fade-in-up ${isUrgente ? 'recibo-urgente' : ''}">
+                        <div class="recibo-header">
+                            <div class="recibo-numero">#${recibo.recibo || 'N/A'}</div>
+                            <div class="recibo-status ${statusClass}">${statusText}</div>
+                        </div>
+                        
+                        <div class="recibo-info">
+                            <div class="mb-2">
+                                <strong><i class="fas fa-user"></i> Cliente:</strong>
+                                <span>${recibo.nomeCliente || 'Não informado'}</span>
+                            </div>
+                            
+                            <div class="mb-2">
+                                <strong><i class="fas fa-user-tie"></i> Vendedor:</strong>
+                                <span>${recibo.vendedor || 'Não informado'}</span>
+                            </div>
+                            
+                            <div class="mb-2">
+                                <strong><i class="fas fa-calendar"></i> Data Ida:</strong>
+                                <span>${recibo.dataIda || 'Não informada'}</span>
+                            </div>
+                            
+                            <div class="mb-2">
+                                <strong><i class="fas fa-plane"></i> Tipo:</strong>
+                                <span class="badge bg-info">${recibo.tipo || 'N/A'}</span>
+                            </div>
+                            
+                            ${recibo.cpfCliente ? `
+                                <div class="mb-2">
+                                    <strong><i class="fas fa-id-card"></i> CPF:</strong>
+                                    <span>${recibo.cpfCliente}</span>
+                                </div>
+                            ` : ''}
+                            
+                            ${recibo.whatsappCliente ? `
+                                <div class="mb-2">
+                                    <strong><i class="fab fa-whatsapp"></i> WhatsApp:</strong>
+                                    <span>${recibo.whatsappCliente}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="recibo-actions mt-3">
+                            <button class="btn btn-sm btn-primary" onclick="editarRecibo('${recibo.recibo}')">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="btn btn-sm btn-success" onclick="marcarCompleto('${recibo.recibo}')">
+                                <i class="fas fa-check"></i> Concluir
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            recibosContainer.innerHTML = html;
+        }
+
+        // ================================================================================
+        // 🎛️ CONTROLES E AÇÕES v10.0
         // ================================================================================
         
         function filtrarPorVendedor(vendedor) {
-            addDebugLog(`🔍 Filtrando por vendedor: ${vendedor}`, 'info');
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = vendedor;
+                termoBusca = vendedor.toLowerCase();
+                filtrarEExibirRecibos();
+                
+                // Scroll para recibos
+                const recibosSection = document.getElementById('recibosSection');
+                if (recibosSection) {
+                    recibosSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
             
-            recibosData = recibosDataOriginal.filter(r => r.vendedor === vendedor);
-            exibirRecibos();
-            
-            // Ativar tab de recibos
-            ativarTab('recibos');
-            
-            // Scroll para a seção de recibos
-            document.getElementById('tabContainer').scrollIntoView({ 
-                behavior: 'smooth' 
-            });
+            showToast(`Filtro aplicado: ${vendedor}`, 'info');
         }
-
-        // ================================================================================
-        // FUNÇÕES DE EXPORTAÇÃO
-        // ================================================================================
+        
+        function editarRecibo(reciboId) {
+            addDebugLog(`✏️ Solicitada edição do recibo: ${reciboId}`, 'info');
+            showToast('Redirecionando para edição...', 'info');
+            window.open(`embarques.html?recibo=${reciboId}`, '_blank');
+        }
+        
+        function marcarCompleto(reciboId) {
+            addDebugLog(`✅ Marcando recibo como completo: ${reciboId}`, 'info');
+            showToast('Funcionalidade em desenvolvimento', 'warning');
+        }
+        
+        function atualizarDados() {
+            addDebugLog('🔄 Solicitada atualização manual dos dados', 'info');
+            showToast('Atualizando dados...', 'info');
+            carregarDadosInicial();
+        }
         
         function exportarDados() {
-            exportarCSV();
-        }
-        
-        function exportarCSV() {
-            addDebugLog('📁 Exportando dados para CSV...', 'info');
+            addDebugLog('📁 Iniciando exportação de dados...', 'info');
             
-            const headers = ['Recibo', 'Cliente', 'Vendedor', 'Data Ida', 'Tipo', 'CIA', 'CPF', 'WhatsApp', 'Urgência'];
+            const headers = ['Recibo', 'Cliente', 'Vendedor', 'Data Ida', 'Tipo', 'CPF', 'WhatsApp', 'Status'];
             const csvContent = [
                 headers.join(','),
-                ...recibosDataOriginal.map(recibo => [
+                ...recibosDataFiltrada.map(recibo => [
                     recibo.recibo || '',
                     `"${recibo.nomeCliente || ''}"`,
                     recibo.vendedor || '',
                     recibo.dataIda || '',
                     recibo.tipo || '',
-                    recibo.cia || '',
                     recibo.cpfCliente || '',
                     recibo.whatsappCliente || '',
-                    recibo.urgencia || ''
+                    recibo.urgencia || 'Pendente'
                 ].join(','))
             ].join('\n');
             
@@ -1848,37 +1388,38 @@
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
-            link.setAttribute('download', `recibos_pendentes_${new Date().toISOString().split('T')[0]}.csv`);
+            link.setAttribute('download', `vendas_automatizado_${new Date().toISOString().split('T')[0]}.csv`);
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             
-            addDebugLog('✅ CSV exportado com sucesso', 'success');
-        }
-        
-        function exportarPDF() {
-            addDebugLog('📄 Função de exportação PDF ainda não implementada', 'warning');
-            alert('Função de exportação PDF será implementada em versão futura.');
-        }
-        
-        function imprimirRelatorio() {
-            addDebugLog('🖨️ Preparando para impressão...', 'info');
-            window.print();
+            addDebugLog(`✅ Arquivo CSV exportado com ${recibosDataFiltrada.length} registros`, 'success');
+            showToast(`Dados exportados (${recibosDataFiltrada.length} registros)`, 'success');
         }
 
         // ================================================================================
-        // FUNÇÃO DE ATUALIZAÇÃO
+        // 🎯 UTILITÁRIOS v10.0
         // ================================================================================
         
-        function atualizarDados() {
-            addDebugLog('🔄 Atualizando dados...', 'info');
-            carregarDadosInicial();
+        function ocultarTodasSecoes() {
+            const secoes = ['filtersSection', 'vendedoresSection', 'recibosSection', 'actionsSection'];
+            secoes.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) element.style.display = 'none';
+            });
         }
-
-        // ================================================================================
-        // TRATAMENTO DE ERROS
-        // ================================================================================
+        
+        function exibirSecoes() {
+            const secoes = ['filtersSection', 'vendedoresSection', 'recibosSection', 'actionsSection'];
+            secoes.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.style.display = 'block';
+                    element.classList.add('fade-in-up');
+                }
+            });
+        }
         
         function mostrarErro(mensagem) {
             document.getElementById('loadingContainer').style.display = 'none';
@@ -1889,27 +1430,38 @@
         }
 
         // ================================================================================
-        // INICIALIZAÇÃO DO SISTEMA
+        // 🚀 INICIALIZAÇÃO DO SISTEMA v10.0
         // ================================================================================
         
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🤖 CVC Portal Itaquá - Sistema de Vendas Automatizado v9.0');
-            console.log('📋 Funcionalidades disponíveis:');
-            console.log('   • Dados reais da planilha de embarques');
-            console.log('   • Bypass CORS com JSONP v9.0 PURO');
-            console.log('   • ZERO fetch() - APENAS JSONP');
-            console.log('   • Interface completa por vendedores');
-            console.log('   • Filtros dinâmicos e busca');
-            console.log('   • Análise de dados e relatórios');
-            console.log('   • Sistema de exportação');
-            console.log('   • Debug detalhado');
-            console.log('   • Responsivo e acessível');
+            console.log('%c🚀 CVC Portal Itaquá - Vendas Automatizado v10.0', 'color: #0A00B4; font-size: 18px; font-weight: bold;');
+            console.log('%c✨ Melhorias v10.0:', 'color: #FFE600; background: #0A00B4; padding: 4px 8px; font-weight: bold;');
+            console.log('   • Interface modernizada com animações fluidas');
+            console.log('   • Sistema de toast notifications');
+            console.log('   • Performance otimizada e debug avançado');
+            console.log('   • Filtros inteligentes e busca melhorada');
+            console.log('   • UX/UI responsiva aprimorada');
+            console.log('   • Shortcuts de teclado (Ctrl+R, F5)');
+            console.log('   • Animações de contagem nos stats');
+            console.log('   • Sistema de skeleton loading');
             
             // Inicializar sistema
-            inicializarSistema();
+            setTimeout(inicializarSistema, 300);
             
-            console.log('🎯 Sistema de vendas automatizado v9.0 carregado e pronto!');
+            console.log('%c🎯 Sistema pronto para uso!', 'color: #50fa7b; font-weight: bold;');
         });
+
+        // ================================================================================
+        // 🌍 EXPOSIÇÃO DE FUNÇÕES GLOBAIS
+        // ================================================================================
+        
+        window.atualizarDados = atualizarDados;
+        window.exportarDados = exportarDados;
+        window.filtrarPorVendedor = filtrarPorVendedor;
+        window.editarRecibo = editarRecibo;
+        window.marcarCompleto = marcarCompleto;
+        window.mostrarDebugSection = mostrarDebugSection;
+        
     </script>
 </body>
 </html>
