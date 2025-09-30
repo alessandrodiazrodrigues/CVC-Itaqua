@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 CVC Portal Itaquá - Diagnóstico de Configuração</title>
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #0A00B4, #FFE600);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: #0A00B4;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .content {
+            padding: 30px;
+        }
+        .status-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 5px solid;
+        }
+        .status-success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        .status-error {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        .status-warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+        .btn {
+            background: #0A00B4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #FFE600;
+            color: #0A00B4;
+        }
+        .log-output {
+            background: #1e1e1e;
+            color: #00ff00;
+            font-family: monospace;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+        .diagnostic-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 CVC Portal Itaquá</h1>
+            <h2>Diagnóstico de Configuração v10.0</h2>
+        </div>
+        
+        <div class="content">
+            <div class="diagnostic-info">
+                <h3>📊 Status da Configuração</h3>
+                <div id="configStatus"></div>
+            </div>
+            
+            <div class="diagnostic-info">
+                <h3>🌐 Informações do Sistema</h3>
+                <div id="systemInfo"></div>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <button class="btn" onclick="executarDiagnostico()">🔍 Executar Diagnóstico Completo</button>
+                <button class="btn" onclick="testarAPI()">🌐 Testar Conexão API</button>
+                <button class="btn" onclick="limparLogs()">🗑️ Limpar Logs</button>
+            </div>
+            
+            <div class="log-output" id="logOutput">
+                <div>🔧 CVC Portal Itaquá - Diagnóstico de Configuração</div>
+                <div>⏰ Aguardando execução do diagnóstico...</div>
+            </div>
+            
+            <div class="diagnostic-info">
+                <h3>💡 Instruções de Correção</h3>
+                <p><strong>Se aparecer "Configuração inválida":</strong></p>
+                <ol>
+                    <li>Verifique se o arquivo <code>config.js</code> está na mesma pasta</li>
+                    <li>Confirme se a URL da API está correta</li>
+                    <li>Verifique se todas as listas (VENDEDORES, TIPOS_SERVICO, etc.) estão preenchidas</li>
+                    <li>Substitua o arquivo <code>config.js</code> pelo arquivo corrigido v10.0</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        let logCount = 0;
+        
+        function adicionarLog(mensagem, tipo = 'info') {
+            const logOutput = document.getElementById('logOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            const icones = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+            
+            const cores = {
+                success: '#00ff00',
+                error: '#ff5555',
+                warning: '#ffff55',
+                info: '#55ffff'
+            };
+            
+            logCount++;
+            const logLine = document.createElement('div');
+            logLine.style.color = cores[tipo] || '#00ff00';
+            logLine.innerHTML = `[${timestamp}] ${icones[tipo]} ${mensagem}`;
+            
+            logOutput.appendChild(logLine);
+            logOutput.scrollTop = logOutput.scrollHeight;
+        }
+        
+        function limparLogs() {
+            document.getElementById('logOutput').innerHTML = `
+                <div>🔧 CVC Portal Itaquá - Diagnóstico de Configuração</div>
+                <div>⏰ Logs limpos - Execute novo diagnóstico...</div>
+            `;
+            logCount = 0;
+        }
+        
+        function executarDiagnostico() {
+            limparLogs();
+            adicionarLog('🚀 Iniciando diagnóstico completo...', 'info');
+            
+            // Teste 1: Verificar se config.js foi carregado
+            adicionarLog('📋 Teste 1: Verificando carregamento do config.js...', 'info');
+            if (typeof CVC_CONFIG !== 'undefined') {
+                adicionarLog('✅ CVC_CONFIG encontrado!', 'success');
+            } else {
+                adicionarLog('❌ CVC_CONFIG NÃO ENCONTRADO! Verifique se config.js está carregado.', 'error');
+                return;
+            }
+            
+            // Teste 2: Verificar função getApiUrl
+            adicionarLog('📋 Teste 2: Verificando função getApiUrl...', 'info');
+            if (typeof getApiUrl === 'function') {
+                const apiUrl = getApiUrl();
+                if (apiUrl) {
+                    adicionarLog(`✅ getApiUrl() funcionando: ${apiUrl}`, 'success');
+                } else {
+                    adicionarLog('❌ getApiUrl() retornou null/undefined!', 'error');
+                }
+            } else {
+                adicionarLog('❌ Função getApiUrl NÃO ENCONTRADA!', 'error');
+            }
+            
+            // Teste 3: Validar configuração
+            adicionarLog('📋 Teste 3: Executando validateConfig()...', 'info');
+            if (typeof validateConfig === 'function') {
+                const validation = validateConfig();
+                if (validation.valid) {
+                    adicionarLog('✅ Configuração VÁLIDA!', 'success');
+                } else {
+                    adicionarLog('❌ Configuração INVÁLIDA!', 'error');
+                    validation.errors.forEach(erro => {
+                        adicionarLog(`   • ${erro}`, 'error');
+                    });
+                }
+            } else {
+                adicionarLog('❌ Função validateConfig NÃO ENCONTRADA!', 'error');
+            }
+            
+            // Teste 4: Verificar listas essenciais
+            adicionarLog('📋 Teste 4: Verificando listas essenciais...', 'info');
+            
+            const listas = [
+                ['VENDEDORES', CVC_CONFIG.VENDEDORES],
+                ['TIPOS_SERVICO', CVC_CONFIG.TIPOS_SERVICO],
+                ['DEPARTAMENTOS', CVC_CONFIG.DEPARTAMENTOS]
+            ];
+            
+            listas.forEach(([nome, lista]) => {
+                if (Array.isArray(lista) && lista.length > 0) {
+                    adicionarLog(`✅ ${nome}: ${lista.length} itens`, 'success');
+                } else {
+                    adicionarLog(`❌ ${nome}: Vazio ou inválido!`, 'error');
+                }
+            });
+            
+            // Teste 5: Verificar outras funções importantes
+            adicionarLog('📋 Teste 5: Verificando outras funções...', 'info');
+            const funcoes = ['debugLog', 'getConfig', 'applyTheme', 'updatePageTitle'];
+            funcoes.forEach(funcao => {
+                if (typeof window[funcao] === 'function') {
+                    adicionarLog(`✅ ${funcao}() disponível`, 'success');
+                } else {
+                    adicionarLog(`❌ ${funcao}() NÃO ENCONTRADA!`, 'error');
+                }
+            });
+            
+            adicionarLog('🎯 Diagnóstico completo finalizado!', 'info');
+            atualizarStatusVisual();
+        }
+        
+        function testarAPI() {
+            adicionarLog('🌐 Testando conexão com a API...', 'info');
+            
+            if (typeof getApiUrl !== 'function') {
+                adicionarLog('❌ Função getApiUrl não disponível!', 'error');
+                return;
+            }
+            
+            const apiUrl = getApiUrl();
+            if (!apiUrl) {
+                adicionarLog('❌ URL da API não configurada!', 'error');
+                return;
+            }
+            
+            adicionarLog(`🔗 Testando: ${apiUrl}`, 'info');
+            
+            // Criar script JSONP para teste
+            const callbackName = `testCallback_${Date.now()}`;
+            window[callbackName] = function(result) {
+                if (result && result.success) {
+                    adicionarLog('✅ API respondeu com sucesso!', 'success');
+                    adicionarLog(`📊 Resposta: ${result.message || 'OK'}`, 'info');
+                } else {
+                    adicionarLog('⚠️ API respondeu, mas com erro', 'warning');
+                    adicionarLog(`📊 Erro: ${result.message || 'Desconhecido'}`, 'warning');
+                }
+                
+                // Limpeza
+                script.remove();
+                delete window[callbackName];
+            };
+            
+            const script = document.createElement('script');
+            script.src = `${apiUrl}?callback=${callbackName}&action=test`;
+            script.onerror = () => {
+                adicionarLog('❌ Erro ao conectar com a API!', 'error');
+                script.remove();
+                delete window[callbackName];
+            };
+            
+            document.head.appendChild(script);
+            
+            // Timeout de 10 segundos
+            setTimeout(() => {
+                if (window[callbackName]) {
+                    adicionarLog('⏰ Timeout: API não respondeu em 10 segundos', 'warning');
+                    script.remove();
+                    delete window[callbackName];
+                }
+            }, 10000);
+        }
+        
+        function atualizarStatusVisual() {
+            const configStatus = document.getElementById('configStatus');
+            const systemInfo = document.getElementById('systemInfo');
+            
+            // Status da configuração
+            let statusHTML = '';
+            
+            if (typeof CVC_CONFIG !== 'undefined') {
+                statusHTML += '<div class="status-item status-success"><span>✅ config.js carregado</span></div>';
+                
+                if (typeof getApiUrl === 'function' && getApiUrl()) {
+                    statusHTML += '<div class="status-item status-success"><span>✅ API URL configurada</span></div>';
+                } else {
+                    statusHTML += '<div class="status-item status-error"><span>❌ API URL não configurada</span></div>';
+                }
+                
+                if (typeof validateConfig === 'function') {
+                    const validation = validateConfig();
+                    if (validation.valid) {
+                        statusHTML += '<div class="status-item status-success"><span>✅ Configuração válida</span></div>';
+                    } else {
+                        statusHTML += '<div class="status-item status-error"><span>❌ Configuração inválida</span></div>';
+                    }
+                }
+            } else {
+                statusHTML += '<div class="status-item status-error"><span>❌ config.js NÃO carregado</span></div>';
+            }
+            
+            configStatus.innerHTML = statusHTML;
+            
+            // Informações do sistema
+            let infoHTML = '';
+            if (typeof CVC_CONFIG !== 'undefined') {
+                infoHTML += `<p><strong>Sistema:</strong> ${CVC_CONFIG.SYSTEM_NAME}</p>`;
+                infoHTML += `<p><strong>Versão:</strong> ${CVC_CONFIG.VERSION}</p>`;
+                infoHTML += `<p><strong>Filial:</strong> ${CVC_CONFIG.NOME_FILIAL}</p>`;
+                infoHTML += `<p><strong>API URL:</strong> ${CVC_CONFIG.API_URL ? '✅ Configurada' : '❌ Não configurada'}</p>`;
+                infoHTML += `<p><strong>Debug Mode:</strong> ${CVC_CONFIG.DEBUG_MODE ? '✅ Ativo' : '❌ Inativo'}</p>`;
+            } else {
+                infoHTML = '<p>❌ Informações não disponíveis - config.js não carregado</p>';
+            }
+            
+            systemInfo.innerHTML = infoHTML;
+        }
+        
+        // Executar diagnóstico inicial ao carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                executarDiagnostico();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
