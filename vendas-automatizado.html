@@ -1559,6 +1559,21 @@
                             recibosData = [...recibosDataOriginal];
                             addDebugLog(`✅ JSONP: ${recibosData.length} recibos carregados`, 'success');
                             
+                            // 🔧 DEBUG: Mostrar estrutura dos dados para resolver o problema
+                            if (recibosData.length > 0) {
+                                addDebugLog('📊 DEBUG: Estrutura do primeiro recibo:', 'info');
+                                console.log('ESTRUTURA COMPLETA DO PRIMEIRO RECIBO:', recibosData[0]);
+                                addDebugLog(`Propriedades disponíveis: ${Object.keys(recibosData[0]).join(', ')}`, 'info');
+                                
+                                // Verificar propriedades de ID
+                                const primeiroRecibo = recibosData[0];
+                                addDebugLog(`🔍 ID Properties:`, 'info');
+                                addDebugLog(`  - recibo: ${primeiroRecibo.recibo}`, 'info');
+                                addDebugLog(`  - id: ${primeiroRecibo.id}`, 'info');
+                                addDebugLog(`  - numeroInforme: ${primeiroRecibo.numeroInforme}`, 'info');
+                                addDebugLog(`  - nomeCliente: ${primeiroRecibo.nomeCliente}`, 'info');
+                            }
+                            
                             processarDadosVendedores();
                             atualizarDashboard();
                             exibirDados();
@@ -1933,7 +1948,7 @@
                 html += `
                     <div class="recibo-card" style="animation-delay: ${index * 0.1}s">
                         <div class="recibo-header">
-                            <div class="recibo-numero">📄 ${recibo.recibo || 'N/A'}</div>
+                            <div class="recibo-numero">📄 ${recibo.recibo || recibo.id || recibo.numeroInforme || 'N/A'}</div>
                             <div class="recibo-urgencia ${urgenciaClass}">
                                 ${(diffDias <= 3 && diffDias !== 999) ? `Urgente (${diffDias} dias)` : 'Normal'}
                             </div>
@@ -1969,10 +1984,10 @@
                             </div>
                         </div>
                         <div class="recibo-actions">
-                            <button class="btn btn-primary btn-sm" onclick="completarDados('${recibo.recibo}')">
+                            <button class="btn btn-primary btn-sm" onclick="completarDados('${recibo.recibo || recibo.id || recibo.numeroInforme || index}')">
                                 <i class="fas fa-upload"></i> Completar Dados
                             </button>
-                            <button class="btn btn-outline-info btn-sm" onclick="visualizarVenda('${recibo.recibo}')">
+                            <button class="btn btn-outline-info btn-sm" onclick="visualizarVenda('${recibo.recibo || recibo.id || recibo.numeroInforme || index}')">
                                 <i class="fas fa-eye"></i> Visualizar
                             </button>
                         </div>
@@ -2030,14 +2045,34 @@
         // ================================================================================
         
         function completarDados(recibo) {
-            vendaAtual = recibosData.find(r => r.recibo === recibo);
+            // 🔧 CORREÇÃO: Buscar venda por múltiplas propriedades possíveis
+            vendaAtual = recibosData.find(r => 
+                r.recibo === recibo || 
+                r.id === recibo || 
+                r.numeroInforme === recibo ||
+                r.numeroRecibo === recibo ||
+                r.nomeCliente === recibo || // Fallback para debug
+                String(r.recibo) === String(recibo) ||
+                String(r.id) === String(recibo)
+            );
             
+            // Debug detalhado se não encontrar
             if (!vendaAtual) {
-                showToast('Venda não encontrada', 'error');
+                addDebugLog(`❌ Venda não encontrada para: ${recibo}`, 'error');
+                addDebugLog(`📊 Total de recibos disponíveis: ${recibosData.length}`, 'info');
+                addDebugLog(`📊 Exemplo de estrutura dos dados:`, 'info');
+                if (recibosData.length > 0) {
+                    console.log('Estrutura do primeiro recibo:', recibosData[0]);
+                    addDebugLog(`Propriedades disponíveis: ${Object.keys(recibosData[0]).join(', ')}`, 'info');
+                }
+                
+                showToast(`Venda não encontrada: ${recibo}. Verifique o console para debug.`, 'error');
                 return;
             }
             
             addDebugLog(`📋 Abrindo complementação para venda ${recibo}`, 'info');
+            addDebugLog(`📊 Dados da venda encontrada:`, 'info');
+            console.log('Venda atual:', vendaAtual);
             
             // Resetar modal
             resetarModal();
