@@ -1066,7 +1066,7 @@
 
                             <!-- Dados da Viagem -->
                             <div class="form-section">
-                                <h5><i class="fas fa-plane"></i> Dados da Viagem</h5>
+                                <h5 data-viagem="true"><i class="fas fa-plane"></i> Dados da Viagem</h5>
                                 <div class="row g-3">
                                     <div class="col-md-4">
                                         <label class="form-label">Destino</label>
@@ -1085,13 +1085,17 @@
                                         <input type="text" class="form-control" id="hotel">
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-label">Tipo Produto</label>
-                                        <select class="form-select" id="tipoProduto">
+                                        <label class="form-label">Tipo Produto *</label>
+                                        <select class="form-select" id="tipoProduto" required>
                                             <option value="">Selecione...</option>
                                             <option value="AEREO">Aéreo</option>
+                                            <option value="A+H">A+H (Aéreo + Hotel)</option>
+                                            <option value="A+H+S">A+H+S (Aéreo + Hotel + Seguro)</option>
                                             <option value="TERRESTRE">Terrestre</option>
                                             <option value="CRUZEIRO">Cruzeiro</option>
                                             <option value="HOTEL">Hotel</option>
+                                            <option value="SEGURO">Seguro</option>
+                                            <option value="OUTROS">Outros</option>
                                         </select>
                                     </div>
                                     <div class="col-md-3">
@@ -1554,6 +1558,9 @@
                 });
             }
 
+            // Configurar detecção automática de campos aéreos
+            configurarDeteccaoAereo();
+
             // Shortcuts de teclado
             document.addEventListener('keydown', (e) => {
                 if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
@@ -1565,7 +1572,7 @@
                 }
             });
 
-            addDebugLog('✅ Eventos configurados com shortcuts', 'success');
+            addDebugLog('✅ Eventos configurados com shortcuts e detecção aérea', 'success');
         }
 
         // ================================================================================
@@ -2382,9 +2389,127 @@
                 }
             }
             
+            // Auto-detectar e mostrar campos aéreos se necessário
+            const tipoProduto = document.getElementById('tipoProduto');
+            if (tipoProduto && dadosExtraidos.companhiaAerea) {
+                // Se tem dados de companhia aérea, definir como produto aéreo
+                tipoProduto.value = 'AEREO';
+                mostrarCamposAereos();
+            }
+            
             addDebugLog('📝 Formulário preenchido com dados disponíveis', 'info');
             addDebugLog('📊 Dados da venda atual aplicados', 'info');
             addDebugLog('📄 Dados do PDF aplicados', 'info');
+        }
+        
+        // Função para mostrar campos aéreos automaticamente
+        function mostrarCamposAereos() {
+            // Adicionar campos específicos de voo se não existirem
+            const formulario = document.getElementById('formCompleto');
+            let secaoVoo = document.getElementById('secaoVoo');
+            
+            if (!secaoVoo) {
+                // Criar seção de voo se não existir
+                const secaoViagem = document.querySelector('.form-section h5[data-viagem]')?.closest('.form-section');
+                if (secaoViagem) {
+                    const novaSecao = document.createElement('div');
+                    novaSecao.className = 'form-section';
+                    novaSecao.id = 'secaoVoo';
+                    novaSecao.innerHTML = `
+                        <h5><i class="fas fa-plane"></i> Detalhes do Voo</h5>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Companhia Aérea</label>
+                                <select class="form-select" id="companhiaAerea">
+                                    <option value="">Selecione...</option>
+                                    <option value="GOL">GOL</option>
+                                    <option value="LATAM">LATAM</option>
+                                    <option value="AZUL">AZUL</option>
+                                    <option value="VOEPASS">VOEPASS</option>
+                                    <option value="Air France">Air France</option>
+                                    <option value="American Airlines">American Airlines</option>
+                                    <option value="Emirates">Emirates</option>
+                                    <option value="TAP">TAP</option>
+                                    <option value="Lufthansa">Lufthansa</option>
+                                    <option value="Air Canada">Air Canada</option>
+                                    <option value="OUTRAS">OUTRAS</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Número do Voo</label>
+                                <input type="text" class="form-control" id="numeroVoo" placeholder="Ex: G3 1566">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Trecho</label>
+                                <input type="text" class="form-control" id="trechoVoo" placeholder="Ex: CGH/SSA">
+                            </div>
+                        </div>
+                        <div class="row g-3 mt-2">
+                            <div class="col-md-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="temBagagemVoo">
+                                    <label class="form-check-label" for="temBagagemVoo">
+                                        <i class="fas fa-suitcase"></i> Tem Bagagem
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="temAssentoVoo">
+                                    <label class="form-check-label" for="temAssentoVoo">
+                                        <i class="fas fa-chair"></i> Assento Marcado
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Horário Partida</label>
+                                <input type="time" class="form-control" id="horarioPartida">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Horário Chegada</label>
+                                <input type="time" class="form-control" id="horarioChegada">
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Inserir após a seção de viagem
+                    secaoViagem.parentNode.insertBefore(novaSecao, secaoViagem.nextSibling);
+                    
+                    // Preencher com dados extraídos se disponíveis
+                    if (dadosExtraidos.companhiaAerea) {
+                        document.getElementById('companhiaAerea').value = dadosExtraidos.companhiaAerea;
+                    }
+                    if (dadosExtraidos.numeroVoo) {
+                        document.getElementById('numeroVoo').value = dadosExtraidos.numeroVoo;
+                    }
+                    if (dadosExtraidos.trecho) {
+                        document.getElementById('trechoVoo').value = dadosExtraidos.trecho;
+                    }
+                    
+                    addDebugLog('✈️ Seção de voo adicionada automaticamente', 'success');
+                }
+            }
+        }
+        
+        // Função para detectar quando tipo de produto é aéreo
+        function configurarDeteccaoAereo() {
+            const tipoProduto = document.getElementById('tipoProduto');
+            if (tipoProduto) {
+                tipoProduto.addEventListener('change', function() {
+                    const tiposAereos = ['AEREO', 'A+H', 'A+H+S', 'Aéreo'];
+                    if (tiposAereos.includes(this.value)) {
+                        mostrarCamposAereos();
+                        addDebugLog('✈️ Tipo aéreo detectado - mostrando campos de voo', 'info');
+                    } else {
+                        // Remover seção de voo se não for aéreo
+                        const secaoVoo = document.getElementById('secaoVoo');
+                        if (secaoVoo) {
+                            secaoVoo.remove();
+                            addDebugLog('🚫 Campos de voo removidos - tipo não aéreo', 'info');
+                        }
+                    }
+                });
+            }
         }
 
         // ================================================================================
@@ -2448,7 +2573,7 @@
         function coletarDadosFormulario() {
             const dados = {};
             
-            // Lista de campos do formulário
+            // Lista de campos do formulário básico
             const campos = [
                 'nomeCliente', 'cpfCliente', 'dataNascimento', 'whatsappCliente', 'emailCliente', 'rgCliente',
                 'destino', 'dataIda', 'dataVolta', 'hotel', 'tipoProduto', 'valorTotal', 'formaPagamento', 'dataReserva',
@@ -2463,12 +2588,44 @@
                 }
             });
             
+            // Campos específicos de voo (se existirem)
+            const camposVoo = [
+                'companhiaAerea', 'numeroVoo', 'trechoVoo', 'horarioPartida', 'horarioChegada'
+            ];
+            
+            camposVoo.forEach(campo => {
+                const elemento = document.getElementById(campo);
+                if (elemento) {
+                    dados[campo] = elemento.value.trim();
+                }
+            });
+            
+            // Checkboxes de voo
+            const temBagagemVoo = document.getElementById('temBagagemVoo');
+            const temAssentoVoo = document.getElementById('temAssentoVoo');
+            
+            if (temBagagemVoo) {
+                dados.temBagagemVoo = temBagagemVoo.checked ? 'Sim' : 'Não';
+            }
+            
+            if (temAssentoVoo) {
+                dados.temAssentoVoo = temAssentoVoo.checked ? 'Sim' : 'Não';
+            }
+            
             // Adicionar dados fixos
             dados.recibo = vendaAtual.recibo;
             dados.vendedor = vendaAtual.vendedor;
             dados.dataComplementacao = new Date().toISOString();
+            dados.sistemaOrigem = 'Portal CVC Itaquá - Sistema Completo';
             
-            addDebugLog('📊 Dados coletados:', dados);
+            // Se tem dados de voo, marcar como produto aéreo
+            if (dados.companhiaAerea || dados.numeroVoo) {
+                dados.isVooCompleto = true;
+                addDebugLog('✈️ Dados de voo detectados na coleta', 'info');
+            }
+            
+            addDebugLog('📊 Dados coletados (incluindo voo se aplicável):', 'info');
+            console.log('Dados completos:', dados);
             return dados;
         }
         
