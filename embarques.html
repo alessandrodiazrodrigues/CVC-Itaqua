@@ -724,6 +724,13 @@
                 
                 mostrarLoading(true);
                 
+                // Verificar modo anônimo
+                const isIncognito = await detectarModoAnonimo();
+                if (isIncognito) {
+                    console.warn('🕵️ Modo anônimo detectado - algumas funcionalidades podem não funcionar');
+                    mostrarAlerta('🕵️ Modo anônimo detectado! Para acessar dados reais da planilha, use o navegador normal e faça login no Google.', 'info');
+                }
+                
                 // Verificar se config está carregado
                 if (typeof CVC_CONFIG === 'undefined' || !CVC_CONFIG.API_URL) {
                     throw new Error('Configuração CVC_CONFIG não encontrada. Verifique se config.js está carregado.');
@@ -779,11 +786,36 @@
             try {
                 console.log('📊 Carregando embarques da API...');
                 
-                // Usar JSONP como o modelo antigo que funcionava
-                const dados = await fazerRequisicaoJSONP(CVC_CONFIG.API_URL, {
-                    action: 'listarEmbarques',
-                    t: Date.now()
-                });
+                // Tentar diferentes métodos de requisição
+                let dados = null;
+                
+                // Método 1: JSONP (melhor para CORS)
+                try {
+                    dados = await fazerRequisicaoJSONP(CVC_CONFIG.API_URL, {
+                        action: 'listarEmbarques',
+                        t: Date.now()
+                    });
+                } catch (jsonpError) {
+                    console.warn('⚠️ JSONP falhou:', jsonpError.message);
+                    
+                    // Método 2: Fetch com CORS (backup)
+                    try {
+                        const response = await fetch(CVC_CONFIG.API_URL + '?action=listarEmbarques&t=' + Date.now(), {
+                            method: 'GET',
+                            mode: 'cors',
+                            credentials: 'omit' // Importante para modo anônimo
+                        });
+                        
+                        if (response.ok) {
+                            dados = await response.json();
+                        } else {
+                            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                        }
+                    } catch (fetchError) {
+                        console.warn('⚠️ Fetch também falhou:', fetchError.message);
+                        throw new Error('Todos os métodos de requisição falharam');
+                    }
+                }
                 
                 if (!dados.success) {
                     throw new Error(dados.message || 'Erro desconhecido na API');
@@ -793,14 +825,24 @@
                 
                 console.log(`✅ ${dadosEmbarques.length} embarques carregados da API`);
                 
+                // Mostrar sucesso se conectou com API real
+                mostrarAlerta('✅ Conectado com a planilha! Dados atualizados.', 'success');
+                
             } catch (error) {
                 console.warn('⚠️ API não disponível, usando dados simulados para teste:', error.message);
+                
+                // Verificar se é problema de autenticação
+                if (error.message.includes('401') || error.message.includes('403') || error.message.includes('Unauthorized')) {
+                    mostrarAlerta('⚠️ Acesso negado à planilha. Faça login no Google e tente novamente.', 'warning');
+                } else if (error.message.includes('CORS') || error.message.includes('Network')) {
+                    mostrarAlerta('⚠️ Problema de conexão. Verifique sua internet ou tente em navegador normal.', 'warning');
+                } else {
+                    mostrarAlerta('⚠️ Sistema em modo de teste - conecte com a planilha para dados reais', 'warning');
+                }
                 
                 // Fallback com dados simulados para teste
                 dadosEmbarques = gerarDadosSimulados();
                 console.log(`🧪 ${dadosEmbarques.length} embarques simulados carregados para teste`);
-                
-                mostrarAlerta('Sistema em modo de teste - conecte com a planilha para dados reais', 'warning');
             }
             
             // Processar e renderizar dashboards
@@ -2208,24 +2250,99 @@
                 mostrarLoading(true);
                 console.log('🧪 Testando conectividade com a API...');
                 
-                const dados = await fazerRequisicaoJSONP(CVC_CONFIG.API_URL, {
-                    action: 'ping',
-                    teste: 'conectividade'
-                });
+                let sucessoAlgumMetodo = false;
+                const resultados = [];
                 
-                console.log('📡 Resposta do teste:', dados);
+                // Teste 1: JSONP
+                try {
+                    console.log('🔗 Testando JSONP...');
+                    const dadosJSONP = await fazerRequisicaoJSONP(CVC_CONFIG.API_URL, {
+                        action: 'ping',
+                        teste: 'conectividade'
+                    });
+                    
+                    if (dadosJSONP.success) {
+                        resultados.push('✅ JSONP: Funcionando');
+                        sucessoAlgumMetodo = true;
+                    } else {
+                        resultados.push('⚠️ JSONP: Respondeu mas com erro');
+                    }
+                } catch (error) {
+                    resultados.push('❌ JSONP: ' + error.message);
+                }
                 
-                if (dados.success) {
-                    mostrarAlerta(`✅ API funcionando! Versão: ${dados.versao || 'N/A'}`, 'success');
+                // Teste 2: Fetch CORS
+                try {
+                    console.log('🔗 Testando Fetch CORS...');
+                    const response = await fetch(CVC_CONFIG.API_URL + '?action=ping&teste=conectividade&t=' + Date.now(), {
+                        method: 'GET',
+                        mode: 'cors',
+                        credentials: 'omit'
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success) {
+                            resultados.push('✅ Fetch CORS: Funcionando');
+                            sucessoAlgumMetodo = true;
+                        } else {
+                            resultados.push('⚠️ Fetch CORS: Respondeu mas com erro');
+                        }
+                    } else {
+                        resultados.push(`❌ Fetch CORS: HTTP ${response.status}`);
+                    }
+                } catch (error) {
+                    resultados.push('❌ Fetch CORS: ' + error.message);
+                }
+                
+                // Teste 3: Verificar se está em modo anônimo
+                const isIncognito = await detectarModoAnonimo();
+                if (isIncognito) {
+                    resultados.push('🕵️ Modo anônimo detectado');
+                }
+                
+                // Mostrar resultados
+                const mensagem = resultados.join('\n');
+                
+                if (sucessoAlgumMetodo) {
+                    mostrarAlerta('🎉 Conectividade OK!\n\n' + mensagem, 'success');
                 } else {
-                    mostrarAlerta(`⚠️ API respondeu mas com erro: ${dados.message}`, 'warning');
+                    mostrarAlerta('⚠️ Problemas de conectividade:\n\n' + mensagem + '\n\n💡 Dicas:\n• Faça login no Google\n• Use navegador normal (não anônimo)\n• Verifique sua conexão', 'warning');
                 }
                 
             } catch (error) {
                 console.error('❌ Erro no teste de conectividade:', error);
-                mostrarAlerta(`❌ Falha na conectividade: ${error.message}`, 'danger');
+                mostrarAlerta(`❌ Falha no teste: ${error.message}`, 'danger');
             } finally {
                 mostrarLoading(false);
+            }
+        }
+        
+        // Detectar se está em modo anônimo/privado
+        async function detectarModoAnonimo() {
+            try {
+                // Método 1: Tentar usar localStorage
+                if (!window.localStorage) {
+                    return true;
+                }
+                
+                // Método 2: Verificar se pode escrever no localStorage
+                try {
+                    localStorage.setItem('test', 'test');
+                    localStorage.removeItem('test');
+                } catch (e) {
+                    return true;
+                }
+                
+                // Método 3: Verificar quotas de storage
+                if ('storage' in navigator && 'estimate' in navigator.storage) {
+                    const estimate = await navigator.storage.estimate();
+                    return estimate.quota < 120000000; // Modo anônimo tem quota menor
+                }
+                
+                return false;
+            } catch {
+                return true; // Se der erro, provavelmente é modo anônimo
             }
         }
         
