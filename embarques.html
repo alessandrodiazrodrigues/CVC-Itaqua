@@ -1248,6 +1248,9 @@
                         <strong>Informe:</strong> ${informe.numeroInforme}
                     </div>
                     <div class="card-info">
+                        <strong>Recibos:</strong> ${informe.voos.map(v => v.recibo || 'S/N').filter(r => r !== 'S/N').join(', ') || 'Não informado'}
+                    </div>
+                    <div class="card-info">
                         <strong>Vendedor:</strong> ${informe.vendedor}
                     </div>
                     <div class="card-info">
@@ -1289,6 +1292,9 @@
                     <div class="card-header-custom">
                         <span class="priority-badge ${voo.prioridade}">${voo.prioridade}</span>
                         <span class="days-remaining">${formatarDiasRestantes(voo.diasParaCheckin)}</span>
+                    </div>
+                    <div class="card-info">
+                        <strong>Recibo:</strong> ${voo.recibo || 'Não informado'}
                     </div>
                     <div class="card-info">
                         <strong>Cliente:</strong> ${voo.nomeCliente}
@@ -1337,6 +1343,9 @@
                     </div>
                     <div class="card-info">
                         <strong>Informe:</strong> ${informe.numeroInforme}
+                    </div>
+                    <div class="card-info">
+                        <strong>Recibos:</strong> ${informe.voos.map(v => v.recibo || 'S/N').filter(r => r !== 'S/N').join(', ') || 'Não informado'}
                     </div>
                     <div class="card-info">
                         <strong>Cliente:</strong> ${informe.clientes[0]}
@@ -1414,55 +1423,200 @@
             modalData.conferencia = informe;
             
             document.getElementById('conferencia-info').innerHTML = `
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Número do Informe:</strong> ${informe.numeroInforme}</p>
-                        <p><strong>Vendedor:</strong> ${informe.vendedor}</p>
-                        <p><strong>Primeira Data:</strong> ${formatarData(informe.primeiraData)}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <p><strong>Total de Voos:</strong> ${informe.totalVoos}</p>
-                        <p><strong>Clientes:</strong> ${informe.clientes.join(', ')}</p>
-                        <p><strong>Status:</strong> <span class="priority-badge ${informe.prioridade}">${informe.prioridade}</span></p>
+                <div class="alert alert-info">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6><i class="fas fa-info-circle"></i> Informe: ${informe.numeroInforme}</h6>
+                            <p class="mb-1"><strong>Vendedor:</strong> ${informe.vendedor} | <strong>Status:</strong> <span class="priority-badge ${informe.prioridade}">${informe.prioridade}</span></p>
+                            <p class="mb-0"><strong>Total de ${informe.totalVoos} voo(s)</strong> - Primeira data: ${formatarData(informe.primeiraData)}</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-sm btn-info" onclick="buscarOrbiuns('${informe.voos[0]?.whatsappCliente || ''}')">
+                                <i class="fas fa-search"></i> Buscar Orbiuns
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Seção Editável -->
-                <hr>
-                <h6><i class="fas fa-edit"></i> Dados Editáveis dos Voos</h6>
-                <div class="row g-3">
-                    ${informe.voos.map((voo, index) => `
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-header bg-light">
-                                    <small><strong>Voo ${index + 1}:</strong> ${voo.nomeCliente} - ${formatarData(voo.dataIda)}</small>
+                <!-- Lista de Voos com Detalhes Editáveis -->
+                ${informe.voos.map((voo, index) => `
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0">
+                                <i class="fas fa-plane"></i> Voo ${index + 1}: ${voo.nomeCliente}
+                                <small class="text-muted ms-2">ID: ${voo.id}</small>
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-2">
+                                <!-- Dados Básicos -->
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Nome do Cliente</label>
+                                    <input type="text" class="form-control form-control-sm" 
+                                           value="${voo.nomeCliente || ''}" 
+                                           data-voo-id="${voo.id}" data-campo="nomeCliente">
                                 </div>
-                                <div class="card-body">
-                                    <div class="mb-2">
-                                        <label class="form-label">CPF</label>
-                                        <input type="text" class="form-control form-control-sm" 
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">CPF</label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control" 
                                                value="${voo.cpfCliente || ''}" 
                                                data-voo-id="${voo.id}" data-campo="cpfCliente"
                                                placeholder="000.000.000-00">
+                                        <button class="btn btn-outline-secondary" type="button" 
+                                                onclick="copiarTexto('${voo.cpfCliente || ''}', 'CPF')">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
                                     </div>
-                                    <div class="mb-2">
-                                        <label class="form-label">WhatsApp</label>
-                                        <input type="text" class="form-control form-control-sm" 
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">WhatsApp</label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control" 
                                                value="${voo.whatsappCliente || ''}" 
                                                data-voo-id="${voo.id}" data-campo="whatsappCliente"
                                                placeholder="(11) 99999-9999">
+                                        <button class="btn btn-outline-secondary" type="button" 
+                                                onclick="copiarTexto('${voo.whatsappCliente || ''}', 'WhatsApp')">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
                                     </div>
-                                    <div class="mb-2">
-                                        <label class="form-label">Observações</label>
-                                        <textarea class="form-control form-control-sm" rows="2" 
-                                                  data-voo-id="${voo.id}" data-campo="observacoes"
-                                                  placeholder="Observações específicas">${voo.observacoes || ''}</textarea>
+                                </div>
+                                
+                                <!-- Datas e Voo -->
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Data Ida</label>
+                                    <input type="date" class="form-control form-control-sm" 
+                                           value="${voo.dataIda || ''}" 
+                                           data-voo-id="${voo.id}" data-campo="dataIda">
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Data Volta</label>
+                                    <input type="date" class="form-control form-control-sm" 
+                                           value="${voo.dataVolta || ''}" 
+                                           data-voo-id="${voo.id}" data-campo="dataVolta">
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Companhia</label>
+                                    <input type="text" class="form-control form-control-sm" 
+                                           value="${voo.cia || ''}" 
+                                           data-voo-id="${voo.id}" data-campo="cia"
+                                           placeholder="GOL, LATAM, AZUL...">
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Tipo</label>
+                                    <select class="form-select form-select-sm" data-voo-id="${voo.id}" data-campo="tipo">
+                                        <option value="Aéreo" ${(voo.tipo || 'Aéreo') === 'Aéreo' ? 'selected' : ''}>Aéreo</option>
+                                        <option value="A+H" ${voo.tipo === 'A+H' ? 'selected' : ''}>A+H</option>
+                                        <option value="Hotel" ${voo.tipo === 'Hotel' ? 'selected' : ''}>Hotel</option>
+                                        <option value="Cruzeiro" ${voo.tipo === 'Cruzeiro' ? 'selected' : ''}>Cruzeiro</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Recibo e Localizadores -->
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Recibo</label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control" 
+                                               value="${voo.recibo || ''}" 
+                                               data-voo-id="${voo.id}" data-campo="recibo"
+                                               placeholder="Número do recibo">
+                                        <button class="btn btn-outline-secondary" type="button" 
+                                                onclick="copiarTexto('${voo.recibo || ''}', 'Recibo')">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
                                     </div>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">LOC GDS</label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control" 
+                                               value="${voo.locGds || ''}" 
+                                               data-voo-id="${voo.id}" data-campo="locGds"
+                                               placeholder="Localizador GDS">
+                                        <button class="btn btn-outline-secondary" type="button" 
+                                                onclick="copiarTexto('${voo.locGds || ''}', 'LOC GDS')">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">LOC CIA</label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control" 
+                                               value="${voo.locCia || ''}" 
+                                               data-voo-id="${voo.id}" data-campo="locCia"
+                                               placeholder="Localizador CIA">
+                                        <button class="btn btn-outline-secondary" type="button" 
+                                                onclick="copiarTexto('${voo.locCia || ''}', 'LOC CIA')">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Reserva</label>
+                                    <input type="text" class="form-control form-control-sm" 
+                                           value="${voo.reserva || ''}" 
+                                           data-voo-id="${voo.id}" data-campo="reserva"
+                                           placeholder="Código da reserva">
+                                </div>
+                                
+                                <!-- Serviços -->
+                                <div class="col-md-2">
+                                    <label class="form-label fw-bold">Bagagem</label>
+                                    <select class="form-select form-select-sm" data-voo-id="${voo.id}" data-campo="temBagagem">
+                                        <option value="Não informado" ${(voo.temBagagem || 'Não informado') === 'Não informado' ? 'selected' : ''}>N/I</option>
+                                        <option value="Sim" ${voo.temBagagem === 'Sim' ? 'selected' : ''}>Sim</option>
+                                        <option value="Não" ${voo.temBagagem === 'Não' ? 'selected' : ''}>Não</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-2">
+                                    <label class="form-label fw-bold">Assento</label>
+                                    <select class="form-select form-select-sm" data-voo-id="${voo.id}" data-campo="temAssento">
+                                        <option value="Não informado" ${(voo.temAssento || 'Não informado') === 'Não informado' ? 'selected' : ''}>N/I</option>
+                                        <option value="Sim" ${voo.temAssento === 'Sim' ? 'selected' : ''}>Sim</option>
+                                        <option value="Não" ${voo.temAssento === 'Não' ? 'selected' : ''}>Não</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-2">
+                                    <label class="form-label fw-bold">Seguro</label>
+                                    <select class="form-select form-select-sm" data-voo-id="${voo.id}" data-campo="seguro">
+                                        <option value="Não informado" ${(voo.seguro || 'Não informado') === 'Não informado' ? 'selected' : ''}>N/I</option>
+                                        <option value="Sim" ${voo.seguro === 'Sim' ? 'selected' : ''}>Sim</option>
+                                        <option value="Não" ${voo.seguro === 'Não' ? 'selected' : ''}>Não</option>
+                                        <option value="Recusado" ${voo.seguro === 'Recusado' ? 'selected' : ''}>Recusado</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-2">
+                                    <label class="form-label fw-bold">Cliente Ale</label>
+                                    <select class="form-select form-select-sm" data-voo-id="${voo.id}" data-campo="clienteAle">
+                                        <option value="Não" ${(voo.clienteAle || 'Não') === 'Não' ? 'selected' : ''}>Não</option>
+                                        <option value="Sim" ${voo.clienteAle === 'Sim' ? 'selected' : ''}>Sim</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Observações -->
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">Observações</label>
+                                    <textarea class="form-control form-control-sm" rows="2" 
+                                              data-voo-id="${voo.id}" data-campo="observacoes"
+                                              placeholder="Observações específicas do voo">${voo.observacoes || ''}</textarea>
                                 </div>
                             </div>
                         </div>
-                    `).join('')}
-                </div>
+                    </div>
+                `).join('')}
             `;
             
             new bootstrap.Modal(document.getElementById('modalConferencia')).show();
@@ -1502,53 +1656,210 @@
             modalData.checkin = voo;
             
             document.getElementById('checkin-info').innerHTML = `
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Cliente:</strong> ${voo.nomeCliente}</p>
-                        <p><strong>CPF:</strong> ${voo.cpfCliente}</p>
-                        <p><strong>Data do Voo:</strong> ${formatarData(voo.dataIda)}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <p><strong>Companhia:</strong> ${voo.cia || 'N/A'}</p>
-                        <p><strong>Tipo:</strong> ${voo.tipoAereo || voo.tipo}</p>
-                        <p><strong>Status:</strong> <span class="priority-badge ${voo.prioridade}">${voo.prioridade}</span></p>
+                <div class="alert alert-warning">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6><i class="fas fa-plane-departure"></i> Check-in: ${voo.nomeCliente}</h6>
+                            <p class="mb-1"><strong>Voo:</strong> ${formatarData(voo.dataIda)} - ${voo.cia || 'N/A'} | <strong>Status:</strong> <span class="priority-badge ${voo.prioridade}">${voo.prioridade}</span></p>
+                            <p class="mb-0"><strong>Vendedor:</strong> ${voo.vendedor} | <strong>Tipo:</strong> ${voo.tipoAereo || voo.tipo}</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-sm btn-info" onclick="buscarOrbiuns('${voo.whatsappCliente || ''}')">
+                                <i class="fas fa-search"></i> Buscar Orbiuns
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Campos Editáveis -->
-                <hr>
-                <h6><i class="fas fa-edit"></i> Dados do Check-in</h6>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">LOC GDS</label>
-                        <input type="text" class="form-control" id="editLocGds" 
-                               value="${voo.locGds || ''}" placeholder="Localizador GDS">
+                <!-- Detalhes Completos Editáveis -->
+                <div class="card">
+                    <div class="card-header bg-warning text-dark">
+                        <h6 class="mb-0"><i class="fas fa-edit"></i> Todos os Detalhes (Editáveis)</h6>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">LOC CIA</label>
-                        <input type="text" class="form-control" id="editLocCia" 
-                               value="${voo.locCia || ''}" placeholder="Localizador CIA">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Tem Bagagem?</label>
-                        <select class="form-select" id="editTemBagagem">
-                            <option value="Não informado" ${(voo.temBagagem || 'Não informado') === 'Não informado' ? 'selected' : ''}>Não informado</option>
-                            <option value="Sim" ${voo.temBagagem === 'Sim' ? 'selected' : ''}>Sim</option>
-                            <option value="Não" ${voo.temBagagem === 'Não' ? 'selected' : ''}>Não</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Tem Assento?</label>
-                        <select class="form-select" id="editTemAssento">
-                            <option value="Não informado" ${(voo.temAssento || 'Não informado') === 'Não informado' ? 'selected' : ''}>Não informado</option>
-                            <option value="Sim" ${voo.temAssento === 'Sim' ? 'selected' : ''}>Sim</option>
-                            <option value="Não" ${voo.temAssento === 'Não' ? 'selected' : ''}>Não</option>
-                        </select>
-                    </div>
-                    <div class="col-12">
-                        <label class="form-label">Observações do Check-in</label>
-                        <textarea class="form-control" id="editObservacoesCheckin" rows="3" 
-                                  placeholder="Observações específicas do check-in">${voo.observacoes || ''}</textarea>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <!-- Dados Básicos -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Nome do Cliente</label>
+                                <input type="text" class="form-control form-control-sm" 
+                                       value="${voo.nomeCliente || ''}" 
+                                       id="editNomeCliente">
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">CPF</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" 
+                                           value="${voo.cpfCliente || ''}" 
+                                           id="editCpfCliente"
+                                           placeholder="000.000.000-00">
+                                    <button class="btn btn-outline-secondary" type="button" 
+                                            onclick="copiarTexto('${voo.cpfCliente || ''}', 'CPF')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">WhatsApp</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" 
+                                           value="${voo.whatsappCliente || ''}" 
+                                           id="editWhatsappCliente"
+                                           placeholder="(11) 99999-9999">
+                                    <button class="btn btn-outline-secondary" type="button" 
+                                            onclick="copiarTexto('${voo.whatsappCliente || ''}', 'WhatsApp')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Datas e Voo -->
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Data Ida</label>
+                                <input type="date" class="form-control form-control-sm" 
+                                       value="${voo.dataIda || ''}" 
+                                       id="editDataIda">
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Data Volta</label>
+                                <input type="date" class="form-control form-control-sm" 
+                                       value="${voo.dataVolta || ''}" 
+                                       id="editDataVolta">
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Companhia</label>
+                                <input type="text" class="form-control form-control-sm" 
+                                       value="${voo.cia || ''}" 
+                                       id="editCia"
+                                       placeholder="GOL, LATAM, AZUL...">
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Tipo</label>
+                                <select class="form-select form-select-sm" id="editTipo">
+                                    <option value="Aéreo" ${(voo.tipo || 'Aéreo') === 'Aéreo' ? 'selected' : ''}>Aéreo</option>
+                                    <option value="A+H" ${voo.tipo === 'A+H' ? 'selected' : ''}>A+H</option>
+                                    <option value="Hotel" ${voo.tipo === 'Hotel' ? 'selected' : ''}>Hotel</option>
+                                    <option value="Cruzeiro" ${voo.tipo === 'Cruzeiro' ? 'selected' : ''}>Cruzeiro</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Recibo e Localizadores -->
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Recibo</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" 
+                                           value="${voo.recibo || ''}" 
+                                           id="editRecibo"
+                                           placeholder="Número do recibo">
+                                    <button class="btn btn-outline-secondary" type="button" 
+                                            onclick="copiarTexto('${voo.recibo || ''}', 'Recibo')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">LOC GDS</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" 
+                                           value="${voo.locGds || ''}" 
+                                           id="editLocGds"
+                                           placeholder="Localizador GDS">
+                                    <button class="btn btn-outline-secondary" type="button" 
+                                            onclick="copiarTexto(document.getElementById('editLocGds').value, 'LOC GDS')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">LOC CIA</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" 
+                                           value="${voo.locCia || ''}" 
+                                           id="editLocCia"
+                                           placeholder="Localizador CIA">
+                                    <button class="btn btn-outline-secondary" type="button" 
+                                            onclick="copiarTexto(document.getElementById('editLocCia').value, 'LOC CIA')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Reserva</label>
+                                <input type="text" class="form-control form-control-sm" 
+                                       value="${voo.reserva || ''}" 
+                                       id="editReserva"
+                                       placeholder="Código da reserva">
+                            </div>
+                            
+                            <!-- Serviços -->
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold">Bagagem</label>
+                                <select class="form-select form-select-sm" id="editTemBagagem">
+                                    <option value="Não informado" ${(voo.temBagagem || 'Não informado') === 'Não informado' ? 'selected' : ''}>N/I</option>
+                                    <option value="Sim" ${voo.temBagagem === 'Sim' ? 'selected' : ''}>Sim</option>
+                                    <option value="Não" ${voo.temBagagem === 'Não' ? 'selected' : ''}>Não</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold">Assento</label>
+                                <select class="form-select form-select-sm" id="editTemAssento">
+                                    <option value="Não informado" ${(voo.temAssento || 'Não informado') === 'Não informado' ? 'selected' : ''}>N/I</option>
+                                    <option value="Sim" ${voo.temAssento === 'Sim' ? 'selected' : ''}>Sim</option>
+                                    <option value="Não" ${voo.temAssento === 'Não' ? 'selected' : ''}>Não</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold">Multi Trecho</label>
+                                <select class="form-select form-select-sm" id="editMultiTrecho">
+                                    <option value="Não" ${(voo.multiTrecho || 'Não') === 'Não' ? 'selected' : ''}>Não</option>
+                                    <option value="Sim" ${voo.multiTrecho === 'Sim' ? 'selected' : ''}>Sim</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold">Seguro</label>
+                                <select class="form-select form-select-sm" id="editSeguro">
+                                    <option value="Não informado" ${(voo.seguro || 'Não informado') === 'Não informado' ? 'selected' : ''}>N/I</option>
+                                    <option value="Sim" ${voo.seguro === 'Sim' ? 'selected' : ''}>Sim</option>
+                                    <option value="Não" ${voo.seguro === 'Não' ? 'selected' : ''}>Não</option>
+                                    <option value="Recusado" ${voo.seguro === 'Recusado' ? 'selected' : ''}>Recusado</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold">Cliente Ale</label>
+                                <select class="form-select form-select-sm" id="editClienteAle">
+                                    <option value="Não" ${(voo.clienteAle || 'Não') === 'Não' ? 'selected' : ''}>Não</option>
+                                    <option value="Sim" ${voo.clienteAle === 'Sim' ? 'selected' : ''}>Sim</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold">Tipo Aéreo</label>
+                                <select class="form-select form-select-sm" id="editTipoAereo">
+                                    <option value="OW" ${(voo.tipoAereo || 'OW') === 'OW' ? 'selected' : ''}>OW</option>
+                                    <option value="RT" ${voo.tipoAereo === 'RT' ? 'selected' : ''}>RT</option>
+                                    <option value="MT" ${voo.tipoAereo === 'MT' ? 'selected' : ''}>MT</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Observações -->
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Observações do Check-in</label>
+                                <textarea class="form-control form-control-sm" rows="2" 
+                                          id="editObservacoesCheckin"
+                                          placeholder="Observações específicas do check-in">${voo.observacoes || ''}</textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -1892,6 +2203,171 @@
                 console.error('❌ Erro ao salvar edições:', error);
                 mostrarAlerta('Erro ao salvar edições: ' + error.message, 'danger');
             }
+        }
+        
+        // Função para copiar texto para área de transferência
+        async function copiarTexto(texto, tipo) {
+            try {
+                if (!texto || texto.trim() === '') {
+                    mostrarAlerta(`Nenhum ${tipo} para copiar`, 'warning');
+                    return;
+                }
+                
+                await navigator.clipboard.writeText(texto);
+                mostrarAlerta(`${tipo} copiado: ${texto}`, 'success');
+                
+            } catch (error) {
+                console.error('❌ Erro ao copiar:', error);
+                
+                // Fallback para navegadores mais antigos
+                try {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = texto;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    mostrarAlerta(`${tipo} copiado: ${texto}`, 'success');
+                } catch (fallbackError) {
+                    mostrarAlerta('Erro ao copiar texto', 'danger');
+                }
+            }
+        }
+        
+        // Função para buscar orbiuns
+        async function buscarOrbiuns(whatsapp) {
+            try {
+                if (!whatsapp || whatsapp.trim() === '') {
+                    mostrarAlerta('WhatsApp não informado para buscar orbiuns', 'warning');
+                    return;
+                }
+                
+                console.log('🔍 Buscando orbiuns para WhatsApp:', whatsapp);
+                
+                // Chamar API para buscar orbiuns
+                const dados = await fazerRequisicaoJSONP(CVC_CONFIG.API_URL, {
+                    action: 'buscarOrbiuns',
+                    whatsapp: whatsapp,
+                    t: Date.now()
+                });
+                
+                if (dados.success && dados.data && dados.data.orbiuns) {
+                    const orbiuns = dados.data.orbiuns;
+                    
+                    if (orbiuns.length > 0) {
+                        mostrarModalOrbiuns(orbiuns, whatsapp);
+                    } else {
+                        mostrarAlerta(`Nenhum orbiun encontrado para ${whatsapp}`, 'info');
+                    }
+                } else {
+                    mostrarAlerta('Erro ao buscar orbiuns: ' + (dados.message || 'Resposta inválida'), 'danger');
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro ao buscar orbiuns:', error);
+                
+                // Fallback: mostrar dados simulados
+                const orbiunsSimulados = [
+                    {
+                        id: 1,
+                        titulo: 'Cotação - Pacote Nordeste',
+                        departamento: 'Vendas',
+                        responsavel: 'Alessandro',
+                        status: 'Em Andamento',
+                        dataAbertura: '2024-12-01',
+                        prioridade: 'Normal',
+                        observacoes: 'Cliente interessado em pacote para Natal/RN'
+                    },
+                    {
+                        id: 2,
+                        titulo: 'Dúvida sobre Documentação',
+                        departamento: 'Atendimento',
+                        responsavel: 'Ana Paula',
+                        status: 'Pendente',
+                        dataAbertura: '2024-12-03',
+                        prioridade: 'Baixa',
+                        observacoes: 'Esclarecimentos sobre passaporte'
+                    }
+                ];
+                
+                mostrarModalOrbiuns(orbiunsSimulados, whatsapp, true);
+            }
+        }
+        
+        // Função para mostrar modal com orbiuns encontrados
+        function mostrarModalOrbiuns(orbiuns, whatsapp, simulado = false) {
+            const modalHtml = `
+                <div class="modal fade" id="modalOrbiuns" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-info text-white">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-search"></i> Orbiuns Encontrados
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="alert alert-info">
+                                    <strong>WhatsApp pesquisado:</strong> ${whatsapp}
+                                    ${simulado ? '<br><small class="text-muted">Dados simulados - conecte com a API real</small>' : ''}
+                                </div>
+                                
+                                <div class="row">
+                                    ${orbiuns.map(orbiun => `
+                                        <div class="col-md-6 mb-3">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6 class="mb-0">${orbiun.titulo}</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <p class="mb-1"><strong>Departamento:</strong> ${orbiun.departamento}</p>
+                                                    <p class="mb-1"><strong>Responsável:</strong> ${orbiun.responsavel}</p>
+                                                    <p class="mb-1"><strong>Status:</strong> 
+                                                        <span class="badge ${orbiun.status === 'Em Andamento' ? 'bg-warning' : 'bg-secondary'}">${orbiun.status}</span>
+                                                    </p>
+                                                    <p class="mb-1"><strong>Data:</strong> ${formatarData(orbiun.dataAbertura)}</p>
+                                                    <p class="mb-1"><strong>Prioridade:</strong> ${orbiun.prioridade}</p>
+                                                    ${orbiun.observacoes ? `<p class="mb-0"><small class="text-muted">${orbiun.observacoes}</small></p>` : ''}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                
+                                ${orbiuns.length === 0 ? `
+                                    <div class="text-center py-4">
+                                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                                        <p class="text-muted">Nenhum orbiun encontrado para este WhatsApp</p>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                <button type="button" class="btn btn-primary" onclick="abrirOrbiuns()">
+                                    <i class="fas fa-external-link-alt"></i> Abrir Orbiuns
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Remover modal anterior se existir
+            const modalExistente = document.getElementById('modalOrbiuns');
+            if (modalExistente) {
+                modalExistente.remove();
+            }
+            
+            // Adicionar novo modal
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            
+            // Mostrar modal
+            new bootstrap.Modal(document.getElementById('modalOrbiuns')).show();
+        }
+        
+        // Função para abrir página de orbiuns
+        function abrirOrbiuns() {
+            window.open('orbiuns.html', '_blank');
         }
     </script>
 </body>
