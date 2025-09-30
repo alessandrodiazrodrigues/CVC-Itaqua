@@ -928,13 +928,15 @@
     
     <script>
         // ================================================================================
-        // 🚀 CVC PORTAL ITAQUÁ - VENDAS AUTOMATIZADO v10.0 COMPLETO
+        // 🚀 CVC PORTAL ITAQUÁ - VENDAS AUTOMATIZADO v10.0 COMPLETO - CORRIGIDO
         // Sistema completo que busca dados reais da planilha e exibe para os vendedores
         // CORREÇÃO TOTAL: Bypass CORS com JSONP + Interface Moderna + Debug Avançado
+        // CORREÇÃO ESPECÍFICA: Resolução do erro "Invalid Date" na formatação de datas
         // ================================================================================
         
-        console.log('🚀 CVC Portal Itaquá - Vendas Automatizado v10.0');
-        console.log('✨ Melhorias v10.0:');
+        console.log('🚀 CVC Portal Itaquá - Vendas Automatizado v10.0 - CORRIGIDO');
+        console.log('✨ Melhorias v10.0 (CORRIGIDO):');
+        console.log('   • Correção do erro "Invalid Date" na formatação de datas');
         console.log('   • Interface modernizada com animações fluidas');
         console.log('   • Sistema de toast notifications');
         console.log('   • Performance otimizada e debug avançado');
@@ -944,7 +946,7 @@
         console.log('   • Animações de contagem nos stats');
         console.log('   • Sistema de skeleton loading');
         console.log('');
-        console.log('🎯 Sistema pronto para uso!');
+        console.log('🎯 Sistema pronto para uso - BUG CORRIGIDO!');
         
         // ================================================================================
         // VARIÁVEIS GLOBAIS
@@ -957,6 +959,115 @@
         let API_URL = null;
         let filtroAtivo = 'todos';
         let termoBusca = '';
+
+        // ================================================================================
+        // 🔧 CORREÇÃO ESPECÍFICA: FUNÇÃO DE FORMATAÇÃO DE DATA SEGURA
+        // ================================================================================
+        
+        /**
+         * Função corrigida para formatação segura de datas
+         * Resolve o erro "Invalid Date" encontrado na conversa anterior
+         */
+        function formatarDataSegura(dataString) {
+            try {
+                if (!dataString) {
+                    return 'Data não informada';
+                }
+                
+                // Se já é um objeto Date válido
+                if (dataString instanceof Date && !isNaN(dataString.getTime())) {
+                    return dataString.toLocaleDateString('pt-BR');
+                }
+                
+                // Converter string para Date
+                let data;
+                
+                // Tentar diferentes formatos de data
+                if (typeof dataString === 'string') {
+                    // Formato ISO (YYYY-MM-DD ou com hora)
+                    if (dataString.includes('-') && dataString.length >= 10) {
+                        data = new Date(dataString);
+                    }
+                    // Formato brasileiro (DD/MM/YYYY)
+                    else if (dataString.includes('/')) {
+                        const partes = dataString.split('/');
+                        if (partes.length === 3) {
+                            // Assumir formato DD/MM/YYYY
+                            const dia = parseInt(partes[0]);
+                            const mes = parseInt(partes[1]) - 1; // Mês é 0-indexed
+                            const ano = parseInt(partes[2]);
+                            data = new Date(ano, mes, dia);
+                        }
+                    }
+                    // Tentar parse direto
+                    else {
+                        data = new Date(dataString);
+                    }
+                } else {
+                    data = new Date(dataString);
+                }
+                
+                // Verificar se a data é válida
+                if (data && !isNaN(data.getTime())) {
+                    return data.toLocaleDateString('pt-BR');
+                } else {
+                    console.warn('Data inválida recebida:', dataString);
+                    return 'Data inválida';
+                }
+                
+            } catch (error) {
+                console.error('Erro ao formatar data:', error, 'Data original:', dataString);
+                return 'Erro na data';
+            }
+        }
+
+        /**
+         * Função corrigida para calcular diferença de dias com verificação de data válida
+         */
+        function calcularDiferencaDias(dataString) {
+            try {
+                if (!dataString) return 999; // Valor alto para ordenação
+                
+                let dataEmbarque;
+                
+                // Processar data com a mesma lógica da formatarDataSegura
+                if (dataString instanceof Date && !isNaN(dataString.getTime())) {
+                    dataEmbarque = dataString;
+                } else if (typeof dataString === 'string') {
+                    if (dataString.includes('-') && dataString.length >= 10) {
+                        dataEmbarque = new Date(dataString);
+                    } else if (dataString.includes('/')) {
+                        const partes = dataString.split('/');
+                        if (partes.length === 3) {
+                            const dia = parseInt(partes[0]);
+                            const mes = parseInt(partes[1]) - 1;
+                            const ano = parseInt(partes[2]);
+                            dataEmbarque = new Date(ano, mes, dia);
+                        }
+                    } else {
+                        dataEmbarque = new Date(dataString);
+                    }
+                } else {
+                    dataEmbarque = new Date(dataString);
+                }
+                
+                // Verificar se a data é válida
+                if (!dataEmbarque || isNaN(dataEmbarque.getTime())) {
+                    console.warn('Data inválida para cálculo:', dataString);
+                    return 999;
+                }
+                
+                const hoje = new Date();
+                const diffTime = dataEmbarque - hoje;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                return diffDays;
+                
+            } catch (error) {
+                console.error('Erro ao calcular diferença de dias:', error);
+                return 999;
+            }
+        }
 
         // ================================================================================
         // SISTEMA DE DEBUG AVANÇADO
@@ -1037,7 +1148,7 @@
         // ================================================================================
         
         function inicializarSistema() {
-            addDebugLog('🚀 Iniciando CVC Portal Itaquá - Vendas Automatizado v10.0...', 'info');
+            addDebugLog('🚀 Iniciando CVC Portal Itaquá - Vendas Automatizado v10.0 (CORRIGIDO)...', 'info');
             
             // 🔧 CORREÇÃO: Verificação mais robusta da configuração
             if (typeof getApiUrl === 'function') {
@@ -1060,6 +1171,7 @@
             
             showDebugSection();
             addDebugLog('✅ Sistema inicializado com sucesso!', 'success');
+            addDebugLog('🔧 Correção "Invalid Date" aplicada', 'success');
             
             // Configurar eventos
             configurarEventos();
@@ -1263,12 +1375,10 @@
                 vendedoresData[vendedor].total++;
                 vendedoresData[vendedor].recibos.push(recibo);
                 
-                // Verificar urgência (embarque em até 3 dias)
-                const dataEmbarque = new Date(recibo.dataIda || recibo.dataEmbarque);
-                const hoje = new Date();
-                const diffDias = Math.ceil((dataEmbarque - hoje) / (1000 * 60 * 60 * 24));
+                // 🔧 CORREÇÃO: Usar função segura para verificar urgência
+                const diffDias = calcularDiferencaDias(recibo.dataIda || recibo.dataEmbarque);
                 
-                if (diffDias <= 3) {
+                if (diffDias <= 3 && diffDias !== 999) {
                     vendedoresData[vendedor].urgentes++;
                 }
                 
@@ -1341,18 +1451,16 @@
         }
         
         function calcularEstatisticas() {
-            const hoje = new Date();
             let urgentes = 0;
             let semCPF = 0;
             let semWhatsApp = 0;
             let completos = 0;
             
             recibosData.forEach(recibo => {
-                // Verificar urgência
-                const dataEmbarque = new Date(recibo.dataIda || recibo.dataEmbarque);
-                const diffDias = Math.ceil((dataEmbarque - hoje) / (1000 * 60 * 60 * 24));
+                // 🔧 CORREÇÃO: Usar função segura para verificar urgência
+                const diffDias = calcularDiferencaDias(recibo.dataIda || recibo.dataEmbarque);
                 
-                if (diffDias <= 3) urgentes++;
+                if (diffDias <= 3 && diffDias !== 999) urgentes++;
                 
                 // Verificar CPF
                 if (!recibo.cpf || recibo.cpf.length < 11) {
@@ -1443,10 +1551,8 @@
             switch (filtroAtivo) {
                 case 'urgente':
                     recibosFiltrados = recibosFiltrados.filter(recibo => {
-                        const dataEmbarque = new Date(recibo.dataIda || recibo.dataEmbarque);
-                        const hoje = new Date();
-                        const diffDias = Math.ceil((dataEmbarque - hoje) / (1000 * 60 * 60 * 24));
-                        return diffDias <= 3;
+                        const diffDias = calcularDiferencaDias(recibo.dataIda || recibo.dataEmbarque);
+                        return diffDias <= 3 && diffDias !== 999;
                     });
                     break;
                 case 'semCPF':
@@ -1490,17 +1596,17 @@
             let html = '';
             
             recibos.forEach((recibo, index) => {
-                const dataEmbarque = new Date(recibo.dataIda || recibo.dataEmbarque);
-                const hoje = new Date();
-                const diffDias = Math.ceil((dataEmbarque - hoje) / (1000 * 60 * 60 * 24));
-                const urgenciaClass = diffDias <= 3 ? 'urgente' : 'normal';
+                // 🔧 CORREÇÃO: Usar função segura para cálculos
+                const diffDias = calcularDiferencaDias(recibo.dataIda || recibo.dataEmbarque);
+                const urgenciaClass = (diffDias <= 3 && diffDias !== 999) ? 'urgente' : 'normal';
+                const dataFormatada = formatarDataSegura(recibo.dataIda || recibo.dataEmbarque);
                 
                 html += `
                     <div class="recibo-card" style="animation-delay: ${index * 0.1}s">
                         <div class="recibo-header">
                             <div class="recibo-numero">📄 ${recibo.recibo || 'N/A'}</div>
                             <div class="recibo-urgencia ${urgenciaClass}">
-                                ${diffDias <= 3 ? `Urgente (${diffDias} dias)` : 'Normal'}
+                                ${(diffDias <= 3 && diffDias !== 999) ? `Urgente (${diffDias} dias)` : 'Normal'}
                             </div>
                         </div>
                         <div class="recibo-info">
@@ -1514,7 +1620,7 @@
                             </div>
                             <div class="recibo-campo">
                                 <span class="recibo-label">Embarque:</span>
-                                <span class="recibo-valor">${dataEmbarque.toLocaleDateString('pt-BR')}</span>
+                                <span class="recibo-valor">${dataFormatada}</span>
                             </div>
                             <div class="recibo-campo">
                                 <span class="recibo-label">CPF:</span>
@@ -1582,7 +1688,7 @@
                 'Recibo': recibo.recibo || '',
                 'Cliente': recibo.nomeCliente || '',
                 'Vendedor': recibo.vendedor || '',
-                'Data Embarque': recibo.dataIda || recibo.dataEmbarque || '',
+                'Data Embarque': formatarDataSegura(recibo.dataIda || recibo.dataEmbarque),
                 'CPF': recibo.cpf || 'PENDENTE',
                 'WhatsApp': recibo.whatsapp || 'PENDENTE',
                 'Tipo': recibo.tipo || ''
