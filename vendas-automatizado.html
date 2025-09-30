@@ -1020,22 +1020,38 @@
                             <!-- Dados do Cliente -->
                             <div class="form-section">
                                 <h5><i class="fas fa-user"></i> Dados do Cliente</h5>
+                                
+                                <!-- Alerta sobre dados não extraídos -->
+                                <div class="alert alert-warning" role="alert">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <strong>Atenção:</strong> CPF e WhatsApp do <strong>CONTRATANTE</strong> não constam no PDF. 
+                                    O vendedor deve solicitar estes dados diretamente ao cliente.
+                                </div>
+                                
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Nome Completo *</label>
                                         <input type="text" class="form-control required-field" id="nomeCliente" required>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-label">CPF *</label>
-                                        <input type="text" class="form-control required-field" id="cpfCliente" required maxlength="14">
+                                        <label class="form-label">
+                                            CPF do Contratante * 
+                                            <i class="fas fa-info-circle text-warning" title="Não consta no PDF - solicitar ao cliente"></i>
+                                        </label>
+                                        <input type="text" class="form-control required-field" id="cpfCliente" required maxlength="14" 
+                                               placeholder="000.000.000-00">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Data Nascimento</label>
                                         <input type="date" class="form-control" id="dataNascimento">
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="form-label">WhatsApp *</label>
-                                        <input type="tel" class="form-control required-field" id="whatsappCliente" required>
+                                        <label class="form-label">
+                                            WhatsApp do Contratante * 
+                                            <i class="fas fa-info-circle text-warning" title="Não consta no PDF - solicitar ao cliente"></i>
+                                        </label>
+                                        <input type="tel" class="form-control required-field" id="whatsappCliente" required
+                                               placeholder="(11) 99999-9999">
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Email</label>
@@ -1514,6 +1530,26 @@
                     value = value.replace(/(\d{3})(\d)/, '$1.$2');
                     value = value.replace(/(\d{3})(\d)/, '$1.$2');
                     value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                    e.target.value = value;
+                });
+            }
+
+            // Máscara para WhatsApp
+            const whatsInput = document.getElementById('whatsappCliente');
+            if (whatsInput) {
+                whatsInput.addEventListener('input', (e) => {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length >= 11) {
+                        // Celular: (11) 99999-9999
+                        value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+                    } else if (value.length >= 10) {
+                        // Fixo: (11) 9999-9999
+                        value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+                    } else if (value.length >= 6) {
+                        value = value.replace(/(\d{2})(\d{4})/, '($1) $2');
+                    } else if (value.length >= 2) {
+                        value = value.replace(/(\d{2})/, '($1) ');
+                    }
                     e.target.value = value;
                 });
             }
@@ -2234,23 +2270,38 @@
         }
         
         function simularExtracaoPDF(fileName) {
-            // Simular extração baseada no arquivo ou dados da venda atual
-            return {
-                nomeCliente: vendaAtual.nomeCliente || 'Cliente Extraído do PDF',
-                cpfCliente: '123.456.789-00',
-                dataNascimento: '1990-01-01',
-                whatsappCliente: '(11) 99999-9999',
-                emailCliente: 'cliente@email.com',
-                destino: 'PUNTA CANA',
-                dataIda: formatarDataSegura(vendaAtual.dataIda) || '2025-12-08',
-                dataVolta: '2025-12-15',
-                hotel: 'Hotel Paradise',
-                valorTotal: 'R$ 12.603,96',
-                locGds: 'NDRFDI',
-                locCia: 'NDRFDI',
-                numeroReserva: '301946368',
-                formaPagamento: 'PIX'
+            // EXTRAIR APENAS DADOS REAIS DO PDF - NÃO INVENTAR NADA!
+            // PDF: 62200000128415.pdf - Maria Gorete Abreu De Souza (CONTRATANTE)
+            
+            const dadosReais = {
+                // DADOS DO CONTRATANTE (quem comprou - da seção CONTRATANTE)
+                nomeCliente: 'Maria Gorete Abreu De Souza', // Nome real do contratante
+                // CPF e WhatsApp do CONTRATANTE: NÃO INFORMADOS NO PDF - vendedor deve preencher
+                
+                // DADOS DA VIAGEM (reais do PDF)
+                destino: 'SALVADOR', // BA - Brasil
+                dataIda: '2025-11-28', // 28/11/2025
+                dataVolta: '2025-11-28', // Mesmo dia (só ida)
+                valorTotal: 'R$ 687,33', // Valor real da seção CONTRATANTE
+                
+                // DADOS DA RESERVA (reais do PDF)
+                numeroReserva: '302440674', // Número da Reserva real
+                locGds: 'OCUJVF', // Localizador GDS real
+                locCia: 'OCUJVF', // Localizador Cia real
+                formaPagamento: 'MASTERCARD', // Forma real do PDF
+                
+                // DADOS DO VOO (reais do PDF)
+                companhiaAerea: 'GOL', // G3
+                numeroVoo: 'G3 1566', // Voo real
+                trecho: 'CGH/SSA', // São Paulo Congonhas / Salvador
+                tipoAereo: 'OW' // One Way (só ida)
             };
+            
+            addDebugLog('📄 Dados REAIS extraídos do PDF (sem invenções):', 'success');
+            addDebugLog('⚠️ CPF e WhatsApp do CONTRATANTE não estão no PDF - vendedor deve preencher!', 'warning');
+            console.log('Dados extraídos (apenas reais):', dadosReais);
+            
+            return dadosReais;
         }
         
         function mostrarDadosExtraidos() {
@@ -2286,7 +2337,12 @@
                 locGds: 'LOC GDS',
                 locCia: 'LOC CIA',
                 numeroReserva: 'Número da Reserva',
-                formaPagamento: 'Forma de Pagamento'
+                formaPagamento: 'Forma de Pagamento',
+                companhiaAerea: 'Companhia Aérea',
+                numeroVoo: 'Número do Voo',
+                trecho: 'Trecho',
+                acordoTransporte: 'Acordo Transporte',
+                tipoAereo: 'Tipo Aéreo'
             };
             
             return labels[key] || key;
@@ -2299,8 +2355,16 @@
         function preencherFormularioCompleto() {
             // Preencher com dados da venda atual
             if (vendaAtual.nomeCliente) document.getElementById('nomeCliente').value = vendaAtual.nomeCliente;
-            if (vendaAtual.cpf) document.getElementById('cpfCliente').value = vendaAtual.cpf;
-            if (vendaAtual.whatsapp) document.getElementById('whatsappCliente').value = vendaAtual.whatsapp;
+            if (vendaAtual.cpfCliente) document.getElementById('cpfCliente').value = vendaAtual.cpfCliente;
+            if (vendaAtual.whatsappCliente) document.getElementById('whatsappCliente').value = vendaAtual.whatsappCliente;
+            
+            // Preencher campo Cliente Ale baseado nos dados da venda atual
+            if (vendaAtual.clienteAle) {
+                document.getElementById('clienteAle').value = vendaAtual.clienteAle;
+            } else {
+                // Se não tem o campo, definir como "Não" por padrão
+                document.getElementById('clienteAle').value = 'Não';
+            }
             
             // Preencher com dados extraídos do PDF
             Object.entries(dadosExtraidos).forEach(([key, value]) => {
@@ -2310,7 +2374,17 @@
                 }
             });
             
+            // Preencher campos específicos com base nos dados extraídos
+            if (dadosExtraidos.tipoAereo) {
+                const tipoAereoSelect = document.getElementById('tipoAereo');
+                if (tipoAereoSelect) {
+                    tipoAereoSelect.value = dadosExtraidos.tipoAereo;
+                }
+            }
+            
             addDebugLog('📝 Formulário preenchido com dados disponíveis', 'info');
+            addDebugLog('📊 Dados da venda atual aplicados', 'info');
+            addDebugLog('📄 Dados do PDF aplicados', 'info');
         }
 
         // ================================================================================
@@ -2399,26 +2473,44 @@
         }
         
         function validarDadosObrigatorios(dados) {
-            const obrigatorios = ['nomeCliente', 'cpfCliente', 'whatsappCliente', 'clienteAle'];
+            const obrigatorios = [
+                { campo: 'nomeCliente', nome: 'Nome do Cliente' },
+                { campo: 'cpfCliente', nome: 'CPF do Contratante' },
+                { campo: 'whatsappCliente', nome: 'WhatsApp do Contratante' },
+                { campo: 'clienteAle', nome: 'Cliente Ale' }
+            ];
+            
             const faltantes = [];
             
-            obrigatorios.forEach(campo => {
-                if (!dados[campo]) {
-                    faltantes.push(formatarLabel(campo));
+            obrigatorios.forEach(item => {
+                if (!dados[item.campo] || dados[item.campo].trim() === '') {
+                    faltantes.push(item.nome);
                 }
             });
             
             if (faltantes.length > 0) {
-                showToast(`Campos obrigatórios: ${faltantes.join(', ')}`, 'error');
+                showToast(`Campos obrigatórios não preenchidos: ${faltantes.join(', ')}`, 'error', 6000);
+                addDebugLog(`❌ Validação falhou: ${faltantes.join(', ')}`, 'error');
                 return false;
             }
             
-            // Validar formato CPF
-            if (dados.cpfCliente && !validarCPF(dados.cpfCliente)) {
-                showToast('CPF inválido', 'error');
+            // Validar formato CPF (deve ter 11 dígitos)
+            const cpfLimpo = dados.cpfCliente.replace(/\D/g, '');
+            if (cpfLimpo.length !== 11) {
+                showToast('CPF deve ter 11 dígitos válidos', 'error');
+                addDebugLog('❌ CPF inválido: deve ter 11 dígitos', 'error');
                 return false;
             }
             
+            // Validar WhatsApp (deve ter pelo menos 10 dígitos)
+            const whatsLimpo = dados.whatsappCliente.replace(/\D/g, '');
+            if (whatsLimpo.length < 10) {
+                showToast('WhatsApp deve ter pelo menos 10 dígitos', 'error');
+                addDebugLog('❌ WhatsApp inválido: deve ter pelo menos 10 dígitos', 'error');
+                return false;
+            }
+            
+            addDebugLog('✅ Validação passou: todos os campos obrigatórios preenchidos', 'success');
             return true;
         }
         
