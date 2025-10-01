@@ -31,7 +31,7 @@
     
     <style>
         /* ================================================================================
-         * ESTILOS ESPECÍFICOS PARA EMBARQUES v12.0 - DASHBOARDS TEMPORAIS
+         * ESTILOS ESPECÍFICOS PARA EMBARQUES v12.1 - FEEDBACK VISUAL E NAVEGAÇÃO
          * ================================================================================ */
         
         .main-container {
@@ -219,6 +219,61 @@
             opacity: 0.9;
         }
         
+        /* ESTADOS DE BOTÕES - NOVA FUNCIONALIDADE */
+        .btn-loading {
+            position: relative;
+            pointer-events: none;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .btn-success-feedback {
+            background: #28a745 !important;
+            border-color: #28a745 !important;
+            animation: successPulse 0.6s ease-out;
+        }
+        
+        .btn-error-feedback {
+            background: #dc3545 !important;
+            border-color: #dc3545 !important;
+            animation: errorShake 0.6s ease-out;
+        }
+        
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes errorShake {
+            0%, 20%, 40%, 60%, 80% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+        }
+        
         /* CONTROLES SUPERIORES */
         .controls-section {
             background: rgba(255, 255, 255, 0.1);
@@ -283,12 +338,6 @@
             animation: pulse 2s infinite;
         }
         
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-        
         /* LOADING */
         .loading-overlay {
             position: fixed;
@@ -310,11 +359,6 @@
             border-top: 4px solid white;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
         
         /* EMPTY STATES */
@@ -390,6 +434,23 @@
             background: linear-gradient(135deg, #f8d7da, #f5c6cb);
             color: #721c24;
         }
+        
+        /* HEADER ATUALIZADO CONFORME PADRÃO */
+        .cvc-page-title {
+            color: var(--cvc-branco);
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin: 0;
+            border: none;
+            padding: 0;
+        }
+        
+        .cvc-subtitle-page {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin: 0;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body class="cvc-background">
@@ -397,45 +458,87 @@
     <div class="loading-overlay" id="loadingOverlay">
         <div class="text-center text-white">
             <div class="loading-spinner"></div>
-            <div class="mt-3">Carregando embarques v12.0...</div>
+            <div class="mt-3">Carregando embarques v12.1...</div>
         </div>
     </div>
 
     <div class="container-fluid">
         <div class="main-container">
-            <!-- Header CVC -->
+            <!-- Header CVC Padrão -->
             <header class="cvc-header">
                 <div class="container-fluid">
                     <div class="row align-items-center py-3">
+                        <!-- Logo CVC -->
                         <div class="col-md-4">
                             <div class="cvc-logo">
                                 <div class="cvc-logo-symbol">CVC</div>
                                 <div>
                                     <div class="cvc-logo-text">CVC Portal Itaquá</div>
-                                    <p class="cvc-subtitle">Controle de Embarques v12.0</p>
+                                    <p class="cvc-subtitle">Sistema Integrado de Gestão</p>
                                 </div>
                             </div>
                         </div>
                         
+                        <!-- Título da Página -->
                         <div class="col-md-4 text-center">
-                            <h1 class="cvc-page-title">Controle de Embarques</h1>
+                            <h1 class="cvc-page-title">
+                                <i class="fas fa-plane-departure"></i> Controle de Embarques
+                            </h1>
                             <p class="cvc-subtitle-page">Conferências • Check-ins • Pós-vendas</p>
                         </div>
                         
+                        <!-- Status do Sistema -->
                         <div class="col-md-4 text-end">
-                            <button class="btn btn-outline-light btn-sm me-2" onclick="voltarDashboard()">
-                                <i class="fas fa-arrow-left"></i> Voltar
-                            </button>
-                            <button class="btn btn-light btn-sm me-2" onclick="recarregarEmbarques()">
-                                <i class="fas fa-sync-alt"></i> Atualizar
-                            </button>
-                            <button class="btn btn-warning btn-sm" onclick="testarConectividade()">
-                                <i class="fas fa-wifi"></i> Testar API
-                            </button>
+                            <div class="d-flex align-items-center justify-content-end">
+                                <div class="me-3">
+                                    <small class="text-white-50">Sistema v12.1 - Gestão temporal de embarques</small><br>
+                                    <small class="text-white">
+                                        <i class="fas fa-check-circle"></i> Sistema Online
+                                    </small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </header>
+
+            <!-- Navegação Principal - Igual ao Index -->
+            <nav class="cvc-nav">
+                <div class="container-fluid">
+                    <ul class="nav nav-pills justify-content-center mb-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="orcamentos.html">
+                                <i class="fas fa-calculator"></i> Padronizador de Orçamentos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="vendas.html">
+                                <i class="fas fa-chart-line"></i> Informe de Vendas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="vendas-automatizado.html">
+                                <i class="fas fa-robot"></i> Informe Automatizado
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="embarques.html">
+                                <i class="fas fa-plane-departure"></i> Controle de Embarques
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="orbiuns.html">
+                                <i class="fas fa-clipboard-list"></i> Controle de Orbiuns
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
 
             <!-- Conteúdo Principal -->
             <main class="content-section">
@@ -480,6 +583,12 @@
                     <div class="filter-group ms-auto">
                         <button class="btn btn-outline-primary btn-sm" onclick="exportarRelatorio()">
                             <i class="fas fa-download"></i> Exportar
+                        </button>
+                        <button class="btn btn-outline-success btn-sm" onclick="recarregarEmbarques()">
+                            <i class="fas fa-sync-alt"></i> Atualizar
+                        </button>
+                        <button class="btn btn-outline-warning btn-sm" onclick="testarConectividade()">
+                            <i class="fas fa-wifi"></i> Testar API
                         </button>
                     </div>
                 </div>
@@ -691,7 +800,7 @@
     
     <script>
         // ================================================================================
-        // CVC PORTAL ITAQUÁ - EMBARQUES v12.0 - SISTEMA DE DASHBOARDS TEMPORAIS
+        // CVC PORTAL ITAQUÁ - EMBARQUES v12.1 - SISTEMA COM FEEDBACK VISUAL
         // ================================================================================
         
         // Variáveis globais
@@ -712,13 +821,13 @@
         
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 CVC Portal Itaquá - Embarques v12.0 iniciando...');
+            console.log('🚀 CVC Portal Itaquá - Embarques v12.1 iniciando...');
             inicializarSistema();
         });
         
         async function inicializarSistema() {
             try {
-                console.log('🚀 CVC Portal Itaquá - Embarques v12.0 iniciando...');
+                console.log('🚀 CVC Portal Itaquá - Embarques v12.1 iniciando...');
                 console.log('🔧 API URL:', CVC_CONFIG.API_URL);
                 console.log('🏪 Filial:', CVC_CONFIG.FILIAL_PADRAO);
                 
@@ -1493,7 +1602,7 @@
         }
         
         // ================================================================================
-        // MODAIS E AÇÕES
+        // MODAIS E AÇÕES COM FEEDBACK VISUAL
         // ================================================================================
         
         function abrirModalConferencia(numeroInforme) {
@@ -1728,8 +1837,22 @@
             new bootstrap.Modal(document.getElementById('modalConferencia')).show();
         }
         
+        // FUNÇÃO COM FEEDBACK VISUAL APRIMORADO
         async function confirmarConferencia() {
+            const btnConfirmar = document.querySelector('button[onclick="confirmarConferencia()"]');
+            const btnSalvar = document.querySelector('button[onclick="salvarEdicoes(\'conferencia\')"]');
+            const btnCancelar = document.querySelector('.btn-secondary[data-bs-dismiss="modal"]');
+            
             try {
+                // Desabilitar todos os botões e mostrar loading
+                btnConfirmar.disabled = true;
+                btnSalvar.disabled = true;
+                btnCancelar.disabled = true;
+                
+                const iconOriginal = btnConfirmar.innerHTML;
+                btnConfirmar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+                btnConfirmar.classList.add('btn-loading');
+                
                 const informe = modalData.conferencia;
                 
                 const dados = {
@@ -1742,8 +1865,18 @@
                 const response = await enviarAcao(dados);
                 
                 if (response.success) {
+                    // Mostrar sucesso visual
+                    btnConfirmar.innerHTML = '<i class="fas fa-check"></i> Salvo!';
+                    btnConfirmar.classList.remove('btn-loading');
+                    btnConfirmar.classList.add('btn-success-feedback');
+                    
                     mostrarAlerta('Conferência marcada com sucesso!', 'success');
-                    bootstrap.Modal.getInstance(document.getElementById('modalConferencia')).hide();
+                    
+                    // Aguardar um pouco antes de fechar para o usuário ver o feedback
+                    setTimeout(() => {
+                        bootstrap.Modal.getInstance(document.getElementById('modalConferencia')).hide();
+                    }, 1000);
+                    
                     await carregarEmbarques();
                 } else {
                     throw new Error(response.message);
@@ -1751,7 +1884,22 @@
                 
             } catch (error) {
                 console.error('❌ Erro ao marcar conferência:', error);
+                
+                // Mostrar erro visual
+                btnConfirmar.innerHTML = '<i class="fas fa-times"></i> Erro - Tente novamente';
+                btnConfirmar.classList.remove('btn-loading');
+                btnConfirmar.classList.add('btn-error-feedback');
+                
                 mostrarAlerta('Erro ao marcar conferência: ' + error.message, 'danger');
+                
+                // Reabilitar botões após erro
+                setTimeout(() => {
+                    btnConfirmar.disabled = false;
+                    btnSalvar.disabled = false;
+                    btnCancelar.disabled = false;
+                    btnConfirmar.innerHTML = '<i class="fas fa-check"></i> Conferir Informe';
+                    btnConfirmar.classList.remove('btn-error-feedback', 'btn-success-feedback');
+                }, 3000);
             }
         }
         
@@ -1985,8 +2133,22 @@
             new bootstrap.Modal(document.getElementById('modalCheckin')).show();
         }
         
+        // FUNÇÃO DO CHECK-IN COM FEEDBACK VISUAL
         async function confirmarCheckin() {
+            const btnConfirmar = document.querySelector('button[onclick="confirmarCheckin()"]');
+            const btnSalvar = document.querySelector('.modal#modalCheckin button[onclick="salvarEdicoes(\'checkin\')"]');
+            const btnCancelar = document.querySelector('.modal#modalCheckin .btn-secondary[data-bs-dismiss="modal"]');
+            
             try {
+                // Desabilitar todos os botões e mostrar loading
+                btnConfirmar.disabled = true;
+                if (btnSalvar) btnSalvar.disabled = true;
+                if (btnCancelar) btnCancelar.disabled = true;
+                
+                const iconOriginal = btnConfirmar.innerHTML;
+                btnConfirmar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+                btnConfirmar.classList.add('btn-loading');
+                
                 const voo = modalData.checkin;
                 
                 const dados = {
@@ -2000,8 +2162,18 @@
                 const response = await enviarAcao(dados);
                 
                 if (response.success) {
+                    // Mostrar sucesso visual
+                    btnConfirmar.innerHTML = '<i class="fas fa-check"></i> Check-in OK!';
+                    btnConfirmar.classList.remove('btn-loading');
+                    btnConfirmar.classList.add('btn-success-feedback');
+                    
                     mostrarAlerta('Check-in marcado com sucesso!', 'success');
-                    bootstrap.Modal.getInstance(document.getElementById('modalCheckin')).hide();
+                    
+                    // Aguardar um pouco antes de fechar
+                    setTimeout(() => {
+                        bootstrap.Modal.getInstance(document.getElementById('modalCheckin')).hide();
+                    }, 1000);
+                    
                     await carregarEmbarques();
                 } else {
                     throw new Error(response.message);
@@ -2009,7 +2181,22 @@
                 
             } catch (error) {
                 console.error('❌ Erro ao marcar check-in:', error);
+                
+                // Mostrar erro visual
+                btnConfirmar.innerHTML = '<i class="fas fa-times"></i> Erro - Tente novamente';
+                btnConfirmar.classList.remove('btn-loading');
+                btnConfirmar.classList.add('btn-error-feedback');
+                
                 mostrarAlerta('Erro ao marcar check-in: ' + error.message, 'danger');
+                
+                // Reabilitar botões após erro
+                setTimeout(() => {
+                    btnConfirmar.disabled = false;
+                    if (btnSalvar) btnSalvar.disabled = false;
+                    if (btnCancelar) btnCancelar.disabled = false;
+                    btnConfirmar.innerHTML = '<i class="fas fa-check"></i> Fazer Check-in';
+                    btnConfirmar.classList.remove('btn-error-feedback', 'btn-success-feedback');
+                }, 3000);
             }
         }
         
@@ -2040,8 +2227,20 @@
             new bootstrap.Modal(document.getElementById('modalPosVenda')).show();
         }
         
+        // FUNÇÃO DA PÓS-VENDA COM FEEDBACK VISUAL
         async function confirmarPosVenda() {
+            const btnConfirmar = document.querySelector('button[onclick="confirmarPosVenda()"]');
+            const btnCancelar = document.querySelector('.modal#modalPosVenda .btn-secondary[data-bs-dismiss="modal"]');
+            
             try {
+                // Desabilitar botões e mostrar loading
+                btnConfirmar.disabled = true;
+                if (btnCancelar) btnCancelar.disabled = true;
+                
+                const iconOriginal = btnConfirmar.innerHTML;
+                btnConfirmar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+                btnConfirmar.classList.add('btn-loading');
+                
                 const informe = modalData.posVenda;
                 
                 const dadosEditaveis = {
@@ -2064,8 +2263,18 @@
                 const response = await enviarAcao(dados);
                 
                 if (response.success) {
+                    // Mostrar sucesso visual
+                    btnConfirmar.innerHTML = '<i class="fas fa-check"></i> Pós-venda OK!';
+                    btnConfirmar.classList.remove('btn-loading');
+                    btnConfirmar.classList.add('btn-success-feedback');
+                    
                     mostrarAlerta('Pós-venda marcada com sucesso!', 'success');
-                    bootstrap.Modal.getInstance(document.getElementById('modalPosVenda')).hide();
+                    
+                    // Aguardar um pouco antes de fechar
+                    setTimeout(() => {
+                        bootstrap.Modal.getInstance(document.getElementById('modalPosVenda')).hide();
+                    }, 1000);
+                    
                     await carregarEmbarques();
                 } else {
                     throw new Error(response.message);
@@ -2073,7 +2282,21 @@
                 
             } catch (error) {
                 console.error('❌ Erro ao marcar pós-venda:', error);
+                
+                // Mostrar erro visual
+                btnConfirmar.innerHTML = '<i class="fas fa-times"></i> Erro - Tente novamente';
+                btnConfirmar.classList.remove('btn-loading');
+                btnConfirmar.classList.add('btn-error-feedback');
+                
                 mostrarAlerta('Erro ao marcar pós-venda: ' + error.message, 'danger');
+                
+                // Reabilitar botões após erro
+                setTimeout(() => {
+                    btnConfirmar.disabled = false;
+                    if (btnCancelar) btnCancelar.disabled = false;
+                    btnConfirmar.innerHTML = '<i class="fas fa-check"></i> Confirmar Pós-venda';
+                    btnConfirmar.classList.remove('btn-error-feedback', 'btn-success-feedback');
+                }, 3000);
             }
         }
         
@@ -2104,27 +2327,6 @@
                 
                 // Adicionar callback aos dados
                 dados.callback = callbackName;
-                
-                // Criar formulário oculto
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = url;
-                form.target = callbackName + '_iframe';
-                form.style.display = 'none';
-                
-                // Adicionar campos do formulário
-                Object.keys(dados).forEach(key => {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = key;
-                    input.value = typeof dados[key] === 'object' ? JSON.stringify(dados[key]) : dados[key];
-                    form.appendChild(input);
-                });
-                
-                // Criar iframe oculto para receber resposta
-                const iframe = document.createElement('iframe');
-                iframe.name = callbackName + '_iframe';
-                iframe.style.display = 'none';
                 
                 // Usar JSONP para POST
                 const script = document.createElement('script');
@@ -2222,11 +2424,7 @@
             }, 5000);
         }
         
-        // Funções de navegação
-        function voltarDashboard() {
-            window.location.href = 'index.html';
-        }
-        
+        // Funções de navegação e utilitários
         async function recarregarEmbarques() {
             try {
                 mostrarLoading(true);
