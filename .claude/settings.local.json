@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nMigrar identidade visual CVC → SYSTELOS TUR\n\nMudanças implementadas:\n- Atualizar paleta de cores:\n  * Azul: #0A00B4 → #0F1B3D (SYSTELOS azul principal)\n  * Amarelo: #FFE600 → #FFB800 (SYSTELOS TUR amarelo)\n  * Verde: #00D4AA → #14B8A6 (SYSTELOS TUR verde-água)\n\n- Atualizar tipografia:\n  * Remover Nunito\n  * Adicionar Poppins (600,700,800) para títulos\n  * Adicionar Inter (400,500,600) para textos\n\n- Renomear todas as classes CSS:\n  * .cvc-* → .systelos-*\n  * --cvc-* → --systelos-*\n\n- Atualizar textos e branding:\n  * \"CVC Itaquá\" → \"SYSTELOS TUR\"\n  * \"Portal de Gestão da Loja\" → \"Sistemas com propósito\"\n  * Logo \"CVC\" → \"[S]\"\n\n- Manter 100% da funcionalidade original\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push:*)",
+      "Bash(start index.html)",
+      "Bash(git pull:*)",
+      "Bash(code:*)",
+      "Bash(start assets/css/cvc-styles.css)",
+      "Bash(for file in orcamentos.html vendas.html vendas-automatizado.html embarques.html importacao.html orbiuns.html)",
+      "Bash(do echo \"\")",
+      "Bash(echo:*)",
+      "Bash(done)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

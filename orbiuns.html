@@ -15,23 +15,23 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="CVC Portal Itaquá - Sistema Integrado de Gestão">
     <meta property="og:description" content="Sistema de gestão integrado da CVC Itaquaquecetuba">
-    <meta property="og:image" content="assets/images/cvc-logo.png">
+    <meta property="og:image" content="assets/images/systelos-logo.png">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/images/cvc-favicon.ico">
-    <link rel="apple-touch-icon" href="assets/images/cvc-apple-icon.png">
+    <link rel="icon" type="image/x-icon" href="assets/images/systelos-favicon.ico">
+    <link rel="apple-touch-icon" href="assets/images/systelos-apple-icon.png">
     
     <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="assets/css/cvc-styles.css" rel="stylesheet">
+    <link href="assets/css/systelos-styles.css" rel="stylesheet">
     
     <style>
         /* Estilos específicos do controle de orbiuns */
         .main-container {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            box-shadow: var(--cvc-sombra-forte);
+            box-shadow: var(--systelos-sombra-forte);
             backdrop-filter: blur(10px);
             margin: 20px auto;
             max-width: 1400px;
@@ -67,7 +67,7 @@
         .stat-card i {
             font-size: 1.5rem;
             margin-bottom: 8px;
-            color: var(--cvc-amarelo);
+            color: var(--systelos-amarelo);
         }
         
         .stat-card h6 {
@@ -78,7 +78,7 @@
         .stat-card span {
             font-size: 1.8rem;
             font-weight: bold;
-            color: var(--cvc-amarelo);
+            color: var(--systelos-amarelo);
         }
         
         .header-links {
@@ -94,7 +94,7 @@
         
         .header-link {
             background: white;
-            color: var(--cvc-azul);
+            color: var(--systelos-azul);
             text-decoration: none;
             padding: 10px 20px;
             border-radius: 8px;
@@ -109,7 +109,7 @@
         }
         
         .header-link:hover {
-            background: var(--cvc-azul);
+            background: var(--systelos-azul);
             color: white;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(10, 0, 180, 0.3);
@@ -117,16 +117,16 @@
         }
         
         .filter-section {
-            background: var(--cvc-branco);
+            background: var(--systelos-branco);
             border-radius: 15px;
             padding: 25px;
             margin-bottom: 25px;
-            box-shadow: var(--cvc-sombra-suave);
-            border-left: 4px solid var(--cvc-azul);
+            box-shadow: var(--systelos-sombra-suave);
+            border-left: 4px solid var(--systelos-azul);
         }
         
         .filter-section h4 {
-            color: var(--cvc-azul);
+            color: var(--systelos-azul);
             margin-bottom: 20px;
             font-weight: 600;
             display: flex;
@@ -136,7 +136,7 @@
         
         .form-label {
             font-weight: 600;
-            color: var(--cvc-azul);
+            color: var(--systelos-azul);
             margin-bottom: 8px;
             font-size: 0.9rem;
         }
@@ -150,7 +150,7 @@
         }
         
         .form-control-cvc:focus {
-            border-color: var(--cvc-azul);
+            border-color: var(--systelos-azul);
             box-shadow: 0 0 0 0.2rem rgba(10, 0, 180, 0.25);
             outline: none;
         }
@@ -164,18 +164,18 @@
         }
         
         .form-select-cvc:focus {
-            border-color: var(--cvc-azul);
+            border-color: var(--systelos-azul);
             box-shadow: 0 0 0 0.2rem rgba(10, 0, 180, 0.25);
             outline: none;
         }
         
         .orbium-card {
-            background: var(--cvc-branco);
+            background: var(--systelos-branco);
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: var(--cvc-sombra-suave);
-            border-left: 4px solid var(--cvc-azul-claro);
+            box-shadow: var(--systelos-sombra-suave);
+            border-left: 4px solid var(--systelos-azul-claro);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -188,7 +188,7 @@
             right: 0;
             width: 100px;
             height: 100px;
-            background: var(--cvc-amarelo);
+            background: var(--systelos-amarelo);
             border-radius: 50%;
             opacity: 0.05;
             transform: translate(30%, -30%);
@@ -196,7 +196,7 @@
         
         .orbium-card:hover {
             transform: translateY(-3px);
-            box-shadow: var(--cvc-sombra-media);
+            box-shadow: var(--systelos-sombra-media);
         }
         
         .orbium-card.problema {
@@ -205,11 +205,11 @@
         }
         
         .orbium-card.em-atendimento {
-            border-left-color: var(--cvc-amarelo);
+            border-left-color: var(--systelos-amarelo);
         }
         
         .orbium-card.resolvido {
-            border-left-color: var(--cvc-verde);
+            border-left-color: var(--systelos-verde);
             opacity: 0.8;
         }
         
@@ -263,7 +263,7 @@
         }
         
         .orbium-detail-item strong {
-            color: var(--cvc-azul);
+            color: var(--systelos-azul);
         }
         
         .orbium-observacoes {
@@ -304,13 +304,13 @@
             right: 30px;
             width: 65px;
             height: 65px;
-            background: var(--cvc-gradiente-azul);
+            background: var(--systelos-gradiente-azul);
             color: white;
             border: none;
             border-radius: 50%;
             font-size: 28px;
             cursor: pointer;
-            box-shadow: var(--cvc-sombra-media);
+            box-shadow: var(--systelos-sombra-media);
             transition: all 0.3s ease;
             z-index: 1000;
             display: flex;
@@ -320,7 +320,7 @@
         
         .fab:hover {
             transform: scale(1.1) rotate(90deg);
-            box-shadow: var(--cvc-sombra-forte);
+            box-shadow: var(--systelos-sombra-forte);
         }
         
         .modal-content {
@@ -330,7 +330,7 @@
         }
         
         .modal-header {
-            background: var(--cvc-gradiente-azul);
+            background: var(--systelos-gradiente-azul);
             color: white;
             padding: 20px 25px;
             border: none;
@@ -357,7 +357,7 @@
             width: 20px;
             height: 20px;
             border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--cvc-azul);
+            border-top: 3px solid var(--systelos-azul);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -411,17 +411,17 @@
             padding: 60px 30px;
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             border-radius: 15px;
-            box-shadow: var(--cvc-sombra-suave);
+            box-shadow: var(--systelos-sombra-suave);
         }
         
         .sem-orbiuns i {
             font-size: 4rem;
-            color: var(--cvc-azul-claro);
+            color: var(--systelos-azul-claro);
             margin-bottom: 20px;
         }
         
         .sem-orbiuns h3 {
-            color: var(--cvc-azul);
+            color: var(--systelos-azul);
             margin-bottom: 15px;
         }
         
@@ -478,7 +478,7 @@
                         
                         <!-- Título da Página -->
                         <div class="col-md-4 text-center">
-                            <h1 class="page-title mb-0" style="border: none; padding: 0; color: var(--cvc-azul);">
+                            <h1 class="page-title mb-0" style="border: none; padding: 0; color: var(--systelos-azul);">
                                 <i class="fas fa-clipboard-list"></i> Controle de Orbiuns
                             </h1>
                         </div>
@@ -650,7 +650,7 @@
 
                 <!-- Lista de Orbiuns -->
                 <div>
-                    <h4 style="color: var(--cvc-azul); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                    <h4 style="color: var(--systelos-azul); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
                         <i class="fas fa-list"></i> Orbiuns Ativos
                     </h4>
                     <div id="loadingMessage" class="alert alert-info" style="display: none;">
@@ -1062,7 +1062,7 @@
                 return `
                     <div class="orbium-card ${statusClass}">
                         <div class="orbium-header">
-                            <h5 style="margin: 0; color: var(--cvc-azul);">
+                            <h5 style="margin: 0; color: var(--systelos-azul);">
                                 <i class="fas fa-clipboard"></i> ${orbium.orbium || 'N/A'} - ${orbium.nome_cliente || 'Cliente não informado'}
                             </h5>
                             <span class="orbium-status status-${statusClass}">

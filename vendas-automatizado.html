@@ -14,24 +14,24 @@
     <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="assets/css/cvc-styles.css" rel="stylesheet">
+    <link href="assets/css/systelos-styles.css" rel="stylesheet">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/images/cvc-favicon.ico">
+    <link rel="icon" type="image/x-icon" href="assets/images/systelos-favicon.ico">
     
     <style>
         /* ===== ESTILOS ESPECÍFICOS DO SISTEMA COMPLETO v11.1 CORRIGIDO ===== */
         
         :root {
-            --cvc-amarelo: #FFE600;
-            --cvc-azul: #0A00B4;
-            --cvc-branco: #FFFFFF;
-            --cvc-verde: #00D4AA;
-            --cvc-azul-escuro: #1B365D;
-            --cvc-cinza: #6C757D;
-            --cvc-fundo-card: #f8f9fa;
-            --cvc-sombra-suave: 0 4px 6px rgba(0,0,0,0.1);
-            --cvc-sombra-media: 0 8px 15px rgba(0,0,0,0.2);
+            --systelos-amarelo: #FFE600;
+            --systelos-azul: #0A00B4;
+            --systelos-branco: #FFFFFF;
+            --systelos-verde: #00D4AA;
+            --systelos-azul-escuro: #1B365D;
+            --systelos-cinza: #6C757D;
+            --systelos-fundo-card: #f8f9fa;
+            --systelos-sombra-suave: 0 4px 6px rgba(0,0,0,0.1);
+            --systelos-sombra-media: 0 8px 15px rgba(0,0,0,0.2);
         }
         
         .vendas-completo-container {
@@ -42,7 +42,7 @@
 
         /* Dashboard Status */
         .status-dashboard {
-            background: linear-gradient(135deg, var(--cvc-azul), var(--cvc-azul-escuro));
+            background: linear-gradient(135deg, var(--systelos-azul), var(--systelos-azul-escuro));
             border-radius: 20px;
             padding: 30px;
             color: white;
@@ -90,7 +90,7 @@
         .stat-number {
             font-size: 2.5rem;
             font-weight: 900;
-            color: var(--cvc-amarelo);
+            color: var(--systelos-amarelo);
             line-height: 1;
             margin-bottom: 8px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
@@ -106,7 +106,7 @@
 
         /* Loading e Error */
         .loading-container {
-            background: linear-gradient(135deg, var(--cvc-azul), var(--cvc-amarelo));
+            background: linear-gradient(135deg, var(--systelos-azul), var(--systelos-amarelo));
             border-radius: 20px;
             padding: 50px;
             text-align: center;
@@ -126,12 +126,12 @@
 
         /* Filtros Section */
         .filtros-section {
-            background: var(--cvc-fundo-card);
+            background: var(--systelos-fundo-card);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: var(--cvc-sombra-media);
+            box-shadow: var(--systelos-sombra-media);
             margin-bottom: 30px;
-            border-left: 5px solid var(--cvc-amarelo);
+            border-left: 5px solid var(--systelos-amarelo);
             animation: slideInLeft 0.8s ease-out;
         }
 
@@ -143,10 +143,10 @@
         }
 
         .filtro-card {
-            background: var(--cvc-branco);
+            background: var(--systelos-branco);
             border-radius: 12px;
             padding: 20px;
-            box-shadow: var(--cvc-sombra-suave);
+            box-shadow: var(--systelos-sombra-suave);
             border: 2px solid transparent;
             transition: all 0.3s ease;
             cursor: pointer;
@@ -170,19 +170,19 @@
         }
 
         .filtro-card.active {
-            border-color: var(--cvc-azul);
+            border-color: var(--systelos-azul);
             background: linear-gradient(135deg, rgba(10, 0, 180, 0.05), rgba(255, 230, 0, 0.05));
             transform: scale(1.02);
         }
 
         .filtro-card:hover {
             transform: translateY(-2px);
-            box-shadow: var(--cvc-sombra-media);
+            box-shadow: var(--systelos-sombra-media);
         }
 
         .filtro-titulo {
             font-weight: 700;
-            color: var(--cvc-azul);
+            color: var(--systelos-azul);
             margin-bottom: 10px;
             display: flex;
             align-items: center;
@@ -191,35 +191,35 @@
 
         .filtro-desc {
             font-size: 0.9rem;
-            color: var(--cvc-cinza);
+            color: var(--systelos-cinza);
             margin-bottom: 15px;
         }
 
         .filtro-count {
             font-size: 1.5rem;
             font-weight: 800;
-            color: var(--cvc-azul);
+            color: var(--systelos-azul);
             animation: countUp 1.5s ease-out;
         }
 
         /* Seção de Vendedores */
         .vendedores-section {
-            background: var(--cvc-fundo-card);
+            background: var(--systelos-fundo-card);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: var(--cvc-sombra-media);
+            box-shadow: var(--systelos-sombra-media);
             margin-bottom: 30px;
-            border-left: 5px solid var(--cvc-verde);
+            border-left: 5px solid var(--systelos-verde);
             animation: fadeIn 1s ease-out;
         }
 
         .vendedor-card {
-            background: var(--cvc-branco);
+            background: var(--systelos-branco);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: var(--cvc-sombra-suave);
+            box-shadow: var(--systelos-sombra-suave);
             margin-bottom: 20px;
-            border-left: 5px solid var(--cvc-azul);
+            border-left: 5px solid var(--systelos-azul);
             transition: all 0.3s ease;
             cursor: pointer;
             animation: slideInUp 0.6s ease-out;
@@ -227,7 +227,7 @@
 
         .vendedor-card:hover {
             transform: translateY(-2px);
-            box-shadow: var(--cvc-sombra-media);
+            box-shadow: var(--systelos-sombra-media);
         }
 
         .vendedor-header {
@@ -242,7 +242,7 @@
         .vendedor-nome {
             font-size: 1.3rem;
             font-weight: 700;
-            color: var(--cvc-azul);
+            color: var(--systelos-azul);
         }
 
         .vendedor-status {
@@ -277,40 +277,40 @@
         .vendedor-stat-number {
             font-size: 1.8rem;
             font-weight: 800;
-            color: var(--cvc-azul);
+            color: var(--systelos-azul);
             line-height: 1;
         }
 
         .vendedor-stat-label {
             font-size: 0.8rem;
-            color: var(--cvc-cinza);
+            color: var(--systelos-cinza);
             margin-top: 2px;
         }
 
         /* Container de Recibos */
         .recibos-container {
-            background: var(--cvc-fundo-card);
+            background: var(--systelos-fundo-card);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: var(--cvc-sombra-media);
+            box-shadow: var(--systelos-sombra-media);
             margin-bottom: 30px;
             animation: fadeIn 1.2s ease-out;
         }
 
         .recibo-card {
-            background: var(--cvc-branco);
+            background: var(--systelos-branco);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 15px;
-            box-shadow: var(--cvc-sombra-suave);
-            border-left: 4px solid var(--cvc-azul);
+            box-shadow: var(--systelos-sombra-suave);
+            border-left: 4px solid var(--systelos-azul);
             transition: all 0.3s ease;
             animation: slideInUp 0.5s ease-out;
         }
 
         .recibo-card:hover {
             transform: translateX(5px);
-            box-shadow: var(--cvc-sombra-media);
+            box-shadow: var(--systelos-sombra-media);
         }
 
         .recibo-header {
@@ -324,7 +324,7 @@
 
         .recibo-numero {
             font-weight: 700;
-            color: var(--cvc-azul);
+            color: var(--systelos-azul);
             font-size: 1.1rem;
         }
 
@@ -359,11 +359,11 @@
 
         .recibo-label {
             font-weight: 600;
-            color: var(--cvc-cinza);
+            color: var(--systelos-cinza);
         }
 
         .recibo-valor {
-            color: var(--cvc-azul);
+            color: var(--systelos-azul);
             font-weight: 500;
         }
 
@@ -399,19 +399,19 @@
             border-radius: 25px;
             background: #f8f9fa;
             font-weight: 600;
-            color: var(--cvc-cinza);
+            color: var(--systelos-cinza);
             transition: all 0.3s ease;
             border: 2px solid transparent;
         }
 
         .step.active {
-            background: var(--cvc-azul);
+            background: var(--systelos-azul);
             color: white;
-            border-color: var(--cvc-amarelo);
+            border-color: var(--systelos-amarelo);
         }
 
         .step.completed {
-            background: var(--cvc-verde);
+            background: var(--systelos-verde);
             color: white;
         }
 
@@ -421,25 +421,25 @@
 
         /* Upload Area */
         .upload-area {
-            border: 2px dashed var(--cvc-azul);
+            border: 2px dashed var(--systelos-azul);
             border-radius: 15px;
             padding: 40px;
             text-align: center;
-            background: var(--cvc-fundo-card);
+            background: var(--systelos-fundo-card);
             transition: all 0.3s ease;
             cursor: pointer;
             margin: 20px 0;
         }
 
         .upload-area.dragover {
-            border-color: var(--cvc-amarelo);
+            border-color: var(--systelos-amarelo);
             background: rgba(255, 230, 0, 0.1);
             transform: scale(1.02);
         }
 
         .upload-icon {
             font-size: 3rem;
-            color: var(--cvc-azul);
+            color: var(--systelos-azul);
             margin-bottom: 15px;
         }
 
@@ -449,11 +449,11 @@
 
         /* Dados Extraídos */
         .dados-extraidos {
-            background: var(--cvc-fundo-card);
+            background: var(--systelos-fundo-card);
             border-radius: 12px;
             padding: 20px;
             margin: 20px 0;
-            border-left: 4px solid var(--cvc-verde);
+            border-left: 4px solid var(--systelos-verde);
         }
 
         .dado-item {
@@ -469,25 +469,25 @@
 
         .dado-label {
             font-weight: 600;
-            color: var(--cvc-azul);
+            color: var(--systelos-azul);
         }
 
         .dado-valor {
-            color: var(--cvc-cinza);
+            color: var(--systelos-cinza);
         }
 
         /* Formulário */
         .form-section {
-            background: var(--cvc-branco);
+            background: var(--systelos-branco);
             border-radius: 12px;
             padding: 25px;
             margin: 20px 0;
-            box-shadow: var(--cvc-sombra-suave);
-            border-left: 4px solid var(--cvc-azul);
+            box-shadow: var(--systelos-sombra-suave);
+            border-left: 4px solid var(--systelos-azul);
         }
 
         .form-section h5 {
-            color: var(--cvc-azul);
+            color: var(--systelos-azul);
             margin-bottom: 20px;
             font-weight: 700;
             display: flex;
@@ -503,7 +503,7 @@
         }
 
         .form-control:focus, .form-select:focus {
-            border-color: var(--cvc-azul);
+            border-color: var(--systelos-azul);
             box-shadow: 0 0 0 3px rgba(10, 0, 180, 0.1);
         }
 
@@ -521,14 +521,14 @@
             font-family: 'Courier New', monospace;
             max-height: 400px;
             overflow-y: auto;
-            border: 2px solid var(--cvc-azul);
+            border: 2px solid var(--systelos-azul);
         }
 
         .debug-header {
-            color: var(--cvc-amarelo);
+            color: var(--systelos-amarelo);
             font-weight: bold;
             margin-bottom: 15px;
-            border-bottom: 1px solid var(--cvc-azul);
+            border-bottom: 1px solid var(--systelos-azul);
             padding-bottom: 10px;
         }
 
@@ -561,12 +561,12 @@
         }
 
         .toast-notification {
-            background: var(--cvc-branco);
+            background: var(--systelos-branco);
             border-radius: 10px;
             padding: 15px 20px;
             margin-bottom: 10px;
-            box-shadow: var(--cvc-sombra-media);
-            border-left: 4px solid var(--cvc-azul);
+            box-shadow: var(--systelos-sombra-media);
+            border-left: 4px solid var(--systelos-azul);
             min-width: 300px;
             animation: slideInRight 0.5s ease-out;
         }
@@ -705,7 +705,7 @@
                 
                 <!-- Título da Página -->
                 <div class="col-md-4 text-center">
-                    <h1 class="page-title mb-0" style="border: none; padding: 0; color: var(--cvc-branco); font-size: 1.8rem;">
+                    <h1 class="page-title mb-0" style="border: none; padding: 0; color: var(--systelos-branco); font-size: 1.8rem;">
                         <i class="fas fa-robot"></i> Sistema Completo
                     </h1>
                 </div>
