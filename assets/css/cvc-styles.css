@@ -1,40 +1,39 @@
 /* ===============================================
-   CVC ITAQUÁ - PORTAL DE GESTÃO DA LOJA
-   CSS CENTRALIZADO v8.05 - CORREÇÃO VISUAL COMPLETA
-   Baseado no Manual da Marca CVC Junho/2021
+   SYSTELOS TUR - SISTEMAS COM PROPÓSITO
+   CSS CENTRALIZADO v9.0 - IDENTIDADE VISUAL SYSTELOS
    =============================================== */
 
 /* ===== IMPORTAÇÕES ===== */
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
 
-/* ===== VARIÁVEIS DE CORES CONFORME MANUAL DA MARCA ===== */
+/* ===== VARIÁVEIS DE CORES - IDENTIDADE VISUAL SYSTELOS ===== */
 :root {
-    /* Paleta Primária Oficial */
-    --cvc-amarelo: #FFE600;      /* R255 G230 B0 - PANTONE 102 C */
-    --cvc-azul: #0A00B4;         /* R10 G0 B180 - PANTONE 2736 C */
-    --cvc-branco: #FFFFFF;       /* R255 G255 B255 */
-    
-    /* Degradê Secundário */
-    --cvc-verde: #00D4AA;        /* Conforme degradê do logo */
-    
-    /* Variações para Interface - ATUALIZADAS */
-    --cvc-azul-escuro: #1B365D;
-    --cvc-azul-claro: #E8F0FE;
-    --cvc-amarelo-claro: #FFF9CC;
-    --cvc-cinza: #6C757D;
-    --cvc-cinza-claro: #f5f6fa;  /* MUDANÇA: mais suave */
-    --cvc-cinza-escuro: #495057;
-    --cvc-fundo-card: #fefefe;   /* NOVO: fundo de cards mais suave */
-    --cvc-fundo-area: #f8f9fb;   /* NOVO: fundo de área de conteúdo */
-    
-    /* Gradientes Oficiais - SIMPLIFICADOS */
-    --cvc-gradiente-principal: linear-gradient(135deg, var(--cvc-amarelo) 0%, var(--cvc-verde) 100%);
-    --cvc-gradiente-azul: linear-gradient(135deg, var(--cvc-azul) 0%, var(--cvc-azul-escuro) 100%);
-    
+    /* Paleta Primária SYSTELOS TUR */
+    --systelos-tur-amarelo: #FFB800;      /* Amarelo TUR */
+    --systelos-azul-principal: #0F1B3D;   /* Azul Principal */
+    --systelos-branco: #FFFFFF;           /* Branco */
+
+    /* Cor Secundária */
+    --systelos-tur-verde-agua: #14B8A6;   /* Verde-água TUR */
+
+    /* Variações para Interface */
+    --systelos-azul-escuro: #0A1429;
+    --systelos-azul-claro: #E8F0FE;
+    --systelos-tur-amarelo-claro: #FFF9CC;
+    --systelos-cinza: #6C757D;
+    --systelos-cinza-claro: #f5f6fa;
+    --systelos-cinza-escuro: #495057;
+    --systelos-fundo-card: #fefefe;
+    --systelos-fundo-area: #f8f9fb;
+
+    /* Gradientes */
+    --systelos-gradiente-principal: linear-gradient(135deg, var(--systelos-tur-amarelo) 0%, var(--systelos-tur-verde-agua) 100%);
+    --systelos-gradiente-azul: linear-gradient(135deg, var(--systelos-azul-principal) 0%, var(--systelos-azul-escuro) 100%);
+
     /* Sombras Padrão */
-    --cvc-sombra-suave: 0 4px 20px rgba(10, 0, 180, 0.1);
-    --cvc-sombra-media: 0 6px 25px rgba(10, 0, 180, 0.15);
-    --cvc-sombra-forte: 0 8px 30px rgba(10, 0, 180, 0.2);
+    --systelos-sombra-suave: 0 4px 20px rgba(15, 27, 61, 0.1);
+    --systelos-sombra-media: 0 6px 25px rgba(15, 27, 61, 0.15);
+    --systelos-sombra-forte: 0 8px 30px rgba(15, 27, 61, 0.2);
 }
 
 /* ===== RESET E BASE ===== */
@@ -43,26 +42,26 @@
 }
 
 body {
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 400;
     line-height: 1.6;
-    color: var(--cvc-azul-escuro);
-    background-color: var(--cvc-cinza-claro); /* MUDANÇA: mais suave para os olhos */
+    color: var(--systelos-azul-escuro);
+    background-color: var(--systelos-cinza-claro);
     margin: 0;
     padding: 0;
 }
 
-/* ===== HEADER PRINCIPAL CVC - CORRIGIDO ===== */
-.cvc-header {
-    background: var(--cvc-azul); /* MUDANÇA: cor sólida ao invés de gradiente */
-    box-shadow: var(--cvc-sombra-suave);
+/* ===== HEADER PRINCIPAL SYSTELOS ===== */
+.systelos-header {
+    background: var(--systelos-azul-principal); /* MUDANÇA: cor sólida ao invés de gradiente */
+    box-shadow: var(--systelos-sombra-suave);
     position: relative;
     overflow: hidden;
     z-index: 1000;
     min-height: 80px;
 }
 
-.cvc-header::before {
+.systelos-header::before {
     content: '';
     position: absolute;
     top: 0;
@@ -79,7 +78,7 @@ body {
 }
 
 /* ===== LOGO CVC - CONFORME MANUAL DA MARCA ===== */
-.cvc-logo {
+.systelos-logo {
     display: flex;
     align-items: center;
     position: relative;
@@ -87,15 +86,15 @@ body {
     padding: 15px; /* Área de proteção baseada na altura do "C" */
 }
 
-.cvc-logo-symbol {
+.systelos-logo-symbol {
     width: 50px;
     height: 50px;
-    background: var(--cvc-amarelo); /* MUDANÇA: cor sólida amarela */
+    background: var(--systelos-tur-amarelo); /* MUDANÇA: cor sólida amarela */
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--cvc-azul);
+    color: var(--systelos-azul-principal);
     font-weight: 900;
     font-size: 18px;
     letter-spacing: -1px;
@@ -105,27 +104,27 @@ body {
     box-shadow: 0 4px 15px rgba(10, 0, 180, 0.3);
 }
 
-.cvc-logo-symbol::before {
+.systelos-logo-symbol::before {
     content: '';
     position: absolute;
     top: 2px;
     left: 2px;
     right: 2px;
     bottom: 2px;
-    border: 2px solid var(--cvc-azul);
+    border: 2px solid var(--systelos-azul-principal);
     border-radius: 50%;
     opacity: 0.7;
 }
 
-.cvc-logo-text {
-    color: var(--cvc-branco); /* MUDANÇA: branco no header azul */
+.systelos-logo-text {
+    color: var(--systelos-branco); /* MUDANÇA: branco no header azul */
     font-weight: 800; /* Nunito ExtraBold conforme manual */
     font-size: 24px;
     line-height: 1;
     margin: 0;
 }
 
-.cvc-subtitle {
+.systelos-subtitle {
     color: rgba(255, 255, 255, 0.8); /* MUDANÇA: branco transparente */
     font-size: 14px;
     font-weight: 600; /* Nunito SemiBold conforme manual */
@@ -133,27 +132,27 @@ body {
 }
 
 /* Versões monocromáticas conforme manual */
-.cvc-logo-mono .cvc-logo-symbol {
-    background: var(--cvc-azul);
-    color: var(--cvc-branco);
+.systelos-logo-mono .systelos-logo-symbol {
+    background: var(--systelos-azul-principal);
+    color: var(--systelos-branco);
 }
 
-.cvc-logo-mono-negativa .cvc-logo-symbol {
-    background: var(--cvc-branco);
-    color: var(--cvc-azul);
-    border: 2px solid var(--cvc-azul);
+.systelos-logo-mono-negativa .systelos-logo-symbol {
+    background: var(--systelos-branco);
+    color: var(--systelos-azul-principal);
+    border: 2px solid var(--systelos-azul-principal);
 }
 
 /* ===== NAVEGAÇÃO PRINCIPAL - CORRIGIDA ===== */
-.cvc-nav {
-    background: var(--cvc-azul); /* MUDANÇA: cor sólida */
+.systelos-nav {
+    background: var(--systelos-azul-principal); /* MUDANÇA: cor sólida */
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     position: relative;
     z-index: 999;
 }
 
-.cvc-nav .nav-link {
-    color: var(--cvc-branco) !important;
+.systelos-nav .nav-link {
+    color: var(--systelos-branco) !important;
     font-weight: 600; /* Nunito SemiBold */
     padding: 15px 20px;
     transition: all 0.3s ease;
@@ -163,31 +162,31 @@ body {
     border-bottom: 3px solid transparent;
 }
 
-.cvc-nav .nav-link::before {
+.systelos-nav .nav-link::before {
     content: '';
     position: absolute;
     bottom: 0;
     left: 50%;
     width: 0;
     height: 3px;
-    background: var(--cvc-amarelo);
+    background: var(--systelos-tur-amarelo);
     transition: all 0.3s ease;
     transform: translateX(-50%);
 }
 
-.cvc-nav .nav-link:hover,
-.cvc-nav .nav-link.active {
+.systelos-nav .nav-link:hover,
+.systelos-nav .nav-link.active {
     background: rgba(255, 230, 0, 0.1);
-    color: var(--cvc-amarelo) !important;
-    border-bottom-color: var(--cvc-amarelo);
+    color: var(--systelos-tur-amarelo) !important;
+    border-bottom-color: var(--systelos-tur-amarelo);
 }
 
-.cvc-nav .nav-link:hover::before,
-.cvc-nav .nav-link.active::before {
+.systelos-nav .nav-link:hover::before,
+.systelos-nav .nav-link.active::before {
     width: 80%;
 }
 
-.cvc-nav .nav-link i {
+.systelos-nav .nav-link i {
     margin-right: 8px;
     font-size: 16px;
 }
@@ -196,7 +195,7 @@ body {
 .user-info {
     display: flex;
     align-items: center;
-    color: var(--cvc-branco); /* MUDANÇA: branco no header azul */
+    color: var(--systelos-branco); /* MUDANÇA: branco no header azul */
     position: relative;
     z-index: 2;
 }
@@ -205,7 +204,7 @@ body {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 2px solid var(--cvc-amarelo); /* MUDANÇA: borda amarela */
+    border: 2px solid var(--systelos-tur-amarelo); /* MUDANÇA: borda amarela */
     margin-right: 10px;
     object-fit: cover;
 }
@@ -214,7 +213,7 @@ body {
     font-weight: 700; /* Nunito Bold */
     font-size: 16px;
     margin: 0;
-    color: var(--cvc-branco); /* MUDANÇA: branco */
+    color: var(--systelos-branco); /* MUDANÇA: branco */
 }
 
 .user-role {
@@ -224,8 +223,8 @@ body {
 }
 
 .logout-btn {
-    background: var(--cvc-amarelo); /* MUDANÇA: botão amarelo */
-    color: var(--cvc-azul);
+    background: var(--systelos-tur-amarelo); /* MUDANÇA: botão amarelo */
+    color: var(--systelos-azul-principal);
     border: none;
     padding: 8px 16px;
     border-radius: 25px;
@@ -239,29 +238,31 @@ body {
     background: #ffe000; /* MUDANÇA: amarelo mais claro */
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(255, 230, 0, 0.3);
-    color: var(--cvc-azul);
+    color: var(--systelos-azul-principal);
 }
 
 /* ===== ÁREA DE CONTEÚDO - CORRIGIDA ===== */
 .content-area {
     padding: 30px 0;
     min-height: calc(100vh - 160px);
-    background: var(--cvc-fundo-area); /* MUDANÇA: fundo mais suave */
+    background: var(--systelos-fundo-area); /* MUDANÇA: fundo mais suave */
 }
 
 /* ===== TÍTULOS E TEXTOS ===== */
 .page-title {
-    color: var(--cvc-azul);
-    font-weight: 800; /* Nunito ExtraBold */
+    color: var(--systelos-azul-principal);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800; /* Poppins ExtraBold */
     margin-bottom: 20px;
-    border-left: 4px solid var(--cvc-amarelo);
+    border-left: 4px solid var(--systelos-tur-amarelo);
     padding-left: 20px;
     font-size: 2.5rem;
 }
 
 .section-title {
-    color: var(--cvc-azul);
-    font-weight: 700; /* Nunito Bold */
+    color: var(--systelos-azul-principal);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700; /* Poppins Bold */
     margin-bottom: 15px;
     display: flex;
     align-items: center;
@@ -270,11 +271,11 @@ body {
 
 .section-title i {
     margin-right: 10px;
-    color: var(--cvc-amarelo);
+    color: var(--systelos-tur-amarelo);
 }
 
 .page-subtitle {
-    color: var(--cvc-cinza);
+    color: var(--systelos-cinza);
     font-size: 1.1rem;
     font-weight: 500;
     margin-bottom: 30px;
@@ -283,32 +284,32 @@ body {
 /* ===== COMPONENTES PADRONIZADOS - CORRIGIDOS ===== */
 
 /* Cards */
-.cvc-card {
-    background: var(--cvc-fundo-card); /* MUDANÇA: fundo mais suave */
+.systelos-card {
+    background: var(--systelos-fundo-card); /* MUDANÇA: fundo mais suave */
     border-radius: 15px;
-    box-shadow: var(--cvc-sombra-suave);
+    box-shadow: var(--systelos-sombra-suave);
     padding: 25px;
     margin-bottom: 20px;
     transition: all 0.3s ease;
     border: 1px solid rgba(10, 0, 180, 0.05);
 }
 
-.cvc-card:hover {
+.systelos-card:hover {
     transform: translateY(-5px);
-    box-shadow: var(--cvc-sombra-media);
+    box-shadow: var(--systelos-sombra-media);
 }
 
-.cvc-card-header {
-    background: var(--cvc-azul); /* MUDANÇA: cor sólida */
-    color: var(--cvc-branco);
+.systelos-card-header {
+    background: var(--systelos-azul-principal); /* MUDANÇA: cor sólida */
+    color: var(--systelos-branco);
     padding: 20px 25px;
     border-radius: 15px 15px 0 0;
     margin: -25px -25px 20px -25px;
     font-weight: 700;
 }
 
-.cvc-card-title {
-    color: var(--cvc-azul);
+.systelos-card-title {
+    color: var(--systelos-azul-principal);
     font-weight: 700;
     font-size: 1.2rem;
     margin-bottom: 15px;
@@ -316,9 +317,9 @@ body {
 
 /* Botões - CORRIGIDOS */
 .btn-cvc-primary {
-    background: var(--cvc-amarelo); /* MUDANÇA: cor sólida amarela */
+    background: var(--systelos-tur-amarelo); /* MUDANÇA: cor sólida amarela */
     border: none;
-    color: var(--cvc-azul);
+    color: var(--systelos-azul-principal);
     font-weight: 700;
     padding: 12px 25px;
     border-radius: 25px;
@@ -331,14 +332,14 @@ body {
 .btn-cvc-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(255, 230, 0, 0.4);
-    color: var(--cvc-azul);
+    color: var(--systelos-azul-principal);
     background: #ffe000; /* MUDANÇA: hover mais sutil */
 }
 
 .btn-cvc-secondary {
-    background: var(--cvc-azul); /* MUDANÇA: cor sólida */
+    background: var(--systelos-azul-principal); /* MUDANÇA: cor sólida */
     border: none;
-    color: var(--cvc-branco);
+    color: var(--systelos-branco);
     font-weight: 600;
     padding: 10px 20px;
     border-radius: 20px;
@@ -349,14 +350,14 @@ body {
 .btn-cvc-secondary:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(10, 0, 180, 0.3);
-    color: var(--cvc-branco);
+    color: var(--systelos-branco);
     background: #001a66; /* MUDANÇA: azul mais escuro */
 }
 
 .btn-cvc-outline {
     background: transparent;
-    border: 2px solid var(--cvc-azul);
-    color: var(--cvc-azul);
+    border: 2px solid var(--systelos-azul-principal);
+    color: var(--systelos-azul-principal);
     font-weight: 600;
     padding: 10px 20px;
     border-radius: 20px;
@@ -365,8 +366,8 @@ body {
 }
 
 .btn-cvc-outline:hover {
-    background: var(--cvc-azul);
-    color: var(--cvc-branco);
+    background: var(--systelos-azul-principal);
+    color: var(--systelos-branco);
 }
 
 /* ===== ESTATÍSTICAS E MÉTRICAS ===== */
@@ -378,13 +379,13 @@ body {
 }
 
 .stat-card {
-    background: var(--cvc-fundo-card); /* MUDANÇA: fundo mais suave */
+    background: var(--systelos-fundo-card); /* MUDANÇA: fundo mais suave */
     border-radius: 12px;
     padding: 20px;
     text-align: center;
-    box-shadow: var(--cvc-sombra-suave);
+    box-shadow: var(--systelos-sombra-suave);
     transition: all 0.3s ease;
-    border-top: 4px solid var(--cvc-amarelo);
+    border-top: 4px solid var(--systelos-tur-amarelo);
     position: relative;
     overflow: hidden;
 }
@@ -396,39 +397,39 @@ body {
     left: 0;
     right: 0;
     height: 4px;
-    background: var(--cvc-amarelo); /* MUDANÇA: cor sólida */
+    background: var(--systelos-tur-amarelo); /* MUDANÇA: cor sólida */
 }
 
 .stat-card:hover {
     transform: translateY(-3px);
-    box-shadow: var(--cvc-sombra-media);
+    box-shadow: var(--systelos-sombra-media);
 }
 
 .stat-number {
     font-size: 2.5rem;
     font-weight: 900; /* Nunito Black */
-    color: var(--cvc-azul);
+    color: var(--systelos-azul-principal);
     line-height: 1;
     margin-bottom: 5px;
 }
 
 .stat-label {
     font-size: 0.9rem;
-    color: var(--cvc-cinza);
+    color: var(--systelos-cinza);
     font-weight: 600; /* Nunito SemiBold */
     margin: 0;
 }
 
 .stat-description {
     font-size: 0.8rem;
-    color: var(--cvc-cinza);
+    color: var(--systelos-cinza);
     margin-top: 5px;
     opacity: 0.7;
 }
 
 /* Variações de cores para stats */
 .stat-card.vendas { border-top-color: #28a745; }
-.stat-card.performance { border-top-color: var(--cvc-azul); }
+.stat-card.performance { border-top-color: var(--systelos-azul-principal); }
 .stat-card.embarques { border-top-color: #17a2b8; }
 .stat-card.urgente { border-top-color: #dc3545; }
 
@@ -439,18 +440,18 @@ body {
     padding: 12px 15px;
     font-weight: 500;
     transition: all 0.3s ease;
-    font-family: 'Nunito', sans-serif;
-    background: var(--cvc-branco); /* MUDANÇA: fundo branco nos inputs */
+    font-family: 'Poppins', sans-serif;
+    background: var(--systelos-branco); /* MUDANÇA: fundo branco nos inputs */
 }
 
 .form-control-cvc:focus {
-    border-color: var(--cvc-amarelo);
+    border-color: var(--systelos-tur-amarelo);
     box-shadow: 0 0 0 0.2rem rgba(255, 230, 0, 0.25);
     outline: none;
 }
 
 .form-label-cvc {
-    color: var(--cvc-azul);
+    color: var(--systelos-azul-principal);
     font-weight: 600; /* Nunito SemiBold */
     margin-bottom: 8px;
     display: block;
@@ -462,32 +463,32 @@ body {
     padding: 12px 15px;
     font-weight: 500;
     transition: all 0.3s ease;
-    font-family: 'Nunito', sans-serif;
-    background: var(--cvc-branco); /* MUDANÇA: fundo branco nos selects */
+    font-family: 'Poppins', sans-serif;
+    background: var(--systelos-branco); /* MUDANÇA: fundo branco nos selects */
 }
 
 .form-select-cvc:focus {
-    border-color: var(--cvc-amarelo);
+    border-color: var(--systelos-tur-amarelo);
     box-shadow: 0 0 0 0.2rem rgba(255, 230, 0, 0.25);
     outline: none;
 }
 
 /* ===== SEÇÕES ESPECÍFICAS - VENDAS.HTML ===== */
 .form-section {
-    background: var(--cvc-fundo-card); /* MUDANÇA: fundo mais suave */
+    background: var(--systelos-fundo-card); /* MUDANÇA: fundo mais suave */
     border-radius: 15px;
     padding: 25px;
     margin-bottom: 25px;
-    box-shadow: var(--cvc-sombra-suave);
+    box-shadow: var(--systelos-sombra-suave);
     position: relative;
     overflow: hidden;
-    border-left: 4px solid var(--cvc-azul);
+    border-left: 4px solid var(--systelos-azul-principal);
 }
 
 .main-container {
     background: rgba(254, 254, 254, 0.95); /* MUDANÇA: menos transparente */
     border-radius: 20px;
-    box-shadow: var(--cvc-sombra-forte);
+    box-shadow: var(--systelos-sombra-forte);
     backdrop-filter: blur(10px);
     margin: 20px auto;
     max-width: 1400px;
@@ -496,23 +497,23 @@ body {
 
 .content-section {
     padding: 30px;
-    background: var(--cvc-fundo-area); /* MUDANÇA: fundo mais suave */
+    background: var(--systelos-fundo-area); /* MUDANÇA: fundo mais suave */
 }
 
 /* ===== ALERTAS ===== */
 .alert-cvc-success {
-    background: var(--cvc-amarelo-claro);
-    border: 1px solid var(--cvc-amarelo);
-    color: var(--cvc-azul-escuro);
+    background: var(--systelos-tur-amarelo-claro);
+    border: 1px solid var(--systelos-tur-amarelo);
+    color: var(--systelos-azul-escuro);
     border-radius: 10px;
     padding: 15px;
     margin-bottom: 20px;
 }
 
 .alert-cvc-info {
-    background: var(--cvc-azul-claro);
-    border: 1px solid var(--cvc-azul);
-    color: var(--cvc-azul-escuro);
+    background: var(--systelos-azul-claro);
+    border: 1px solid var(--systelos-azul-principal);
+    color: var(--systelos-azul-escuro);
     border-radius: 10px;
     padding: 15px;
     margin-bottom: 20px;
@@ -538,15 +539,15 @@ body {
 
 /* ===== TABELAS ===== */
 .table-cvc {
-    background: var(--cvc-fundo-card); /* MUDANÇA: fundo mais suave */
+    background: var(--systelos-fundo-card); /* MUDANÇA: fundo mais suave */
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: var(--cvc-sombra-suave);
+    box-shadow: var(--systelos-sombra-suave);
 }
 
 .table-cvc thead {
-    background: var(--cvc-azul); /* MUDANÇA: cor sólida */
-    color: var(--cvc-branco);
+    background: var(--systelos-azul-principal); /* MUDANÇA: cor sólida */
+    color: var(--systelos-branco);
 }
 
 .table-cvc th {
@@ -569,13 +570,13 @@ body {
 .modal-cvc .modal-content {
     border-radius: 15px;
     border: none;
-    box-shadow: var(--cvc-sombra-forte);
-    background: var(--cvc-fundo-card); /* MUDANÇA: fundo mais suave */
+    box-shadow: var(--systelos-sombra-forte);
+    background: var(--systelos-fundo-card); /* MUDANÇA: fundo mais suave */
 }
 
 .modal-cvc .modal-header {
-    background: var(--cvc-azul); /* MUDANÇA: cor sólida */
-    color: var(--cvc-branco);
+    background: var(--systelos-azul-principal); /* MUDANÇA: cor sólida */
+    color: var(--systelos-branco);
     border-radius: 15px 15px 0 0;
     border-bottom: none;
 }
@@ -593,7 +594,7 @@ body {
 
 /* Tablets */
 @media (max-width: 1200px) {
-    .cvc-nav .nav-link {
+    .systelos-nav .nav-link {
         padding: 12px 15px;
         font-size: 14px;
     }
@@ -605,17 +606,17 @@ body {
 
 /* Mobile */
 @media (max-width: 768px) {
-    .cvc-header {
+    .systelos-header {
         text-align: center;
     }
     
-    .cvc-logo {
+    .systelos-logo {
         justify-content: center;
         flex-direction: column;
         padding: 20px 15px;
     }
     
-    .cvc-logo-symbol {
+    .systelos-logo-symbol {
         margin-right: 0;
         margin-bottom: 10px;
         width: 40px;
@@ -626,17 +627,17 @@ body {
         min-height: 12px;
     }
     
-    .cvc-logo-text {
+    .systelos-logo-text {
         font-size: 20px;
         text-align: center;
     }
     
-    .cvc-subtitle {
+    .systelos-subtitle {
         text-align: center;
         font-size: 12px;
     }
     
-    .cvc-nav .nav-link {
+    .systelos-nav .nav-link {
         padding: 10px 12px;
         font-size: 12px;
     }
@@ -646,7 +647,7 @@ body {
         padding-left: 15px;
     }
     
-    .cvc-card {
+    .systelos-card {
         padding: 20px;
         border-radius: 10px;
     }
@@ -674,17 +675,17 @@ body {
 
 /* Mobile Pequeno */
 @media (max-width: 576px) {
-    .cvc-nav .nav {
+    .systelos-nav .nav {
         flex-direction: column;
     }
     
-    .cvc-nav .nav-link {
+    .systelos-nav .nav-link {
         text-align: center;
         border-bottom: 1px solid rgba(255,255,255,0.1);
         border-radius: 0;
     }
     
-    .cvc-nav .nav-link:last-child {
+    .systelos-nav .nav-link:last-child {
         border-bottom: none;
     }
     
@@ -699,11 +700,11 @@ body {
 
 /* ===== UTILITÁRIOS ===== */
 .text-cvc-primary {
-    color: var(--cvc-azul) !important;
+    color: var(--systelos-azul-principal) !important;
 }
 
 .text-cvc-secondary {
-    color: var(--cvc-amarelo) !important;
+    color: var(--systelos-tur-amarelo) !important;
 }
 
 .text-cvc-success {
@@ -719,15 +720,15 @@ body {
 }
 
 .bg-cvc-primary {
-    background: var(--cvc-azul) !important; /* MUDANÇA: cor sólida */
+    background: var(--systelos-azul-principal) !important; /* MUDANÇA: cor sólida */
 }
 
 .bg-cvc-secondary {
-    background: var(--cvc-amarelo) !important; /* MUDANÇA: cor sólida */
+    background: var(--systelos-tur-amarelo) !important; /* MUDANÇA: cor sólida */
 }
 
 .bg-cvc-light {
-    background: var(--cvc-cinza-claro) !important;
+    background: var(--systelos-cinza-claro) !important;
 }
 
 /* ===== ANIMAÇÕES ===== */
@@ -776,32 +777,32 @@ body {
 
 /* ===== IMPRESSÃO ===== */
 @media print {
-    .cvc-header,
-    .cvc-nav {
-        background: var(--cvc-branco) !important;
-        color: var(--cvc-azul) !important;
+    .systelos-header,
+    .systelos-nav {
+        background: var(--systelos-branco) !important;
+        color: var(--systelos-azul-principal) !important;
         box-shadow: none !important;
     }
     
-    .cvc-logo-symbol {
-        background: var(--cvc-branco) !important;
-        border: 2px solid var(--cvc-azul) !important;
-        color: var(--cvc-azul) !important;
+    .systelos-logo-symbol {
+        background: var(--systelos-branco) !important;
+        border: 2px solid var(--systelos-azul-principal) !important;
+        color: var(--systelos-azul-principal) !important;
         /* Garante dimensões mínimas de 4mm para impressão (72dpi) */
         min-width: 11.34px; /* 4mm em 72dpi */
         min-height: 11.34px;
     }
     
-    .cvc-card {
+    .systelos-card {
         box-shadow: none !important;
         border: 1px solid #ddd !important;
     }
     
     .btn-cvc-primary,
     .btn-cvc-secondary {
-        background: var(--cvc-branco) !important;
-        color: var(--cvc-azul) !important;
-        border: 1px solid var(--cvc-azul) !important;
+        background: var(--systelos-branco) !important;
+        color: var(--systelos-azul-principal) !important;
+        border: 1px solid var(--systelos-azul-principal) !important;
     }
 }
 
@@ -819,11 +820,11 @@ body {
 }
 
 /* Focus para navegação por teclado */
-.cvc-nav .nav-link:focus,
+.systelos-nav .nav-link:focus,
 .btn-cvc-primary:focus,
 .btn-cvc-secondary:focus,
 .form-control-cvc:focus {
-    outline: 3px solid var(--cvc-amarelo);
+    outline: 3px solid var(--systelos-tur-amarelo);
     outline-offset: 2px;
 }
 
@@ -849,8 +850,8 @@ body {
 
 /* ===== LOADING E SPINNERS ===== */
 .loading-spinner {
-    border: 3px solid var(--cvc-cinza-claro);
-    border-top: 3px solid var(--cvc-azul);
+    border: 3px solid var(--systelos-cinza-claro);
+    border-top: 3px solid var(--systelos-azul-principal);
     border-radius: 50%;
     width: 30px;
     height: 30px;
@@ -905,7 +906,7 @@ body {
 .toggle-option {
     display: flex;
     align-items: center;
-    background: var(--cvc-branco);
+    background: var(--systelos-branco);
     padding: 12px 25px;
     border-radius: 25px;
     cursor: pointer;
@@ -929,7 +930,7 @@ body {
 
 .toggle-option.selected {
     background: #ffc107;
-    color: var(--cvc-branco);
+    color: var(--systelos-branco);
     font-weight: 700;
 }
 
@@ -941,7 +942,7 @@ body {
 }
 
 .radio-item {
-    background: var(--cvc-branco);
+    background: var(--systelos-branco);
     border: 2px solid #e9ecef;
     border-radius: 10px;
     padding: 12px 20px;
@@ -953,16 +954,16 @@ body {
 }
 
 .radio-item:hover {
-    border-color: var(--cvc-azul);
-    background: var(--cvc-azul-claro);
+    border-color: var(--systelos-azul-principal);
+    background: var(--systelos-azul-claro);
     transform: translateY(-2px);
 }
 
 .radio-item.selected {
-    border-color: var(--cvc-azul);
-    background: var(--cvc-azul-claro);
+    border-color: var(--systelos-azul-principal);
+    background: var(--systelos-azul-claro);
     font-weight: 600;
-    color: var(--cvc-azul);
+    color: var(--systelos-azul-principal);
 }
 
 .checkbox-group {
@@ -972,7 +973,7 @@ body {
 }
 
 .checkbox-item {
-    background: var(--cvc-branco);
+    background: var(--systelos-branco);
     border: 2px solid #e9ecef;
     border-radius: 10px;
     padding: 12px 20px;
@@ -984,26 +985,26 @@ body {
 }
 
 .checkbox-item:hover {
-    border-color: var(--cvc-azul);
-    background: var(--cvc-azul-claro);
+    border-color: var(--systelos-azul-principal);
+    background: var(--systelos-azul-claro);
     transform: translateY(-2px);
 }
 
 .checkbox-item.selected {
-    border-color: var(--cvc-azul);
-    background: var(--cvc-azul-claro);
+    border-color: var(--systelos-azul-principal);
+    background: var(--systelos-azul-claro);
     font-weight: 600;
-    color: var(--cvc-azul);
+    color: var(--systelos-azul-principal);
 }
 
 /* Recibos */
 .recibo-container {
-    background: var(--cvc-branco);
+    background: var(--systelos-branco);
     border-radius: 15px;
     padding: 20px;
     margin-bottom: 20px;
-    box-shadow: var(--cvc-sombra-suave);
-    border-left: 4px solid var(--cvc-verde);
+    box-shadow: var(--systelos-sombra-suave);
+    border-left: 4px solid var(--systelos-tur-verde-agua);
     position: relative;
     overflow: hidden;
 }
@@ -1016,7 +1017,7 @@ body {
 }
 
 .recibo-number {
-    background: linear-gradient(135deg, var(--cvc-verde) 0%, #007C42 100%);
+    background: linear-gradient(135deg, var(--systelos-tur-verde-agua) 0%, #007C42 100%);
     color: white;
     padding: 8px 16px;
     border-radius: 20px;
@@ -1046,7 +1047,7 @@ body {
     padding: 20px;
     background: linear-gradient(135deg, #fff3cd 0%, #ffe5a0 100%);
     border-radius: 12px;
-    border-left: 4px solid var(--cvc-amarelo);
+    border-left: 4px solid var(--systelos-tur-amarelo);
     display: none;
 }
 
@@ -1075,8 +1076,8 @@ body {
 
 /* Botões customizados */
 .btn-submit {
-    background: var(--cvc-amarelo); /* MUDANÇA: cor sólida amarela */
-    color: var(--cvc-azul);
+    background: var(--systelos-tur-amarelo); /* MUDANÇA: cor sólida amarela */
+    color: var(--systelos-azul-principal);
     border: none;
     padding: 15px 30px;
     border-radius: 12px;
@@ -1086,12 +1087,12 @@ body {
     transition: all 0.3s ease;
     width: 100%;
     margin-top: 20px;
-    box-shadow: var(--cvc-sombra-suave);
+    box-shadow: var(--systelos-sombra-suave);
 }
 
 .btn-submit:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: var(--cvc-sombra-media);
+    box-shadow: var(--systelos-sombra-media);
     background: #ffe000; /* MUDANÇA: hover mais sutil */
 }
 
@@ -1106,19 +1107,19 @@ body {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: var(--cvc-azul);
+    background: var(--systelos-azul-principal);
     color: white;
     padding: 10px 15px;
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: 600;
-    box-shadow: var(--cvc-sombra-suave);
+    box-shadow: var(--systelos-sombra-suave);
     z-index: 1000;
     display: none;
 }
 
 .status-conexao.online {
-    background: var(--cvc-verde);
+    background: var(--systelos-tur-verde-agua);
 }
 
 .status-conexao.offline {
