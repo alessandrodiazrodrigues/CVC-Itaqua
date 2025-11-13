@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CVC Portal Itaquá - Padronizador de Orçamentos</title>
-    
+    <title>SYSTELOS TUR - Padronizador de Orçamentos</title>
+
     <!-- Meta Tags -->
-    <meta name="description" content="CVC Portal Itaquá - Sistema Integrado de Gestão para a filial de Itaquaquecetuba">
-    <meta name="keywords" content="CVC, Itaquaquecetuba, gestão, viagens, turismo, sistema">
-    <meta name="author" content="CVC Itaquaquecetuba">
+    <meta name="description" content="SYSTELOS TUR - Sistemas com propósito">
+    <meta name="keywords" content="SYSTELOS, TUR, Itaquaquecetuba, gestão, viagens, turismo, sistema">
+    <meta name="author" content="SYSTELOS TUR">
     <meta name="robots" content="noindex, nofollow">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="CVC Portal Itaquá - Sistema Integrado de Gestão">
-    <meta property="og:description" content="Sistema de gestão integrado da CVC Itaquaquecetuba">
+    <meta property="og:title" content="SYSTELOS TUR - Sistemas com propósito">
+    <meta property="og:description" content="Sistema de gestão integrado da SYSTELOS TUR">
     <meta property="og:image" content="assets/images/systelos-logo.png">
     
     <!-- Favicon -->
@@ -225,7 +225,7 @@
         
         /* BOTÕES */
         .btn-cvc-primary {
-            background: var(--systelos-gradiente-principal);
+            background: var(--systelos-tur-amarelo);
             border: none;
             color: var(--systelos-azul);
             font-weight: 700;
@@ -244,7 +244,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            background: transparent;
             transition: left 0.5s;
         }
         
@@ -259,7 +259,7 @@
         }
         
         .btn-cvc-secondary {
-            background: var(--systelos-gradiente-azul);
+            background: var(--systelos-azul-principal);
             border: none;
             color: var(--systelos-branco);
             font-weight: 600;
@@ -306,7 +306,7 @@
         }
         
         .btn-copy {
-            background: linear-gradient(135deg, #17a2b8 0%, #117a8b 100%);
+            background: #17a2b8;
             border: none;
             border-radius: 10px;
             color: white;
@@ -317,7 +317,7 @@
         }
         
         .btn-copy:hover {
-            background: linear-gradient(135deg, #138496 0%, #0e6674 100%);
+            background: #138496;
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
             color: white;
@@ -325,7 +325,7 @@
         
         /* CARDS DE DICAS */
         .info-card {
-            background: linear-gradient(135deg, rgba(0, 212, 170, 0.1) 0%, rgba(0, 212, 170, 0.05) 100%);
+            background: rgba(0, 212, 170, 0.1);
             border: 2px solid rgba(0, 212, 170, 0.2);
             border-radius: 15px;
             padding: 25px;
@@ -335,7 +335,7 @@
         
         .info-card:hover {
             border-color: var(--systelos-verde);
-            background: linear-gradient(135deg, rgba(0, 212, 170, 0.15) 0%, rgba(0, 212, 170, 0.08) 100%);
+            background: rgba(0, 212, 170, 0.15);
             transform: translateY(-2px);
         }
         
@@ -426,36 +426,16 @@
 <body>
     <div class="container-fluid">
         <div class="main-container">
-            <!-- HEADER CVC PADRÃO -->
-            <header class="cvc-header">
+            <!-- HEADER -->
+            <header class="systelos-header">
                 <div class="container-fluid">
                     <div class="row align-items-center py-3">
-                        <!-- Logo CVC -->
                         <div class="col-md-4">
-                            <div class="cvc-logo">
-                                <div class="cvc-logo-symbol">CVC</div>
+                            <div class="systelos-logo">
+                                <div class="systelos-logo-symbol">[S]</div>
                                 <div>
-                                    <div class="cvc-logo-text">CVC Portal Itaquá</div>
-                                    <p class="cvc-subtitle">Sistema Integrado de Gestão</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Título da Página -->
-                        <div class="col-md-4 text-center">
-                            <h1 class="page-title mb-0" style="border: none; padding: 0; color: var(--systelos-azul);">
-                                <i class="fas fa-calculator"></i> Padronizador de Orçamentos
-                            </h1>
-                        </div>
-                        
-                        <!-- Status do Sistema -->
-                        <div class="col-md-4 text-end">
-                            <div class="d-flex align-items-center justify-content-end">
-                                <div class="me-3">
-                                    <small class="text-muted">Geração inteligente de propostas comerciais</small><br>
-                                    <div id="apiStatus" class="api-status loading">
-                                        <i class="fas fa-spinner fa-spin"></i> Verificando IA...
-                                    </div>
+                                    <div class="systelos-logo-text">SYSTELOS TUR</div>
+                                    <p class="systelos-subtitle">Sistemas com propósito</p>
                                 </div>
                             </div>
                         </div>
@@ -463,8 +443,8 @@
                 </div>
             </header>
 
-            <!-- NAVEGAÇÃO CVC PADRÃO -->
-            <nav class="cvc-nav">
+            <!-- NAVEGAÇÃO -->
+            <nav class="systelos-nav">
                 <div class="container-fluid">
                     <ul class="nav nav-pills justify-content-center mb-0">
                         <li class="nav-item">
@@ -483,6 +463,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="vendas-automatizado.html">
+                                <i class="fas fa-robot"></i> Informe Automatizado
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="embarques.html">
                                 <i class="fas fa-plane-departure"></i> Controle de Embarques
                             </a>
@@ -490,6 +475,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="orbiuns.html">
                                 <i class="fas fa-clipboard-list"></i> Controle de Orbiuns
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="importacao.html">
+                                <i class="fas fa-cloud-upload-alt"></i> Importação
                             </a>
                         </li>
                     </ul>
@@ -739,7 +729,7 @@
     <script src="config.js"></script>
     
     <script>
-        console.log('🚀 CVC Portal Itaquá - Padronizador de Orçamentos v8.04');
+        console.log('🚀 SYSTELOS TUR - Padronizador de Orçamentos v8.04');
         console.log('🎯 Integração com IA e 14 templates disponíveis');
         
         // ================================================================================
@@ -761,16 +751,16 @@
         // ================================================================================
         
         document.addEventListener('DOMContentLoaded', function() {
-            debugLog('📋 Inicializando sistema CVC Orçamentos...', 'info');
-            
+            debugLog('📋 Inicializando sistema SYSTELOS TUR Orçamentos...', 'info');
+
             setupEventListeners();
             setupPasteArea();
             setupCheckboxesClicaveis();
             setupCamposCriancas();
             atualizarDisplayCustos();
             verificarVersaoAPI();
-            
-            debugLog('✅ CVC Portal Itaquá - Padronizador v8.04 carregado!', 'success');
+
+            debugLog('✅ SYSTELOS TUR - Padronizador v8.04 carregado!', 'success');
         });
         
         function setupEventListeners() {
@@ -986,7 +976,7 @@
                                     <small>${file.name}</small>
                                 </div>
                             `;
-                            
+
                         } catch (error) {
                             debugLog('❌ Erro ao processar PDF: ' + error.message, 'error');
                             pasteArea.innerHTML = `<div class="error">Erro ao ler o PDF</div>`;
@@ -1102,7 +1092,7 @@ OPÇÃO 3 - PREMIUM: R$ 6.500,00
 • Cancelamento com reembolso
 
 📞 CONTATO
-CVC Itaquaquecetuba
+SYSTELOS TUR
 WhatsApp: (11) 99999-9999`;
 
                 debugLog('✅ Resposta da API recebida', 'success');
@@ -1342,7 +1332,7 @@ WhatsApp: (11) 99999-9999`;
                 if (botao) {
                     const textoOriginal = botao.innerHTML;
                     botao.innerHTML = '<i class="fas fa-check"></i> Copiado!';
-                    botao.style.background = 'linear-gradient(135deg, #28a745 0%, #20a139 100%)';
+                    botao.style.background = '#28a745';
                     
                     setTimeout(() => {
                         botao.innerHTML = textoOriginal;
@@ -1391,9 +1381,9 @@ WhatsApp: (11) 99999-9999`;
         // 🎯 LOG FINAL
         // ================================================================================
         
-        debugLog("CVC Portal Itaquá - Padronizador de Orçamentos v8.04", 'success');
+        debugLog("SYSTELOS TUR - Padronizador de Orçamentos v8.04", 'success');
         debugLog("Funcionalidades:", 'info');
-        debugLog("- Interface CVC padrão integrada", 'info');
+        debugLog("- Interface SYSTELOS TUR integrada", 'info');
         debugLog("- IA com 14 templates", 'info');
         debugLog("- Upload de PDF e imagens", 'info');
         debugLog("- Sistema de dicas e ranking", 'info');

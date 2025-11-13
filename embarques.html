@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CVC Portal Itaquá - Controle de Embarques</title>
-    
-    <!-- Meta Tags Conforme Manual CVC -->
-    <meta name="description" content="CVC Portal Itaquá - Sistema Integrado de Gestão para a filial de Itaquaquecetuba">
-    <meta name="keywords" content="CVC, Itaquaquecetuba, gestão, viagens, turismo, sistema, embarques">
-    <meta name="author" content="CVC Itaquaquecetuba">
+    <title>SYSTELOS TUR - Controle de Embarques</title>
+
+    <!-- Meta Tags -->
+    <meta name="description" content="SYSTELOS TUR - Sistemas com propósito">
+    <meta name="keywords" content="SYSTELOS, TUR, Itaquaquecetuba, gestão, viagens, turismo, sistema, embarques">
+    <meta name="author" content="SYSTELOS TUR">
     <meta name="robots" content="noindex, nofollow">
     
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="CVC Portal Itaquá - Controle de Embarques">
+    <meta property="og:title" content="SYSTELOS TUR - Controle de Embarques">
     <meta property="og:description" content="Sistema de controle de embarques da CVC Itaquaquecetuba">
     <meta property="og:image" content="assets/images/systelos-logo.png">
     
@@ -116,22 +116,22 @@
         /* PRIORIDADES */
         .priority-ATRASADO {
             border-left-color: #dc3545;
-            background: linear-gradient(135deg, #fff, #ffebee);
+            background: #fff;
         }
         
         .priority-URGENTE {
             border-left-color: #fd7e14;
-            background: linear-gradient(135deg, #fff, #fff8e7);
+            background: #fff;
         }
         
         .priority-PROXIMO {
             border-left-color: #ffc107;
-            background: linear-gradient(135deg, #fff, #fffbf0);
+            background: #fff;
         }
         
         .priority-NORMAL {
             border-left-color: #28a745;
-            background: linear-gradient(135deg, #fff, #f0fff4);
+            background: #fff;
         }
         
         .card-header-custom {
@@ -426,12 +426,12 @@
         }
         
         .alert-success-custom {
-            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            background: #d4edda;
             color: #155724;
         }
         
         .alert-danger-custom {
-            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            background: #f8d7da;
             color: #721c24;
         }
         
@@ -465,15 +465,15 @@
     <div class="container-fluid">
         <div class="main-container">
             <!-- Header CVC Padrão -->
-            <header class="cvc-header">
+            <header class="systelos-header">
                 <div class="container-fluid">
                     <div class="row align-items-center py-3">
                         <!-- Logo CVC -->
                         <div class="col-md-4">
-                            <div class="cvc-logo">
-                                <div class="cvc-logo-symbol">CVC</div>
+                            <div class="systelos-logo">
+                                <div class="systelos-logo-symbol">CVC</div>
                                 <div>
-                                    <div class="cvc-logo-text">CVC Portal Itaquá</div>
+                                    <div class="systelos-logo-text">SYSTELOS TUR</div>
                                     <p class="cvc-subtitle">Sistema Integrado de Gestão</p>
                                 </div>
                             </div>
@@ -503,7 +503,7 @@
             </header>
 
             <!-- Navegação Principal - Igual ao Index -->
-            <nav class="cvc-nav">
+            <nav class="systelos-nav">
                 <div class="container-fluid">
                     <ul class="nav nav-pills justify-content-center mb-0">
                         <li class="nav-item">
@@ -821,13 +821,13 @@
         
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 CVC Portal Itaquá - Embarques v12.1 iniciando...');
+            console.log('🚀 SYSTELOS TUR - Embarques v12.1 iniciando...');
             inicializarSistema();
         });
         
         async function inicializarSistema() {
             try {
-                console.log('🚀 CVC Portal Itaquá - Embarques v12.1 iniciando...');
+                console.log('🚀 SYSTELOS TUR - Embarques v12.1 iniciando...');
                 console.log('🔧 API URL:', CVC_CONFIG.API_URL);
                 console.log('🏪 Filial:', CVC_CONFIG.FILIAL_PADRAO);
                 

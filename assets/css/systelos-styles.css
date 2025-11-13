@@ -26,10 +26,6 @@
     --systelos-fundo-card: #fefefe;
     --systelos-fundo-area: #f8f9fb;
 
-    /* Gradientes */
-    --systelos-gradiente-principal: linear-gradient(135deg, var(--systelos-tur-amarelo) 0%, var(--systelos-tur-verde-agua) 100%);
-    --systelos-gradiente-azul: linear-gradient(135deg, var(--systelos-azul-principal) 0%, var(--systelos-azul-escuro) 100%);
-
     /* Sombras Padrão */
     --systelos-sombra-suave: 0 4px 20px rgba(15, 27, 61, 0.1);
     --systelos-sombra-media: 0 6px 25px rgba(15, 27, 61, 0.15);
@@ -68,8 +64,8 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.05) 50%, transparent 70%);
-    animation: shine 6s infinite; /* MUDANÇA: animação mais sutil e lenta */
+    background: transparent;
+    animation: shine 6s infinite;
 }
 
 @keyframes shine {
@@ -868,7 +864,7 @@ body {
 
 /* SEÇÃO: É CLIENTE DO ALE? */
 .cliente-ale-section {
-    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    background: #fff3cd;
     border: 2px solid #ffc107;
     border-radius: 15px;
     padding: 25px;
@@ -1017,7 +1013,7 @@ body {
 }
 
 .recibo-number {
-    background: linear-gradient(135deg, var(--systelos-tur-verde-agua) 0%, #007C42 100%);
+    background: var(--systelos-tur-verde-agua);
     color: white;
     padding: 8px 16px;
     border-radius: 20px;
@@ -1026,7 +1022,7 @@ body {
 }
 
 .btn-remove-recibo {
-    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    background: #dc3545;
     color: white;
     border: none;
     padding: 8px 16px;
@@ -1045,7 +1041,7 @@ body {
 .extra-fields {
     margin-top: 20px;
     padding: 20px;
-    background: linear-gradient(135deg, #fff3cd 0%, #ffe5a0 100%);
+    background: #fff3cd;
     border-radius: 12px;
     border-left: 4px solid var(--systelos-tur-amarelo);
     display: none;
@@ -1054,7 +1050,7 @@ body {
 .multi-datas {
     margin-top: 15px;
     padding: 15px;
-    background: linear-gradient(135deg, #d1ecf1 0%, #b8daff 100%);
+    background: #d1ecf1;
     border-radius: 10px;
     border-left: 3px solid #17a2b8;
     display: none;
