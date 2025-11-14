@@ -692,7 +692,7 @@
         
         async function verificarVersaoAPI() {
             const statusElement = document.getElementById('apiStatus');
-            const apiUrl = CONFIG_UTILS.getApiUrl('openaiAssistant');
+            const apiUrl = CONFIG_UTILS.getApiUrl('orcamentos');
             
             try {
                 debugLog('🔍 Verificando API: ' + apiUrl, 'info');
@@ -983,7 +983,7 @@
         // ================================================================================
         
         async function enviarParaAPI(dados) {
-            const apiUrl = CONFIG_UTILS.getApiUrl('openaiAssistant');
+            const apiUrl = CONFIG_UTILS.getApiUrl('orcamentos');
             debugLog('🚀 Enviando para API: ' + apiUrl, 'info');
             debugLog('📤 Dados', 'info', dados);
             
