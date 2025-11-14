@@ -38,17 +38,19 @@
     </script>
     
     <style>
-        /* Estilos específicos do padronizador de orçamentos */
-        .main-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: var(--systelos-sombra-forte);
-            backdrop-filter: blur(10px);
-            margin: 20px auto;
-            max-width: 1400px;
-            overflow: hidden;
+        /* Layout principal - ocupar toda a largura */
+        body {
+            margin: 0;
+            padding: 0;
         }
         
+        body > .container-fluid {
+            padding: 0;
+            margin: 0;
+            max-width: 100%;
+        }
+        
+        /* Estilos específicos do padronizador de orçamentos */
         .content-section {
             padding: 30px;
         }
@@ -300,7 +302,6 @@
 </head>
 <body>
     <div class="container-fluid">
-        <div class="main-container">
                         <!-- HEADER SYSTELOS -->
             <header class="systelos-header">
                 <div class="container-fluid">
@@ -580,7 +581,6 @@
                     </div>
                 </div>
             </div>
-        </div>
     </div>
     
     <!-- Bootstrap JS -->
