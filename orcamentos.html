@@ -539,9 +539,20 @@
                             <small>Cole as informações acima e clique em "Gerar Orçamento"</small>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-secondary systelos-btn-secondary" onclick="copiarTexto('orcamentoIA')">
-                        <i class="fas fa-copy"></i> Copiar Orçamento
-                    </button>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button type="button" class="btn btn-secondary systelos-btn-secondary" onclick="copiarTexto('orcamentoIA')">
+                            <i class="fas fa-copy"></i> Copiar Orçamento
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="copiarFinanPadrao()">
+                            <i class="fas fa-credit-card"></i> Copiar Finan Padrão
+                        </button>
+                        <button type="button" class="btn btn-warning" onclick="copiarFinanPromocional()">
+                            <i class="fas fa-percent"></i> Copiar Finan Promocional
+                        </button>
+                    </div>
+                    <small class="text-muted d-block mt-2" style="font-style: italic;">
+                        <i class="fas fa-info-circle"></i> Financiamentos: sempre conferir antes de enviar
+                    </small>
                 </div>
                 
                 <!-- Dicas do Destino -->
@@ -1078,6 +1089,84 @@
                 }
             } catch (err) {
                 debugLog('❌ Erro ao copiar', 'error');
+            }
+        }
+        
+        // ================================================================================
+        // 💳 COPIAR FINANCIAMENTOS
+        // ================================================================================
+        
+        async function copiarFinanPadrao() {
+            const texto = `💳 Formas de Pagamento – Produtos CVC
+
+Você tem várias opções para pagar da forma que for mais tranquila pra você:
+
+• Parcelamento em até 12x sem juros no cartão de crédito 🧾
+• Descontos especiais no cartão:
+  De 5x a 8x: 2% de desconto
+  De 1x a 4x: 4% de desconto
+
+• Parcelamento no boleto (sujeito à aprovação da financeira - verifique se sua viagem se enquadra nessa opção):
+  Entrada de 10% ou 20% + 7x sem juros
+  Entrada de 10% ou 20% + até 24x com juros
+
+• Pontos Livelo: se você acumula pontos Livelo, pode usar na sua viagem! Total ou parcial, você escolhe. ✨
+• FGTS: em algumas situações, você pode utilizar seu saldo do FGTS para pagar parte da viagem. Fale com a gente e veja se é elegível! 😉
+
+Fácil, flexível e do seu jeito! 😉✨
+Se quiser ajuda pra simular o melhor parcelamento, é só me chamar!`;
+
+            try {
+                await navigator.clipboard.writeText(texto);
+                debugLog('✅ Finan Padrão copiado!', 'success');
+                
+                const botao = event?.target;
+                if (botao) {
+                    const original = botao.innerHTML;
+                    botao.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+                    setTimeout(() => botao.innerHTML = original, 2000);
+                }
+            } catch (err) {
+                debugLog('❌ Erro ao copiar financiamento', 'error');
+                alert('❌ Erro ao copiar. Tente novamente.');
+            }
+        }
+        
+        async function copiarFinanPromocional() {
+            const texto = `💳 Formas de Pagamento – Produtos CVC
+
+Você tem várias opções para pagar da forma que for mais tranquila pra você:
+
+• Parcelamento em até 15x sem juros no cartão de crédito emitido pelo Banco Santander!
+
+• Parcelamento em até 12x sem juros no cartão de crédito 🧾
+• Descontos especiais no cartão:
+  De 5x a 8x: 2% de desconto
+  De 1x a 4x: 4% de desconto
+
+• Parcelamento no boleto (sujeito à aprovação da financeira - verifique se sua viagem se enquadra nessa opção):
+  Entrada de 10% ou 20% + 7x sem juros
+  Entrada de 10% ou 20% + até 24x com juros
+
+• Pontos Livelo: se você acumula pontos Livelo, pode usar na sua viagem! Total ou parcial, você escolhe. ✨
+• FGTS: em algumas situações, você pode utilizar seu saldo do FGTS para pagar parte da viagem. Fale com a gente e veja se é elegível! 😉
+
+Fácil, flexível e do seu jeito! 😉✨
+Se quiser ajuda pra simular o melhor parcelamento, é só me chamar!`;
+
+            try {
+                await navigator.clipboard.writeText(texto);
+                debugLog('✅ Finan Promocional copiado!', 'success');
+                
+                const botao = event?.target;
+                if (botao) {
+                    const original = botao.innerHTML;
+                    botao.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+                    setTimeout(() => botao.innerHTML = original, 2000);
+                }
+            } catch (err) {
+                debugLog('❌ Erro ao copiar financiamento', 'error');
+                alert('❌ Erro ao copiar. Tente novamente.');
             }
         }
         
