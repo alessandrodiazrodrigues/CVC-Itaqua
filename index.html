@@ -603,7 +603,7 @@
             }
             
             // Verificar se é um vendedor válido (simplificado)
-            const vendedores = CVC_CONFIG.VENDEDORES;
+            const vendedores = ['Alessandro', 'Ana Paula', 'Claudia', 'Fernanda', 'Julia', 'Marcos', 'Patricia', 'Rafael']; // Lista de vendedores SYSTELOS TUR
             const vendedorEncontrado = vendedores.find(v => 
                 v.toLowerCase().replace(/\s+/g, '') === senha.toLowerCase()
             );
@@ -698,7 +698,7 @@
         
         function atualizarDashboardVendedores() {
             const container = document.getElementById('vendedoresContainer');
-            const vendedores = CVC_CONFIG.VENDEDORES;
+            const vendedores = ['Alessandro', 'Ana Paula', 'Claudia', 'Fernanda', 'Julia', 'Marcos', 'Patricia', 'Rafael']; // Lista de vendedores SYSTELOS TUR
             
             // Mostrar loading
             container.innerHTML = '<div class="text-center py-4"><div class="loading-spinner"></div><p class="mt-2">Carregando dados dos vendedores...</p></div>';
