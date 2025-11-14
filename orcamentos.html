@@ -732,8 +732,8 @@
     <script src="config.js"></script>
     
     <script>
-        console.log('🚀 SYSTELOS TUR - Padronizador de Orçamentos v8.04');
-        console.log('🎯 Integração com IA e 14 templates disponíveis');
+        debugLog('🚀 SYSTELOS TUR - Padronizador de Orçamentos v8.05', 'info');
+        debugLog('🎯 Integração com IA e 14 templates disponíveis', 'info');
         
         // ================================================================================
         // 🎯 VARIÁVEIS GLOBAIS
@@ -763,7 +763,7 @@
             atualizarDisplayCustos();
             verificarVersaoAPI();
 
-            debugLog('✅ SYSTELOS TUR - Padronizador v8.04 carregado!', 'success');
+            debugLog('✅ SYSTELOS TUR - Padronizador v8.05 carregado!', 'success');
         });
         
         function setupEventListeners() {
@@ -1355,7 +1355,7 @@ WhatsApp: (11) 99999-9999`;
         function atualizarDisplayCustos() {
             try {
                 const hoje = new Date().toLocaleDateString('pt-BR');
-                const custosHoje = JSON.parse(localStorage.getItem(`custos_${hoje}`) || '[]');
+                const custosHoje = JSON.parse(ESTADO_CONFIG.carregar(`custos_${hoje}`) || '[]');
                 
                 const custoTotal = custosHoje.reduce((acc, item) => acc + (item.valor || 0), 0);
                 const quantidadeHoje = custosHoje.length;
@@ -1369,7 +1369,7 @@ WhatsApp: (11) 99999-9999`;
                     const data = new Date();
                     data.setDate(data.getDate() - i);
                     const dataStr = data.toLocaleDateString('pt-BR');
-                    const custosDia = JSON.parse(localStorage.getItem(`custos_${dataStr}`) || '[]');
+                    const custosDia = JSON.parse(ESTADO_CONFIG.carregar(`custos_${dataStr}`) || '[]');
                     custoMes += custosDia.reduce((acc, item) => acc + (item.valor || 0), 0);
                 }
                 
