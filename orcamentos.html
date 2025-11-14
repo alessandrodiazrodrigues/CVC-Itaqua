@@ -301,83 +301,94 @@
 <body>
     <div class="container-fluid">
         <div class="main-container">
-            <!-- Header SYSTELOS TUR -->
-            <div class="systelos-header">
-                <div class="systelos-header-content">
-                    <div class="d-flex align-items-center justify-content-center flex-wrap">
-                        <div class="systelos-logo me-4">[S]</div>
-                        <div class="text-center">
-                            <h1 class="systelos-header-title">
-                                <i class="fas fa-robot"></i> SYSTELOS TUR - Orçamentos IA
-                            </h1>
-                            <p class="systelos-header-subtitle">
-                                Sistema completo com 14 templates - Sistemas com propósito
-                            </p>
+                        <!-- HEADER SYSTELOS -->
+            <header class="systelos-header">
+                <div class="container-fluid">
+                    <div class="row align-items-center py-3">
+                        <!-- Logo SYSTELOS -->
+                        <div class="col-md-4">
+                            <div class="systelos-logo">
+                                <div class="systelos-logo-symbol">[S]</div>
+                                <div>
+                                    <div class="systelos-logo-text">SYSTELOS TUR</div>
+                                    <p class="systelos-subtitle">Sistemas com propósito</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <!-- Status da API -->
-                    <div id="apiStatus" class="api-status loading">
-                        <i class="fas fa-spinner fa-spin"></i> Verificando status da API...
-                    </div>
-                    
-                    <!-- Estimador de Custos -->
-                    <div class="cost-estimator">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="cost-card">
-                                    <i class="fas fa-coins"></i>
-                                    <h6>Custo do Dia</h6>
-                                    <span id="custoDia">R$ 0,00</span>
-                                    <small>com IA</small>
+                        
+                        <!-- Título da Página -->
+                        <div class="col-md-4 text-center">
+                            <h1 class="page-title mb-0" style="border: none; padding: 0; color: var(--systelos-azul-principal);">
+                                <i class="fas fa-calculator"></i> Padronizador de Orçamentos
+                            </h1>
+                            <!-- Status API (discreto) -->
+                            <small id="apiStatus" class="text-muted">
+                                <i class="fas fa-spinner fa-spin"></i> Verificando API...
+                            </small>
+                        </div>
+                        
+                        <!-- Informações do Usuário -->
+                        <div class="col-md-4">
+                            <div class="user-info justify-content-end">
+                                <div class="me-3">
+                                    <p class="user-name">Gestor SYSTELOS</p>
+                                    <p class="user-role">Gestor</p>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="cost-card">
-                                    <i class="fas fa-calendar-month"></i>
-                                    <h6>Custo do Mês</h6>
-                                    <span id="custoMes">R$ 0,00</span>
-                                    <small>acumulado</small>
+                                <div class="admin-indicator">
+                                    <i class="fas fa-crown"></i> GESTOR
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="cost-card">
-                                    <i class="fas fa-chart-line"></i>
-                                    <h6>Orçamentos Hoje</h6>
-                                    <span id="orcamentosHoje">0</span>
-                                    <small>gerados</small>
-                                </div>
+                                <button class="logout-btn" onclick="window.location.href='index.html'">
+                                    <i class="fas fa-sign-out-alt"></i> Sair
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Navigation -->
+            </header>
+
+            <!-- NAVEGAÇÃO SYSTELOS -->
             <nav class="systelos-nav">
-                <ul class="nav nav-pills justify-content-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">
-                            <i class="fas fa-tachometer-alt"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="orcamentos.html">
-                            <i class="fas fa-calculator"></i> Orçamentos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="vendas.html">
-                            <i class="fas fa-handshake"></i> Vendas
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="orbiuns.html">
-                            <i class="fas fa-headset"></i> Orbiuns
-                        </a>
-                    </li>
-                </ul>
+                <div class="container-fluid">
+                    <ul class="nav nav-pills justify-content-center mb-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="orcamentos.html">
+                                <i class="fas fa-calculator"></i> Padronizador de Orçamentos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="vendas.html">
+                                <i class="fas fa-chart-line"></i> Informe de Vendas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="vendas-automatizado.html">
+                                <i class="fas fa-robot"></i> Informe Automatizado
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="embarques.html">
+                                <i class="fas fa-plane-departure"></i> Controle de Embarques
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="orbiuns.html">
+                                <i class="fas fa-clipboard-list"></i> Controle de Orbiuns
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="importacao.html">
+                                <i class="fas fa-cloud-upload-alt"></i> Importação
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </nav>
+
             
             <!-- Main Content -->
             <div class="content-section">
@@ -625,7 +636,7 @@
             
             try {
                 debugLog('🔍 Verificando API: ' + apiUrl, 'info');
-                statusElement.className = 'api-status loading';
+                statusElement.className = 'text-warning';
                 statusElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando API...';
                 
                 // POST de teste com dados mínimos
@@ -642,17 +653,17 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    statusElement.className = 'api-status success';
-                    statusElement.innerHTML = `<i class="fas fa-check-circle"></i> OpenAI GPT-4 Conectado - API OK`;
+                    statusElement.className = 'text-success';
+                    statusElement.innerHTML = '<i class="fas fa-check-circle"></i> API Conectada';
                     estadoGlobal.versaoAPI = 'v8.3';
-                    debugLog('✅ API OK: OpenAI GPT-4', 'success');
+                    debugLog('✅ API OK: OpenAI Assistant', 'success');
                 } else {
                     throw new Error('Resposta inválida');
                 }
             } catch (error) {
                 debugLog('❌ Erro API: ' + error.message, 'error');
-                statusElement.className = 'api-status error';
-                statusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> API indisponível - ' + error.message;
+                statusElement.className = 'text-danger';
+                statusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> API Indisponível';
             }
         }
         
