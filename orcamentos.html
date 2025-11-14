@@ -133,15 +133,6 @@
             border-left: 4px solid var(--systelos-azul);
         }
         
-        .form-section h4 {
-            color: var(--systelos-azul);
-            margin-bottom: 20px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
         .form-label {
             font-weight: 600;
             color: var(--systelos-azul);
@@ -149,20 +140,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-        
-        .form-control-cvc {
-            border: 2px solid var(--systelos-border);
-            border-radius: 10px;
-            padding: 12px 15px;
-            transition: all 0.3s ease;
-            font-family: 'Nunito', sans-serif;
-        }
-        
-        .form-control-cvc:focus {
-            border-color: var(--systelos-amarelo);
-            box-shadow: 0 0 0 0.2rem rgba(255, 230, 0, 0.25);
-            outline: none;
         }
         
         .textarea-large {
@@ -194,15 +171,12 @@
         
         .checkbox-item:hover {
             border-color: var(--systelos-azul);
-            background: var(--systelos-azul-opacity-05);
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px var(--systelos-azul-opacity-10);
         }
         
         .checkbox-item.selected {
             border-color: var(--systelos-azul);
-            background: var(--systelos-azul-opacity-10);
-            color: var(--systelos-azul);
+            background: rgba(15, 27, 61, 0.1);
             font-weight: 600;
         }
         
@@ -220,12 +194,6 @@
             font-size: 0.95rem;
         }
         
-        /* CAMPOS DINÂMICOS PARA CRIANÇAS */
-        .idade-crianca-input {
-            max-width: 120px;
-            margin-bottom: 10px;
-        }
-        
         /* PASTE AREA */
         .paste-area {
             min-height: 120px;
@@ -239,7 +207,6 @@
         
         .paste-area:hover {
             border-color: var(--systelos-azul);
-            background: var(--systelos-azul-opacity-05);
         }
         
         .paste-area.has-content {
@@ -275,7 +242,6 @@
             white-space: pre-wrap;
             font-family: var(--font-textos);
             line-height: 1.6;
-            box-shadow: var(--systelos-sombra-suave);
         }
         
         /* CARDS DE DICAS */
@@ -290,7 +256,6 @@
         
         .info-card:hover {
             border-color: var(--systelos-verde-agua);
-            background: rgba(20, 184, 166, 0.15);
             transform: translateY(-2px);
         }
         
@@ -324,27 +289,12 @@
         }
         
         .error {
-            color: var(--systelos-error);
+            color: #dc3545;
             background: rgba(220, 53, 69, 0.1);
             border: 2px solid rgba(220, 53, 69, 0.3);
             border-radius: 10px;
             padding: 20px;
             margin: 15px 0;
-        }
-        
-        .success {
-            color: var(--systelos-success);
-            background: rgba(40, 167, 69, 0.1);
-            border: 2px solid rgba(40, 167, 69, 0.3);
-            border-radius: 10px;
-            padding: 20px;
-            margin: 15px 0;
-        }
-        
-        /* RESPONSIVO */
-        @media (max-width: 768px) {
-            .checkbox-group { grid-template-columns: 1fr; }
-            .cost-card { margin: 10px 0; }
         }
     </style>
 </head>
@@ -355,9 +305,7 @@
             <div class="systelos-header">
                 <div class="systelos-header-content">
                     <div class="d-flex align-items-center justify-content-center flex-wrap">
-                        <div class="systelos-logo me-4">
-                            [S]
-                        </div>
+                        <div class="systelos-logo me-4">[S]</div>
                         <div class="text-center">
                             <h1 class="systelos-header-title">
                                 <i class="fas fa-robot"></i> SYSTELOS TUR - Orçamentos IA
@@ -499,8 +447,7 @@
                                     <i class="fas fa-users"></i>
                                     Adultos
                                 </label>
-                                <input type="number" class="form-control" id="adultos" min="1" max="10" value="2"
-                                       placeholder="Número de adultos">
+                                <input type="number" class="form-control" id="adultos" min="1" max="10" value="2">
                             </div>
                             
                             <div class="form-group">
@@ -513,9 +460,7 @@
                                 <!-- CAMPOS DINÂMICOS DE IDADE -->
                                 <div id="idadesCriancas" style="display: none; margin-top: 15px;">
                                     <label class="form-label">Idades das crianças:</label>
-                                    <div id="camposIdades" class="row">
-                                        <!-- Campos criados dinamicamente -->
-                                    </div>
+                                    <div id="camposIdades" class="row"></div>
                                 </div>
                             </div>
                         </div>
@@ -529,9 +474,7 @@
                                 </label>
                                 <textarea class="form-control textarea-large" id="observacoes" rows="12"
                                           placeholder="Cole aqui as informações do orçamento (horários, preços, passageiros, etc.)"></textarea>
-                                <small class="text-muted">
-                                    💡 Dica: Cole prints de orçamentos ou informações detalhadas aqui
-                                </small>
+                                <small class="text-muted">💡 Dica: Cole prints de orçamentos ou informações detalhadas aqui</small>
                             </div>
                             
                             <div class="form-group">
@@ -556,9 +499,7 @@
                                 </label>
                                 <input type="file" class="form-control" id="arquivo" 
                                        accept="image/*,.pdf" style="padding: 10px;">
-                                <small class="text-muted">
-                                    Formatos: JPG, PNG, PDF (máx. 10MB)
-                                </small>
+                                <small class="text-muted">Formatos: JPG, PNG, PDF (máx. 10MB)</small>
                             </div>
                         </div>
                     </div>
@@ -589,9 +530,7 @@
                 <!-- Dicas do Destino -->
                 <div class="result-section" id="secaoDicas" style="display: none;">
                     <h4><i class="fas fa-lightbulb"></i> Dicas do Destino</h4>
-                    <div id="dicasIA" class="result-content">
-                        Aguardando geração de dicas...
-                    </div>
+                    <div id="dicasIA" class="result-content">Aguardando geração de dicas...</div>
                     <button type="button" class="btn btn-secondary systelos-btn-secondary" onclick="copiarTexto('dicasIA')">
                         <i class="fas fa-copy"></i> Copiar Dicas
                     </button>
@@ -600,9 +539,7 @@
                 <!-- Ranking de Hotéis -->
                 <div class="result-section" id="secaoRanking" style="display: none;">
                     <h4><i class="fas fa-star"></i> Ranking de Hotéis</h4>
-                    <div id="rankingIA" class="result-content">
-                        Aguardando geração de ranking...
-                    </div>
+                    <div id="rankingIA" class="result-content">Aguardando geração de ranking...</div>
                     <button type="button" class="btn btn-secondary systelos-btn-secondary" onclick="copiarTexto('rankingIA')">
                         <i class="fas fa-copy"></i> Copiar Ranking
                     </button>
@@ -639,7 +576,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        debugLog("🚀 Iniciando SYSTELOS TUR - Orçamentos v8.1...", 'info');
+        debugLog("🚀 Iniciando SYSTELOS TUR - Orçamentos v8.2 FINAL", 'info');
         
         // ================================================================================
         // 🎯 VARIÁVEIS GLOBAIS
@@ -650,8 +587,6 @@
             ultimoDestino: '',
             imagemBase64: null,
             pdfContent: null,
-            custoDia: 0,
-            orcamentosHoje: 0,
             versaoAPI: 'carregando...'
         };
         
@@ -660,7 +595,7 @@
         // ================================================================================
         
         document.addEventListener('DOMContentLoaded', function() {
-            debugLog('📋 Inicializando sistema SYSTELOS TUR...', 'info');
+            debugLog('📋 Inicializando SYSTELOS TUR Orçamentos...', 'info');
             
             setupEventListeners();
             setupPasteArea();
@@ -669,30 +604,24 @@
             atualizarDisplayCustos();
             verificarVersaoAPI();
             
-            debugLog('✅ SYSTELOS TUR Orçamentos v8.1 carregado e pronto!', 'success');
+            debugLog('✅ Sistema pronto!', 'success');
         });
         
         function setupEventListeners() {
             const form = document.getElementById('orcamentoForm');
-            if (form) {
-                form.addEventListener('submit', handleSubmit);
-                debugLog('✅ Formulário conectado', 'success');
-            }
+            if (form) form.addEventListener('submit', handleSubmit);
             
             const arquivo = document.getElementById('arquivo');
-            if (arquivo) {
-                arquivo.addEventListener('change', handleFileUpload);
-                debugLog('✅ Upload de arquivo conectado', 'success');
-            }
+            if (arquivo) arquivo.addEventListener('change', handleFileUpload);
         }
         
         // ================================================================================
-        // 🔍 VERIFICAÇÃO DE VERSÃO DA API
+        // 🔍 VERIFICAÇÃO DA API - OPENAI ASSISTANT
         // ================================================================================
         
         async function verificarVersaoAPI() {
             const statusElement = document.getElementById('apiStatus');
-            const apiUrl = CONFIG_UTILS.getApiUrl('orcamentos');
+            const apiUrl = CONFIG_UTILS.getApiUrl('openaiAssistant');
             
             try {
                 debugLog('🔍 Verificando API: ' + apiUrl, 'info');
@@ -701,47 +630,37 @@
                 
                 const response = await fetch(apiUrl, {
                     method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
+                    headers: { 'Content-Type': 'application/json' }
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
                 
                 if (data.success && data.version) {
                     statusElement.className = 'api-status success';
-                    statusElement.innerHTML = `<i class="fas fa-check-circle"></i> ${data.ia_usada} ${data.version} funcionando - ${data.total_templates || 14} templates disponíveis`;
+                    statusElement.innerHTML = `<i class="fas fa-check-circle"></i> ${data.ia_usada} ${data.version} - ${data.total_templates || 14} templates`;
                     estadoGlobal.versaoAPI = data.version;
-                    debugLog('✅ API funcionando: ' + data.ia_usada, 'success');
+                    debugLog('✅ API OK: ' + data.ia_usada, 'success');
                 } else {
-                    throw new Error('Resposta inválida da API');
+                    throw new Error('Resposta inválida');
                 }
-                
             } catch (error) {
-                debugLog('❌ Erro ao verificar API: ' + error.message, 'error');
+                debugLog('❌ Erro API: ' + error.message, 'error');
                 statusElement.className = 'api-status error';
-                statusElement.innerHTML = `<i class="fas fa-exclamation-triangle"></i> API não disponível`;
+                statusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> API indisponível';
             }
         }
         
         // ================================================================================
-        // 🖱️ CHECKBOXES TOTALMENTE CLICÁVEIS
+        // 🖱️ CHECKBOXES CLICÁVEIS
         // ================================================================================
         
         function setupCheckboxesClicaveis() {
             document.querySelectorAll('.checkbox-item').forEach(item => {
                 item.addEventListener('click', function(e) {
-                    if (e.target.type === 'checkbox' || e.target.tagName === 'LABEL') {
-                        return;
-                    }
-                    
+                    if (e.target.type === 'checkbox' || e.target.tagName === 'LABEL') return;
                     const checkbox = this.querySelector('input[type="checkbox"]');
                     checkbox.checked = !checkbox.checked;
-                    
                     updateCheckboxVisual(this, checkbox.checked);
                     checkbox.dispatchEvent(new Event('change'));
                 });
@@ -751,16 +670,10 @@
                     updateCheckboxVisual(item, this.checked);
                 });
             });
-            
-            debugLog('✅ Checkboxes clicáveis configurados', 'success');
         }
         
         function updateCheckboxVisual(item, checked) {
-            if (checked) {
-                item.classList.add('selected');
-            } else {
-                item.classList.remove('selected');
-            }
+            item.classList.toggle('selected', checked);
         }
         
         // ================================================================================
@@ -768,8 +681,7 @@
         // ================================================================================
         
         function setupCamposCriancas() {
-            const criancasInput = document.getElementById('criancas');
-            criancasInput.addEventListener('change', function() {
+            document.getElementById('criancas').addEventListener('change', function() {
                 const numCriancas = parseInt(this.value) || 0;
                 const container = document.getElementById('idadesCriancas');
                 const camposContainer = document.getElementById('camposIdades');
@@ -777,19 +689,14 @@
                 if (numCriancas > 0) {
                     container.style.display = 'block';
                     camposContainer.innerHTML = '';
-                    
                     for (let i = 1; i <= numCriancas; i++) {
-                        const col = document.createElement('div');
-                        col.className = 'col-md-6 mb-2';
-                        col.innerHTML = `
-                            <input type="number" class="form-control idade-crianca-input" 
-                                   id="idadeCrianca${i}" min="0" max="17" 
-                                   placeholder="Idade da criança ${i}">
+                        camposContainer.innerHTML += `
+                            <div class="col-md-6 mb-2">
+                                <input type="number" class="form-control" id="idadeCrianca${i}" min="0" max="17" 
+                                       placeholder="Idade da criança ${i}">
+                            </div>
                         `;
-                        camposContainer.appendChild(col);
                     }
-                    
-                    debugLog(`✅ ${numCriancas} campos de idade criados`, 'info');
                 } else {
                     container.style.display = 'none';
                 }
@@ -806,26 +713,20 @@
             
             pasteArea.addEventListener('paste', function(e) {
                 e.preventDefault();
-                
                 const clipboardData = e.clipboardData || window.clipboardData;
-                const items = clipboardData.items;
                 
-                // Verificar se há imagem
-                for (let item of items) {
+                for (let item of clipboardData.items) {
                     if (item.type.indexOf('image') !== -1) {
-                        const file = item.getAsFile();
-                        handleImagePaste(file);
+                        handleImagePaste(item.getAsFile());
                         return;
                     }
                 }
                 
-                // Se não há imagem, processar texto
                 const text = clipboardData.getData('text/plain');
                 if (text) {
-                    this.innerHTML = `<pre style="white-space: pre-wrap; margin: 0; text-align: left;">${text}</pre>`;
+                    this.innerHTML = `<pre style="white-space: pre-wrap; margin: 0;">${text}</pre>`;
                     this.classList.add('has-content');
                     document.getElementById('textoColado').value = text;
-                    debugLog('📝 Texto colado: ' + text.length + ' caracteres', 'info');
                 }
             });
         }
@@ -834,21 +735,15 @@
             try {
                 const base64 = await fileToBase64(file);
                 estadoGlobal.imagemBase64 = base64;
-                
-                const preview = `
+                document.getElementById('pasteArea').innerHTML = `
                     <div style="text-align: center;">
-                        <img src="${base64}" style="max-width: 100%; max-height: 200px; border-radius: 8px;">
-                        <div style="margin-top: 10px; color: #666;">
-                            <i class="fas fa-image"></i> Imagem colada
-                        </div>
+                        <img src="${base64}" style="max-width: 100%; max-height: 200px;">
+                        <div style="margin-top: 10px;"><i class="fas fa-image"></i> Imagem colada</div>
                     </div>
                 `;
-                document.getElementById('pasteArea').innerHTML = preview;
                 document.getElementById('pasteArea').classList.add('has-content');
-                
-                debugLog('🖼️ Imagem colada via Ctrl+V', 'success');
             } catch (error) {
-                debugLog('❌ Erro ao colar imagem: ' + error.message, 'error');
+                debugLog('❌ Erro imagem: ' + error.message, 'error');
             }
         }
         
@@ -861,7 +756,7 @@
             if (!file) return;
 
             const pasteArea = document.getElementById('pasteArea');
-            pasteArea.innerHTML = `<div class="loading">Processando arquivo...</div>`;
+            pasteArea.innerHTML = '<div class="loading">Processando arquivo...</div>';
             pasteArea.classList.add('has-content');
 
             try {
@@ -874,25 +769,18 @@
                             <div>${file.name}</div>
                         </div>
                     `;
-                    debugLog('✅ Imagem carregada: ' + file.name, 'success');
                 } else if (file.type === 'application/pdf') {
                     const fileReader = new FileReader();
                     fileReader.onload = async function() {
                         try {
-                            if (typeof pdfjsLib === 'undefined') {
-                                throw new Error('PDF.js não carregado');
-                            }
-                            
-                            const typedarray = new Uint8Array(this.result);
-                            const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                            if (typeof pdfjsLib === 'undefined') throw new Error('PDF.js não carregado');
+                            const pdf = await pdfjsLib.getDocument(new Uint8Array(this.result)).promise;
                             let fullText = '';
-                            
                             for (let i = 1; i <= pdf.numPages; i++) {
                                 const page = await pdf.getPage(i);
                                 const textContent = await page.getTextContent();
                                 fullText += textContent.items.map(item => item.str).join(' ');
                             }
-                            
                             estadoGlobal.pdfContent = fullText;
                             pasteArea.innerHTML = `
                                 <div style="text-align: center; color: #28a745;">
@@ -901,19 +789,14 @@
                                     <small>${file.name}</small>
                                 </div>
                             `;
-                            
-                            debugLog('✅ PDF processado: ' + file.name, 'success');
-                            
                         } catch (error) {
-                            debugLog('❌ Erro ao processar PDF: ' + error.message, 'error');
-                            pasteArea.innerHTML = `<div class="error">Erro ao ler o PDF</div>`;
+                            pasteArea.innerHTML = '<div class="error">Erro ao ler PDF</div>';
                         }
                     };
                     fileReader.readAsArrayBuffer(file);
                 }
             } catch (error) {
-                pasteArea.innerHTML = `<div class="error">Erro ao processar o arquivo</div>`;
-                debugLog('❌ Erro no upload: ' + error.message, 'error');
+                pasteArea.innerHTML = '<div class="error">Erro ao processar arquivo</div>';
             }
         }
         
@@ -927,45 +810,31 @@
         }
         
         // ================================================================================
-        // 📋 COLETA DE DADOS DO FORMULÁRIO
+        // 📋 COLETA DE DADOS
         // ================================================================================
         
         function coletarDadosFormulario() {
-            const observacoes = document.getElementById('observacoes').value || '';
-            const textoColado = document.getElementById('textoColado').value || '';
-            const destino = document.getElementById('destino').value || '';
-            const adultos = document.getElementById('adultos').value || 2;
             const criancas = parseInt(document.getElementById('criancas').value) || 0;
-            
-            // Coletar idades das crianças
             const idadesCriancas = [];
             if (criancas > 0) {
                 for (let i = 1; i <= criancas; i++) {
                     const idadeInput = document.getElementById(`idadeCrianca${i}`);
-                    if (idadeInput) {
-                        idadesCriancas.push(parseInt(idadeInput.value) || 0);
-                    }
+                    if (idadeInput) idadesCriancas.push(parseInt(idadeInput.value) || 0);
                 }
             }
             
-            // Coletar tipos selecionados
             const tipos = [];
-            document.querySelectorAll('input[name="tipos"]:checked').forEach(checkbox => {
-                tipos.push(checkbox.value);
-            });
+            document.querySelectorAll('input[name="tipos"]:checked').forEach(cb => tipos.push(cb.value));
             
-            // Coletar parcelamento selecionado (apenas um)
             let parcelamento = '';
-            const parcelamentoChecked = document.querySelector('input[name="parcelamento"]:checked');
-            if (parcelamentoChecked) {
-                parcelamento = parcelamentoChecked.value;
-            }
+            const parcChecked = document.querySelector('input[name="parcelamento"]:checked');
+            if (parcChecked) parcelamento = parcChecked.value;
             
-            const dados = {
-                observacoes,
-                textoColado,
-                destino,
-                adultos: parseInt(adultos),
+            return {
+                observacoes: document.getElementById('observacoes').value || '',
+                textoColado: document.getElementById('textoColado').value || '',
+                destino: document.getElementById('destino').value || '',
+                adultos: parseInt(document.getElementById('adultos').value) || 2,
                 criancas,
                 idadesCriancas,
                 tipos,
@@ -973,50 +842,38 @@
                 imagemBase64: estadoGlobal.imagemBase64,
                 pdfContent: estadoGlobal.pdfContent
             };
-            
-            debugLog('📋 Dados coletados do formulário', 'info', dados);
-            return dados;
         }
         
         // ================================================================================
-        // 📡 COMUNICAÇÃO COM API
+        // 📡 COMUNICAÇÃO COM API - OPENAI ASSISTANT
         // ================================================================================
         
         async function enviarParaAPI(dados) {
-            const apiUrl = CONFIG_UTILS.getApiUrl('orcamentos');
-            debugLog('🚀 Enviando para API: ' + apiUrl, 'info');
-            debugLog('📤 Dados', 'info', dados);
+            const apiUrl = CONFIG_UTILS.getApiUrl('openaiAssistant');
+            debugLog('🚀 Enviando para: ' + apiUrl, 'info');
             
             try {
                 const response = await fetch(apiUrl, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dados)
                 });
 
                 const data = await response.json();
-                debugLog('📥 Resposta recebida', 'info', data);
-
-                if (!response.ok) {
-                    throw new Error(data.error || `HTTP ${response.status}`);
-                }
-
+                if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
                 if (data.success) {
-                    debugLog('✅ Sucesso! IA processou: ' + data.ia_usada, 'success');
+                    debugLog('✅ Sucesso: ' + data.ia_usada, 'success');
                     return data.result;
-                } else {
-                    throw new Error(data.error || 'Erro desconhecido');
                 }
+                throw new Error(data.error || 'Erro desconhecido');
             } catch (error) {
-                debugLog('❌ Erro na API: ' + error.message, 'error');
+                debugLog('❌ Erro API: ' + error.message, 'error');
                 throw error;
             }
         }
         
         // ================================================================================
-        // 🔍 EXTRAÇÃO DE CONTEXTO DO ORÇAMENTO
+        // 🔍 EXTRAÇÃO DE CONTEXTO
         // ================================================================================
         
         function extrairContextoDoOrcamento(orcamento) {
@@ -1025,7 +882,7 @@
             const contexto = {
                 destino: '',
                 dataIda: '',
-                dataVolta: '', 
+                dataVolta: '',
                 dias: '',
                 adultos: '',
                 criancas: '',
@@ -1034,266 +891,140 @@
             };
             
             try {
-                // Extrair destino (padrão: *Companhia - Origem ✈ Destino*)
                 const destinoMatch = orcamento.match(/\*[^-]+-[^✈]+✈\s*([^\n\r*]+)/);
-                if (destinoMatch) {
-                    contexto.destino = destinoMatch[1].trim();
-                }
+                if (destinoMatch) contexto.destino = destinoMatch[1].trim();
                 
-                // Extrair datas (padrão: dd/mm a dd/mm)
                 const datasMatch = orcamento.match(/(\d{1,2}\/\d{1,2})\s*a\s*(\d{1,2}\/\d{1,2})/);
                 if (datasMatch) {
                     contexto.dataIda = datasMatch[1];
                     contexto.dataVolta = datasMatch[2];
                 }
                 
-                // Extrair duração (padrão: (X dias e Y noites))
                 const diasMatch = orcamento.match(/\((\d+)\s*dias?\s*e?\s*(\d+)?\s*noites?\)/);
-                if (diasMatch) {
-                    contexto.dias = diasMatch[1];
-                }
+                if (diasMatch) contexto.dias = diasMatch[1];
                 
-                // Extrair passageiros (padrão: para XX adultos + YY bebês + ZZ crianças)
                 const adultosMatch = orcamento.match(/(\d+)\s*adultos?/i);
-                if (adultosMatch) {
-                    contexto.adultos = adultosMatch[1];
-                }
+                if (adultosMatch) contexto.adultos = adultosMatch[1];
                 
                 const criancasMatch = orcamento.match(/(\d+)\s*(?:bebês?|crianças?)/i);
-                if (criancasMatch) {
-                    contexto.criancas = criancasMatch[1];
-                }
+                if (criancasMatch) contexto.criancas = criancasMatch[1];
                 
-                // Extrair hotéis mencionados (buscar nomes após "Hotel:", "Hospedagem:" etc)
                 const hotelMatches = orcamento.match(/(?:Hotel|Hospedagem):\s*([^\n\r]+)/gi);
-                if (hotelMatches) {
-                    contexto.hoteis = hotelMatches.map(h => h.replace(/^(?:Hotel|Hospedagem):\s*/i, '').trim());
-                }
+                if (hotelMatches) contexto.hoteis = hotelMatches.map(h => h.replace(/^(?:Hotel|Hospedagem):\s*/i, '').trim());
                 
-                // Extrair companhias aéreas
-                const companhiaMatches = orcamento.match(/\*([^-]+)-/g);
-                if (companhiaMatches) {
-                    contexto.companhias = companhiaMatches.map(c => c.replace(/\*|−/g, '').trim());
-                }
-                
-                debugLog('🔍 Contexto extraído do orçamento', 'info', contexto);
                 return contexto;
-                
             } catch (error) {
-                debugLog('❌ Erro ao extrair contexto: ' + error.message, 'error');
                 return null;
             }
         }
         
         // ================================================================================
-        // 🎯 HANDLER DO FORMULÁRIO PRINCIPAL
+        // 🎯 HANDLER PRINCIPAL
         // ================================================================================
         
         async function handleSubmit(e) {
             e.preventDefault();
-            debugLog('🚀 Iniciando geração de orçamento...', 'info');
-            
             const botao = e.target.querySelector('button[type="submit"]');
             const textoOriginal = botao.textContent;
             
             try {
-                // Mostrar loading
                 botao.disabled = true;
                 botao.textContent = 'Gerando orçamento...';
-                mostrarLoading();
+                document.getElementById('orcamentoIA').innerHTML = '<div class="loading">🤖 Processando com OpenAI...</div>';
                 
-                // Coletar dados do formulário
                 const dados = coletarDadosFormulario();
-                
-                // Validar dados básicos
-                const temConteudo = dados.observacoes.trim() || 
-                                  dados.textoColado.trim() || 
-                                  dados.imagemBase64 || 
-                                  dados.pdfContent;
-                                  
-                if (!temConteudo) {
+                if (!dados.observacoes.trim() && !dados.textoColado.trim() && !dados.imagemBase64 && !dados.pdfContent) {
                     throw new Error('Adicione informações sobre a viagem');
                 }
                 
-                // Enviar para API
                 const resultado = await enviarParaAPI(dados);
+                document.getElementById('orcamentoIA').innerText = resultado;
                 
-                // Exibir resultado
-                exibirResultado(resultado);
-                
-                // Salvar estado para dicas/ranking
                 estadoGlobal.ultimoOrcamento = resultado;
                 estadoGlobal.ultimoDestino = dados.destino || 'Destino';
                 
-                // Habilitar botões de dicas
-                habilitarBotoesDicas();
+                document.getElementById('btnGerarDicas').disabled = false;
+                document.getElementById('btnGerarRanking').disabled = false;
                 
-                debugLog('✅ Orçamento gerado com sucesso!', 'success');
-                
+                debugLog('✅ Orçamento gerado!', 'success');
             } catch (error) {
-                debugLog('❌ Erro ao gerar orçamento: ' + error.message, 'error');
-                exibirErro(error.message);
+                debugLog('❌ Erro: ' + error.message, 'error');
+                document.getElementById('orcamentoIA').innerHTML = `<div class="error"><strong>❌ Erro:</strong> ${error.message}</div>`;
             } finally {
-                // Restaurar botão
                 botao.disabled = false;
                 botao.textContent = textoOriginal;
-                esconderLoading();
             }
-        }
-        
-        function mostrarLoading() {
-            document.getElementById('orcamentoIA').innerHTML = `
-                <div class="loading">
-                    🤖 Processando com IA...
-                    <div style="margin-top: 10px; font-size: 0.9rem;">
-                        14 templates disponíveis - Detecção automática inteligente
-                    </div>
-                </div>
-            `;
-        }
-        
-        function esconderLoading() {
-            // Apenas remove o estado de loading
-        }
-        
-        function exibirResultado(resultado) {
-            document.getElementById('orcamentoIA').innerText = resultado;
-            debugLog('✅ Orçamento exibido com sucesso!', 'success');
-        }
-        
-        function exibirErro(mensagem) {
-            document.getElementById('orcamentoIA').innerHTML = `
-                <div class="error">
-                    <strong>❌ Erro:</strong> ${mensagem}
-                    <div style="margin-top: 10px; font-size: 0.9rem;">
-                        Tente novamente ou verifique os dados informados
-                    </div>
-                </div>
-            `;
         }
         
         // ================================================================================
-        // 💡 DICAS E RANKING - VERSÃO REAL (DO SISTEMA ANTIGO)
+        // 💡 DICAS E RANKING
         // ================================================================================
-        
-        function habilitarBotoesDicas() {
-            const btnDicas = document.getElementById('btnGerarDicas');
-            const btnRanking = document.getElementById('btnGerarRanking');
-            
-            if (btnDicas) {
-                btnDicas.disabled = false;
-            }
-            
-            if (btnRanking) {
-                btnRanking.disabled = false;
-            }
-        }
         
         async function gerarDicasDestino() {
             try {
                 const contexto = extrairContextoDoOrcamento(estadoGlobal.ultimoOrcamento);
-                const destino = contexto?.destino || estadoGlobal.ultimoDestino || 'destino selecionado';
+                const destino = contexto?.destino || estadoGlobal.ultimoDestino || 'destino';
                 
                 document.getElementById('secaoDicas').style.display = 'block';
-                document.getElementById('dicasIA').innerHTML = `
-                    <div class="loading">
-                        🧭 Gerando dicas para ${destino}...
-                    </div>
-                `;
+                document.getElementById('dicasIA').innerHTML = '<div class="loading">🧭 Gerando dicas...</div>';
                 
-                let observacoes = `Gere dicas de viagem baseadas neste orçamento:`;
-                
+                let observacoes = 'Gere dicas de viagem baseadas neste orçamento:';
                 if (contexto) {
                     observacoes += `\n\nDESTINO: ${contexto.destino}`;
-                    if (contexto.dataIda && contexto.dataVolta) {
-                        observacoes += `\nDATAS: ${contexto.dataIda} a ${contexto.dataVolta}`;
-                    }
-                    if (contexto.dias) {
-                        observacoes += `\nDURAÇÃO: ${contexto.dias} dias`;
-                    }
-                    if (contexto.adultos) {
-                        observacoes += `\nPASSAGEIROS: ${contexto.adultos} adultos`;
-                        if (contexto.criancas) {
-                            observacoes += ` + ${contexto.criancas} crianças`;
-                        }
-                    }
-                    if (contexto.hoteis && contexto.hoteis.length > 0) {
-                        observacoes += `\nHOTÉIS: ${contexto.hoteis.join(', ')}`;
-                    }
+                    if (contexto.dataIda) observacoes += `\nDATAS: ${contexto.dataIda} a ${contexto.dataVolta}`;
+                    if (contexto.dias) observacoes += `\nDURAÇÃO: ${contexto.dias} dias`;
+                    if (contexto.adultos) observacoes += `\nPASSAGEIROS: ${contexto.adultos} adultos`;
+                    if (contexto.criancas) observacoes += ` + ${contexto.criancas} crianças`;
+                    if (contexto.hoteis.length) observacoes += `\nHOTÉIS: ${contexto.hoteis.join(', ')}`;
                 }
+                observacoes += `\n\nORÇAMENTO:\n${estadoGlobal.ultimoOrcamento}`;
                 
-                observacoes += `\n\nORÇAMENTO COMPLETO:\n${estadoGlobal.ultimoOrcamento}`;
-                
-                const dados = {
-                    observacoes: observacoes,
+                const resultado = await enviarParaAPI({
+                    observacoes,
                     tipos: ['Dicas'],
                     destino: contexto?.destino || destino
-                };
+                });
                 
-                debugLog('🧭 Gerando dicas com contexto', 'info', dados);
-                const resultado = await enviarParaAPI(dados);
                 document.getElementById('dicasIA').innerText = resultado;
-                
-                debugLog('✅ Dicas geradas com sucesso!', 'success');
-                
+                debugLog('✅ Dicas geradas!', 'success');
             } catch (error) {
-                debugLog('❌ Erro ao gerar dicas: ' + error.message, 'error');
-                document.getElementById('dicasIA').innerHTML = `
-                    <div class="error">❌ Erro ao gerar dicas: ${error.message}</div>
-                `;
+                debugLog('❌ Erro dicas: ' + error.message, 'error');
+                document.getElementById('dicasIA').innerHTML = `<div class="error">❌ ${error.message}</div>`;
             }
         }
         
         async function gerarRankingHoteis() {
             try {
                 const contexto = extrairContextoDoOrcamento(estadoGlobal.ultimoOrcamento);
-                const destino = contexto?.destino || estadoGlobal.ultimoDestino || 'destino selecionado';
+                const destino = contexto?.destino || estadoGlobal.ultimoDestino || 'destino';
                 
                 document.getElementById('secaoRanking').style.display = 'block';
-                document.getElementById('rankingIA').innerHTML = `
-                    <div class="loading">
-                        🏆 Gerando ranking de hotéis para ${destino}...
-                    </div>
-                `;
+                document.getElementById('rankingIA').innerHTML = '<div class="loading">🏆 Gerando ranking...</div>';
                 
-                let observacoes = `Gere ranking dos hotéis baseado neste orçamento:`;
-                
+                let observacoes = 'Gere ranking dos hotéis baseado neste orçamento:';
                 if (contexto) {
                     observacoes += `\n\nDESTINO: ${contexto.destino}`;
-                    if (contexto.dataIda && contexto.dataVolta) {
-                        observacoes += `\nDATAS: ${contexto.dataIda} a ${contexto.dataVolta}`;
-                    }
-                    if (contexto.adultos) {
-                        observacoes += `\nPASSAGEIROS: ${contexto.adultos} adultos`;
-                        if (contexto.criancas) {
-                            observacoes += ` + ${contexto.criancas} crianças (considere dicas para famílias)`;
-                        }
-                    }
-                    if (contexto.hoteis && contexto.hoteis.length > 0) {
-                        observacoes += `\nHOTÉIS DO ORÇAMENTO: ${contexto.hoteis.join(', ')}`;
-                        observacoes += `\n\nCrie ranking destes hotéis específicos com avaliações, localização, facilidades e recomendações.`;
+                    if (contexto.dataIda) observacoes += `\nDATAS: ${contexto.dataIda} a ${contexto.dataVolta}`;
+                    if (contexto.adultos) observacoes += `\nPASSAGEIROS: ${contexto.adultos} adultos`;
+                    if (contexto.criancas) observacoes += ` + ${contexto.criancas} crianças`;
+                    if (contexto.hoteis.length) {
+                        observacoes += `\nHOTÉIS: ${contexto.hoteis.join(', ')}`;
+                        observacoes += '\n\nCrie ranking com avaliações, localização e facilidades.';
                     }
                 }
+                observacoes += `\n\nORÇAMENTO:\n${estadoGlobal.ultimoOrcamento}`;
                 
-                observacoes += `\n\nORÇAMENTO COMPLETO:\n${estadoGlobal.ultimoOrcamento}`;
-                
-                const dados = {
-                    observacoes: observacoes,
+                const resultado = await enviarParaAPI({
+                    observacoes,
                     tipos: ['Ranking'],
                     destino: contexto?.destino || destino
-                };
+                });
                 
-                debugLog('🏆 Gerando ranking com contexto', 'info', dados);
-                const resultado = await enviarParaAPI(dados);
                 document.getElementById('rankingIA').innerText = resultado;
-                
-                debugLog('✅ Ranking gerado com sucesso!', 'success');
-                
+                debugLog('✅ Ranking gerado!', 'success');
             } catch (error) {
-                debugLog('❌ Erro ao gerar ranking: ' + error.message, 'error');
-                document.getElementById('rankingIA').innerHTML = `
-                    <div class="error">❌ Erro ao gerar ranking: ${error.message}</div>
-                `;
+                debugLog('❌ Erro ranking: ' + error.message, 'error');
+                document.getElementById('rankingIA').innerHTML = `<div class="error">❌ ${error.message}</div>`;
             }
         }
         
@@ -1301,41 +1032,33 @@
         // 📋 COPIAR TEXTO
         // ================================================================================
         
-        async function copiarTexto(elementId = 'orcamentoIA') {
+        async function copiarTexto(elementId) {
             const elemento = document.getElementById(elementId);
             if (!elemento) return;
             
             const texto = elemento.innerText || elemento.textContent;
-            
-            if (!texto || texto.trim() === '' || texto.includes('Aguardando')) {
+            if (!texto || texto.includes('Aguardando')) {
                 alert('⚠️ Não há conteúdo para copiar!');
                 return;
             }
             
             try {
                 await navigator.clipboard.writeText(texto);
-                debugLog('✅ Texto copiado: ' + texto.length + ' caracteres', 'success');
+                debugLog('✅ Copiado: ' + texto.length + ' chars', 'success');
                 
-                // Feedback visual
                 const botao = event?.target;
                 if (botao) {
-                    const textoOriginal = botao.innerHTML;
+                    const original = botao.innerHTML;
                     botao.innerHTML = '<i class="fas fa-check"></i> Copiado!';
-                    botao.style.background = 'var(--systelos-success)';
-                    
-                    setTimeout(() => {
-                        botao.innerHTML = textoOriginal;
-                        botao.style.background = '';
-                    }, 2000);
+                    setTimeout(() => botao.innerHTML = original, 2000);
                 }
-                
             } catch (err) {
-                debugLog('❌ Erro ao copiar: ' + err.message, 'error');
+                debugLog('❌ Erro ao copiar', 'error');
             }
         }
         
         // ================================================================================
-        // 💰 SISTEMA DE CUSTOS
+        // 💰 CUSTOS
         // ================================================================================
         
         function atualizarDisplayCustos() {
@@ -1344,25 +1067,19 @@
                 const custosHoje = JSON.parse(ESTADO_CONFIG.carregar(`custos_${hoje}`) || '[]');
                 
                 const custoTotal = custosHoje.reduce((acc, item) => acc + (item.valor || 0), 0);
-                const quantidadeHoje = custosHoje.length;
-                
                 document.getElementById('custoDia').textContent = `R$ ${custoTotal.toFixed(2)}`;
-                document.getElementById('orcamentosHoje').textContent = quantidadeHoje;
+                document.getElementById('orcamentosHoje').textContent = custosHoje.length;
                 
-                // Calcular custo do mês
                 let custoMes = 0;
                 for (let i = 0; i < 30; i++) {
                     const data = new Date();
                     data.setDate(data.getDate() - i);
-                    const dataStr = data.toLocaleDateString('pt-BR');
-                    const custosDia = JSON.parse(ESTADO_CONFIG.carregar(`custos_${dataStr}`) || '[]');
+                    const custosDia = JSON.parse(ESTADO_CONFIG.carregar(`custos_${data.toLocaleDateString('pt-BR')}`) || '[]');
                     custoMes += custosDia.reduce((acc, item) => acc + (item.valor || 0), 0);
                 }
-                
                 document.getElementById('custoMes').textContent = `R$ ${custoMes.toFixed(2)}`;
-                
             } catch (error) {
-                debugLog('❌ Erro ao atualizar custos: ' + error.message, 'error');
+                debugLog('❌ Erro custos: ' + error.message, 'error');
             }
         }
         
@@ -1370,16 +1087,7 @@
         // 🎯 LOG FINAL
         // ================================================================================
         
-        debugLog("SYSTELOS TUR - Padronizador de Orçamentos v8.1 - Config.js Integrado", 'success');
-        debugLog("Funcionalidades:", 'info');
-        debugLog("- Interface SYSTELOS TUR integrada", 'info');
-        debugLog("- IA com 14 templates REAIS (sem mocks)", 'info');
-        debugLog("- Upload de PDF e imagens", 'info');
-        debugLog("- Sistema de dicas e ranking COM API REAL", 'info');
-        debugLog("- Checkboxes totalmente clicáveis", 'info');
-        debugLog("- Campos dinâmicos para crianças", 'info');
-        debugLog("- Sistema de custos integrado", 'info');
-        debugLog("- Config.js centralizado funcionando", 'info');
+        debugLog("✅ SYSTELOS TUR v8.2 FINAL - OpenAI Assistant do Vercel", 'success');
     </script>
 </body>
 </html>
