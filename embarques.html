@@ -932,7 +932,7 @@
                 
                 dadosEmbarques = dados.data.embarques || [];
                 
-                console.log(`✅ ${dadosEmbarques.length} embarques carregados da API`);
+                debugLog(`✅ ${dadosEmbarques.length} embarques carregados da API`, 'success');
                 
                 // Mostrar sucesso se conectou com API real
                 mostrarAlerta('✅ Conectado com a planilha! Dados atualizados.', 'success');
@@ -951,7 +951,7 @@
                 
                 // Fallback com dados simulados para teste
                 dadosEmbarques = gerarDadosSimulados();
-                console.log(`🧪 ${dadosEmbarques.length} embarques simulados carregados para teste`);
+                debugLog(`🧪 ${dadosEmbarques.length} embarques simulados carregados para teste`, 'info');
             }
             
             // Processar e renderizar dashboards
@@ -2526,8 +2526,8 @@
                 
                 // Método 2: Verificar se pode escrever no localStorage
                 try {
-                    localStorage.setItem('test', 'test');
-                    localStorage.removeItem('test');
+                    // localStorage.setItem('test', 'test'); // Teste removido - usar ESTADO_CONFIG se necessário
+                    // localStorage.removeItem('test'); // Teste removido - usar ESTADO_CONFIG se necessário
                 } catch (e) {
                     return true;
                 }

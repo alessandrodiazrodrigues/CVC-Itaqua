@@ -61,7 +61,7 @@
         }
         
         .google-btn {
-            background: #4285f4;
+            background: var(--systelos-azul);
             color: white;
             border: none;
             padding: 12px 25px;
@@ -73,14 +73,14 @@
         }
         
         .google-btn:hover {
-            background: #3367d6;
+            background: var(--systelos-azul);
             transform: translateY(-2px);
         }
         
         .senha-input {
             width: 100%;
             padding: 12px 15px;
-            border: 2px solid #e9ecef;
+            border: 2px solid var(--systelos-border);
             border-radius: 10px;
             margin-bottom: 15px;
             font-weight: 500;
@@ -149,7 +149,7 @@
         /* Card de Importação - NOVO */
         .action-card.importacao {
             background: var(--systelos-tur-amarelo);
-            border: 2px solid #FFE600;
+            border: 2px solid var(--systelos-amarelo);
             transform: scale(1.02);
         }
         
@@ -162,7 +162,7 @@
             position: absolute;
             top: -5px;
             right: -5px;
-            background: #FF4444;
+            background: var(--systelos-error);
             color: white;
             padding: 4px 8px;
             border-radius: 12px;
@@ -203,7 +203,7 @@
         /* Card Automatizado - NOVO */
         .action-card.automatizado {
             background: var(--systelos-tur-verde-agua);
-            border: 2px solid #00D4AA;
+            border: 2px solid var(--systelos-verde);
         }
         
         .action-card.automatizado:hover {
@@ -270,9 +270,9 @@
             border-left: 3px solid var(--systelos-amarelo);
         }
         
-        .vendedor-stat.vendas { border-left-color: #28a745; }
-        .vendedor-stat.checkin { border-left-color: #17a2b8; }
-        .vendedor-stat.pos-venda { border-left-color: #ffc107; }
+        .vendedor-stat.vendas { border-left-color: var(--systelos-success); }
+        .vendedor-stat.checkin { border-left-color: var(--systelos-info); }
+        .vendedor-stat.pos-venda { border-left-color: var(--systelos-warning); }
         
         .vendedor-stat-number {
             font-size: 1.5rem;
@@ -629,7 +629,7 @@
             isAdmin = userData.isAdmin;
 
             // Salvar no localStorage para persistência
-            localStorage.setItem('systelos_user', JSON.stringify(userData));
+            ESTADO_CONFIG.salvar('systelos_user', JSON.stringify(userData));
             
             // Ocultar login e mostrar dashboard
             document.getElementById('loginContainer').style.display = 'none';
@@ -644,7 +644,7 @@
         }
         
         function logout() {
-            localStorage.removeItem('systelos_user');
+            ESTADO_CONFIG.remover('systelos_user');
             currentUser = null;
             isAdmin = false;
             
@@ -748,13 +748,13 @@
             debugLog('🏢 Dashboard SYSTELOS TUR carregado', 'success');
 
             // Verificar se já está logado
-            const savedUser = localStorage.getItem('systelos_user');
+            const savedUser = ESTADO_CONFIG.carregar('systelos_user');
             if (savedUser) {
                 try {
                     const userData = JSON.parse(savedUser);
                     processLogin(userData);
                 } catch (e) {
-                    localStorage.removeItem('systelos_user');
+                    ESTADO_CONFIG.remover('systelos_user');
                 }
             }
             
@@ -765,13 +765,13 @@
                 }
             });
             
-            console.log('🎯 Dashboard SYSTELOS TUR - Sistemas com propósito v2.0');
-            console.log('📊 Recursos disponíveis:');
-            console.log('   ✅ Dashboard geral da loja');
-            console.log('   ✅ Dashboard por vendedores (vendas, check-ins, pós-vendas)');
-            console.log('   ✅ Login Google e por senha');
-            console.log('   ✅ Interface responsiva');
-            console.log('   ✅ 🔥 NOVO: Importação Automática de Embarques');
+            debugLog('🎯 Dashboard SYSTELOS TUR - Sistemas com propósito v11.2', 'info');
+            debugLog('📊 Recursos disponíveis:', 'info');
+            debugLog('   ✅ Dashboard geral da loja', 'info');
+            debugLog('   ✅ Dashboard por vendedores (vendas, check-ins, pós-vendas)', 'info');
+            debugLog('   ✅ Login Google e por senha', 'info');
+            debugLog('   ✅ Interface responsiva', 'info');
+            debugLog('   ✅ 🔥 NOVO: Importação Automática de Embarques', 'info');
         });
     </script>
 </body>

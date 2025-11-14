@@ -26,13 +26,13 @@
         /* ===== ESTILOS ESPECÍFICOS DO SISTEMA COMPLETO v11.2 - Config.js Integrado ===== */
         
         :root {
-            --systelos-amarelo: #FFE600;
-            --systelos-azul: #0A00B4;
-            --systelos-branco: #FFFFFF;
-            --systelos-verde: #00D4AA;
-            --systelos-azul-escuro: #1B365D;
+            --systelos-amarelo: var(--systelos-amarelo);
+            --systelos-azul: var(--systelos-azul);
+            --systelos-branco: var(--systelos-branco);
+            --systelos-verde: var(--systelos-verde);
+            --systelos-azul-escuro: var(--systelos-azul-escuro);
             --systelos-cinza: var(--systelos-cinza);
-            --systelos-fundo-card: #f8f9fa;
+            --systelos-fundo-card: var(--systelos-bg-light);
             --systelos-sombra-suave: 0 4px 6px rgba(0,0,0,0.1);
             --systelos-sombra-media: 0 8px 15px rgba(0,0,0,0.2);
         }
@@ -400,7 +400,7 @@
             align-items: center;
             padding: 12px 20px;
             border-radius: 25px;
-            background: #f8f9fa;
+            background: var(--systelos-bg-light);
             font-weight: 600;
             color: var(--systelos-cinza);
             transition: all 0.3s ease;
@@ -499,7 +499,7 @@
         }
 
         .form-control, .form-select {
-            border: 2px solid #e9ecef;
+            border: 2px solid var(--systelos-border);
             border-radius: 8px;
             padding: 10px 15px;
             transition: all 0.3s ease;
@@ -516,8 +516,8 @@
 
         /* Debug Section */
         .debug-section {
-            background: #1e1e1e;
-            color: #00ff00;
+            background: var(--systelos-dark);
+            color: var(--systelos-success);
             border-radius: 15px;
             padding: 20px;
             margin-top: 30px;
@@ -540,19 +540,19 @@
         }
 
         .debug-content .success {
-            color: #50fa7b;
+            color: var(--systelos-success);
         }
 
         .debug-content .error {
-            color: #ff5555;
+            color: var(--systelos-error);
         }
 
         .debug-content .warning {
-            color: #f1fa8c;
+            color: var(--systelos-warning);
         }
 
         .debug-content .info {
-            color: #8be9fd;
+            color: var(--systelos-info);
         }
 
         /* Toast Notifications */
@@ -1372,10 +1372,10 @@
             
             // Console log com cores
             const colors = {
-                error: 'color: #ff5555; font-weight: bold;',
-                success: 'color: #50fa7b; font-weight: bold;',
-                warning: 'color: #f1fa8c; font-weight: bold;',
-                info: 'color: #8be9fd;'
+                error: 'color: var(--systelos-error); font-weight: bold;',
+                success: 'color: var(--systelos-success); font-weight: bold;',
+                warning: 'color: var(--systelos-warning); font-weight: bold;',
+                info: 'color: var(--systelos-info);'
             };
             
             console.log(`%c[${type.toUpperCase()}] ${message}`, colors[type] || colors.info);

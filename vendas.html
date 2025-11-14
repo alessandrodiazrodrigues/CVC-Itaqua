@@ -55,15 +55,15 @@
         }
         
         .cliente-ale-section {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
+            background: var(--systelos-bg-warning);
+            border: 2px solid var(--systelos-warning);
             border-radius: 15px;
             padding: 25px;
             margin-bottom: 25px;
         }
         
         .cliente-ale-section h4 {
-            color: #856404;
+            color: var(--systelos-text-warning);
             font-weight: 700;
             margin-bottom: 15px;
         }
@@ -82,15 +82,15 @@
             border-radius: 25px;
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 2px solid #ffc107;
+            border: 2px solid var(--systelos-warning);
             font-weight: 600;
-            color: #856404;
+            color: var(--systelos-text-warning);
             min-width: 120px;
             justify-content: center;
         }
         
         .toggle-option.selected {
-            background: #ffc107;
+            background: var(--systelos-warning);
             color: white;
         }
         
@@ -102,7 +102,7 @@
         
         .radio-item, .checkbox-item {
             background: white;
-            border: 2px solid #e9ecef;
+            border: 2px solid var(--systelos-border);
             border-radius: 10px;
             padding: 12px 20px;
             cursor: pointer;
@@ -145,7 +145,7 @@
         }
         
         .btn-remove-recibo {
-            background: #dc3545;
+            background: var(--systelos-error);
             color: white;
             border: none;
             padding: 8px 16px;
@@ -171,13 +171,13 @@
         }
         
         .btn-submit:hover {
-            background: #ffe000;
+            background: var(--systelos-amarelo);
         }
         
         .extra-fields {
             margin-top: 20px;
             padding: 20px;
-            background: #fff3cd;
+            background: var(--systelos-bg-warning);
             border-radius: 12px;
             display: none;
         }
@@ -418,7 +418,7 @@
     
     <!-- JAVASCRIPT INCORPORADO - GARANTIDO -->
     <script>
-        console.log('🚀 Sistema v8.12 - Ultra-Simplificado - GARANTIDO!');
+        debugLog('🚀 Sistema v11.2 - Ultra-Simplificado - GARANTIDO!', 'info');
         
         // ================================================================================
         // VARIÁVEIS GLOBAIS
@@ -435,11 +435,11 @@
             if (isCliente) {
                 opcoes[0].classList.add('selected');
                 opcoes[0].querySelector('input').checked = true;
-                console.log('✅ Cliente do Ale: SIM');
+                debugLog('✅ Cliente do Ale: SIM', 'success');
             } else {
                 opcoes[1].classList.add('selected');
                 opcoes[1].querySelector('input').checked = true;
-                console.log('❌ Cliente do Ale: NÃO');
+                debugLog('❌ Cliente do Ale: NÃO', 'error');
             }
         }
         
@@ -447,7 +447,7 @@
         // ADICIONAR RECIBO - SUPER SIMPLIFICADO
         // ================================================================================
         function adicionarRecibo() {
-            console.log('🧾 Adicionando recibo...');
+            debugLog('🧾 Adicionando recibo...', 'info');
             
             contadorRecibos++;
             const container = document.getElementById('recibosContainer');
@@ -587,7 +587,7 @@
             container.appendChild(reciboDiv);
             atualizarBotaoRemover();
             
-            console.log(`✅ Recibo ${contadorRecibos} adicionado!`);
+            debugLog(`✅ Recibo ${contadorRecibos} adicionado!`, 'success');
         }
         
         // ================================================================================
@@ -598,7 +598,7 @@
             if (recibo) {
                 recibo.remove();
                 atualizarBotaoRemover();
-                console.log(`🗑️ Recibo ${numero} removido`);
+                debugLog(`🗑️ Recibo ${numero} removido`, 'info');
             }
         }
         
@@ -608,7 +608,7 @@
             if (ultimo) {
                 ultimo.remove();
                 atualizarBotaoRemover();
-                console.log('🗑️ Último recibo removido');
+                debugLog('🗑️ Último recibo removido', 'info');
             }
         }
         
@@ -629,7 +629,7 @@
             
             if (extras) {
                 extras.style.display = isAereo ? 'block' : 'none';
-                console.log(`Extras aéreos: ${isAereo ? 'MOSTRADO' : 'OCULTO'}`);
+                debugLog(`Extras aéreos: ${isAereo ? 'MOSTRADO' : 'OCULTO'}`, 'info');
             }
         }
         
@@ -702,15 +702,15 @@
                 
                 // Coletar dados
                 const dados = new FormData(form);
-                console.log('📤 Enviando venda...');
+                debugLog('📤 Enviando venda...', 'info');
                 
                 // Simular sucesso
                 alert('✅ Venda cadastrada com sucesso!\n\n(Modo demonstração - dados coletados no console)');
                 
                 // Mostrar dados no console
-                console.log('Dados coletados:');
+                debugLog('Dados coletados:', 'info');
                 for (let [key, value] of dados.entries()) {
-                    console.log(`${key}: ${value}`);
+                    debugLog(`${key}: ${value}`, 'info');
                 }
             });
         }
@@ -719,10 +719,10 @@
         // INICIALIZAÇÃO AUTOMÁTICA - GARANTIDA
         // ================================================================================
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('📄 DOM carregado!');
+            debugLog('📄 DOM carregado!', 'info');
             
             setTimeout(function() {
-                console.log('🎯 Inicializando sistema ultra-simplificado...');
+                debugLog('🎯 Inicializando sistema ultra-simplificado...', 'info');
                 
                 // Configurar tudo
                 aplicarMascaras();
@@ -732,15 +732,15 @@
                 // Adicionar primeiro recibo
                 adicionarRecibo();
                 
-                console.log('✅ Sistema v8.12 inicializado com SUCESSO!');
-                console.log('🔧 Funcionalidades ativas:');
-                console.log('   ✅ Lista de vendedores hardcoded');
-                console.log('   ✅ Botão adicionar recibo');
-                console.log('   ✅ Campos dinâmicos aéreos'); 
-                console.log('   ✅ Máscaras CPF/WhatsApp');
-                console.log('   ✅ Cliente do Ale');
-                console.log('   ✅ Envio de formulário');
-                console.log('🚀 TUDO FUNCIONANDO!');
+                debugLog('✅ Sistema v11.2 inicializado com SUCESSO!', 'success');
+                debugLog('🔧 Funcionalidades ativas:', 'info');
+                debugLog('   ✅ Lista de vendedores hardcoded', 'info');
+                debugLog('   ✅ Botão adicionar recibo', 'info');
+                debugLog('   ✅ Campos dinâmicos aéreos', 'info'); 
+                debugLog('   ✅ Máscaras CPF/WhatsApp', 'info');
+                debugLog('   ✅ Cliente do Ale', 'info');
+                debugLog('   ✅ Envio de formulário', 'info');
+                debugLog('🚀 TUDO FUNCIONANDO!', 'info');
                 
             }, 100);
         });
@@ -748,10 +748,10 @@
         // ================================================================================
         // LOGS FINAIS
         // ================================================================================
-        console.log('✅ JavaScript incorporado carregado!');
-        console.log('🎯 v8.12: Versão ultra-simplificada que SEMPRE funciona');
-        console.log('📋 Todas as funções estão incorporadas no HTML');
-        console.log('🔧 Não depende de carregamento externo de JS');
+        debugLog('✅ JavaScript incorporado carregado!', 'success');
+        debugLog('🎯 v11.2: Versão ultra-simplificada que SEMPRE funciona', 'info');
+        debugLog('📋 Todas as funções estão incorporadas no HTML', 'info');
+        debugLog('🔧 Não depende de carregamento externo de JS', 'info');
     </script>
 </body>
 </html>
