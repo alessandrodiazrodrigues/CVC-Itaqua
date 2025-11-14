@@ -654,7 +654,7 @@
                 statusElement.className = 'api-status error';
                 statusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> API indisponível - ' + error.message;
             }
-        }        }
+        }
         
         // ================================================================================
         // 🖱️ CHECKBOXES CLICÁVEIS
@@ -861,14 +861,17 @@
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(dados)
+                    body: JSON.stringify({
+                        prompt: 'Gere um orçamento detalhado de viagem baseado nas informações fornecidas',
+                        dadosOrcamento: dados
+                    })
                 });
 
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
                 if (data.success) {
-                    debugLog('✅ Sucesso: ' + data.ia_usada, 'success');
-                    return data.result;
+                    debugLog('✅ Sucesso: ' + data.modelo, 'success');
+                    return data.orcamento;
                 }
                 throw new Error(data.error || 'Erro desconhecido');
             } catch (error) {
