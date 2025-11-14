@@ -1,494 +1,604 @@
 // ================================================================================
-// 🏢 CVC ITAQUÁ - PORTAL DE GESTÃO DA LOJA - CONFIGURAÇÃO CENTRAL v10.0
+// ⚙️ SYSTELOS TUR - CONFIGURAÇÃO CENTRALIZADA v9.0
 // ================================================================================
-// 🚨 CORREÇÃO CRÍTICA: Compatibilidade total com vendas-automatizado.html v10.0
+// 🎯 ARQUIVO ÚNICO DE CONFIGURAÇÃO
+// Todas as URLs, cores, APIs e configurações em UM SÓ LUGAR
+// Se precisar mudar algo, muda APENAS aqui!
+// ================================================================================
 
-const CVC_CONFIG = {
-    // ✅ URL PRINCIPAL - ATUALIZADA COM A NOVA API
-    API_URL: 'https://script.google.com/macros/s/AKfycbxxvt5eY2L5DpI2yFCyqvHBA_sYkteDPCkxgEyb4QeF597J-CP0WE7hHJWCWlsBGLRCrA/exec',
+console.log('⚙️ Carregando SYSTELOS TUR - Configuração Centralizada v9.0...');
+
+// ================================================================================
+// 🏢 INFORMAÇÕES DO SISTEMA
+// ================================================================================
+
+const SYSTELOS_CONFIG = {
+    // Identidade
+    nome: 'SYSTELOS TUR',
+    nomeCompleto: 'SYSTELOS TUR - Sistemas com Propósito',
+    simbolo: '[S]',
+    tagline: 'Sistemas com propósito',
+    versao: '9.0',
+    ambiente: 'production', // 'development' ou 'production'
     
-    // 📊 INFORMAÇÕES DO SISTEMA
-    VERSION: '10.0',
-    SYSTEM_NAME: 'CVC Itaquá - Portal de Gestão da Loja',
-    SYSTEM_FULL_NAME: 'CVC Itaquá - Portal de Gestão da Loja - Sistema de Gestão Integrado',
-    SYSTEM_SHORT_NAME: 'Portal Itaquá',
-    LAST_UPDATE: '2024-12-10',
-    ENVIRONMENT: 'production',
-    
-    // 🏪 CONFIGURAÇÕES DA LOJA (FILIAL ÚNICA)
-    FILIAL_PADRAO: '6220',
-    NOME_FILIAL: 'Itaquaquecetuba',
-    FILIAL_NOME_COMPLETO: 'CVC Itaquaquecetuba',
-    FILIAL_UNICA: true,
-    
-    // 👥 VENDEDORES ATIVOS - OBRIGATÓRIO PARA O SISTEMA
-    VENDEDORES: [
-        'Alessandro',
-        'Ana Paula', 
-        'Adriana',
-        'Adrielly',
-        'Bia',
-        'Conceição',
-        'Jhully'
-    ],
-    
-    // 🎫 TIPOS DE SERVIÇO - CORREÇÃO DO ERRO "Cannot read properties of undefined"
-    TIPOS_SERVICO: [
-        'Aéreo',
-        'Aéreo Facial',
-        'A+H',
-        'A+H+S',
-        'Terrestre',
-        'Marítimo',
-        'Seguro',
-        'Câmbio',
-        'Chip',
-        'Transfer',
-        'Passeio',
-        'Ingresso',
-        'Outros'
-    ],
-    
-    // ✈️ COMPANHIAS AÉREAS
-    COMPANHIAS_AEREAS: [
-        'LATAM', 'AZUL', 'GOL', 'VOEPASS',
-        '──────────────',
-        'CRUZEIRO MSC', 'CRUZEIRO COSTA', 'CRUZEIRO TEMÁTICO', 'CRUZEIRO NCL', 
-        'CRUZEIRO DISNEY', 'CRUZEIROS OUTROS',
-        '──────────────',
-        'Aerolíneas Argentinas', 'Aeroméxico', 'Air Canada', 'Air China', 
-        'Air Europa', 'Air France', 'Alitalia', 'American Airlines', 
-        'British Airways', 'Copa Airlines', 'Delta', 'Emirates', 
-        'Iberia', 'KLM', 'Lufthansa', 'Swiss', 'TAP', 'Turkish Airlines', 
-        'United Airlines', 'OUTRAS'
-    ],
-    
-    // 🏢 DEPARTAMENTOS - Para orbiuns.html
-    DEPARTAMENTOS: [
-        'Vendas',
-        'Pós-Vendas',
-        'Financeiro',
-        'Operacional',
-        'Marketing',
-        'Recursos Humanos',
-        'Tecnologia',
-        'Gerência'
-    ],
-    
-    // 📋 STATUS ORBIUM - Para controle de status
-    STATUS_ORBIUM: [
-        'Pendente',
-        'Em Andamento',
-        'Aguardando Aprovação',
-        'Aprovado',
-        'Rejeitado',
-        'Concluído',
-        'Cancelado'
-    ],
-    
-    // 🔄 PRIORIDADES
-    PRIORIDADES: [
-        'Baixa',
-        'Média',
-        'Alta',
-        'Urgente',
-        'Crítica'
-    ],
-    
-    // 📄 PÁGINAS DO SISTEMA
-    PAGES: {
-        DASHBOARD: {
-            title: 'Dashboard Principal',
-            subtitle: 'Visão geral das operações - CVC Itaquaquecetuba',
-            icon: 'fas fa-tachometer-alt',
-            file: 'index.html'
+    // URLs e Endpoints
+    urls: {
+        // Frontend (Vercel)
+        frontend: window.location.origin, // Pega automaticamente
+        
+        // APIs do Backend (Vercel Serverless Functions)
+        api: {
+            orcamentos: '/api/ai-google',         // API principal de orçamentos com IA
+            orbiuns: '/api/orbiuns',              // API de orbiuns/processos
+            embarques: '/api/embarques',          // API de embarques (se existir)
+            custos: '/api/custos',                // API de custos (se existir)
+            openaiAssistant: '/api/openai-assistant', // OpenAI Assistant
+            debug: '/api/debug-orbiuns'           // Debug API
         },
-        ORCAMENTOS: {
-            title: 'Padronizador de Orçamentos',
-            subtitle: 'Geração inteligente de propostas comerciais',
-            icon: 'fas fa-calculator',
-            file: 'orcamentos.html'
-        },
-        VENDAS: {
-            title: 'Informe de Vendas',
-            subtitle: 'Cadastro e acompanhamento de vendas realizadas',
-            icon: 'fas fa-chart-line',
-            file: 'vendas.html'
-        },
-        VENDAS_AUTOMATIZADO: {
-            title: 'Vendas Automatizado',
-            subtitle: 'Sistema de vendas com dados em tempo real',
-            icon: 'fas fa-robot',
-            file: 'vendas-automatizado.html'
-        },
-        EMBARQUES: {
-            title: 'Controle de Embarques',
-            subtitle: 'Gestão de check-ins e conferências de viagem',
-            icon: 'fas fa-plane-departure',
-            file: 'embarques.html'
-        },
-        ORBIUNS: {
-            title: 'Controle de Orbiuns',
-            subtitle: 'Gestão e acompanhamento de processos internos',
-            icon: 'fas fa-clipboard-list',
-            file: 'orbiuns.html'
-        },
-        IMPORTACAO: {
-            title: 'Sistema de Importação',
-            subtitle: 'Importação inteligente de dados com IA',
-            icon: 'fas fa-upload',
-            file: 'importacao.html'
-        },
-        ADMIN: {
-            title: 'Área do Gestor',
-            subtitle: 'Gestão de usuários e configurações do sistema',
-            icon: 'fas fa-crown',
-            file: 'admin.html'
+        
+        // Google Sheets (se precisar acesso direto)
+        googleSheets: {
+            planilhaId: '1dF8dfIh8EyvX-5_sISpVc4dMsLNOqpwovQsbsxl9ywc',
+            urlBase: 'https://docs.google.com/spreadsheets/d/1dF8dfIh8EyvX-5_sISpVc4dMsLNOqpwovQsbsxl9ywc'
         }
-    },
-    
-    // 🎨 CONFIGURAÇÕES VISUAIS (CONFORME MANUAL DA MARCA CVC)
-    VISUAL: {
-        COLORS: {
-            PRIMARY_YELLOW: '#FFE600',
-            PRIMARY_BLUE: '#0A00B4',
-            PRIMARY_WHITE: '#FFFFFF',
-            SECONDARY_GREEN: '#00D4AA',
-            DARK_BLUE: '#1B365D',
-            LIGHT_BLUE: '#E8F0FE',
-            LIGHT_YELLOW: '#FFF9CC',
-            GRAY: '#6C757D',
-            LIGHT_GRAY: '#f5f6fa'
-        },
-        FONTS: {
-            PRIMARY: 'Nunito, sans-serif',
-            WEIGHTS: {
-                LIGHT: 300,
-                REGULAR: 400,
-                SEMIBOLD: 600,
-                BOLD: 700,
-                EXTRABOLD: 800,
-                BLACK: 900
-            }
-        }
-    },
-    
-    // 🔧 CONFIGURAÇÕES TÉCNICAS
-    DEBUG_MODE: true, // ✅ ATIVADO PARA DIAGNÓSTICO
-    CACHE_TIMEOUT: 300000,
-    REQUEST_TIMEOUT: 30000,
-    
-    // 📱 CONFIGURAÇÕES DE INTERFACE
-    UI: {
-        ANIMATION_DURATION: 300,
-        TOAST_DURATION: 4000,
-        LOADING_DELAY: 1000,
-        AUTO_REFRESH: 300000
     }
 };
 
 // ================================================================================
-// 🔧 FUNÇÕES UTILITÁRIAS OBRIGATÓRIAS
+// 🎨 IDENTIDADE VISUAL SYSTELOS TUR (conforme manual da marca)
 // ================================================================================
 
-/**
- * 🌐 Obter URL da API (FUNÇÃO PRINCIPAL)
- */
-function getApiUrl() {
-    if (!CVC_CONFIG.API_URL) {
-        console.error('❌ API_URL não definida no CVC_CONFIG!');
-        return null;
+const VISUAL_CONFIG = {
+    // Cores Principais
+    cores: {
+        // Cor principal SYSTELOS
+        azulPrincipal: '#0F1B3D',
+        azul: '#0F1B3D',
+        
+        // Cores secundárias TUR
+        amarelo: '#FFB800',        // Sol, viagens, energia
+        verdeAgua: '#14B8A6',      // Praia, turismo
+        
+        // Cores neutras
+        branco: '#FFFFFF',
+        darkMode: '#1F2937',
+        cinza: '#6C757D',
+        cinzaClaro: '#F5F6FA'
+    },
+    
+    // Tipografia (conforme manual)
+    fontes: {
+        titulos: 'Poppins, sans-serif',  // Para títulos e logo
+        textos: 'Inter, sans-serif',      // Para textos gerais
+        pesos: {
+            light: 300,
+            regular: 400,
+            medium: 500,
+            semibold: 600,
+            bold: 700,
+            extrabold: 800
+        }
+    },
+    
+    // Logo e branding
+    branding: {
+        simbolo: '[S]',
+        nome: 'SYSTELOS TUR',
+        tagline: 'Sistemas com propósito',
+        significado: 'SYS (sistema) + τέλος (telos: objetivo, em grego)',
+        logoPath: 'assets/images/systelos-logo.png',
+        faviconPath: 'assets/images/systelos-favicon.ico'
+    },
+    
+    // Sombras
+    sombras: {
+        suave: '0 2px 8px rgba(15, 27, 61, 0.1)',
+        media: '0 4px 15px rgba(15, 27, 61, 0.15)',
+        forte: '0 8px 30px rgba(15, 27, 61, 0.2)'
     }
-    return CVC_CONFIG.API_URL;
-}
+};
 
-/**
- * 📊 Obter configurações completas
- */
-function getConfig() {
-    return {
-        ...CVC_CONFIG,
-        current_environment: detectEnvironment(),
-        is_mobile: isMobile(),
-        browser_info: getBrowserInfo()
-    };
-}
+// ================================================================================
+// 🤖 CONFIGURAÇÕES DE IA
+// ================================================================================
 
-/**
- * 🔍 Detectar ambiente
- */
-function detectEnvironment() {
-    const hostname = window.location.hostname;
+const IA_CONFIG = {
+    // Modelos disponíveis (baseado no ai-google.js)
+    modelos: {
+        padrao: 'claude-sonnet-4-20250514',
+        alternativo: 'gpt-4o-mini',
+        premium: 'claude-opus-4',
+        haiku: 'claude-3-haiku-20240307'
+    },
     
-    if (hostname === 'localhost' || hostname === '127.0.0.1') {
-        return 'development';
-    } else if (hostname.includes('github.io')) {
-        return 'github_pages';
-    } else if (hostname.includes('netlify') || hostname.includes('vercel')) {
-        return 'deploy_preview';
+    // Configurações de processamento
+    processamento: {
+        maxTokens: 4000,
+        temperatura: 0.7,
+        timeout: 35000,     // 35 segundos
+        retries: 3
+    },
+    
+    // Custos estimados (para exibição ao usuário)
+    custos: {
+        'claude-sonnet-4-20250514': {
+            input: 0.003,       // USD por 1K tokens
+            output: 0.015,      // USD por 1K tokens
+            nome: 'Claude Sonnet 4',
+            recomendado: true
+        },
+        'gpt-4o-mini': {
+            input: 0.00015,
+            output: 0.0006,
+            nome: 'GPT-4o Mini',
+            economico: true
+        },
+        'claude-3-haiku-20240307': {
+            input: 0.00025,
+            output: 0.00125,
+            nome: 'Claude Haiku',
+            rapido: true
+        }
+    },
+    
+    // Conversão de moeda (atualizar periodicamente)
+    moeda: {
+        taxaUSDtoBRL: 5.2,
+        ultimaAtualizacao: '2025-01-01',
+        formatoBRL: 'R$ 0,000000'
+    },
+    
+    // Templates disponíveis (baseado no ai-google.js v4.10)
+    templates: {
+        total: 14,
+        tipos: [
+            'AEREO_SIMPLES',
+            'AEREO_SOMENTE_IDA',
+            'MULTIPLAS_OPCOES_2',
+            'MULTIPLAS_OPCOES_3',
+            'MULTITRECHO',
+            'HOTEIS_MULTIPLAS',
+            'PACOTE_COMPLETO',
+            'CRUZEIRO',
+            'DICAS',
+            'RANKING_HOTEIS',
+            'MULTIPLAS_COMPANHIAS',
+            'PASSEIOS',
+            'SEGURO_VIAGEM'
+        ]
     }
-    
-    return 'production';
-}
+};
 
-/**
- * 📱 Detectar móvel
- */
-function isMobile() {
-    return window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}
+// ================================================================================
+// 📋 CONFIGURAÇÕES DE ORÇAMENTOS
+// ================================================================================
 
-/**
- * 🌐 Info do navegador
- */
-function getBrowserInfo() {
-    const ua = navigator.userAgent;
-    let browser = 'Unknown';
+const ORCAMENTOS_CONFIG = {
+    // Tipos de serviço disponíveis
+    tiposServico: [
+        { value: 'Aéreo', label: '✈️ Aéreo', icon: 'fa-plane' },
+        { value: 'Hotel', label: '🏨 Hotel', icon: 'fa-hotel' },
+        { value: 'Cruzeiro', label: '🚢 Cruzeiro', icon: 'fa-ship' },
+        { value: 'Multitrechos', label: '🛤️ Multitrechos', icon: 'fa-route' },
+        { value: 'Passeios', label: '🎡 Passeios', icon: 'fa-ticket' },
+        { value: 'Seguro', label: '🛡️ Seguro Viagem', icon: 'fa-shield-alt' },
+        { value: 'Dicas', label: '💡 Dicas de Destino', icon: 'fa-lightbulb' },
+        { value: 'Ranking', label: '🏆 Ranking de Hotéis', icon: 'fa-star' }
+    ],
     
-    if (ua.includes('Chrome')) browser = 'Chrome';
-    else if (ua.includes('Firefox')) browser = 'Firefox';
-    else if (ua.includes('Safari')) browser = 'Safari';
-    else if (ua.includes('Edge')) browser = 'Edge';
+    // Opções de parcelamento
+    parcelamento: [
+        { value: '', label: 'Sem parcelamento' },
+        { value: '10', label: '10x sem juros' },
+        { value: '12', label: '12x sem juros' },
+        { value: '15', label: '15x sem juros' }
+    ],
     
-    return {
-        name: browser,
-        userAgent: ua,
-        language: navigator.language,
-        platform: navigator.platform
-    };
-}
+    // Limites
+    limites: {
+        maxAdultos: 10,
+        maxCriancas: 5,
+        maxIdadeCrianca: 17,
+        maxFileSize: 10485760,      // 10MB em bytes
+        maxPromptSize: 10000,        // caracteres
+        maxImagens: 5
+    },
+    
+    // Formatos aceitos
+    formatos: {
+        imagens: ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'],
+        documentos: ['application/pdf'],
+        aceitos: '.jpg,.jpeg,.png,.pdf,.webp'
+    },
+    
+    // Destinos populares (para autocomplete)
+    destinosPopulares: [
+        'Orlando', 'Miami', 'Nova York', 'Las Vegas', 'Los Angeles',
+        'Lisboa', 'Porto', 'Madrid', 'Barcelona', 'Paris', 'Roma', 'Londres',
+        'Amsterdam', 'Buenos Aires', 'Santiago', 'Cancún',
+        'Salvador', 'Fortaleza', 'Recife', 'Maceió', 'Natal', 'Porto Seguro'
+    ]
+};
 
-/**
- * 🎨 Aplicar tema
- */
-function applyTheme() {
-    const root = document.documentElement;
-    const colors = CVC_CONFIG.VISUAL.COLORS;
-    
-    root.style.setProperty('--cvc-amarelo', colors.PRIMARY_YELLOW);
-    root.style.setProperty('--cvc-azul', colors.PRIMARY_BLUE);
-    root.style.setProperty('--cvc-branco', colors.PRIMARY_WHITE);
-    root.style.setProperty('--cvc-verde', colors.SECONDARY_GREEN);
-    
-    debugLog('🎨 Tema CVC aplicado dinamicamente', 'info');
-}
+// ================================================================================
+// 💾 SISTEMA DE ESTADO (localStorage)
+// ================================================================================
 
-/**
- * 📄 Info da página atual
- */
-function getCurrentPageInfo() {
-    const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+const ESTADO_CONFIG = {
+    // Chaves do localStorage
+    keys: {
+        // Estado de orçamentos
+        ultimoDestino: 'systelos_ultimo_destino',
+        ultimosPassageiros: 'systelos_ultimos_passageiros',
+        ultimoPeriodo: 'systelos_ultimo_periodo',
+        ultimoTipo: 'systelos_ultimo_tipo',
+        ultimoConteudo: 'systelos_ultimo_conteudo',
+
+        // Custos e métricas
+        custoDia: 'systelos_custos_dia_',      // + data
+        custoMes: 'systelos_custos_mes',
+        orcamentosHoje: 'systelos_orcamentos_hoje_', // + data
+
+        // Preferências do usuário
+        darkMode: 'systelos_dark_mode',
+        nomeUsuario: 'systelos_nome_usuario',
+        emailUsuario: 'systelos_email_usuario',
+        usuario: 'systelos_user',               // Dados completos do usuário logado
+        ultimoOrcamento: 'systelos_ultimo_orcamento' // Último orçamento gerado
+    },
     
-    for (const [key, page] of Object.entries(CVC_CONFIG.PAGES)) {
-        if (page.file === currentFile) {
-            return {
-                key: key,
-                ...page,
-                isActive: true
+    // Tempo de expiração (em dias)
+    expiracao: {
+        estadoOrcamento: 7,      // 7 dias
+        custos: 90,              // 90 dias
+        preferencias: 365        // 1 ano
+    },
+    
+    // Funções auxiliares
+    salvar: function(chave, valor) {
+        try {
+            const timestamp = new Date().toISOString();
+            const dados = { valor, timestamp };
+            localStorage.setItem(chave, JSON.stringify(dados));
+            console.log(`💾 Estado salvo: ${chave}`);
+            return true;
+        } catch (error) {
+            console.error('❌ Erro ao salvar estado:', error);
+            return false;
+        }
+    },
+    
+    carregar: function(chave) {
+        try {
+            const item = localStorage.getItem(chave);
+            if (!item) return null;
+            
+            const dados = JSON.parse(item);
+            return dados.valor;
+        } catch (error) {
+            console.error('❌ Erro ao carregar estado:', error);
+            return null;
+        }
+    },
+    
+    limpar: function(chave) {
+        try {
+            localStorage.removeItem(chave);
+            console.log(`🗑️ Estado removido: ${chave}`);
+            return true;
+        } catch (error) {
+            console.error('❌ Erro ao limpar estado:', error);
+            return false;
+        }
+    }
+};
+
+// ================================================================================
+// 📱 CONFIGURAÇÕES DE INTERFACE
+// ================================================================================
+
+const UI_CONFIG = {
+    // Animações
+    animacoes: {
+        duracao: 300,           // ms
+        easing: 'ease-in-out'
+    },
+    
+    // Toasts/Notificações
+    toast: {
+        duracao: 4000,          // ms
+        posicao: 'top-right'
+    },
+    
+    // Loading
+    loading: {
+        delay: 1000,            // ms antes de mostrar loading
+        minDuracao: 500         // duração mínima do loading
+    },
+    
+    // Auto-refresh
+    autoRefresh: {
+        habilitado: false,
+        intervalo: 300000       // 5 minutos
+    },
+    
+    // Responsividade
+    breakpoints: {
+        mobile: 768,
+        tablet: 1024,
+        desktop: 1440
+    }
+};
+
+// ================================================================================
+// 🔧 CONFIGURAÇÕES TÉCNICAS
+// ================================================================================
+
+const TECH_CONFIG = {
+    // Debug
+    debug: {
+        habilitado: true,           // ✅ Sempre habilitado
+        nivel: 'completo',          // 'basico', 'completo', 'detalhado'
+        logCustos: true,
+        logTokens: true,
+        logAPI: true
+    },
+    
+    // Cache
+    cache: {
+        habilitado: true,
+        timeout: 300000             // 5 minutos
+    },
+    
+    // Timeouts
+    timeouts: {
+        api: 30000,                 // 30 segundos
+        upload: 60000,              // 60 segundos
+        processamento: 35000        // 35 segundos
+    },
+    
+    // Retry
+    retry: {
+        maxTentativas: 3,
+        delayInicial: 1000,         // ms
+        multiplicador: 2            // delay dobra a cada tentativa
+    }
+};
+
+// ================================================================================
+// 🛠️ FUNÇÕES AUXILIARES
+// ================================================================================
+
+const CONFIG_UTILS = {
+    /**
+     * Obtém URL completa da API
+     */
+    getApiUrl: function(apiName = 'orcamentos') {
+        const apiPath = SYSTELOS_CONFIG.urls.api[apiName];
+        if (!apiPath) {
+            console.error(`❌ API "${apiName}" não encontrada`);
+            return null;
+        }
+        
+        // Se for caminho relativo, adiciona a base
+        if (apiPath.startsWith('/')) {
+            return `${SYSTELOS_CONFIG.urls.frontend}${apiPath}`;
+        }
+        
+        return apiPath;
+    },
+    
+    /**
+     * Detecta ambiente
+     */
+    detectarAmbiente: function() {
+        const hostname = window.location.hostname;
+        
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            return 'development';
+        } else if (hostname.includes('vercel')) {
+            return 'vercel';
+        } else if (hostname.includes('github.io')) {
+            return 'github';
+        }
+        
+        return 'production';
+    },
+    
+    /**
+     * Verifica se é mobile
+     */
+    isMobile: function() {
+        return window.innerWidth <= UI_CONFIG.breakpoints.mobile || 
+               /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    },
+    
+    /**
+     * Info do navegador
+     */
+    getBrowserInfo: function() {
+        const ua = navigator.userAgent;
+        let browser = 'Unknown';
+        
+        if (ua.includes('Chrome')) browser = 'Chrome';
+        else if (ua.includes('Firefox')) browser = 'Firefox';
+        else if (ua.includes('Safari')) browser = 'Safari';
+        else if (ua.includes('Edge')) browser = 'Edge';
+        
+        return {
+            name: browser,
+            userAgent: ua,
+            language: navigator.language,
+            platform: navigator.platform
+        };
+    },
+    
+    /**
+     * Aplicar tema SYSTELOS
+     */
+    aplicarTema: function() {
+        const root = document.documentElement;
+        const cores = VISUAL_CONFIG.cores;
+        
+        // Aplicar cores como CSS variables
+        root.style.setProperty('--systelos-azul', cores.azulPrincipal);
+        root.style.setProperty('--systelos-amarelo', cores.amarelo);
+        root.style.setProperty('--systelos-verde', cores.verdeAgua);
+        root.style.setProperty('--systelos-branco', cores.branco);
+        root.style.setProperty('--systelos-dark', cores.darkMode);
+        
+        // Aplicar fontes
+        root.style.setProperty('--font-titulos', VISUAL_CONFIG.fontes.titulos);
+        root.style.setProperty('--font-textos', VISUAL_CONFIG.fontes.textos);
+        
+        console.log('🎨 Tema SYSTELOS aplicado');
+    },
+    
+    /**
+     * Validar configuração
+     */
+    validar: function() {
+        const erros = [];
+        
+        // Verificar URLs
+        if (!SYSTELOS_CONFIG.urls.api.orcamentos) {
+            erros.push('URL da API de orçamentos não definida');
+        }
+        
+        // Verificar cores
+        if (!VISUAL_CONFIG.cores.azulPrincipal) {
+            erros.push('Cor principal não definida');
+        }
+        
+        // Verificar IA
+        if (!IA_CONFIG.modelos.padrao) {
+            erros.push('Modelo de IA padrão não definido');
+        }
+        
+        if (erros.length > 0) {
+            console.error('❌ Erros na configuração:', erros);
+            return { valido: false, erros };
+        }
+        
+        console.log('✅ Configuração validada');
+        return { valido: true, erros: [] };
+    },
+    
+    /**
+     * Debug log melhorado
+     */
+    debugLog: function(mensagem, tipo = 'info', dados = null) {
+        if (!TECH_CONFIG.debug.habilitado) return;
+        
+        const timestamp = new Date().toLocaleTimeString();
+        const prefix = `[SYSTELOS ${timestamp}]`;
+        
+        const estilos = {
+            info: 'color: #14B8A6; font-weight: bold;',
+            success: 'color: #28a745; font-weight: bold;',
+            warning: 'color: #FFB800; font-weight: bold;',
+            error: 'color: #dc3545; font-weight: bold;'
+        };
+        
+        if (dados) {
+            console.groupCollapsed(`%c${prefix} ${mensagem}`, estilos[tipo] || '');
+            console.log('Dados:', dados);
+            console.groupEnd();
+        } else {
+            const emoji = {
+                info: 'ℹ️',
+                success: '✅',
+                warning: '⚠️',
+                error: '❌'
             };
+            
+            console.log(`%c${prefix} ${emoji[tipo] || ''} ${mensagem}`, estilos[tipo] || '');
         }
+    },
+    
+    /**
+     * Calcular custo de uso da IA
+     */
+    calcularCusto: function(modelo, tokensInput, tokensOutput) {
+        const config = IA_CONFIG.custos[modelo];
+        if (!config) return null;
+        
+        const custoInput = (tokensInput / 1000) * config.input;
+        const custoOutput = (tokensOutput / 1000) * config.output;
+        const custoTotalUSD = custoInput + custoOutput;
+        const custoTotalBRL = custoTotalUSD * IA_CONFIG.moeda.taxaUSDtoBRL;
+        
+        return {
+            modelo: config.nome,
+            tokensInput,
+            tokensOutput,
+            custoUSD: custoTotalUSD.toFixed(6),
+            custoBRL: custoTotalBRL.toFixed(6),
+            formatado: `R$ ${custoTotalBRL.toFixed(6)}`
+        };
     }
-    
-    return {
-        key: 'DASHBOARD',
-        ...CVC_CONFIG.PAGES.DASHBOARD,
-        isActive: true
-    };
-}
-
-/**
- * 🔧 Sistema de debug OBRIGATÓRIO
- */
-function debugLog(message, level = 'log', data = null) {
-    // ✅ SEMPRE EXIBIR LOGS PARA DIAGNÓSTICO
-    const timestamp = new Date().toLocaleTimeString();
-    const prefix = `🏢 [CVC-${timestamp}]`;
-    
-    const styles = {
-        log: 'color: #0A00B4; font-weight: bold;',
-        info: 'color: #17a2b8; font-weight: bold;',
-        warn: 'color: #ffc107; font-weight: bold;',
-        error: 'color: #dc3545; font-weight: bold;',
-        success: 'color: #28a745; font-weight: bold;'
-    };
-    
-    if (data) {
-        console.groupCollapsed(`%c${prefix} ${message}`, styles[level] || '');
-        console.log('Dados:', data);
-        console.groupEnd();
-    } else {
-        switch(level) {
-            case 'error':
-                console.error(`${prefix} ❌ ${message}`);
-                break;
-            case 'warn':
-                console.warn(`${prefix} ⚠️ ${message}`);
-                break;
-            case 'info':
-                console.info(`${prefix} ℹ️ ${message}`);
-                break;
-            case 'success':
-                console.log(`%c${prefix} ✅ ${message}`, styles.success);
-                break;
-            default:
-                console.log(`${prefix} ${message}`);
-        }
-    }
-}
-
-/**
- * ✅ Validar configuração - VERSÃO RIGOROSA
- */
-function validateConfig() {
-    const errors = [];
-    
-    // Verificação obrigatória da API
-    if (!CVC_CONFIG.API_URL) {
-        errors.push('API_URL não está definida');
-    } else if (!CVC_CONFIG.API_URL.includes('script.google.com')) {
-        errors.push('URL da API deve ser do Google Apps Script');
-    }
-    
-    // Verificação obrigatória dos vendedores
-    if (!CVC_CONFIG.VENDEDORES || !Array.isArray(CVC_CONFIG.VENDEDORES) || CVC_CONFIG.VENDEDORES.length === 0) {
-        errors.push('Lista de VENDEDORES vazia ou inválida');
-    }
-    
-    // Verificação obrigatória dos tipos de serviço
-    if (!CVC_CONFIG.TIPOS_SERVICO || !Array.isArray(CVC_CONFIG.TIPOS_SERVICO) || CVC_CONFIG.TIPOS_SERVICO.length === 0) {
-        errors.push('Lista TIPOS_SERVICO vazia ou inválida');
-    }
-    
-    // Verificação obrigatória dos departamentos
-    if (!CVC_CONFIG.DEPARTAMENTOS || !Array.isArray(CVC_CONFIG.DEPARTAMENTOS) || CVC_CONFIG.DEPARTAMENTOS.length === 0) {
-        errors.push('Lista DEPARTAMENTOS vazia ou inválida');
-    }
-    
-    // Verificação do nome do sistema
-    if (!CVC_CONFIG.SYSTEM_NAME) {
-        errors.push('SYSTEM_NAME não está definido');
-    }
-    
-    // Log detalhado dos resultados
-    debugLog('🔍 Iniciando validação da configuração...', 'info');
-    debugLog(`📊 API_URL: ${CVC_CONFIG.API_URL ? 'DEFINIDA' : 'INDEFINIDA'}`, CVC_CONFIG.API_URL ? 'success' : 'error');
-    debugLog(`👥 VENDEDORES: ${CVC_CONFIG.VENDEDORES?.length || 0} itens`, CVC_CONFIG.VENDEDORES?.length > 0 ? 'success' : 'error');
-    debugLog(`🎫 TIPOS_SERVICO: ${CVC_CONFIG.TIPOS_SERVICO?.length || 0} itens`, CVC_CONFIG.TIPOS_SERVICO?.length > 0 ? 'success' : 'error');
-    debugLog(`🏢 DEPARTAMENTOS: ${CVC_CONFIG.DEPARTAMENTOS?.length || 0} itens`, CVC_CONFIG.DEPARTAMENTOS?.length > 0 ? 'success' : 'error');
-    debugLog(`📋 SYSTEM_NAME: ${CVC_CONFIG.SYSTEM_NAME ? 'DEFINIDO' : 'INDEFINIDO'}`, CVC_CONFIG.SYSTEM_NAME ? 'success' : 'error');
-    
-    if (errors.length > 0) {
-        debugLog('❌ CONFIGURAÇÃO INVÁLIDA!', 'error', errors);
-        console.error('❌ Erros na configuração:', errors);
-        return { valid: false, errors };
-    }
-    
-    debugLog('✅ Configuração validada com sucesso!', 'success');
-    return { valid: true, errors: [] };
-}
-
-/**
- * 🔄 Atualizar título
- */
-function updatePageTitle(customTitle = null) {
-    const pageInfo = getCurrentPageInfo();
-    const baseTitle = CVC_CONFIG.SYSTEM_NAME;
-    
-    if (customTitle) {
-        document.title = `${baseTitle} - ${customTitle}`;
-    } else {
-        document.title = `${baseTitle} - ${pageInfo.title}`;
-    }
-    
-    debugLog(`📄 Título atualizado: ${document.title}`, 'info');
-}
-
-/**
- * 🎯 Marcar navegação ativa
- */
-function setActiveNavigation() {
-    const currentFile = window.location.pathname.split('/').pop() || 'index.html';
-    
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.classList.remove('active');
-    });
-    
-    document.querySelectorAll('.nav-link').forEach(link => {
-        const href = link.getAttribute('href');
-        if (href === currentFile || (currentFile === 'index.html' && href === '#')) {
-            link.classList.add('active');
-        }
-    });
-    
-    debugLog(`🎯 Navegação ativa definida para: ${currentFile}`, 'info');
-}
+};
 
 // ================================================================================
-// 🚀 INICIALIZAÇÃO AUTOMÁTICA E CRÍTICA
+// 🚀 INICIALIZAÇÃO AUTOMÁTICA
 // ================================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    debugLog('🚀 Iniciando sistema CVC Portal Itaquá...', 'info');
+    console.log('%c🌟 SYSTELOS TUR v9.0', 'color: #0F1B3D; font-size: 16px; font-weight: bold; background: #FFB800; padding: 4px 8px;');
+    console.log('%c[S] Sistemas com Propósito', 'color: #14B8A6; font-weight: bold;');
     
-    const validation = validateConfig();
-    const config = getConfig();
-    
-    debugLog(`🏢 ${CVC_CONFIG.SYSTEM_NAME} v${CVC_CONFIG.VERSION}`, 'info');
-    debugLog(`🌍 Ambiente: ${config.current_environment}`, 'info');
-    debugLog(`📱 Mobile: ${config.is_mobile ? 'Sim' : 'Não'}`, 'info');
-    debugLog(`🌐 Navegador: ${config.browser_info.name}`, 'info');
-    debugLog(`🔗 API URL: ${CVC_CONFIG.API_URL}`, 'info');
-    debugLog(`🏪 Filial: ${CVC_CONFIG.FILIAL_PADRAO} - ${CVC_CONFIG.NOME_FILIAL}`, 'info');
-    
-    if (!validation.valid) {
-        debugLog('❌ FALHA NA CONFIGURAÇÃO!', 'error');
-        console.error('❌ Configuração inválida:', validation.errors);
-        alert('❌ Erro crítico na configuração do sistema!\n\nVerifique o console para detalhes.');
+    // Validar configuração
+    const validacao = CONFIG_UTILS.validar();
+    if (!validacao.valido) {
+        console.error('❌ Configuração inválida:', validacao.erros);
+        alert('Erro na configuração do sistema! Verifique o console.');
         return;
     }
     
-    debugLog('✅ Sistema configurado corretamente!', 'success');
+    // Aplicar tema
+    CONFIG_UTILS.aplicarTema();
     
-    // Aplicar tema e configurações
-    applyTheme();
-    updatePageTitle();
+    // Logs informativos
+    const ambiente = CONFIG_UTILS.detectarAmbiente();
+    const mobile = CONFIG_UTILS.isMobile();
+    const browser = CONFIG_UTILS.getBrowserInfo();
     
-    setTimeout(() => {
-        setActiveNavigation();
-    }, 100);
+    CONFIG_UTILS.debugLog(`Ambiente: ${ambiente}`, 'info');
+    CONFIG_UTILS.debugLog(`Mobile: ${mobile ? 'Sim' : 'Não'}`, 'info');
+    CONFIG_UTILS.debugLog(`Navegador: ${browser.name}`, 'info');
+    CONFIG_UTILS.debugLog(`API URL: ${CONFIG_UTILS.getApiUrl('orcamentos')}`, 'info');
+    
+    console.log('✅ Sistema inicializado com sucesso!');
 });
 
 // ================================================================================
-// 🎨 EXPOSIÇÃO GLOBAL OBRIGATÓRIA
+// 🌍 EXPOSIÇÃO GLOBAL
 // ================================================================================
 
-// Tornar tudo disponível globalmente
-window.CVC_CONFIG = CVC_CONFIG;
-window.getApiUrl = getApiUrl;
-window.getConfig = getConfig;
-window.debugLog = debugLog;
-window.validateConfig = validateConfig;
-window.updatePageTitle = updatePageTitle;
-window.setActiveNavigation = setActiveNavigation;
-window.applyTheme = applyTheme;
-window.getCurrentPageInfo = getCurrentPageInfo;
+// Tornar todas as configurações disponíveis globalmente
+window.SYSTELOS_CONFIG = SYSTELOS_CONFIG;
+window.VISUAL_CONFIG = VISUAL_CONFIG;
+window.IA_CONFIG = IA_CONFIG;
+window.ORCAMENTOS_CONFIG = ORCAMENTOS_CONFIG;
+window.ESTADO_CONFIG = ESTADO_CONFIG;
+window.UI_CONFIG = UI_CONFIG;
+window.TECH_CONFIG = TECH_CONFIG;
+window.CONFIG_UTILS = CONFIG_UTILS;
 
-// Aliases para compatibilidade com versões antigas
-window.obterApiUrl = getApiUrl;
-window.validarConfig = validateConfig;
-window.atualizarTituloPagina = updatePageTitle;
+// Aliases para facilitar uso
+window.getApiUrl = CONFIG_UTILS.getApiUrl;
+window.debugLog = CONFIG_UTILS.debugLog;
+window.isMobile = CONFIG_UTILS.isMobile;
+window.calcularCusto = CONFIG_UTILS.calcularCusto;
 
 // ================================================================================
-// 📝 LOGS INFORMATIVOS DE INICIALIZAÇÃO
+// 📝 LOGS FINAIS
 // ================================================================================
 
-console.log('%c🏢 CVC ITAQUÁ - PORTAL DE GESTÃO DA LOJA v10.0', 'color: #0A00B4; font-size: 16px; font-weight: bold;');
-console.log('%c📊 Config v10.0 - COMPATÍVEL COM VENDAS-AUTOMATIZADO!', 'color: #FFE600; background: #0A00B4; padding: 4px 8px; font-weight: bold;');
-console.log('🔧 Para alterar a URL da API, edite apenas este arquivo (config.js)');
-console.log('🎯 URL atual:', CVC_CONFIG.API_URL);
-console.log('🏪 Filial:', CVC_CONFIG.FILIAL_PADRAO, '-', CVC_CONFIG.NOME_FILIAL);
-console.log('📋 Sistema:', CVC_CONFIG.SYSTEM_NAME);
-console.log('🎫 TIPOS_SERVICO:', CVC_CONFIG.TIPOS_SERVICO?.length || 0, 'itens');
-console.log('🏢 DEPARTAMENTOS:', CVC_CONFIG.DEPARTAMENTOS?.length || 0, 'itens');
-console.log('👥 VENDEDORES:', CVC_CONFIG.VENDEDORES?.length || 0, 'itens');
-console.log('✅ Todas as funções expostas globalmente para compatibilidade');
+console.log('📋 Configurações carregadas:');
+console.log('  🌐 APIs:', Object.keys(SYSTELOS_CONFIG.urls.api).length);
+console.log('  🎨 Cores:', Object.keys(VISUAL_CONFIG.cores).length);
+console.log('  🤖 Modelos IA:', Object.keys(IA_CONFIG.modelos).length);
+console.log('  📋 Templates:', IA_CONFIG.templates.total);
+console.log('  💾 Estado:', Object.keys(ESTADO_CONFIG.keys).length, 'chaves');
+console.log('✅ Config SYSTELOS TUR v9.0 pronto para uso!');

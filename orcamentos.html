@@ -26,6 +26,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="assets/css/systelos-styles.css" rel="stylesheet">
     
+    <!-- Config.js Centralizado -->
+    <script src="config.js"></script>
+    
     <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
     <script>
@@ -65,11 +68,11 @@
         }
         
         .api-status.success {
-            color: #28a745;
+            color: var(--systelos-success);
         }
         
         .api-status.error {
-            color: #dc3545;
+            color: var(--systelos-error);
         }
         
         /* ESTIMADOR DE CUSTOS */
@@ -149,7 +152,7 @@
         }
         
         .form-control-cvc {
-            border: 2px solid #e9ecef;
+            border: 2px solid var(--systelos-border);
             border-radius: 10px;
             padding: 12px 15px;
             transition: all 0.3s ease;
@@ -176,8 +179,8 @@
         }
         
         .checkbox-item {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
+            background: var(--systelos-bg-light);
+            border: 2px solid var(--systelos-border);
             border-radius: 12px;
             padding: 18px;
             transition: all 0.3s ease;
@@ -191,14 +194,14 @@
         
         .checkbox-item:hover {
             border-color: var(--systelos-azul);
-            background: rgba(10, 0, 180, 0.05);
+            background: var(--systelos-azul-opacity-05);
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(10, 0, 180, 0.1);
+            box-shadow: 0 4px 15px var(--systelos-azul-opacity-10);
         }
         
         .checkbox-item.selected {
             border-color: var(--systelos-azul);
-            background: rgba(10, 0, 180, 0.1);
+            background: var(--systelos-azul-opacity-10);
             color: var(--systelos-azul);
             font-weight: 600;
         }
@@ -294,11 +297,11 @@
         }
         
         .result-content {
-            background: #f8f9fa;
+            background: var(--systelos-bg-light);
             border-radius: 12px;
             padding: 25px;
             min-height: 200px;
-            border: 1px solid #dee2e6;
+            border: 1px solid var(--systelos-border-light);
             white-space: pre-wrap;
             font-family: 'Nunito', sans-serif;
             line-height: 1.6;
@@ -306,7 +309,7 @@
         }
         
         .btn-copy {
-            background: #17a2b8;
+            background: var(--systelos-info);
             border: none;
             border-radius: 10px;
             color: white;
@@ -350,8 +353,8 @@
         /* PASTE AREA */
         .paste-area {
             min-height: 120px;
-            background: #f8f9fa;
-            border: 2px dashed #dee2e6;
+            background: var(--systelos-bg-light);
+            border: 2px dashed var(--systelos-border-light);
             border-radius: 12px;
             padding: 20px;
             transition: all 0.3s ease;
@@ -360,7 +363,7 @@
         
         .paste-area:hover {
             border-color: var(--systelos-azul);
-            background: rgba(10, 0, 180, 0.05);
+            background: var(--systelos-azul-opacity-05);
         }
         
         .paste-area.has-content {
@@ -372,7 +375,7 @@
         /* LOADING E ESTADOS */
         .loading {
             text-align: center;
-            color: #6c757d;
+            color: var(--systelos-cinza-medio);
             font-style: italic;
             padding: 40px;
         }
@@ -391,8 +394,8 @@
         }
         
         .error {
-            color: #dc3545;
-            background: rgba(220, 53, 69, 0.1);
+            color: var(--systelos-error);
+            background: var(--systelos-bg-error);
             border: 2px solid rgba(220, 53, 69, 0.3);
             border-radius: 10px;
             padding: 20px;
@@ -400,8 +403,8 @@
         }
         
         .success {
-            color: #28a745;
-            background: rgba(40, 167, 69, 0.1);
+            color: var(--systelos-success);
+            background: var(--systelos-bg-success);
             border: 2px solid rgba(40, 167, 69, 0.3);
             border-radius: 10px;
             padding: 20px;
@@ -626,7 +629,7 @@
                                         Ou cole texto ou imagem (Ctrl + V)
                                     </label>
                                     <div id="pasteArea" class="paste-area" contenteditable="true">
-                                        <div style="color: #6c757d; font-style: italic; text-align: center; padding: 20px;">
+                                        <div style="color: var(--systelos-cinza-medio); font-style: italic; text-align: center; padding: 20px;">
                                             <i class="fas fa-clipboard fa-2x" style="display: block; margin-bottom: 10px;"></i>
                                             📋 Clique aqui e pressione Ctrl+V para colar texto ou imagem
                                         </div>
@@ -662,7 +665,7 @@
                 <div class="result-section">
                     <h4><i class="fas fa-file-invoice-dollar"></i> Orçamento Principal</h4>
                     <div id="orcamentoIA" class="result-content">
-                        <div style="text-align: center; color: #6c757d; padding: 40px;">
+                        <div style="text-align: center; color: var(--systelos-cinza-medio); padding: 40px;">
                             <i class="fas fa-robot fa-3x" style="margin-bottom: 20px; opacity: 0.5;"></i>
                             <div>Aguardando informações da viagem...</div>
                             <small>Cole as informações acima e clique em "Gerar Orçamento"</small>
@@ -970,7 +973,7 @@
                             
                             estadoGlobal.pdfContent = fullText;
                             pasteArea.innerHTML = `
-                                <div style="text-align: center; color: #28a745;">
+                                <div style="text-align: center; color: var(--systelos-success);">
                                     <i class="fas fa-file-pdf fa-3x"></i>
                                     <div>PDF Lido com Sucesso!</div>
                                     <small>${file.name}</small>
@@ -1332,7 +1335,7 @@ WhatsApp: (11) 99999-9999`;
                 if (botao) {
                     const textoOriginal = botao.innerHTML;
                     botao.innerHTML = '<i class="fas fa-check"></i> Copiado!';
-                    botao.style.background = '#28a745';
+                    botao.style.background = 'var(--systelos-success)';
                     
                     setTimeout(() => {
                         botao.innerHTML = textoOriginal;
@@ -1381,7 +1384,7 @@ WhatsApp: (11) 99999-9999`;
         // 🎯 LOG FINAL
         // ================================================================================
         
-        debugLog("SYSTELOS TUR - Padronizador de Orçamentos v8.04", 'success');
+        debugLog("SYSTELOS TUR - Padronizador de Orçamentos v8.05 - Config.js Integrado", 'success');
         debugLog("Funcionalidades:", 'info');
         debugLog("- Interface SYSTELOS TUR integrada", 'info');
         debugLog("- IA com 14 templates", 'info');

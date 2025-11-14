@@ -26,6 +26,36 @@
     --systelos-fundo-card: #fefefe;
     --systelos-fundo-area: #f8f9fb;
 
+    /* Cores de Estado/Feedback (Bootstrap-like) */
+    --systelos-success: #28a745;
+    --systelos-warning: #ffc107;
+    --systelos-error: #dc3545;
+    --systelos-danger: #dc3545;
+    --systelos-info: #17a2b8;
+    --systelos-urgente: #ff4757;
+    --systelos-orange: #fd7e14;
+
+    /* Cores de Background de Estado */
+    --systelos-bg-success: rgba(40, 167, 69, 0.1);
+    --systelos-bg-warning: rgba(255, 193, 7, 0.1);
+    --systelos-bg-error: rgba(220, 53, 69, 0.1);
+    --systelos-bg-info: rgba(23, 162, 184, 0.1);
+
+    /* Cores para textos de alerta */
+    --systelos-text-success: #155724;
+    --systelos-text-warning: #856404;
+    --systelos-text-error: #721c24;
+    --systelos-text-info: #0c5460;
+
+    /* Cores de borda e dividers */
+    --systelos-border: #e9ecef;
+    --systelos-border-light: #dee2e6;
+    --systelos-border-dark: #adb5bd;
+
+    /* Cores externas (Google, etc) */
+    --systelos-google-blue: #4285f4;
+    --systelos-google-blue-hover: #3367d6;
+
     /* Sombras Padrão */
     --systelos-sombra-suave: 0 4px 20px rgba(15, 27, 61, 0.1);
     --systelos-sombra-media: 0 6px 25px rgba(15, 27, 61, 0.15);

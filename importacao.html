@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYSTELOS TUR - Informe Automatizado de Vendas v10.0</title>
+    <title>SYSTELOS TUR - Informe Automatizado de Vendas v11.2</title>
 
     <!-- Meta Tags -->
     <meta name="description" content="SYSTELOS TUR - Sistemas com propósito">
@@ -21,11 +21,14 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="assets/css/systelos-styles.css" rel="stylesheet">
     
+    <!-- Config.js Centralizado -->
+    <script src="config.js"></script>
+    
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/images/systelos-favicon.ico">
     
     <style>
-        /* ===== MELHORIAS v10.0 - VENDAS AUTOMATIZADO ===== */
+        /* ===== MELHORIAS v11.2 - VENDAS AUTOMATIZADO ===== */
         
         .vendas-auto-container {
             max-width: 1600px; /* MELHORIA: Container mais amplo */
@@ -117,7 +120,7 @@
 
         /* MELHORIA: Loading modernizado */
         .loading-container {
-            background: #f8f9fa;
+            background: var(--systelos-bg-light);
             border-radius: 20px;
             padding: 60px 40px;
             text-align: center;
@@ -298,13 +301,13 @@
         }
 
         .recibo-urgente {
-            border-left: 5px solid #ff4757;
+            border-left: 5px solid var(--systelos-error);
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { border-left-color: #ff4757; }
-            50% { border-left-color: #ff3742; }
+            0%, 100% { border-left-color: var(--systelos-error); }
+            50% { border-left-color: var(--systelos-error); }
         }
 
         .recibo-header {
@@ -330,26 +333,26 @@
         }
 
         .status-pendente {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
+            background: var(--systelos-bg-warning);
+            color: var(--systelos-text-warning);
+            border: 1px solid var(--systelos-warning);
         }
 
         .status-urgente {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: var(--systelos-bg-error);
+            color: var(--systelos-text-error);
+            border: 1px solid var(--systelos-error);
         }
 
         .status-completo {
-            background: #d1f2eb;
-            color: #0c5460;
-            border: 1px solid #b7e4c7;
+            background: var(--systelos-bg-success);
+            color: var(--systelos-text-info);
+            border: 1px solid var(--systelos-success);
         }
 
         /* MELHORIA: Debug section aprimorada */
         .debug-section {
-            background: #1e1e1e;
+            background: var(--systelos-dark);
             border-radius: 15px;
             padding: 25px;
             margin: 30px 0;
@@ -358,7 +361,7 @@
         }
 
         .debug-header {
-            color: #61dafb;
+            color: var(--systelos-info);
             font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 15px;
@@ -392,19 +395,19 @@
         }
 
         .debug-content .info {
-            color: #8be9fd;
+            color: var(--systelos-info);
         }
 
         .debug-content .success {
-            color: #50fa7b;
+            color: var(--systelos-success);
         }
 
         .debug-content .warning {
-            color: #f1fa8c;
+            color: var(--systelos-warning);
         }
 
         .debug-content .error {
-            color: #ff5555;
+            color: var(--systelos-error);
         }
 
         /* MELHORIA: Actions section */
@@ -499,7 +502,7 @@
 
         /* MELHORIA: Animações de carregamento */
         .skeleton {
-            background: #f0f0f0;
+            background: var(--systelos-bg-cinza-claro);
             background-size: 200% 100%;
             animation: loading 1.5s infinite;
         }
@@ -555,15 +558,15 @@
         }
 
         .toast-success {
-            border-left-color: #50fa7b;
+            border-left-color: var(--systelos-success);
         }
 
         .toast-error {
-            border-left-color: #ff5555;
+            border-left-color: var(--systelos-error);
         }
 
         .toast-warning {
-            border-left-color: #f1fa8c;
+            border-left-color: var(--systelos-warning);
         }
     </style>
 </head>
@@ -576,7 +579,7 @@
                 <div class="systelos-logo-symbol">CVC</div>
                 <div>
                     <div class="systelos-logo-text">Portal Itaquá</div>
-                    <div class="cvc-subtitle">Informe Automatizado v10.0</div>
+                    <div class="cvc-subtitle">Informe Automatizado v11.2</div>
                 </div>
             </div>
         </div>
@@ -647,7 +650,7 @@
             <div id="loadingContainer" class="loading-container">
                 <div class="loading-spinner"></div>
                 <h3>🔄 Carregando dados da planilha...</h3>
-                <p class="text-muted">Conectando com Google Apps Script via JSONP v10.0</p>
+                <p class="text-muted">Conectando com Google Apps Script via JSONP v11.2</p>
                 <div class="mt-3">
                     <small class="text-info">
                         <i class="fas fa-info-circle"></i>
@@ -733,7 +736,7 @@
             <section class="debug-section" id="debugSection" style="display:none;">
                 <div class="debug-header">
                     <i class="fas fa-terminal"></i>
-                    Console de Debug v10.0
+                    Console de Debug v11.2
                 </div>
                 <div class="debug-content" id="debugContent">
                     <!-- Debug logs aparecerão aqui -->
@@ -746,10 +749,10 @@
     <!-- TOAST NOTIFICATIONS -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- JAVASCRIPT INCORPORADO v10.0 -->
+    <!-- JAVASCRIPT INCORPORADO v11.2 -->
     <script>
         // ================================================================================
-        // 🚀 CVC PORTAL ITAQUÁ - VENDAS AUTOMATIZADO v10.0
+        // 🚀 CVC PORTAL ITAQUÁ - VENDAS AUTOMATIZADO v11.2
         // Melhorias: UX/UI aprimorada, performance otimizada, debug avançado
         // ================================================================================
         
@@ -763,7 +766,7 @@
         let isLoading = false;
 
         // ================================================================================
-        // 🎨 SISTEMA DE TOAST NOTIFICATIONS (NOVO v10.0)
+        // 🎨 SISTEMA DE TOAST NOTIFICATIONS (NOVO v11.2)
         // ================================================================================
         
         function showToast(message, type = 'info', duration = 4000) {
@@ -800,7 +803,7 @@
         }
 
         // ================================================================================
-        // 🐛 SISTEMA DE DEBUG AVANÇADO v10.0
+        // 🐛 SISTEMA DE DEBUG AVANÇADO v11.2
         // ================================================================================
         
         function addDebugLog(message, type = 'info') {
@@ -815,10 +818,10 @@
             
             // Console log com cores
             const colors = {
-                error: 'color: #ff5555; font-weight: bold;',
-                success: 'color: #50fa7b; font-weight: bold;',
-                warning: 'color: #f1fa8c; font-weight: bold;',
-                info: 'color: #8be9fd;'
+                error: 'color: var(--systelos-error); font-weight: bold;',
+                success: 'color: var(--systelos-success); font-weight: bold;',
+                warning: 'color: var(--systelos-warning); font-weight: bold;',
+                info: 'color: var(--systelos-info);'
             };
             
             console.log(`%c[${type.toUpperCase()}] ${message}`, colors[type] || colors.info);
@@ -846,11 +849,11 @@
         }
 
         // ================================================================================
-        // ⚙️ INICIALIZAÇÃO SEGURA DO SISTEMA v10.0
+        // ⚙️ INICIALIZAÇÃO SEGURA DO SISTEMA v11.2
         // ================================================================================
         
         function inicializarSistema() {
-            addDebugLog('🚀 Iniciando SYSTELOS TUR - Vendas Automatizado v10.0...', 'info');
+            addDebugLog('🚀 Iniciando SYSTELOS TUR - Vendas Automatizado v11.2...', 'info');
             
             // Verificar configurações
             if (typeof getApiUrl === 'function') {
@@ -867,7 +870,7 @@
             }
             
             addDebugLog('✅ Sistema inicializado com sucesso!', 'success');
-            addDebugLog('🔧 Melhorias v10.0: UX aprimorada, toast notifications, performance otimizada', 'info');
+            addDebugLog('🔧 Melhorias v11.2: UX aprimorada, toast notifications, performance otimizada', 'info');
             
             // Configurar eventos
             configurarEventos();
@@ -877,7 +880,7 @@
         }
 
         // ================================================================================
-        // 🎮 CONFIGURAÇÃO DE EVENTOS v10.0
+        // 🎮 CONFIGURAÇÃO DE EVENTOS v11.2
         // ================================================================================
         
         function configurarEventos() {
@@ -923,7 +926,7 @@
         }
 
         // ================================================================================
-        // 📊 CARREGAMENTO DE DADOS VIA JSONP v10.0
+        // 📊 CARREGAMENTO DE DADOS VIA JSONP v11.2
         // ================================================================================
         
         function carregarDadosInicial() {
@@ -933,7 +936,7 @@
             }
             
             isLoading = true;
-            addDebugLog('📊 Iniciando carregamento de dados via JSONP v10.0...', 'info');
+            addDebugLog('📊 Iniciando carregamento de dados via JSONP v11.2...', 'info');
             
             // UI Feedback
             document.getElementById('loadingContainer').style.display = 'block';
@@ -966,7 +969,7 @@
         }
 
         // ================================================================================
-        // 🌐 SISTEMA JSONP OTIMIZADO v10.0
+        // 🌐 SISTEMA JSONP OTIMIZADO v11.2
         // ================================================================================
         
         function fazerRequisicaoJSONP(action, parametros = {}) {
@@ -1020,7 +1023,7 @@
         }
 
         // ================================================================================
-        // 📈 PROCESSAMENTO DE DADOS v10.0
+        // 📈 PROCESSAMENTO DE DADOS v11.2
         // ================================================================================
         
         function processarDadosRecebidos(response) {
@@ -1108,7 +1111,7 @@
         }
 
         // ================================================================================
-        // 🏷️ SISTEMA DE FILTROS v10.0
+        // 🏷️ SISTEMA DE FILTROS v11.2
         // ================================================================================
         
         function filtrarEExibirRecibos() {
@@ -1158,7 +1161,7 @@
         }
 
         // ================================================================================
-        // 👥 EXIBIÇÃO DE VENDEDORES v10.0
+        // 👥 EXIBIÇÃO DE VENDEDORES v11.2
         // ================================================================================
         
         function processarVendedores(dados) {
@@ -1237,7 +1240,7 @@
         }
 
         // ================================================================================
-        // 🧾 EXIBIÇÃO DE RECIBOS v10.0
+        // 🧾 EXIBIÇÃO DE RECIBOS v11.2
         // ================================================================================
         
         function exibirRecibos(dados) {
@@ -1329,7 +1332,7 @@
         }
 
         // ================================================================================
-        // 🎛️ CONTROLES E AÇÕES v10.0
+        // 🎛️ CONTROLES E AÇÕES v11.2
         // ================================================================================
         
         function filtrarPorVendedor(vendedor) {
@@ -1399,7 +1402,7 @@
         }
 
         // ================================================================================
-        // 🎯 UTILITÁRIOS v10.0
+        // 🎯 UTILITÁRIOS v11.2
         // ================================================================================
         
         function ocultarTodasSecoes() {
@@ -1430,25 +1433,25 @@
         }
 
         // ================================================================================
-        // 🚀 INICIALIZAÇÃO DO SISTEMA v10.0
+        // 🚀 INICIALIZAÇÃO DO SISTEMA v11.2
         // ================================================================================
         
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('%c🚀 SYSTELOS TUR - Vendas Automatizado v10.0', 'color: #0A00B4; font-size: 18px; font-weight: bold;');
-            console.log('%c✨ Melhorias v10.0:', 'color: #FFE600; background: #0A00B4; padding: 4px 8px; font-weight: bold;');
-            console.log('   • Interface modernizada com animações fluidas');
-            console.log('   • Sistema de toast notifications');
-            console.log('   • Performance otimizada e debug avançado');
-            console.log('   • Filtros inteligentes e busca melhorada');
-            console.log('   • UX/UI responsiva aprimorada');
-            console.log('   • Shortcuts de teclado (Ctrl+R, F5)');
-            console.log('   • Animações de contagem nos stats');
-            console.log('   • Sistema de skeleton loading');
+            debugLog('🚀 SYSTELOS TUR - Vendas Automatizado v11.2', 'info');
+            debugLog('✨ Melhorias v11.2:', 'success');
+            debugLog('   • Interface modernizada com animações fluidas', 'info');
+            debugLog('   • Sistema de toast notifications', 'info');
+            debugLog('   • Performance otimizada e debug avançado', 'info');
+            debugLog('   • Filtros inteligentes e busca melhorada', 'info');
+            debugLog('   • UX/UI responsiva aprimorada', 'info');
+            debugLog('   • Shortcuts de teclado (Ctrl+R, F5, 'info')');
+            debugLog('   • Animações de contagem nos stats', 'info');
+            debugLog('   • Sistema de skeleton loading', 'info');
             
             // Inicializar sistema
             setTimeout(inicializarSistema, 300);
             
-            console.log('%c🎯 Sistema pronto para uso!', 'color: #50fa7b; font-weight: bold;');
+            debugLog('🎯 Sistema pronto para uso!', 'success');
         });
 
         // ================================================================================

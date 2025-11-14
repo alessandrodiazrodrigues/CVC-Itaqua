@@ -26,6 +26,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="assets/css/systelos-styles.css" rel="stylesheet">
     
+    <!-- Config.js Centralizado -->
+    <script src="config.js"></script>
+    
     <style>
         /* Estilos específicos do controle de orbiuns */
         .main-container {
@@ -82,7 +85,7 @@
         }
         
         .header-links {
-            background: #e3f2fd;
+            background: var(--systelos-bg-info-light);
             padding: 15px;
             border-radius: 12px;
             margin-bottom: 25px;
@@ -142,7 +145,7 @@
         }
         
         .form-control-cvc {
-            border: 2px solid #e9ecef;
+            border: 2px solid var(--systelos-border);
             border-radius: 10px;
             padding: 10px 15px;
             transition: all 0.3s ease;
@@ -156,7 +159,7 @@
         }
         
         .form-select-cvc {
-            border: 2px solid #e9ecef;
+            border: 2px solid var(--systelos-border);
             border-radius: 10px;
             padding: 10px 15px;
             transition: all 0.3s ease;
@@ -200,8 +203,8 @@
         }
         
         .orbium-card.problema {
-            border-left-color: #dc3545;
-            background: #fff;
+            border-left-color: var(--systelos-error);
+            background: var(--systelos-branco);
         }
         
         .orbium-card.em-atendimento {
@@ -232,18 +235,18 @@
         }
         
         .status-em-atendimento {
-            background: #fff3cd;
-            color: #856404;
+            background: var(--systelos-bg-warning);
+            color: var(--systelos-text-warning);
         }
         
         .status-resolvido {
-            background: #d4edda;
-            color: #155724;
+            background: var(--systelos-bg-success);
+            color: var(--systelos-text-success);
         }
         
         .status-problema {
-            background: #f8d7da;
-            color: #721c24;
+            background: var(--systelos-bg-error);
+            color: var(--systelos-text-error);
         }
         
         .orbium-details {
@@ -267,7 +270,7 @@
         }
         
         .orbium-observacoes {
-            background: #f8f9fa;
+            background: var(--systelos-bg-light);
             border-radius: 10px;
             padding: 15px;
             margin-top: 15px;
@@ -356,7 +359,7 @@
             display: inline-block;
             width: 20px;
             height: 20px;
-            border: 3px solid #f3f3f3;
+            border: 3px solid var(--systelos-bg-cinza-claro);
             border-top: 3px solid var(--systelos-azul);
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -395,21 +398,21 @@
         }
         
         .alert-success-custom {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #28a745;
+            background: var(--systelos-bg-success);
+            color: var(--systelos-text-success);
+            border: 1px solid var(--systelos-success);
         }
         
         .alert-error-custom {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #dc3545;
+            background: var(--systelos-bg-error);
+            color: var(--systelos-text-error);
+            border: 1px solid var(--systelos-error);
         }
         
         .sem-orbiuns {
             text-align: center;
             padding: 60px 30px;
-            background: #f8f9fa;
+            background: var(--systelos-bg-light);
             border-radius: 15px;
             box-shadow: var(--systelos-sombra-suave);
         }
@@ -817,7 +820,7 @@
     <script src="config.js"></script>
     
     <script>
-        console.log('🚀 SYSTELOS TUR - Controle de Orbiuns v8.04');
+        console.log('🚀 SYSTELOS TUR - Controle de Orbiuns v11.2');
         
         // ================================================================================
         // CONFIGURAÇÃO - USANDO CONFIG.JS
@@ -829,7 +832,7 @@
         let orbiunsData = [];
         let orbiunsFiltrados = [];
 
-        debugLog('🚀 Sistema de Orbiuns CVC v8.04 carregado', 'success');
+        debugLog('🚀 Sistema de Orbiuns SYSTELOS TUR v11.2 carregado', 'success');
         debugLog('🔗 API URL: ' + API_URL, 'info');
 
         // ================================================================================
@@ -865,7 +868,7 @@
                 formEditar.addEventListener('submit', editarOrbium);
             }
             
-            debugLog('✅ Sistema de Orbiuns v8.04 totalmente carregado!', 'success');
+            debugLog('✅ Sistema de Orbiuns v11.2 totalmente carregado!', 'success');
         });
 
         function preencherSelectVendedores() {
@@ -1096,7 +1099,7 @@
                             </div>
                         ` : ''}
                         
-                        <div style="margin-top: 10px; font-size: 0.85rem; color: #6c757d;">
+                        <div style="margin-top: 10px; font-size: 0.85rem; color: var(--systelos-cinza-medio);">
                             <strong>Detalhes:</strong>
                             Recibo: ${orbium.recibo || 'N/A'} | 
                             Reserva: ${orbium.reserva || 'N/A'} | 
@@ -1210,7 +1213,7 @@
             try {
                 const dadosFormulario = coletarDadosFormularioNaOrdemCorreta(e.target);
                 
-                debugLog('📤 Dados coletados v8.04 (ordem corrigida)', 'info', dadosFormulario);
+                debugLog('📤 Dados coletados v11.2 (ordem corrigida)', 'info', dadosFormulario);
                 
                 if (!dadosFormulario.orbium || !dadosFormulario.vendedor || !dadosFormulario.nome_cliente) {
                     throw new Error('Preencha todos os campos obrigatórios');
@@ -1245,7 +1248,7 @@
         }
 
         function coletarDadosFormularioNaOrdemCorreta(form) {
-            debugLog('📧 v8.04: Coletando dados NA ORDEM CORRETA das colunas...', 'info');
+            debugLog('📧 v11.2: Coletando dados NA ORDEM CORRETA das colunas...', 'info');
             
             const dados = {
                 status: form.querySelector('#status').value || 'Em atendimento',
@@ -1264,7 +1267,7 @@
                 whats_cliente: form.querySelector('#whats_cliente').value || ''
             };
             
-            debugLog('✅ v8.04: Dados coletados na ordem CORRETA', 'success', dados);
+            debugLog('✅ v11.2: Dados coletados na ordem CORRETA', 'success', dados);
             return dados;
         }
 
@@ -1463,8 +1466,8 @@
         });
 
         // ================================================================================
-        // LOGS FINAIS v8.04
+        // LOGS FINAIS v11.2
         // ================================================================================
-        debugLog('✅ Sistema de Orbiuns CVC v8.04 - ATUALIZADO COMPLETO!', 'success');
-        debugLog('🔧 PRINCIPAIS ATUALIZAÇÕES v8.04:', 'info');
+        debugLog('✅ Sistema de Orbiuns SYSTELOS TUR v11.2 - ATUALIZADO COMPLETO!', 'success');
+        debugLog('🔧 PRINCIPAIS ATUALIZAÇÕES v11.2:', 'info');
         debug

@@ -31,7 +31,7 @@
     
     <style>
         /* ================================================================================
-         * ESTILOS ESPECÍFICOS PARA EMBARQUES v12.1 - FEEDBACK VISUAL E NAVEGAÇÃO
+         * ESTILOS ESPECÍFICOS PARA EMBARQUES v12.2 - CONFIG.JS INTEGRADO - FEEDBACK VISUAL E NAVEGAÇÃO
          * ================================================================================ */
         
         .main-container {
@@ -103,7 +103,7 @@
             padding: 15px;
             margin-bottom: 15px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-left: 4px solid #28a745;
+            border-left: 4px solid var(--systelos-success);
             transition: all 0.3s ease;
             cursor: pointer;
         }
@@ -115,22 +115,22 @@
         
         /* PRIORIDADES */
         .priority-ATRASADO {
-            border-left-color: #dc3545;
+            border-left-color: var(--systelos-error);
             background: #fff;
         }
         
         .priority-URGENTE {
-            border-left-color: #fd7e14;
+            border-left-color: var(--systelos-orange);
             background: #fff;
         }
         
         .priority-PROXIMO {
-            border-left-color: #ffc107;
+            border-left-color: var(--systelos-warning);
             background: #fff;
         }
         
         .priority-NORMAL {
-            border-left-color: #28a745;
+            border-left-color: var(--systelos-success);
             background: #fff;
         }
         
@@ -150,22 +150,22 @@
         }
         
         .priority-badge.ATRASADO {
-            background: #dc3545;
+            background: var(--systelos-error);
             color: white;
         }
         
         .priority-badge.URGENTE {
-            background: #fd7e14;
+            background: var(--systelos-orange);
             color: white;
         }
         
         .priority-badge.PROXIMO {
-            background: #ffc107;
+            background: var(--systelos-warning);
             color: #000;
         }
         
         .priority-badge.NORMAL {
-            background: #28a745;
+            background: var(--systelos-success);
             color: white;
         }
         
@@ -252,14 +252,14 @@
         }
         
         .btn-success-feedback {
-            background: #28a745 !important;
-            border-color: #28a745 !important;
+            background: var(--systelos-success) !important;
+            border-color: var(--systelos-success) !important;
             animation: successPulse 0.6s ease-out;
         }
         
         .btn-error-feedback {
-            background: #dc3545 !important;
-            border-color: #dc3545 !important;
+            background: var(--systelos-error) !important;
+            border-color: var(--systelos-error) !important;
             animation: errorShake 0.6s ease-out;
         }
         
@@ -334,7 +334,7 @@
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background: #28a745;
+            background: var(--systelos-success);
             animation: pulse 2s infinite;
         }
         
@@ -426,13 +426,13 @@
         }
         
         .alert-success-custom {
-            background: #d4edda;
-            color: #155724;
+            background: var(--systelos-bg-success);
+            color: var(--systelos-text-success);
         }
         
         .alert-danger-custom {
-            background: #f8d7da;
-            color: #721c24;
+            background: var(--systelos-bg-error);
+            color: var(--systelos-text-error);
         }
         
         /* HEADER ATUALIZADO CONFORME PADRÃO */
@@ -821,15 +821,15 @@
         
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 SYSTELOS TUR - Embarques v12.1 iniciando...');
+            debugLog('🚀 SYSTELOS TUR - Embarques v12.2 - Config.js Integrado iniciando...', 'info');
             inicializarSistema();
         });
         
         async function inicializarSistema() {
             try {
-                console.log('🚀 SYSTELOS TUR - Embarques v12.1 iniciando...');
-                console.log('🔧 API URL:', CVC_CONFIG.API_URL);
-                console.log('🏪 Filial:', CVC_CONFIG.FILIAL_PADRAO);
+                debugLog('🚀 SYSTELOS TUR - Embarques v12.2 - Config.js Integrado iniciando...', 'info');
+                debugLog('🔧 API URL: ' + CVC_CONFIG.API_URL, 'info');
+                debugLog('🏪 Filial: ' + CVC_CONFIG.FILIAL_PADRAO, 'info');
                 
                 mostrarLoading(true);
                 
@@ -847,18 +847,18 @@
                 
                 // Carregar vendedores no filtro
                 await carregarVendedores();
-                console.log('✅ Vendedores carregados');
+                debugLog('✅ Vendedores carregados', 'success');
                 
                 // Carregar dados dos embarques
                 await carregarEmbarques();
-                console.log('✅ Embarques carregados');
+                debugLog('✅ Embarques carregados', 'success');
                 
                 // Configurar auto-refresh
                 configurarAutoRefresh();
-                console.log('✅ Auto-refresh configurado');
+                debugLog('✅ Auto-refresh configurado', 'success');
                 
                 mostrarLoading(false);
-                console.log('✅ Sistema inicializado com sucesso');
+                debugLog('✅ Sistema inicializado com sucesso', 'success');
                 
             } catch (error) {
                 console.error('❌ Erro na inicialização:', error);
@@ -893,7 +893,7 @@
         
         async function carregarEmbarques() {
             try {
-                console.log('📊 Carregando embarques da API...');
+                debugLog('📊 Carregando embarques da API...', 'info');
                 
                 // Tentar diferentes métodos de requisição
                 let dados = null;
@@ -1153,8 +1153,8 @@
         // ================================================================================
         
         function processarDashboards() {
-            console.log('⚙️ Processando dashboards...');
-            console.log('📊 Total de embarques recebidos:', dadosEmbarques.length);
+            debugLog('⚙️ Processando dashboards...', 'info');
+            debugLog('📊 Total de embarques recebidos: ' + dadosEmbarques.length, 'info');
             
             // Verificar se há dados válidos
             if (!Array.isArray(dadosEmbarques) || dadosEmbarques.length === 0) {
@@ -1172,15 +1172,15 @@
             
             // Processar conferências (agrupadas por informe)
             processarConferencias();
-            console.log('✅ Conferências processadas:', dadosFiltrados.conferencias.length);
+            debugLog('✅ Conferências processadas: ' + dadosFiltrados.conferencias.length, 'success');
             
             // Processar check-ins (individuais por voo)
             processarCheckins();
-            console.log('✅ Check-ins processados:', dadosFiltrados.checkins.length);
+            debugLog('✅ Check-ins processados: ' + dadosFiltrados.checkins.length, 'success');
             
             // Processar pós-vendas (agrupadas, ativadas por data)
             processarPosVendas();
-            console.log('✅ Pós-vendas processadas:', dadosFiltrados.posVendas.length);
+            debugLog('✅ Pós-vendas processadas: ' + dadosFiltrados.posVendas.length, 'success');
             
             // Renderizar dashboards
             renderizarDashboards();
@@ -2370,7 +2370,7 @@
             setInterval(async () => {
                 try {
                     await carregarEmbarques();
-                    console.log('🔄 Auto-refresh executado');
+                    debugLog('🔄 Auto-refresh executado', 'info');
                 } catch (error) {
                     console.error('❌ Erro no auto-refresh:', error);
                 }
@@ -2446,14 +2446,14 @@
         async function testarConectividade() {
             try {
                 mostrarLoading(true);
-                console.log('🧪 Testando conectividade com a API...');
+                debugLog('🧪 Testando conectividade com a API...', 'info');
                 
                 let sucessoAlgumMetodo = false;
                 const resultados = [];
                 
                 // Teste 1: JSONP
                 try {
-                    console.log('🔗 Testando JSONP...');
+                    debugLog('🔗 Testando JSONP...', 'info');
                     const dadosJSONP = await fazerRequisicaoJSONP(CVC_CONFIG.API_URL, {
                         action: 'ping',
                         teste: 'conectividade'
@@ -2471,7 +2471,7 @@
                 
                 // Teste 2: Fetch CORS
                 try {
-                    console.log('🔗 Testando Fetch CORS...');
+                    debugLog('🔗 Testando Fetch CORS...', 'info');
                     const response = await fetch(CVC_CONFIG.API_URL + '?action=ping&teste=conectividade&t=' + Date.now(), {
                         method: 'GET',
                         mode: 'cors',
@@ -2568,7 +2568,7 @@
                     });
                     
                     if (edicoes.length > 0) {
-                        console.log('💾 Salvando edições da conferência:', edicoes);
+                        debugLog('💾 Salvando edições da conferência: ' + edicoes, 'info');
                         // TODO: Implementar salvamento via API
                         mostrarAlerta('Edições salvas com sucesso! (Implementação pendente)', 'success');
                     }
@@ -2585,7 +2585,7 @@
                         observacoes: document.getElementById('editObservacoesCheckin').value
                     };
                     
-                    console.log('💾 Salvando edições do check-in:', edicoes);
+                    debugLog('💾 Salvando edições do check-in: ' + edicoes, 'info');
                     // TODO: Implementar salvamento via API
                     mostrarAlerta('Edições salvas com sucesso! (Implementação pendente)', 'success');
                 }
@@ -2633,7 +2633,7 @@
                     return;
                 }
                 
-                console.log('🔍 Buscando orbiuns para WhatsApp:', whatsapp);
+                debugLog('🔍 Buscando orbiuns para WhatsApp: ' + whatsapp, 'info');
                 
                 // Chamar API para buscar orbiuns
                 const dados = await fazerRequisicaoJSONP(CVC_CONFIG.API_URL, {

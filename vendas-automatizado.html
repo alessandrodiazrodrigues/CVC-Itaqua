@@ -15,12 +15,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="assets/css/systelos-styles.css" rel="stylesheet">
-    
+
+    <!-- Config.js Centralizado -->
+    <script src="config.js"></script>
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/images/systelos-favicon.ico">
-    
+
     <style>
-        /* ===== ESTILOS ESPECÍFICOS DO SISTEMA COMPLETO v11.1 CORRIGIDO ===== */
+        /* ===== ESTILOS ESPECÍFICOS DO SISTEMA COMPLETO v11.2 - Config.js Integrado ===== */
         
         :root {
             --systelos-amarelo: #FFE600;
@@ -28,7 +31,7 @@
             --systelos-branco: #FFFFFF;
             --systelos-verde: #00D4AA;
             --systelos-azul-escuro: #1B365D;
-            --systelos-cinza: #6C757D;
+            --systelos-cinza: var(--systelos-cinza);
             --systelos-fundo-card: #f8f9fa;
             --systelos-sombra-suave: 0 4px 6px rgba(0,0,0,0.1);
             --systelos-sombra-media: 0 8px 15px rgba(0,0,0,0.2);
@@ -116,7 +119,7 @@
         }
 
         .error-container {
-            background: #dc3545;
+            background: var(--systelos-error);
             border-radius: 20px;
             padding: 50px;
             text-align: center;
@@ -254,12 +257,12 @@
         }
 
         .vendedor-status.pendente {
-            background: #ffc107;
+            background: var(--systelos-warning);
             color: #000;
         }
 
         .vendedor-status.ativo {
-            background: #28a745;
+            background: var(--systelos-success);
             color: white;
         }
 
@@ -337,12 +340,12 @@
         }
 
         .recibo-urgencia.urgente {
-            background: #dc3545;
+            background: var(--systelos-error);
             color: white;
         }
 
         .recibo-urgencia.normal {
-            background: #28a745;
+            background: var(--systelos-success);
             color: white;
         }
 
@@ -508,7 +511,7 @@
         }
 
         .required-field {
-            border-left: 3px solid #dc3545;
+            border-left: 3px solid var(--systelos-error);
         }
 
         /* Debug Section */
@@ -572,15 +575,15 @@
         }
 
         .toast-success {
-            border-left-color: #28a745;
+            border-left-color: var(--systelos-success);
         }
 
         .toast-error {
-            border-left-color: #dc3545;
+            border-left-color: var(--systelos-error);
         }
 
         .toast-warning {
-            border-left-color: #ffc107;
+            border-left-color: var(--systelos-warning);
         }
 
         /* Animações */
@@ -1198,49 +1201,40 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- 🚨 CORREÇÃO CRÍTICA: Script ANTES do config.js -->
-    <script>
-        // Garantir que getApiUrl() esteja disponível ANTES de tudo
-        window.getApiUrl = window.getApiUrl || function() {
-            return 'https://script.google.com/macros/s/AKfycbzqttRJjK4PbznHnEfviHZ9LPOITVm_pc0sswGUNVHpGpio5oCdaB2c68s6fVHuN6LL3w/exec';
-        };
 
-        // Definir CVC_CONFIG temporário se não existir
-        window.CVC_CONFIG = window.CVC_CONFIG || {
+    <script>
+        // ================================================================================
+        // 🎯 CONFIGURAÇÃO LOCAL DO SISTEMA
+        // ================================================================================
+
+        // CVC_CONFIG específico para vendas-automatizado
+        window.CVC_CONFIG = {
             API_URL: 'https://script.google.com/macros/s/AKfycbzqttRJjK4PbznHnEfviHZ9LPOITVm_pc0sswGUNVHpGpio5oCdaB2c68s6fVHuN6LL3w/exec',
-            VERSION: '11.1',
-            SYSTEM_NAME: 'CVC Itaquá - Portal de Gestão da Loja',
+            VERSION: '11.2',
+            SYSTEM_NAME: 'SYSTELOS TUR - Sistema Completo de Vendas',
             VENDEDORES: ['Alessandro', 'Ana Paula', 'Adriana', 'Adrielly', 'Bia', 'Conceição', 'Jhully'],
             DEBUG_MODE: true
         };
 
-        console.log('🔧 CORREÇÃO: getApiUrl() e CVC_CONFIG definidos temporariamente');
-        console.log('🎯 API URL:', window.getApiUrl());
-    </script>
-
-    <!-- Config original -->
-    <script src="config.js"></script>
-    
-    <script>
         // ================================================================================
-        // 🚀 CVC PORTAL ITAQUÁ - SISTEMA COMPLETO v11.1 CORRIGIDO
+        // 🚀 SYSTELOS TUR - SISTEMA COMPLETO v11.2 - Config.js Integrado
         // Sistema completo que busca dados reais da planilha e exibe para os vendedores
         // CORREÇÃO TOTAL: Baseado no arquivo funcionando vendas-automatizado.html
         // ================================================================================
         
-        console.log('🚀 CVC Portal Itaquá - Sistema Completo v11.1 CORRIGIDO');
-        console.log('✨ Correções v11.1:');
-        console.log('   • Baseado no arquivo vendas-automatizado.html funcionando');
-        console.log('   • Correção do erro "Invalid Date" aplicada');
-        console.log('   • Sistema JSONP funcionando corretamente');
-        console.log('   • Mapeamento correto da planilha EMBARQUES');
-        console.log('   • Debug avançado funcionando');
-        console.log('   • Toast notifications funcionando');
-        console.log('   • Interface responsiva completa');
-        console.log('   • Upload de PDF e formulário de complementação');
-        console.log('');
-        console.log('🎯 Sistema corrigido e pronto para uso!');
+        debugLog('🚀 SYSTELOS TUR - Sistema Completo v11.2 - Config.js Integrado', 'success');
+        debugLog('✨ Melhorias v11.2:', 'info');
+        debugLog('   • Config.js centralizado integrado', 'info');
+        debugLog('   • Sistema debugLog() implementado', 'info');
+        debugLog('   • Variáveis CSS padronizadas', 'info');
+        debugLog('   • Correção do erro "Invalid Date" mantida', 'info');
+        debugLog('   • Sistema JSONP funcionando corretamente', 'info');
+        debugLog('   • Mapeamento correto da planilha EMBARQUES', 'info');
+        debugLog('   • Debug avançado funcionando', 'info');
+        debugLog('   • Toast notifications funcionando', 'info');
+        debugLog('   • Interface responsiva completa', 'info');
+        debugLog('   • Upload de PDF e formulário de complementação', 'info');
+        debugLog('🎯 Sistema atualizado e pronto para uso!', 'success');
         
         // ================================================================================
         // VARIÁVEIS GLOBAIS
@@ -1309,12 +1303,12 @@
                 if (data && !isNaN(data.getTime())) {
                     return data.toLocaleDateString('pt-BR');
                 } else {
-                    console.warn('Data inválida recebida:', dataString);
+                    debugLog('Data inválida recebida: ' + dataString, 'warning');
                     return 'Data inválida';
                 }
                 
             } catch (error) {
-                console.error('Erro ao formatar data:', error, 'Data original:', dataString);
+                debugLog('Erro ao formatar data: ' + error + ' | Data original: ' + dataString, 'error');
                 return 'Erro na data';
             }
         }
@@ -1351,7 +1345,7 @@
                 
                 // Verificar se a data é válida
                 if (!dataEmbarque || isNaN(dataEmbarque.getTime())) {
-                    console.warn('Data inválida para cálculo:', dataString);
+                    debugLog('Data inválida para cálculo: ' + dataString, 'warning');
                     return 999;
                 }
                 
@@ -1362,7 +1356,7 @@
                 return diffDays;
                 
             } catch (error) {
-                console.error('Erro ao calcular diferença de dias:', error);
+                debugLog('Erro ao calcular diferença de dias: ' + error, 'error');
                 return 999;
             }
         }
@@ -1604,7 +1598,7 @@
                             // 🔧 DEBUG: Mostrar estrutura dos dados para resolver o problema
                             if (recibosData.length > 0) {
                                 addDebugLog('📊 DEBUG: Estrutura do primeiro recibo:', 'info');
-                                console.log('ESTRUTURA COMPLETA DO PRIMEIRO RECIBO:', recibosData[0]);
+                                debugLog('ESTRUTURA COMPLETA DO PRIMEIRO RECIBO: ' + JSON.stringify(recibosData[0]), 'info');
                                 addDebugLog(`Propriedades disponíveis: ${Object.keys(recibosData[0]).join(', ')}`, 'info');
                                 
                                 // Verificar propriedades de ID
@@ -2104,7 +2098,7 @@
                 addDebugLog(`📊 Total de recibos disponíveis: ${recibosData.length}`, 'info');
                 addDebugLog(`📊 Exemplo de estrutura dos dados:`, 'info');
                 if (recibosData.length > 0) {
-                    console.log('Estrutura do primeiro recibo:', recibosData[0]);
+                    debugLog('Estrutura do primeiro recibo: ' + JSON.stringify(recibosData[0]), 'info');
                     addDebugLog(`Propriedades disponíveis: ${Object.keys(recibosData[0]).join(', ')}`, 'info');
                 }
                 
@@ -2114,7 +2108,7 @@
             
             addDebugLog(`📋 Abrindo complementação para venda ${recibo}`, 'info');
             addDebugLog(`📊 Dados da venda encontrada:`, 'info');
-            console.log('Venda atual:', vendaAtual);
+            debugLog('Venda atual: ' + JSON.stringify(vendaAtual), 'info');
             
             // Resetar modal
             resetarModal();
@@ -2305,7 +2299,7 @@
             
             addDebugLog('📄 Dados REAIS extraídos do PDF (sem invenções):', 'success');
             addDebugLog('⚠️ CPF e WhatsApp do CONTRATANTE não estão no PDF - vendedor deve preencher!', 'warning');
-            console.log('Dados extraídos (apenas reais):', dadosReais);
+            debugLog('Dados extraídos (apenas reais): ' + JSON.stringify(dadosReais), 'info');
             
             return dadosReais;
         }
@@ -2624,7 +2618,7 @@
             }
             
             addDebugLog('📊 Dados coletados (incluindo voo se aplicável):', 'info');
-            console.log('Dados completos:', dados);
+            debugLog('Dados completos: ' + JSON.stringify(dados), 'info');
             return dados;
         }
         
