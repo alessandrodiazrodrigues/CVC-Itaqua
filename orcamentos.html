@@ -226,135 +226,11 @@
             margin-bottom: 10px;
         }
         
-        /* BOTÕES */
-        .btn-cvc-primary {
-            background: var(--systelos-tur-amarelo);
-            border: none;
-            color: var(--systelos-azul);
-            font-weight: 700;
-            padding: 15px 35px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn-cvc-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            transition: left 0.5s;
-        }
-        
-        .btn-cvc-primary:hover::before {
-            left: 100%;
-        }
-        
-        .btn-cvc-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--systelos-sombra-media);
-            color: var(--systelos-azul);
-        }
-        
-        .btn-cvc-secondary {
-            background: var(--systelos-azul-principal);
-            border: none;
-            color: var(--systelos-branco);
-            font-weight: 600;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-cvc-secondary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--systelos-sombra-suave);
-            color: var(--systelos-branco);
-        }
-        
-        /* RESULTADOS */
-        .result-section {
-            background: var(--systelos-branco);
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 25px;
-            box-shadow: var(--systelos-sombra-suave);
-            border-left: 4px solid var(--systelos-verde);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .result-section h4 {
-            color: var(--systelos-azul);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .result-content {
-            background: var(--systelos-bg-light);
-            border-radius: 12px;
-            padding: 25px;
-            min-height: 200px;
-            border: 1px solid var(--systelos-border-light);
-            white-space: pre-wrap;
-            font-family: 'Nunito', sans-serif;
-            line-height: 1.6;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .btn-copy {
-            background: var(--systelos-info);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            padding: 12px 25px;
-            margin-top: 15px;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-        
-        .btn-copy:hover {
-            background: #138496;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
-            color: white;
-        }
-        
-        /* CARDS DE DICAS */
-        .info-card {
-            background: rgba(0, 212, 170, 0.1);
-            border: 2px solid rgba(0, 212, 170, 0.2);
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
-            transition: all 0.3s ease;
-        }
-        
-        .info-card:hover {
-            border-color: var(--systelos-verde);
-            background: rgba(0, 212, 170, 0.15);
-            transform: translateY(-2px);
-        }
-        
-        .info-card h5 {
-            color: var(--systelos-verde);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
         /* PASTE AREA */
         .paste-area {
             min-height: 120px;
             background: var(--systelos-bg-light);
-            border: 2px dashed var(--systelos-border-light);
+            border: 2px dashed var(--systelos-border);
             border-radius: 12px;
             padding: 20px;
             transition: all 0.3s ease;
@@ -368,14 +244,68 @@
         
         .paste-area.has-content {
             border-style: solid;
-            border-color: var(--systelos-verde);
-            background: rgba(0, 212, 170, 0.05);
+            border-color: var(--systelos-verde-agua);
+            background: rgba(20, 184, 166, 0.05);
+        }
+        
+        /* RESULTADOS */
+        .result-section {
+            background: var(--systelos-bg-light);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            border-left: 4px solid var(--systelos-azul);
+        }
+        
+        .result-section h4 {
+            color: var(--systelos-azul);
+            margin-bottom: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .result-content {
+            background: var(--systelos-branco);
+            border-radius: 12px;
+            padding: 25px;
+            min-height: 200px;
+            border: 1px solid var(--systelos-border);
+            white-space: pre-wrap;
+            font-family: var(--font-textos);
+            line-height: 1.6;
+            box-shadow: var(--systelos-sombra-suave);
+        }
+        
+        /* CARDS DE DICAS */
+        .info-card {
+            background: rgba(20, 184, 166, 0.1);
+            border: 2px solid rgba(20, 184, 166, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .info-card:hover {
+            border-color: var(--systelos-verde-agua);
+            background: rgba(20, 184, 166, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .info-card h5 {
+            color: var(--systelos-verde-agua);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         /* LOADING E ESTADOS */
         .loading {
             text-align: center;
-            color: var(--systelos-cinza-medio);
+            color: #6c757d;
             font-style: italic;
             padding: 40px;
         }
@@ -395,7 +325,7 @@
         
         .error {
             color: var(--systelos-error);
-            background: var(--systelos-bg-error);
+            background: rgba(220, 53, 69, 0.1);
             border: 2px solid rgba(220, 53, 69, 0.3);
             border-radius: 10px;
             padding: 20px;
@@ -404,7 +334,7 @@
         
         .success {
             color: var(--systelos-success);
-            background: var(--systelos-bg-success);
+            background: rgba(40, 167, 69, 0.1);
             border: 2px solid rgba(40, 167, 69, 0.3);
             border-radius: 10px;
             padding: 20px;
@@ -413,111 +343,93 @@
         
         /* RESPONSIVO */
         @media (max-width: 768px) {
-            .checkbox-group { 
-                grid-template-columns: 1fr; 
-            }
-            .cost-card { 
-                margin: 10px 0; 
-            }
-            .main-container {
-                margin: 10px;
-                border-radius: 15px;
-            }
+            .checkbox-group { grid-template-columns: 1fr; }
+            .cost-card { margin: 10px 0; }
         }
     </style>
 </head>
 <body>
     <div class="container-fluid">
         <div class="main-container">
-            <!-- HEADER -->
-            <header class="systelos-header">
-                <div class="container-fluid">
-                    <div class="row align-items-center py-3">
-                        <div class="col-md-4">
-                            <div class="systelos-logo">
-                                <div class="systelos-logo-symbol">[S]</div>
-                                <div>
-                                    <div class="systelos-logo-text">SYSTELOS TUR</div>
-                                    <p class="systelos-subtitle">Sistemas com propósito</p>
+            <!-- Header SYSTELOS TUR -->
+            <div class="systelos-header">
+                <div class="systelos-header-content">
+                    <div class="d-flex align-items-center justify-content-center flex-wrap">
+                        <div class="systelos-logo me-4">
+                            [S]
+                        </div>
+                        <div class="text-center">
+                            <h1 class="systelos-header-title">
+                                <i class="fas fa-robot"></i> SYSTELOS TUR - Orçamentos IA
+                            </h1>
+                            <p class="systelos-header-subtitle">
+                                Sistema completo com 14 templates - Sistemas com propósito
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Status da API -->
+                    <div id="apiStatus" class="api-status loading">
+                        <i class="fas fa-spinner fa-spin"></i> Verificando status da API...
+                    </div>
+                    
+                    <!-- Estimador de Custos -->
+                    <div class="cost-estimator">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="cost-card">
+                                    <i class="fas fa-coins"></i>
+                                    <h6>Custo do Dia</h6>
+                                    <span id="custoDia">R$ 0,00</span>
+                                    <small>com IA</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="cost-card">
+                                    <i class="fas fa-calendar-month"></i>
+                                    <h6>Custo do Mês</h6>
+                                    <span id="custoMes">R$ 0,00</span>
+                                    <small>acumulado</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="cost-card">
+                                    <i class="fas fa-chart-line"></i>
+                                    <h6>Orçamentos Hoje</h6>
+                                    <span id="orcamentosHoje">0</span>
+                                    <small>gerados</small>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </header>
-
-            <!-- NAVEGAÇÃO -->
-            <nav class="systelos-nav">
-                <div class="container-fluid">
-                    <ul class="nav nav-pills justify-content-center mb-0">
-                        <li class="nav-item">
-                            <a class="nav-link" href="index.html">
-                                <i class="fas fa-tachometer-alt"></i> Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="orcamentos.html">
-                                <i class="fas fa-calculator"></i> Padronizador de Orçamentos
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="vendas.html">
-                                <i class="fas fa-chart-line"></i> Informe de Vendas
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="vendas-automatizado.html">
-                                <i class="fas fa-robot"></i> Informe Automatizado
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="embarques.html">
-                                <i class="fas fa-plane-departure"></i> Controle de Embarques
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="orbiuns.html">
-                                <i class="fas fa-clipboard-list"></i> Controle de Orbiuns
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="importacao.html">
-                                <i class="fas fa-cloud-upload-alt"></i> Importação
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-            
-            <!-- ESTIMADOR DE CUSTOS NO HEADER -->
-            <div class="cost-estimator">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="cost-card">
-                            <i class="fas fa-coins"></i>
-                            <h6>Custo do Dia</h6>
-                            <span id="custoDia">R$ 0,00</span>
-                            <small>com IA</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="cost-card">
-                            <i class="fas fa-calendar-month"></i>
-                            <h6>Custo do Mês</h6>
-                            <span id="custoMes">R$ 0,00</span>
-                            <small>acumulado</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="cost-card">
-                            <i class="fas fa-chart-line"></i>
-                            <h6>Orçamentos Hoje</h6>
-                            <span id="orcamentosHoje">0</span>
-                            <small>gerados</small>
-                        </div>
-                    </div>
-                </div>
             </div>
+            
+            <!-- Navigation -->
+            <nav class="systelos-nav">
+                <ul class="nav nav-pills justify-content-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="orcamentos.html">
+                            <i class="fas fa-calculator"></i> Orçamentos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="vendas.html">
+                            <i class="fas fa-handshake"></i> Vendas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="orbiuns.html">
+                            <i class="fas fa-headset"></i> Orbiuns
+                        </a>
+                    </li>
+                </ul>
+            </nav>
             
             <!-- Main Content -->
             <div class="content-section">
@@ -525,46 +437,20 @@
                     <div class="row">
                         <!-- Coluna Esquerda -->
                         <div class="col-lg-6">
-                            <div class="form-section">
-                                <h4><i class="fas fa-map-marker-alt"></i> Informações da Viagem</h4>
-                                
-                                <div class="mb-3">
-                                    <label for="destino" class="form-label">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        Destino
-                                    </label>
-                                    <input type="text" class="form-control form-control-cvc" id="destino" 
-                                           placeholder="Ex: Salvador, Maceió, Buenos Aires, Orlando...">
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label for="adultos" class="form-label">
-                                        <i class="fas fa-users"></i>
-                                        Adultos
-                                    </label>
-                                    <input type="number" class="form-control form-control-cvc" id="adultos" min="1" max="10" value="2"
-                                           placeholder="Número de adultos">
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label for="criancas" class="form-label">
-                                        <i class="fas fa-child"></i>
-                                        Crianças
-                                    </label>
-                                    <input type="number" class="form-control form-control-cvc" id="criancas" min="0" max="5" value="0">
-                                    
-                                    <!-- CAMPOS DINÂMICOS DE IDADE -->
-                                    <div id="idadesCriancas" style="display: none; margin-top: 15px;">
-                                        <label class="form-label">Idades das crianças:</label>
-                                        <div id="camposIdades" class="row">
-                                            <!-- Campos criados dinamicamente -->
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <label for="destino" class="form-label">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Destino
+                                </label>
+                                <input type="text" class="form-control" id="destino" 
+                                       placeholder="Ex: Salvador, Maceió, Buenos Aires, Orlando...">
                             </div>
                             
-                            <div class="form-section">
-                                <h4><i class="fas fa-list-check"></i> Tipos de Serviços</h4>
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-list-check"></i>
+                                    Tipos de Serviços
+                                </label>
                                 <div class="checkbox-group">
                                     <div class="checkbox-item" data-value="Aéreo">
                                         <input type="checkbox" id="aereo" name="tipos" value="Aéreo">
@@ -586,8 +472,11 @@
                                 <small class="text-muted">Sistema detecta automaticamente se não selecionar</small>
                             </div>
                             
-                            <div class="form-section">
-                                <h4><i class="fas fa-credit-card"></i> Opções de Parcelamento</h4>
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-credit-card"></i>
+                                    Opções de Parcelamento (opcional)
+                                </label>
                                 <div class="checkbox-group">
                                     <div class="checkbox-item" data-value="10">
                                         <input type="checkbox" id="parc10" name="parcelamento" value="10">
@@ -604,58 +493,79 @@
                                 </div>
                                 <small class="text-muted">Selecione apenas se houver parcelamento disponível</small>
                             </div>
+                            
+                            <div class="form-group">
+                                <label for="adultos" class="form-label">
+                                    <i class="fas fa-users"></i>
+                                    Adultos
+                                </label>
+                                <input type="number" class="form-control" id="adultos" min="1" max="10" value="2"
+                                       placeholder="Número de adultos">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="criancas" class="form-label">
+                                    <i class="fas fa-child"></i>
+                                    Crianças
+                                </label>
+                                <input type="number" class="form-control" id="criancas" min="0" max="5" value="0">
+                                
+                                <!-- CAMPOS DINÂMICOS DE IDADE -->
+                                <div id="idadesCriancas" style="display: none; margin-top: 15px;">
+                                    <label class="form-label">Idades das crianças:</label>
+                                    <div id="camposIdades" class="row">
+                                        <!-- Campos criados dinamicamente -->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         
                         <!-- Coluna Direita -->
                         <div class="col-lg-6">
-                            <div class="form-section">
-                                <h4><i class="fas fa-pencil-alt"></i> Informações Detalhadas</h4>
-                                
-                                <div class="mb-3">
-                                    <label for="observacoes" class="form-label">
-                                        <i class="fas fa-pencil-alt"></i>
-                                        Observações e dados da viagem
-                                    </label>
-                                    <textarea class="form-control form-control-cvc textarea-large" id="observacoes" rows="12"
-                                              placeholder="Cole aqui as informações do orçamento (horários, preços, passageiros, etc.)"></textarea>
-                                    <small class="text-muted">
-                                        💡 Dica: Cole prints de orçamentos ou informações detalhadas aqui
-                                    </small>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label for="textoColado" class="form-label">
-                                        <i class="fas fa-clipboard"></i>
-                                        Ou cole texto ou imagem (Ctrl + V)
-                                    </label>
-                                    <div id="pasteArea" class="paste-area" contenteditable="true">
-                                        <div style="color: var(--systelos-cinza-medio); font-style: italic; text-align: center; padding: 20px;">
-                                            <i class="fas fa-clipboard fa-2x" style="display: block; margin-bottom: 10px;"></i>
-                                            📋 Clique aqui e pressione Ctrl+V para colar texto ou imagem
-                                        </div>
+                            <div class="form-group">
+                                <label for="observacoes" class="form-label">
+                                    <i class="fas fa-pencil-alt"></i>
+                                    Observações e dados da viagem
+                                </label>
+                                <textarea class="form-control textarea-large" id="observacoes" rows="12"
+                                          placeholder="Cole aqui as informações do orçamento (horários, preços, passageiros, etc.)"></textarea>
+                                <small class="text-muted">
+                                    💡 Dica: Cole prints de orçamentos ou informações detalhadas aqui
+                                </small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="textoColado" class="form-label">
+                                    <i class="fas fa-clipboard"></i>
+                                    Ou cole texto ou imagem (Ctrl + V)
+                                </label>
+                                <div id="pasteArea" class="paste-area" contenteditable="true">
+                                    <div style="color: #6c757d; font-style: italic; text-align: center; padding: 20px;">
+                                        <i class="fas fa-clipboard fa-2x" style="display: block; margin-bottom: 10px;"></i>
+                                        📋 Clique aqui e pressione Ctrl+V para colar texto ou imagem
                                     </div>
-                                    <input type="hidden" id="textoColado">
-                                    <small class="text-muted">Detecção automática de escalas e múltiplas opções</small>
                                 </div>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label">
-                                        <i class="fas fa-image"></i>
-                                        Anexar orçamento (PDF ou Imagem)
-                                    </label>
-                                    <input type="file" class="form-control form-control-cvc" id="arquivo" 
-                                           accept="image/*,.pdf" style="padding: 10px;">
-                                    <small class="text-muted">
-                                        Formatos: JPG, PNG, PDF (máx. 10MB)
-                                    </small>
-                                </div>
+                                <input type="hidden" id="textoColado">
+                                <small class="text-muted">Detecção automática de escalas e múltiplas opções</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-image"></i>
+                                    Anexar orçamento (PDF ou Imagem)
+                                </label>
+                                <input type="file" class="form-control" id="arquivo" 
+                                       accept="image/*,.pdf" style="padding: 10px;">
+                                <small class="text-muted">
+                                    Formatos: JPG, PNG, PDF (máx. 10MB)
+                                </small>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Botão Principal -->
                     <div class="text-center" style="margin-top: 40px;">
-                        <button type="submit" class="btn btn-cvc-primary btn-lg">
+                        <button type="submit" class="btn btn-primary btn-lg systelos-btn-primary">
                             <i class="fas fa-magic"></i> Gerar Orçamento Completo
                         </button>
                     </div>
@@ -665,13 +575,13 @@
                 <div class="result-section">
                     <h4><i class="fas fa-file-invoice-dollar"></i> Orçamento Principal</h4>
                     <div id="orcamentoIA" class="result-content">
-                        <div style="text-align: center; color: var(--systelos-cinza-medio); padding: 40px;">
+                        <div style="text-align: center; color: #6c757d; padding: 40px;">
                             <i class="fas fa-robot fa-3x" style="margin-bottom: 20px; opacity: 0.5;"></i>
                             <div>Aguardando informações da viagem...</div>
                             <small>Cole as informações acima e clique em "Gerar Orçamento"</small>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-copy" onclick="copiarTexto('orcamentoIA')">
+                    <button type="button" class="btn btn-secondary systelos-btn-secondary" onclick="copiarTexto('orcamentoIA')">
                         <i class="fas fa-copy"></i> Copiar Orçamento
                     </button>
                 </div>
@@ -682,7 +592,7 @@
                     <div id="dicasIA" class="result-content">
                         Aguardando geração de dicas...
                     </div>
-                    <button type="button" class="btn btn-copy" onclick="copiarTexto('dicasIA')">
+                    <button type="button" class="btn btn-secondary systelos-btn-secondary" onclick="copiarTexto('dicasIA')">
                         <i class="fas fa-copy"></i> Copiar Dicas
                     </button>
                 </div>
@@ -693,7 +603,7 @@
                     <div id="rankingIA" class="result-content">
                         Aguardando geração de ranking...
                     </div>
-                    <button type="button" class="btn btn-copy" onclick="copiarTexto('rankingIA')">
+                    <button type="button" class="btn btn-secondary systelos-btn-secondary" onclick="copiarTexto('rankingIA')">
                         <i class="fas fa-copy"></i> Copiar Ranking
                     </button>
                 </div>
@@ -704,7 +614,7 @@
                         <div class="info-card">
                             <h5><i class="fas fa-lightbulb"></i> Dicas do Destino</h5>
                             <p>Gere dicas personalizadas após criar um orçamento</p>
-                            <button type="button" class="btn btn-cvc-secondary" id="btnGerarDicas" disabled 
+                            <button type="button" class="btn btn-secondary systelos-btn-secondary" id="btnGerarDicas" disabled 
                                     onclick="gerarDicasDestino()">
                                 <i class="fas fa-compass"></i> Gerar Dicas
                             </button>
@@ -714,7 +624,7 @@
                         <div class="info-card">
                             <h5><i class="fas fa-star"></i> Ranking de Hotéis</h5>
                             <p>Rankings detalhados por categoria e preço</p>
-                            <button type="button" class="btn btn-cvc-secondary" id="btnGerarRanking" disabled
+                            <button type="button" class="btn btn-secondary systelos-btn-secondary" id="btnGerarRanking" disabled
                                     onclick="gerarRankingHoteis()">
                                 <i class="fas fa-trophy"></i> Gerar Ranking
                             </button>
@@ -728,12 +638,8 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- Configuração Central -->
-    <script src="config.js"></script>
-    
     <script>
-        debugLog('🚀 SYSTELOS TUR - Padronizador de Orçamentos v8.05', 'info');
-        debugLog('🎯 Integração com IA e 14 templates disponíveis', 'info');
+        debugLog("🚀 Iniciando SYSTELOS TUR - Orçamentos v8.1...", 'info');
         
         // ================================================================================
         // 🎯 VARIÁVEIS GLOBAIS
@@ -754,16 +660,16 @@
         // ================================================================================
         
         document.addEventListener('DOMContentLoaded', function() {
-            debugLog('📋 Inicializando sistema SYSTELOS TUR Orçamentos...', 'info');
-
+            debugLog('📋 Inicializando sistema SYSTELOS TUR...', 'info');
+            
             setupEventListeners();
             setupPasteArea();
             setupCheckboxesClicaveis();
             setupCamposCriancas();
             atualizarDisplayCustos();
             verificarVersaoAPI();
-
-            debugLog('✅ SYSTELOS TUR - Padronizador v8.05 carregado!', 'success');
+            
+            debugLog('✅ SYSTELOS TUR Orçamentos v8.1 carregado e pronto!', 'success');
         });
         
         function setupEventListeners() {
@@ -786,24 +692,39 @@
         
         async function verificarVersaoAPI() {
             const statusElement = document.getElementById('apiStatus');
+            const apiUrl = CONFIG_UTILS.getApiUrl('openaiAssistant');
             
             try {
-                debugLog('🔍 Verificando API de IA...', 'info');
+                debugLog('🔍 Verificando API: ' + apiUrl, 'info');
                 statusElement.className = 'api-status loading';
-                statusElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando IA...';
+                statusElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando API...';
                 
-                // Simulação de verificação (substitua pela chamada real da API)
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
                 
-                statusElement.className = 'api-status success';
-                statusElement.innerHTML = '<i class="fas fa-check-circle"></i> IA funcionando - 14 templates disponíveis';
-                estadoGlobal.versaoAPI = 'v4.04';
-                debugLog('✅ IA funcionando', 'success');
+                if (data.success && data.version) {
+                    statusElement.className = 'api-status success';
+                    statusElement.innerHTML = `<i class="fas fa-check-circle"></i> ${data.ia_usada} ${data.version} funcionando - ${data.total_templates || 14} templates disponíveis`;
+                    estadoGlobal.versaoAPI = data.version;
+                    debugLog('✅ API funcionando: ' + data.ia_usada, 'success');
+                } else {
+                    throw new Error('Resposta inválida da API');
+                }
                 
             } catch (error) {
-                debugLog('❌ Erro ao verificar IA: ' + error.message, 'error');
+                debugLog('❌ Erro ao verificar API: ' + error.message, 'error');
                 statusElement.className = 'api-status error';
-                statusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> IA não disponível';
+                statusElement.innerHTML = `<i class="fas fa-exclamation-triangle"></i> API não disponível`;
             }
         }
         
@@ -861,14 +782,14 @@
                         const col = document.createElement('div');
                         col.className = 'col-md-6 mb-2';
                         col.innerHTML = `
-                            <input type="number" class="form-control form-control-cvc idade-crianca-input" 
+                            <input type="number" class="form-control idade-crianca-input" 
                                    id="idadeCrianca${i}" min="0" max="17" 
                                    placeholder="Idade da criança ${i}">
                         `;
                         camposContainer.appendChild(col);
                     }
                     
-                    debugLog(`✅ ${numCriancas} campos de idade criados`, 'success');
+                    debugLog(`✅ ${numCriancas} campos de idade criados`, 'info');
                 } else {
                     container.style.display = 'none';
                 }
@@ -953,6 +874,7 @@
                             <div>${file.name}</div>
                         </div>
                     `;
+                    debugLog('✅ Imagem carregada: ' + file.name, 'success');
                 } else if (file.type === 'application/pdf') {
                     const fileReader = new FileReader();
                     fileReader.onload = async function() {
@@ -973,13 +895,15 @@
                             
                             estadoGlobal.pdfContent = fullText;
                             pasteArea.innerHTML = `
-                                <div style="text-align: center; color: var(--systelos-success);">
+                                <div style="text-align: center; color: #28a745;">
                                     <i class="fas fa-file-pdf fa-3x"></i>
                                     <div>PDF Lido com Sucesso!</div>
                                     <small>${file.name}</small>
                                 </div>
                             `;
-
+                            
+                            debugLog('✅ PDF processado: ' + file.name, 'success');
+                            
                         } catch (error) {
                             debugLog('❌ Erro ao processar PDF: ' + error.message, 'error');
                             pasteArea.innerHTML = `<div class="error">Erro ao ler o PDF</div>`;
@@ -989,6 +913,7 @@
                 }
             } catch (error) {
                 pasteArea.innerHTML = `<div class="error">Erro ao processar o arquivo</div>`;
+                debugLog('❌ Erro no upload: ' + error.message, 'error');
             }
         }
         
@@ -1049,7 +974,7 @@
                 pdfContent: estadoGlobal.pdfContent
             };
             
-            debugLog('📋 Dados coletados', 'info', dados);
+            debugLog('📋 Dados coletados do formulário', 'info', dados);
             return dados;
         }
         
@@ -1058,52 +983,105 @@
         // ================================================================================
         
         async function enviarParaAPI(dados) {
-            debugLog('🚀 Enviando para API de IA...', 'info');
+            const apiUrl = CONFIG_UTILS.getApiUrl('openaiAssistant');
+            debugLog('🚀 Enviando para API: ' + apiUrl, 'info');
+            debugLog('📤 Dados', 'info', dados);
             
             try {
-                // Simulação de chamada para API (substitua pela chamada real)
-                await new Promise(resolve => setTimeout(resolve, 3000));
-                
-                // Simulação de resposta
-                const resultado = `🎯 ORÇAMENTO PERSONALIZADO - ${dados.destino || 'Destino Selecionado'}
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dados)
+                });
 
-📅 DETALHES DA VIAGEM
-• Passageiros: ${dados.adultos} adultos${dados.criancas > 0 ? ` + ${dados.criancas} crianças` : ''}
-• Serviços: ${dados.tipos.length > 0 ? dados.tipos.join(', ') : 'Detecção automática'}
-${dados.parcelamento ? `• Parcelamento: ${dados.parcelamento}x sem juros` : ''}
+                const data = await response.json();
+                debugLog('📥 Resposta recebida', 'info', data);
 
-💰 OPÇÕES DE PREÇOS
-OPÇÃO 1 - ECONÔMICA: R$ 2.850,00
-• Voo com conexão
-• Hotel 3 estrelas
-• Café da manhã incluso
+                if (!response.ok) {
+                    throw new Error(data.error || `HTTP ${response.status}`);
+                }
 
-OPÇÃO 2 - INTERMEDIÁRIA: R$ 4.200,00
-• Voo direto
-• Hotel 4 estrelas
-• Meia pensão
-
-OPÇÃO 3 - PREMIUM: R$ 6.500,00
-• Voo direto premium
-• Resort 5 estrelas
-• All inclusive
-
-✨ DIFERENCIAIS CVC
-• Parcelamento sem juros no cartão
-• Seguro viagem incluso
-• Suporte 24h durante a viagem
-• Cancelamento com reembolso
-
-📞 CONTATO
-SYSTELOS TUR
-WhatsApp: (11) 99999-9999`;
-
-                debugLog('✅ Resposta da API recebida', 'success');
-                return resultado;
-                
+                if (data.success) {
+                    debugLog('✅ Sucesso! IA processou: ' + data.ia_usada, 'success');
+                    return data.result;
+                } else {
+                    throw new Error(data.error || 'Erro desconhecido');
+                }
             } catch (error) {
                 debugLog('❌ Erro na API: ' + error.message, 'error');
                 throw error;
+            }
+        }
+        
+        // ================================================================================
+        // 🔍 EXTRAÇÃO DE CONTEXTO DO ORÇAMENTO
+        // ================================================================================
+        
+        function extrairContextoDoOrcamento(orcamento) {
+            if (!orcamento) return null;
+            
+            const contexto = {
+                destino: '',
+                dataIda: '',
+                dataVolta: '', 
+                dias: '',
+                adultos: '',
+                criancas: '',
+                hoteis: [],
+                companhias: []
+            };
+            
+            try {
+                // Extrair destino (padrão: *Companhia - Origem ✈ Destino*)
+                const destinoMatch = orcamento.match(/\*[^-]+-[^✈]+✈\s*([^\n\r*]+)/);
+                if (destinoMatch) {
+                    contexto.destino = destinoMatch[1].trim();
+                }
+                
+                // Extrair datas (padrão: dd/mm a dd/mm)
+                const datasMatch = orcamento.match(/(\d{1,2}\/\d{1,2})\s*a\s*(\d{1,2}\/\d{1,2})/);
+                if (datasMatch) {
+                    contexto.dataIda = datasMatch[1];
+                    contexto.dataVolta = datasMatch[2];
+                }
+                
+                // Extrair duração (padrão: (X dias e Y noites))
+                const diasMatch = orcamento.match(/\((\d+)\s*dias?\s*e?\s*(\d+)?\s*noites?\)/);
+                if (diasMatch) {
+                    contexto.dias = diasMatch[1];
+                }
+                
+                // Extrair passageiros (padrão: para XX adultos + YY bebês + ZZ crianças)
+                const adultosMatch = orcamento.match(/(\d+)\s*adultos?/i);
+                if (adultosMatch) {
+                    contexto.adultos = adultosMatch[1];
+                }
+                
+                const criancasMatch = orcamento.match(/(\d+)\s*(?:bebês?|crianças?)/i);
+                if (criancasMatch) {
+                    contexto.criancas = criancasMatch[1];
+                }
+                
+                // Extrair hotéis mencionados (buscar nomes após "Hotel:", "Hospedagem:" etc)
+                const hotelMatches = orcamento.match(/(?:Hotel|Hospedagem):\s*([^\n\r]+)/gi);
+                if (hotelMatches) {
+                    contexto.hoteis = hotelMatches.map(h => h.replace(/^(?:Hotel|Hospedagem):\s*/i, '').trim());
+                }
+                
+                // Extrair companhias aéreas
+                const companhiaMatches = orcamento.match(/\*([^-]+)-/g);
+                if (companhiaMatches) {
+                    contexto.companhias = companhiaMatches.map(c => c.replace(/\*|−/g, '').trim());
+                }
+                
+                debugLog('🔍 Contexto extraído do orçamento', 'info', contexto);
+                return contexto;
+                
+            } catch (error) {
+                debugLog('❌ Erro ao extrair contexto: ' + error.message, 'error');
+                return null;
             }
         }
         
@@ -1131,8 +1109,7 @@ WhatsApp: (11) 99999-9999`;
                 const temConteudo = dados.observacoes.trim() || 
                                   dados.textoColado.trim() || 
                                   dados.imagemBase64 || 
-                                  dados.pdfContent ||
-                                  dados.destino.trim();
+                                  dados.pdfContent;
                                   
                 if (!temConteudo) {
                     throw new Error('Adicione informações sobre a viagem');
@@ -1151,8 +1128,10 @@ WhatsApp: (11) 99999-9999`;
                 // Habilitar botões de dicas
                 habilitarBotoesDicas();
                 
+                debugLog('✅ Orçamento gerado com sucesso!', 'success');
+                
             } catch (error) {
-                debugLog('❌ Erro: ' + error.message, 'error');
+                debugLog('❌ Erro ao gerar orçamento: ' + error.message, 'error');
                 exibirErro(error.message);
             } finally {
                 // Restaurar botão
@@ -1194,7 +1173,7 @@ WhatsApp: (11) 99999-9999`;
         }
         
         // ================================================================================
-        // 💡 DICAS E RANKING
+        // 💡 DICAS E RANKING - VERSÃO REAL (DO SISTEMA ANTIGO)
         // ================================================================================
         
         function habilitarBotoesDicas() {
@@ -1212,7 +1191,8 @@ WhatsApp: (11) 99999-9999`;
         
         async function gerarDicasDestino() {
             try {
-                const destino = estadoGlobal.ultimoDestino || 'destino selecionado';
+                const contexto = extrairContextoDoOrcamento(estadoGlobal.ultimoOrcamento);
+                const destino = contexto?.destino || estadoGlobal.ultimoDestino || 'destino selecionado';
                 
                 document.getElementById('secaoDicas').style.display = 'block';
                 document.getElementById('dicasIA').innerHTML = `
@@ -1221,32 +1201,39 @@ WhatsApp: (11) 99999-9999`;
                     </div>
                 `;
                 
-                // Simulação de geração de dicas
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                let observacoes = `Gere dicas de viagem baseadas neste orçamento:`;
                 
-                const dicas = `🌟 DICAS EXCLUSIVAS - ${destino.toUpperCase()}
-
-🏖️ MELHORES PRAIAS
-• Praia Principal - Águas cristalinas
-• Praia Secreta - Para relaxar
-• Praia da Família - Ideal para crianças
-
-🍽️ GASTRONOMIA LOCAL
-• Restaurante do Porto - Frutos do mar
-• Casa da Vovó - Comida caseira
-• Bar da Praia - Drinks tropicais
-
-🎯 PASSEIOS IMPERDÍVEIS
-• City tour histórico
-• Passeio de barco
-• Trilha ecológica
-
-💡 DICAS IMPORTANTES
-• Melhor época: maio a setembro
-• Moeda local aceita cartão
-• Protetor solar é essencial`;
-
-                document.getElementById('dicasIA').innerText = dicas;
+                if (contexto) {
+                    observacoes += `\n\nDESTINO: ${contexto.destino}`;
+                    if (contexto.dataIda && contexto.dataVolta) {
+                        observacoes += `\nDATAS: ${contexto.dataIda} a ${contexto.dataVolta}`;
+                    }
+                    if (contexto.dias) {
+                        observacoes += `\nDURAÇÃO: ${contexto.dias} dias`;
+                    }
+                    if (contexto.adultos) {
+                        observacoes += `\nPASSAGEIROS: ${contexto.adultos} adultos`;
+                        if (contexto.criancas) {
+                            observacoes += ` + ${contexto.criancas} crianças`;
+                        }
+                    }
+                    if (contexto.hoteis && contexto.hoteis.length > 0) {
+                        observacoes += `\nHOTÉIS: ${contexto.hoteis.join(', ')}`;
+                    }
+                }
+                
+                observacoes += `\n\nORÇAMENTO COMPLETO:\n${estadoGlobal.ultimoOrcamento}`;
+                
+                const dados = {
+                    observacoes: observacoes,
+                    tipos: ['Dicas'],
+                    destino: contexto?.destino || destino
+                };
+                
+                debugLog('🧭 Gerando dicas com contexto', 'info', dados);
+                const resultado = await enviarParaAPI(dados);
+                document.getElementById('dicasIA').innerText = resultado;
+                
                 debugLog('✅ Dicas geradas com sucesso!', 'success');
                 
             } catch (error) {
@@ -1259,7 +1246,8 @@ WhatsApp: (11) 99999-9999`;
         
         async function gerarRankingHoteis() {
             try {
-                const destino = estadoGlobal.ultimoDestino || 'destino selecionado';
+                const contexto = extrairContextoDoOrcamento(estadoGlobal.ultimoOrcamento);
+                const destino = contexto?.destino || estadoGlobal.ultimoDestino || 'destino selecionado';
                 
                 document.getElementById('secaoRanking').style.display = 'block';
                 document.getElementById('rankingIA').innerHTML = `
@@ -1268,39 +1256,37 @@ WhatsApp: (11) 99999-9999`;
                     </div>
                 `;
                 
-                // Simulação de geração de ranking
-                await new Promise(resolve => setTimeout(resolve, 2500));
+                let observacoes = `Gere ranking dos hotéis baseado neste orçamento:`;
                 
-                const ranking = `🏆 RANKING DE HOTÉIS - ${destino.toUpperCase()}
-
-🥇 1º LUGAR - RESORT PREMIUM
-⭐⭐⭐⭐⭐ (9.2/10)
-• Localização: Frente ao mar
-• All inclusive premium
-• Spa e academia completos
-• A partir de R$ 450/noite
-
-🥈 2º LUGAR - HOTEL BOUTIQUE
-⭐⭐⭐⭐ (8.8/10)
-• Centro histórico
-• Design moderno e elegante
-• Café da manhã gourmet
-• A partir de R$ 280/noite
-
-🥉 3º LUGAR - POUSADA FAMILIAR
-⭐⭐⭐ (8.5/10)
-• Ambiente acolhedor
-• Ótimo custo-benefício
-• Próximo às principais atrações
-• A partir de R$ 150/noite
-
-📊 CRITÉRIOS DE AVALIAÇÃO
-• Localização e acesso
-• Qualidade dos serviços
-• Custo-benefício
-• Avaliações de hóspedes`;
-
-                document.getElementById('rankingIA').innerText = ranking;
+                if (contexto) {
+                    observacoes += `\n\nDESTINO: ${contexto.destino}`;
+                    if (contexto.dataIda && contexto.dataVolta) {
+                        observacoes += `\nDATAS: ${contexto.dataIda} a ${contexto.dataVolta}`;
+                    }
+                    if (contexto.adultos) {
+                        observacoes += `\nPASSAGEIROS: ${contexto.adultos} adultos`;
+                        if (contexto.criancas) {
+                            observacoes += ` + ${contexto.criancas} crianças (considere dicas para famílias)`;
+                        }
+                    }
+                    if (contexto.hoteis && contexto.hoteis.length > 0) {
+                        observacoes += `\nHOTÉIS DO ORÇAMENTO: ${contexto.hoteis.join(', ')}`;
+                        observacoes += `\n\nCrie ranking destes hotéis específicos com avaliações, localização, facilidades e recomendações.`;
+                    }
+                }
+                
+                observacoes += `\n\nORÇAMENTO COMPLETO:\n${estadoGlobal.ultimoOrcamento}`;
+                
+                const dados = {
+                    observacoes: observacoes,
+                    tipos: ['Ranking'],
+                    destino: contexto?.destino || destino
+                };
+                
+                debugLog('🏆 Gerando ranking com contexto', 'info', dados);
+                const resultado = await enviarParaAPI(dados);
+                document.getElementById('rankingIA').innerText = resultado;
+                
                 debugLog('✅ Ranking gerado com sucesso!', 'success');
                 
             } catch (error) {
@@ -1384,15 +1370,16 @@ WhatsApp: (11) 99999-9999`;
         // 🎯 LOG FINAL
         // ================================================================================
         
-        debugLog("SYSTELOS TUR - Padronizador de Orçamentos v8.05 - Config.js Integrado", 'success');
+        debugLog("SYSTELOS TUR - Padronizador de Orçamentos v8.1 - Config.js Integrado", 'success');
         debugLog("Funcionalidades:", 'info');
         debugLog("- Interface SYSTELOS TUR integrada", 'info');
-        debugLog("- IA com 14 templates", 'info');
+        debugLog("- IA com 14 templates REAIS (sem mocks)", 'info');
         debugLog("- Upload de PDF e imagens", 'info');
-        debugLog("- Sistema de dicas e ranking", 'info');
+        debugLog("- Sistema de dicas e ranking COM API REAL", 'info');
         debugLog("- Checkboxes totalmente clicáveis", 'info');
         debugLog("- Campos dinâmicos para crianças", 'info');
         debugLog("- Sistema de custos integrado", 'info');
+        debugLog("- Config.js centralizado funcionando", 'info');
     </script>
 </body>
 </html>
