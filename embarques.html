@@ -909,11 +909,14 @@
                 await carregarEmbarques();
                 debugLog('✅ Embarques carregados', 'success');
                 
+                debugLog('🔄 Tentando remover loading...', 'info');
+                
                 // Configurar auto-refresh
                 configurarAutoRefresh();
                 debugLog('✅ Auto-refresh configurado', 'success');
                 
                 mostrarLoading(false);
+                debugLog('🎉 LOADING REMOVIDO! Sistema pronto!', 'success');
                 debugLog('✅ Sistema inicializado com sucesso', 'success');
                 
             } catch (error) {
@@ -1115,6 +1118,8 @@
             
             // Renderizar dashboards
             renderizarDashboards();
+            
+            debugLog('🏁 processarDashboards() COMPLETO!', 'success');
         }
         
         function mostrarEmptyStates() {
@@ -1337,10 +1342,25 @@
         // ================================================================================
         
         function renderizarDashboards() {
+            debugLog('🎨 Iniciando renderização de dashboards...', 'info');
+            
+            debugLog('📋 Renderizando conferências...', 'info');
             renderizarConferencias();
+            debugLog('✅ Conferências renderizadas', 'success');
+            
+            debugLog('✈️ Renderizando check-ins...', 'info');
             renderizarCheckins();
+            debugLog('✅ Check-ins renderizados', 'success');
+            
+            debugLog('⭐ Renderizando pós-vendas...', 'info');
             renderizarPosVendas();
+            debugLog('✅ Pós-vendas renderizadas', 'success');
+            
+            debugLog('🔢 Atualizando contadores...', 'info');
             atualizarContadores();
+            debugLog('✅ Contadores atualizados', 'success');
+            
+            debugLog('🎉 Renderização completa!', 'success');
         }
         
         function renderizarConferencias() {
@@ -2331,8 +2351,15 @@
         
         // Funções de interface
         function mostrarLoading(mostrar) {
+            console.log('🔄 mostrarLoading chamada com:', mostrar);
             const overlay = document.getElementById('loadingOverlay');
+            console.log('🔍 Overlay encontrado:', overlay ? 'SIM' : 'NÃO');
+            console.log('🎨 Display ANTES:', overlay ? overlay.style.display : 'overlay null');
+            
             overlay.style.display = mostrar ? 'flex' : 'none';
+            
+            console.log('🎨 Display DEPOIS:', overlay.style.display);
+            console.log('✅ mostrarLoading concluída');
         }
         
         function mostrarAlerta(mensagem, tipo) {
