@@ -1011,8 +1011,8 @@
                 debugLog('❌ Nenhum dado carregado - API não disponível', 'error');
             }
             
-            // Processar e renderizar dashboards
-            processarDashboards();
+            // Processar e renderizar dashboards (assíncrono para não travar)
+            await processarDashboards();
             
             // Atualizar timestamp
             document.getElementById('ultimaAtualizacao').textContent = 
@@ -1074,7 +1074,7 @@
         // PROCESSAMENTO DE DASHBOARDS
         // ================================================================================
         
-        function processarDashboards() {
+        async function processarDashboards() {
             debugLog('⚙️ Processando dashboards...', 'info');
             debugLog('📊 Total de embarques recebidos: ' + dadosEmbarques.length, 'info');
             
@@ -1096,13 +1096,22 @@
             processarConferencias();
             debugLog('✅ Conferências processadas: ' + dadosFiltrados.conferencias.length, 'success');
             
+            // Dar respiro ao navegador antes de processar check-ins
+            await new Promise(resolve => setTimeout(resolve, 10));
+            
             // Processar check-ins (individuais por voo)
             processarCheckins();
             debugLog('✅ Check-ins processados: ' + dadosFiltrados.checkins.length, 'success');
             
+            // Dar respiro ao navegador antes de processar pós-vendas
+            await new Promise(resolve => setTimeout(resolve, 10));
+            
             // Processar pós-vendas (agrupadas, ativadas por data)
             processarPosVendas();
             debugLog('✅ Pós-vendas processadas: ' + dadosFiltrados.posVendas.length, 'success');
+            
+            // Dar respiro ao navegador antes de renderizar
+            await new Promise(resolve => setTimeout(resolve, 10));
             
             // Renderizar dashboards
             renderizarDashboards();

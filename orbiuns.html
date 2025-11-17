@@ -820,7 +820,7 @@
     <!-- Configuração Central -->
     
     <script>
-        debugLog('🚀 SYSTELOS TUR - Controle de Orbiuns v11.3 CORRIGIDA', 'info');
+        debugLog('🚀 SYSTELOS TUR - Controle de Orbiuns v11.3 CORRIGIDA JSONP', 'info');
         
         // ================================================================================
         // CONFIGURAÇÃO - USANDO CONFIG.JS
@@ -832,7 +832,7 @@
         let orbiunsData = [];
         let orbiunsFiltrados = [];
 
-        debugLog('🚀 Sistema de Orbiuns SYSTELOS TUR v11.3 CORRIGIDA carregado', 'success');
+        debugLog('🚀 Sistema de Orbiuns SYSTELOS TUR v11.3 CORRIGIDA JSONP carregado', 'success');
         debugLog('🔗 API URL: ' + API_URL, 'info');
 
         // ================================================================================
@@ -868,7 +868,7 @@
                 formEditar.addEventListener('submit', editarOrbium);
             }
             
-            debugLog('✅ Sistema de Orbiuns v11.3 CORRIGIDA totalmente carregado!', 'success');
+            debugLog('✅ Sistema de Orbiuns v11.3 CORRIGIDA JSONP totalmente carregado!', 'success');
         });
 
         function preencherSelectVendedores() {
@@ -893,39 +893,60 @@
         }
 
         // ================================================================================
-        // COMUNICAÇÃO COM API
+        // ================================================================================
+        // COMUNICAÇÃO COM API - USANDO JSONP (BYPASS CORS)
         // ================================================================================
         async function chamarAPI(dados) {
-            debugLog('📡 Enviando para API', 'info', dados);
+            debugLog('📡 Enviando para API via JSONP', 'info', dados);
             
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(dados)
-                });
+            return new Promise((resolve, reject) => {
+                // Gerar nome único para callback
+                const callbackName = 'jsonp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
                 
-                debugLog('📊 Status da resposta: ' + response.status, 'info');
+                // Criar função de callback global
+                window[callbackName] = function(data) {
+                    delete window[callbackName];
+                    if (script.parentNode) {
+                        document.body.removeChild(script);
+                    }
+                    debugLog('📥 Resposta da API (via JSONP)', 'success', data);
+                    resolve(data);
+                };
                 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    debugLog('📊 Texto do erro: ' + errorText, 'error');
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}\nDetalhes: ${errorText}`);
+                // Montar URL com parâmetros
+                const url = new URL(API_URL);
+                url.searchParams.append('callback', callbackName);
+                
+                // Adicionar action
+                if (dados.action) {
+                    url.searchParams.append('action', dados.action);
                 }
                 
-                const data = await response.json();
-                debugLog('📥 Resposta da API', 'success', data);
+                // Adicionar outros parâmetros
+                Object.keys(dados).forEach(key => {
+                    if (key !== 'action') {
+                        url.searchParams.append(key, typeof dados[key] === 'object' ? JSON.stringify(dados[key]) : dados[key]);
+                    }
+                });
                 
-                return data;
+                debugLog('🔗 URL final: ' + url.toString().substring(0, 100) + '...', 'info');
                 
-            } catch (error) {
-                debugLog('❌ Erro na comunicação com API: ' + error.message, 'error');
-                mostrarAlertaErro(`Erro de conexão: ${error.message}`);
-                throw error;
-            }
+                // Criar script tag
+                const script = document.createElement('script');
+                script.src = url.toString();
+                script.onerror = () => {
+                    delete window[callbackName];
+                    if (script.parentNode) {
+                        document.body.removeChild(script);
+                    }
+                    const erro = new Error('Erro ao carregar script JSONP da API');
+                    debugLog('❌ Erro na comunicação com API: ' + erro.message, 'error');
+                    mostrarAlertaErro(`Erro de conexão: ${erro.message}`);
+                    reject(erro);
+                };
+                
+                document.body.appendChild(script);
+            });
         }
 
         // ================================================================================
@@ -1213,7 +1234,7 @@
             try {
                 const dadosFormulario = coletarDadosFormularioNaOrdemCorreta(e.target);
                 
-                debugLog('📤 Dados coletados v11.3 CORRIGIDA (ordem corrigida)', 'info', dadosFormulario);
+                debugLog('📤 Dados coletados v11.3 CORRIGIDA JSONP (ordem corrigida)', 'info', dadosFormulario);
                 
                 if (!dadosFormulario.orbium || !dadosFormulario.vendedor || !dadosFormulario.nome_cliente) {
                     throw new Error('Preencha todos os campos obrigatórios');
@@ -1248,7 +1269,7 @@
         }
 
         function coletarDadosFormularioNaOrdemCorreta(form) {
-            debugLog('📧 v11.3 CORRIGIDA: Coletando dados NA ORDEM CORRETA das colunas...', 'info');
+            debugLog('📧 v11.3 CORRIGIDA JSONP: Coletando dados NA ORDEM CORRETA das colunas...', 'info');
             
             const dados = {
                 status: form.querySelector('#status').value || 'Em atendimento',
@@ -1267,7 +1288,7 @@
                 whats_cliente: form.querySelector('#whats_cliente').value || ''
             };
             
-            debugLog('✅ v11.3 CORRIGIDA: Dados coletados na ordem CORRETA', 'success', dados);
+            debugLog('✅ v11.3 CORRIGIDA JSONP: Dados coletados na ordem CORRETA', 'success', dados);
             return dados;
         }
 
@@ -1466,8 +1487,8 @@
         });
 
         // ================================================================================
-        // LOGS FINAIS v11.3 CORRIGIDA
+        // LOGS FINAIS v11.3 CORRIGIDA JSONP
         // ================================================================================
-        debugLog('✅ Sistema de Orbiuns SYSTELOS TUR v11.3 CORRIGIDA - ATUALIZADO COMPLETO!', 'success');
-        debugLog('🔧 PRINCIPAIS ATUALIZAÇÕES v11.3 CORRIGIDA:', 'info');
+        debugLog('✅ Sistema de Orbiuns SYSTELOS TUR v11.3 CORRIGIDA JSONP - ATUALIZADO COMPLETO!', 'success');
+        debugLog('🔧 PRINCIPAIS ATUALIZAÇÕES v11.3 CORRIGIDA JSONP:', 'info');
         debug
