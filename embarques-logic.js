@@ -8,11 +8,7 @@
 // 3. Pós-vendas (1 dia após retorno da data mais distante)
 // ================================================================================
 
-console.log('%c🏢 CVC ITAQUÁ - EMBARQUES v12.0 - DASHBOARD DE PRIORIDADES', 'color: #0A00B4; font-size: 16px; font-weight: bold;');
-console.log('✅ NOVO: Dashboard inteligente com agrupamento por informe');
-console.log('✅ NOVO: Sistema de prioridades com cores CVC');
-console.log('✅ NOVO: Lógica temporal para conferências, check-ins e pós-vendas');
-console.log('✅ MANTIDO: 100% da funcionalidade original');
+console.log('🏢 SYSTELOS TUR - Embarques v12.2 - Sistema Otimizado');
 
 // ================================================================================
 // 🎯 VARIÁVEIS GLOBAIS
@@ -94,9 +90,6 @@ function calcularStatusConferencia(informe) {
     const primeiraData = new Date(informe.dataPrimeiroVoo);
     const diasParaViagem = Math.ceil((primeiraData - hoje) / (1000 * 60 * 60 * 24));
     
-    // Debug
-    console.log(`📋 Conferência ${informe.numeroInforme}: ${diasParaViagem} dias para viagem`);
-    
     // Não mostra se ainda não iniciou o período
     if (diasParaViagem > 10) return null;
     
@@ -121,9 +114,6 @@ function calcularStatusCheckin(voo) {
     const dataVoo = new Date(voo.dataIda);
     const diasParaVoo = Math.ceil((dataVoo - hoje) / (1000 * 60 * 60 * 24));
     
-    // Debug
-    console.log(`✈️ Check-in voo ${voo.id}: ${diasParaVoo} dias para voo`);
-    
     // Não mostra se ainda não iniciou o período
     if (diasParaVoo > 2) return null;
     
@@ -146,9 +136,6 @@ function calcularStatusPosVenda(informe) {
     const hoje = new Date();
     const ultimaData = new Date(informe.dataUltimoVoo);
     const diasAposRetorno = Math.ceil((hoje - ultimaData) / (1000 * 60 * 60 * 24));
-    
-    // Debug
-    console.log(`📞 Pós-venda ${informe.numeroInforme}: ${diasAposRetorno} dias após retorno`);
     
     // Ainda não retornou
     if (diasAposRetorno < 1) return null;
@@ -253,7 +240,7 @@ function agruparPorInforme(dados) {
 // 🎨 RENDERIZAÇÃO DO DASHBOARD
 // ================================================================================
 function renderizarDashboard(informes) {
-    console.log('🎨 Renderizando dashboard com', informes.length, 'informes');
+    // Dashboard renderizado
     
     // Separar por prioridade
     const vencidos = [];
@@ -499,7 +486,7 @@ function buscarRapido() {
         );
     });
     
-    console.log(`🔍 Busca "${termo}": ${filtrados.length} resultados`);
+    // Busca processada
     renderizarDados(filtrados);
 }
 
@@ -536,7 +523,7 @@ function aplicarFiltroRapido(filtro) {
             break;
     }
     
-    console.log(`🎯 Filtro "${filtro}": ${filtrados.length} resultados`);
+    // Filtro aplicado
     renderizarDados(filtrados);
 }
 
@@ -1012,10 +999,4 @@ window.buscarOrbiuns = buscarOrbiuns;
 // ================================================================================
 // 📝 LOGS FINAIS v12.0 - DASHBOARD COMPLETO
 // ================================================================================
-console.log('%c🏢 CVC ITAQUÁ - EMBARQUES v12.0 - DASHBOARD COMPLETO IMPLEMENTADO', 'color: #0A00B4; font-size: 16px; font-weight: bold;');
-console.log('✅ DASHBOARD: Agrupamento inteligente por informe');
-console.log('✅ PRIORIDADES: Sistema de cores CVC (vencido/urgente/importante/normal)');
-console.log('✅ LÓGICA TEMPORAL: Conferências (10 dias), Check-ins (2 dias), Pós-vendas (1 dia após)');
-console.log('✅ INTERFACE: Busca rápida, filtros inteligentes, design responsivo');
-console.log('✅ COMPATIBILIDADE: Mantém 100% da funcionalidade original');
-console.log('🚀 PRONTO PARA PRODUÇÃO - SISTEMA OTIMIZADO E INTUITIVO!');
+console.log('✅ SYSTELOS TUR - Embarques v12.2 carregado com sucesso');
