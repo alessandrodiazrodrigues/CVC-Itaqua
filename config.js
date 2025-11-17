@@ -282,6 +282,66 @@ const ESTADO_CONFIG = {
         cache: 7,           // Cache geral
         orcamentos: 30,     // Orçamentos salvos
         custos: 90          // Dados de custos
+    },
+    
+    // ================================================================================
+    // FUNÇÕES DE GERENCIAMENTO DE ESTADO (localStorage)
+    // ================================================================================
+    
+    /**
+     * Salvar dados no localStorage
+     */
+    salvar: function(chave, valor) {
+        try {
+            localStorage.setItem(chave, valor);
+            return true;
+        } catch (error) {
+            console.error('Erro ao salvar no localStorage:', error);
+            return false;
+        }
+    },
+    
+    /**
+     * Carregar dados do localStorage
+     */
+    carregar: function(chave) {
+        try {
+            return localStorage.getItem(chave);
+        } catch (error) {
+            console.error('Erro ao carregar do localStorage:', error);
+            return null;
+        }
+    },
+    
+    /**
+     * Remover dados do localStorage
+     */
+    remover: function(chave) {
+        try {
+            localStorage.removeItem(chave);
+            return true;
+        } catch (error) {
+            console.error('Erro ao remover do localStorage:', error);
+            return false;
+        }
+    },
+    
+    /**
+     * Limpar todo o localStorage do SYSTELOS
+     */
+    limparTudo: function() {
+        try {
+            const chaves = Object.values(this.keys);
+            chaves.forEach(chave => {
+                if (typeof chave === 'string') {
+                    localStorage.removeItem(chave);
+                }
+            });
+            return true;
+        } catch (error) {
+            console.error('Erro ao limpar localStorage:', error);
+            return false;
+        }
     }
 };
 
