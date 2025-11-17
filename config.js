@@ -44,7 +44,7 @@ const SYSTELOS_CONFIG = {
         // Frontend (Vercel)
         frontend: window.location.origin, // Pega automaticamente
         
-        // 🆕 API Google Apps Script (PRODUÇÃO) - CORRIGIDA 17/11/2025
+        // 🆕 API Google Apps Script (PRODUÇÃO) - NOVO DEPLOY 17/11/2025 15:54
         apiGoogleScript: 'https://script.google.com/macros/s/AKfycbyuKtEC2_BGAdh7ZrEvZxHvLTCb2oC1WEYYnubYxMXhJhLn7KWyymFVeqnj2Zm7i6NmUA/exec',
         
         // APIs do Backend (Vercel Serverless Functions)
