@@ -950,6 +950,7 @@
         async function carregarEmbarques() {
             try {
                 debugLog('📊 Carregando embarques da API...', 'info');
+                mostrarAlerta('⏳ Carregando dados da planilha... Isso pode levar alguns segundos.', 'info');
                 
                 // Tentar diferentes métodos de requisição
                 let dados = null;
@@ -1022,9 +1023,11 @@
         function fazerRequisicaoJSONP(url, params) {
             return new Promise((resolve, reject) => {
                 const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+                let timeoutId;
                 
                 // Criar função callback global temporária
                 window[callbackName] = function(data) {
+                    clearTimeout(timeoutId);
                     delete window[callbackName];
                     if (script.parentNode) {
                         document.body.removeChild(script);
@@ -1044,6 +1047,7 @@
                 script.src = url + '?' + urlParams.toString();
                 
                 script.onerror = () => {
+                    clearTimeout(timeoutId);
                     delete window[callbackName];
                     if (script.parentNode) {
                         document.body.removeChild(script);
@@ -1051,29 +1055,16 @@
                     reject(new Error('Falha na requisição JSONP - Verifique se a API está funcionando'));
                 };
                 
-                script.onload = () => {
-                    // Script carregou, aguardar callback
-                    setTimeout(() => {
-                        if (window[callbackName]) {
-                            delete window[callbackName];
-                            if (script.parentNode) {
-                                document.body.removeChild(script);
-                            }
-                            reject(new Error('API não retornou dados válidos'));
-                        }
-                    }, 10000);
-                };
-                
-                // Timeout geral
-                setTimeout(() => {
+                // Timeout de 60 segundos para APIs grandes (420+ embarques)
+                timeoutId = setTimeout(() => {
                     if (window[callbackName]) {
                         delete window[callbackName];
                         if (script.parentNode) {
                             document.body.removeChild(script);
                         }
-                        reject(new Error('Timeout na requisição JSONP (30s)'));
+                        reject(new Error('Timeout na requisição JSONP (60s) - API pode estar lenta ou planilha muito grande'));
                     }
-                }, 30000);
+                }, 60000);
                 
                 document.body.appendChild(script);
             });
