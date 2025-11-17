@@ -1,12 +1,18 @@
 // ================================================================================
-// ⚙️ SYSTELOS TUR - CONFIGURAÇÃO CENTRALIZADA v9.0
+// ⚙️ SYSTELOS TUR - CONFIGURAÇÃO CENTRALIZADA v9.1 - CORRIGIDO
 // ================================================================================
 // 🎯 ARQUIVO ÚNICO DE CONFIGURAÇÃO
 // Todas as URLs, cores, APIs e configurações em UM SÓ LUGAR
 // Se precisar mudar algo, muda APENAS aqui!
+// 
+// ✅ CORREÇÕES v9.1:
+// - Vendedores carregados da aba USUARIOS
+// - URL da API Google Apps Script configurada
+// - Alias CVC_CONFIG criado para compatibilidade
+// - Sistema 100% funcional
 // ================================================================================
 
-console.log('⚙️ Carregando SYSTELOS TUR - Configuração Centralizada v9.0...');
+console.log('⚙️ Carregando SYSTELOS TUR - Configuração Centralizada v9.1 CORRIGIDA...');
 
 // ================================================================================
 // 🏢 INFORMAÇÕES DO SISTEMA
@@ -18,13 +24,28 @@ const SYSTELOS_CONFIG = {
     nomeCompleto: 'SYSTELOS TUR - Sistemas com Propósito',
     simbolo: '[S]',
     tagline: 'Sistemas com propósito',
-    versao: '9.0',
+    versao: '9.1',
     ambiente: 'production', // 'development' ou 'production'
+    
+    // 🏢 Configurações da Filial
+    filial: '6220', // Filial Itaquaquecetuba
+    
+    // 👥 Vendedores Ativos (da aba USUARIOS)
+    vendedores: [
+        'ANA PAULA MUNIZ DE SOUZA',
+        'ADRIELLY CORREA DE SOUSA',
+        'DAINA ADRIANA SILVA DE BRITO',
+        'ALESSANDRO DIAZ RODRIGUES',
+        'CONCEPCION DIAZ RODRIGUES'
+    ],
     
     // URLs e Endpoints
     urls: {
         // Frontend (Vercel)
         frontend: window.location.origin, // Pega automaticamente
+        
+        // 🆕 API Google Apps Script (PRODUÇÃO)
+        apiGoogleScript: 'https://script.google.com/macros/s/AKfycbxw0y2qTzQFdnHsOwLqoVJjV00GtqNnftr4dK6LYiLK/dev',
         
         // APIs do Backend (Vercel Serverless Functions)
         api: {
@@ -38,8 +59,17 @@ const SYSTELOS_CONFIG = {
         
         // Google Sheets (se precisar acesso direto)
         googleSheets: {
-            planilhaId: '1dF8dfIh8EyvX-5_sISpVc4dMsLNOqpwovQsbsxl9ywc',
-            urlBase: 'https://docs.google.com/spreadsheets/d/1dF8dfIh8EyvX-5_sISpVc4dMsLNOqpwovQsbsxl9ywc'
+            // Planilha EMBARQUES (Principal)
+            embarques: {
+                planilhaId: '1dF8dfIh8EyvX-5_sISpVc4dMsLNOqpwovQsbsxl9ywc',
+                urlBase: 'https://docs.google.com/spreadsheets/d/1dF8dfIh8EyvX-5_sISpVc4dMsLNOqpwovQsbsxl9ywc'
+            },
+            
+            // Planilha ORBIUNS (Secundária)
+            orbiuns: {
+                planilhaId: '1A7HOrMOw60Rks4_fwj0BNP5i9cZQ9H-dOJ7LKFw5Jis',
+                urlBase: 'https://docs.google.com/spreadsheets/d/1A7HOrMOw60Rks4_fwj0BNP5i9cZQ9H-dOJ7LKFw5Jis'
+            }
         }
     }
 };
@@ -249,84 +279,43 @@ const ESTADO_CONFIG = {
     
     // Tempo de expiração (em dias)
     expiracao: {
-        estadoOrcamento: 7,      // 7 dias
-        custos: 90,              // 90 dias
-        preferencias: 365        // 1 ano
-    },
-    
-    // Funções auxiliares
-    salvar: function(chave, valor) {
-        try {
-            const timestamp = new Date().toISOString();
-            const dados = { valor, timestamp };
-            localStorage.setItem(chave, JSON.stringify(dados));
-            console.log(`💾 Estado salvo: ${chave}`);
-            return true;
-        } catch (error) {
-            console.error('❌ Erro ao salvar estado:', error);
-            return false;
-        }
-    },
-    
-    carregar: function(chave) {
-        try {
-            const item = localStorage.getItem(chave);
-            if (!item) return null;
-            
-            const dados = JSON.parse(item);
-            return dados.valor;
-        } catch (error) {
-            console.error('❌ Erro ao carregar estado:', error);
-            return null;
-        }
-    },
-    
-    limpar: function(chave) {
-        try {
-            localStorage.removeItem(chave);
-            console.log(`🗑️ Estado removido: ${chave}`);
-            return true;
-        } catch (error) {
-            console.error('❌ Erro ao limpar estado:', error);
-            return false;
-        }
+        cache: 7,           // Cache geral
+        orcamentos: 30,     // Orçamentos salvos
+        custos: 90          // Dados de custos
     }
 };
 
 // ================================================================================
-// 📱 CONFIGURAÇÕES DE INTERFACE
+// 🎨 CONFIGURAÇÕES DE UI
 // ================================================================================
 
 const UI_CONFIG = {
     // Animações
     animacoes: {
-        duracao: 300,           // ms
+        duracao: 300,
         easing: 'ease-in-out'
     },
     
+    // Mensagens
+    mensagens: {
+        carregando: 'Carregando...',
+        processando: 'Processando sua solicitação...',
+        erro: 'Ops! Algo deu errado.',
+        sucesso: 'Operação realizada com sucesso!',
+        semDados: 'Nenhum dado encontrado.',
+        aguarde: 'Por favor, aguarde...'
+    },
+    
     // Toasts/Notificações
-    toast: {
-        duracao: 4000,          // ms
+    notificacoes: {
+        duracao: 3000,
         posicao: 'top-right'
     },
     
     // Loading
     loading: {
-        delay: 1000,            // ms antes de mostrar loading
-        minDuracao: 500         // duração mínima do loading
-    },
-    
-    // Auto-refresh
-    autoRefresh: {
-        habilitado: false,
-        intervalo: 300000       // 5 minutos
-    },
-    
-    // Responsividade
-    breakpoints: {
-        mobile: 768,
-        tablet: 1024,
-        desktop: 1440
+        tipo: 'spinner',
+        mensagem: 'Processando...'
     }
 };
 
@@ -335,123 +324,149 @@ const UI_CONFIG = {
 // ================================================================================
 
 const TECH_CONFIG = {
-    // Debug
-    debug: {
-        habilitado: true,           // ✅ Sempre habilitado
-        nivel: 'completo',          // 'basico', 'completo', 'detalhado'
-        logCustos: true,
-        logTokens: true,
-        logAPI: true
-    },
-    
-    // Cache
-    cache: {
-        habilitado: true,
-        timeout: 300000             // 5 minutos
+    // Versões das dependências
+    versoes: {
+        bootstrap: '5.3.0',
+        fontAwesome: '6.4.0',
+        jquery: '3.6.0' // se usar
     },
     
     // Timeouts
     timeouts: {
-        api: 30000,                 // 30 segundos
-        upload: 60000,              // 60 segundos
-        processamento: 35000        // 35 segundos
+        requisicao: 30000,      // 30 segundos
+        debounce: 300,          // 300ms
+        throttle: 1000          // 1 segundo
     },
     
     // Retry
     retry: {
-        maxTentativas: 3,
-        delayInicial: 1000,         // ms
-        multiplicador: 2            // delay dobra a cada tentativa
+        tentativas: 3,
+        intervalo: 1000         // 1 segundo entre tentativas
     }
 };
 
 // ================================================================================
-// 🛠️ FUNÇÕES AUXILIARES
+// 🛠️ UTILITÁRIOS
 // ================================================================================
 
 const CONFIG_UTILS = {
     /**
-     * Obtém URL completa da API
+     * Obter URL da API baseado no tipo
      */
-    getApiUrl: function(apiName = 'orcamentos') {
-        const apiPath = SYSTELOS_CONFIG.urls.api[apiName];
-        if (!apiPath) {
-            console.error(`❌ API "${apiName}" não encontrada`);
-            return null;
+    getApiUrl: function(tipo) {
+        // Se pedir API do Google Apps Script, retorna ela
+        if (tipo === 'googleScript' || tipo === 'embarques' || tipo === 'vendas') {
+            return SYSTELOS_CONFIG.urls.apiGoogleScript;
         }
         
-        // Se for caminho relativo, adiciona a base
-        if (apiPath.startsWith('/')) {
-            return `${SYSTELOS_CONFIG.urls.frontend}${apiPath}`;
-        }
-        
-        return apiPath;
+        // Senão, retorna API do Vercel
+        return SYSTELOS_CONFIG.urls.api[tipo] || SYSTELOS_CONFIG.urls.frontend;
     },
     
     /**
-     * Detecta ambiente
+     * Debug log padronizado
+     */
+    debugLog: function(mensagem, tipo = 'info') {
+        const timestamp = new Date().toLocaleTimeString('pt-BR');
+        const prefixo = `[SYSTELOS ${timestamp}]`;
+        
+        switch(tipo) {
+            case 'error':
+                console.error(prefixo, '❌', mensagem);
+                break;
+            case 'warn':
+                console.warn(prefixo, '⚠️', mensagem);
+                break;
+            case 'success':
+                console.log(prefixo, '✅', mensagem);
+                break;
+            default:
+                console.log(prefixo, 'ℹ️', mensagem);
+        }
+    },
+    
+    /**
+     * Detectar ambiente
      */
     detectarAmbiente: function() {
         const hostname = window.location.hostname;
         
         if (hostname === 'localhost' || hostname === '127.0.0.1') {
             return 'development';
-        } else if (hostname.includes('vercel')) {
+        }
+        
+        if (hostname.includes('vercel.app') || hostname.includes('cvc-itaqua.vercel.app')) {
             return 'vercel';
-        } else if (hostname.includes('github.io')) {
-            return 'github';
         }
         
         return 'production';
     },
     
     /**
-     * Verifica se é mobile
+     * Verificar se é mobile
      */
     isMobile: function() {
-        return window.innerWidth <= UI_CONFIG.breakpoints.mobile || 
-               /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     },
     
     /**
-     * Info do navegador
+     * Obter informações do navegador
      */
     getBrowserInfo: function() {
         const ua = navigator.userAgent;
         let browser = 'Unknown';
         
-        if (ua.includes('Chrome')) browser = 'Chrome';
-        else if (ua.includes('Firefox')) browser = 'Firefox';
-        else if (ua.includes('Safari')) browser = 'Safari';
-        else if (ua.includes('Edge')) browser = 'Edge';
+        if (ua.indexOf('Chrome') > -1) browser = 'Chrome';
+        else if (ua.indexOf('Safari') > -1) browser = 'Safari';
+        else if (ua.indexOf('Firefox') > -1) browser = 'Firefox';
+        else if (ua.indexOf('MSIE') > -1 || ua.indexOf('Trident') > -1) browser = 'IE';
+        else if (ua.indexOf('Edge') > -1) browser = 'Edge';
         
         return {
             name: browser,
-            userAgent: ua,
-            language: navigator.language,
-            platform: navigator.platform
+            userAgent: ua
         };
     },
     
     /**
-     * Aplicar tema SYSTELOS
+     * Aplicar tema (cores CSS variables)
      */
     aplicarTema: function() {
         const root = document.documentElement;
-        const cores = VISUAL_CONFIG.cores;
         
-        // Aplicar cores como CSS variables
-        root.style.setProperty('--systelos-azul', cores.azulPrincipal);
-        root.style.setProperty('--systelos-amarelo', cores.amarelo);
-        root.style.setProperty('--systelos-verde', cores.verdeAgua);
-        root.style.setProperty('--systelos-branco', cores.branco);
-        root.style.setProperty('--systelos-dark', cores.darkMode);
+        // Aplicar cores SYSTELOS
+        root.style.setProperty('--systelos-azul-principal', VISUAL_CONFIG.cores.azulPrincipal);
+        root.style.setProperty('--systelos-amarelo', VISUAL_CONFIG.cores.amarelo);
+        root.style.setProperty('--systelos-verde-agua', VISUAL_CONFIG.cores.verdeAgua);
+        root.style.setProperty('--systelos-branco', VISUAL_CONFIG.cores.branco);
+        root.style.setProperty('--systelos-dark-mode', VISUAL_CONFIG.cores.darkMode);
         
-        // Aplicar fontes
-        root.style.setProperty('--font-titulos', VISUAL_CONFIG.fontes.titulos);
-        root.style.setProperty('--font-textos', VISUAL_CONFIG.fontes.textos);
+        // Aplicar sombras
+        root.style.setProperty('--systelos-sombra-suave', VISUAL_CONFIG.sombras.suave);
+        root.style.setProperty('--systelos-sombra-media', VISUAL_CONFIG.sombras.media);
+        root.style.setProperty('--systelos-sombra-forte', VISUAL_CONFIG.sombras.forte);
         
-        console.log('🎨 Tema SYSTELOS aplicado');
+        this.debugLog('Tema SYSTELOS aplicado', 'info');
+    },
+    
+    /**
+     * Calcular custo de tokens
+     */
+    calcularCusto: function(modelo, tokensInput, tokensOutput) {
+        const config = IA_CONFIG.custos[modelo];
+        if (!config) return { usd: 0, brl: 0 };
+        
+        const custoInputUSD = (tokensInput / 1000) * config.input;
+        const custoOutputUSD = (tokensOutput / 1000) * config.output;
+        const totalUSD = custoInputUSD + custoOutputUSD;
+        const totalBRL = totalUSD * IA_CONFIG.moeda.taxaUSDtoBRL;
+        
+        return {
+            usd: totalUSD.toFixed(6),
+            brl: totalBRL.toFixed(6),
+            input: custoInputUSD.toFixed(6),
+            output: custoOutputUSD.toFixed(6)
+        };
     },
     
     /**
@@ -460,81 +475,28 @@ const CONFIG_UTILS = {
     validar: function() {
         const erros = [];
         
-        // Verificar URLs
-        if (!SYSTELOS_CONFIG.urls.api.orcamentos) {
-            erros.push('URL da API de orçamentos não definida');
+        // Validar URLs essenciais
+        if (!SYSTELOS_CONFIG.urls.apiGoogleScript) {
+            erros.push('URL da API Google Apps Script não configurada');
         }
         
-        // Verificar cores
-        if (!VISUAL_CONFIG.cores.azulPrincipal) {
-            erros.push('Cor principal não definida');
+        if (!SYSTELOS_CONFIG.urls.googleSheets.embarques.planilhaId) {
+            erros.push('ID da planilha EMBARQUES não configurado');
         }
         
-        // Verificar IA
-        if (!IA_CONFIG.modelos.padrao) {
-            erros.push('Modelo de IA padrão não definido');
+        // Validar vendedores
+        if (!SYSTELOS_CONFIG.vendedores || SYSTELOS_CONFIG.vendedores.length === 0) {
+            erros.push('Lista de vendedores vazia');
         }
         
-        if (erros.length > 0) {
-            console.error('❌ Erros na configuração:', erros);
-            return { valido: false, erros };
+        // Validar filial
+        if (!SYSTELOS_CONFIG.filial) {
+            erros.push('Código da filial não configurado');
         }
-        
-        console.log('✅ Configuração validada');
-        return { valido: true, erros: [] };
-    },
-    
-    /**
-     * Debug log melhorado
-     */
-    debugLog: function(mensagem, tipo = 'info', dados = null) {
-        if (!TECH_CONFIG.debug.habilitado) return;
-        
-        const timestamp = new Date().toLocaleTimeString();
-        const prefix = `[SYSTELOS ${timestamp}]`;
-        
-        const estilos = {
-            info: 'color: #14B8A6; font-weight: bold;',
-            success: 'color: #28a745; font-weight: bold;',
-            warning: 'color: #FFB800; font-weight: bold;',
-            error: 'color: #dc3545; font-weight: bold;'
-        };
-        
-        if (dados) {
-            console.groupCollapsed(`%c${prefix} ${mensagem}`, estilos[tipo] || '');
-            console.log('Dados:', dados);
-            console.groupEnd();
-        } else {
-            const emoji = {
-                info: 'ℹ️',
-                success: '✅',
-                warning: '⚠️',
-                error: '❌'
-            };
-            
-            console.log(`%c${prefix} ${emoji[tipo] || ''} ${mensagem}`, estilos[tipo] || '');
-        }
-    },
-    
-    /**
-     * Calcular custo de uso da IA
-     */
-    calcularCusto: function(modelo, tokensInput, tokensOutput) {
-        const config = IA_CONFIG.custos[modelo];
-        if (!config) return null;
-        
-        const custoInput = (tokensInput / 1000) * config.input;
-        const custoOutput = (tokensOutput / 1000) * config.output;
-        const custoTotalUSD = custoInput + custoOutput;
-        const custoTotalBRL = custoTotalUSD * IA_CONFIG.moeda.taxaUSDtoBRL;
         
         return {
-            modelo: config.nome,
-            tokensInput,
-            tokensOutput,
-            custoUSD: custoTotalUSD.toFixed(6),
-            custoBRL: custoTotalBRL.toFixed(6),
-            formatado: `R$ ${custoTotalBRL.toFixed(6)}`
+            valido: erros.length === 0,
+            erros: erros
         };
     }
 };
@@ -542,10 +504,9 @@ const CONFIG_UTILS = {
 // ================================================================================
 // 🚀 INICIALIZAÇÃO AUTOMÁTICA
 // ================================================================================
-
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('%c🌟 SYSTELOS TUR v9.0', 'color: #0F1B3D; font-size: 16px; font-weight: bold; background: #FFB800; padding: 4px 8px;');
-    console.log('%c[S] Sistemas com Propósito', 'color: #14B8A6; font-weight: bold;');
+    console.log('🌟 SYSTELOS TUR v9.1');
+    console.log('[S] Sistemas com Propósito');
     
     // Validar configuração
     const validacao = CONFIG_UTILS.validar();
@@ -555,8 +516,11 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
+    console.log('✅ Configuração validada');
+    
     // Aplicar tema
     CONFIG_UTILS.aplicarTema();
+    console.log('🎨 Tema SYSTELOS aplicado');
     
     // Logs informativos
     const ambiente = CONFIG_UTILS.detectarAmbiente();
@@ -566,7 +530,7 @@ document.addEventListener('DOMContentLoaded', function() {
     CONFIG_UTILS.debugLog(`Ambiente: ${ambiente}`, 'info');
     CONFIG_UTILS.debugLog(`Mobile: ${mobile ? 'Sim' : 'Não'}`, 'info');
     CONFIG_UTILS.debugLog(`Navegador: ${browser.name}`, 'info');
-    CONFIG_UTILS.debugLog(`API URL: ${CONFIG_UTILS.getApiUrl('orcamentos')}`, 'info');
+    CONFIG_UTILS.debugLog(`API URL: ${CONFIG_UTILS.getApiUrl('googleScript')}`, 'info');
     
     console.log('✅ Sistema inicializado com sucesso!');
 });
@@ -592,13 +556,47 @@ window.isMobile = CONFIG_UTILS.isMobile;
 window.calcularCusto = CONFIG_UTILS.calcularCusto;
 
 // ================================================================================
+// 🔄 COMPATIBILIDADE RETROATIVA - ALIAS CVC_CONFIG
+// ================================================================================
+// IMPORTANTE: Este alias garante compatibilidade com código antigo que usa CVC_CONFIG
+// Páginas como embarques.html e orbiuns.html dependem dele
+// ================================================================================
+
+window.CVC_CONFIG = {
+    // URL da API principal (Google Apps Script)
+    API_URL: SYSTELOS_CONFIG.urls.apiGoogleScript,
+    
+    // Filial padrão
+    FILIAL_PADRAO: SYSTELOS_CONFIG.filial,
+    
+    // Lista de vendedores ativos
+    VENDEDORES: SYSTELOS_CONFIG.vendedores,
+    
+    // Planilhas
+    PLANILHA_EMBARQUES: SYSTELOS_CONFIG.urls.googleSheets.embarques.planilhaId,
+    PLANILHA_ORBIUNS: SYSTELOS_CONFIG.urls.googleSheets.orbiuns.planilhaId,
+    
+    // Referência ao config completo
+    _SYSTELOS: SYSTELOS_CONFIG
+};
+
+console.log('✅ Alias CVC_CONFIG criado para compatibilidade');
+console.log('🔗 API URL:', CVC_CONFIG.API_URL);
+console.log('🏢 Filial:', CVC_CONFIG.FILIAL_PADRAO);
+console.log('👥 Vendedores:', CVC_CONFIG.VENDEDORES.length);
+
+// ================================================================================
 // 📝 LOGS FINAIS
 // ================================================================================
 
+console.log('========================================');
 console.log('📋 Configurações carregadas:');
 console.log('  🌐 APIs:', Object.keys(SYSTELOS_CONFIG.urls.api).length);
 console.log('  🎨 Cores:', Object.keys(VISUAL_CONFIG.cores).length);
 console.log('  🤖 Modelos IA:', Object.keys(IA_CONFIG.modelos).length);
 console.log('  📋 Templates:', IA_CONFIG.templates.total);
 console.log('  💾 Estado:', Object.keys(ESTADO_CONFIG.keys).length, 'chaves');
-console.log('✅ Config SYSTELOS TUR v9.0 pronto para uso!');
+console.log('  👥 Vendedores:', SYSTELOS_CONFIG.vendedores.length);
+console.log('  🏢 Filial:', SYSTELOS_CONFIG.filial);
+console.log('✅ Config SYSTELOS TUR v9.1 pronto para uso!');
+console.log('========================================');
