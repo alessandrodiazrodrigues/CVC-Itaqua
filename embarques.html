@@ -994,20 +994,20 @@
                 mostrarAlerta('✅ Conectado com a planilha! Dados atualizados.', 'success');
                 
             } catch (error) {
-                console.warn('⚠️ API não disponível, usando dados simulados para teste:', error.message);
+                console.error('❌ Erro ao carregar embarques da API:', error.message);
                 
-                // Verificar se é problema de autenticação
+                // Verificar tipo de erro e mostrar mensagem específica
                 if (error.message.includes('401') || error.message.includes('403') || error.message.includes('Unauthorized')) {
-                    mostrarAlerta('⚠️ Acesso negado à planilha. Faça login no Google e tente novamente.', 'warning');
+                    mostrarAlerta('❌ Acesso negado à API. Verifique as credenciais ou permissões.', 'danger');
                 } else if (error.message.includes('CORS') || error.message.includes('Network')) {
-                    mostrarAlerta('⚠️ Problema de conexão. Verifique sua internet ou tente em navegador normal.', 'warning');
+                    mostrarAlerta('❌ Erro de conexão com a API. Verifique a URL no config.js ou sua conexão de internet.', 'danger');
                 } else {
-                    mostrarAlerta('⚠️ Sistema em modo de teste - conecte com a planilha para dados reais', 'warning');
+                    mostrarAlerta('❌ Erro ao carregar dados: ' + error.message, 'danger');
                 }
                 
-                // Fallback com dados simulados para teste
-                dadosEmbarques = gerarDadosSimulados();
-                debugLog(`🧪 ${dadosEmbarques.length} embarques simulados carregados para teste`, 'info');
+                // NÃO usar dados simulados - deixar vazio
+                dadosEmbarques = [];
+                debugLog('❌ Nenhum dado carregado - API não disponível', 'error');
             }
             
             // Processar e renderizar dashboards
@@ -1016,131 +1016,6 @@
             // Atualizar timestamp
             document.getElementById('ultimaAtualizacao').textContent = 
                 new Date().toLocaleString('pt-BR');
-        }
-        
-        // Função para gerar dados simulados para teste
-        function gerarDadosSimulados() {
-            const vendedores = ['Alessandro', 'Ana Paula', 'Adriana', 'Adrielly', 'Bia'];
-            const nomes = ['Maria Silva', 'João Santos', 'Ana Costa', 'Carlos Lima', 'Fernanda Oliveira', 'Pedro Souza', 'Julia Pereira', 'Roberto Alves'];
-            const cias = ['GOL', 'LATAM', 'AZUL', 'AVIANCA'];
-            const origens = ['São Paulo', 'Rio de Janeiro', 'Brasília', 'Salvador', 'Fortaleza'];
-            const destinos = ['Miami', 'Lisboa', 'Paris', 'Buenos Aires', 'Santiago', 'Madrid', 'Roma'];
-            
-            const dados = [];
-            const hoje = new Date();
-            
-            // Gerar dados para conferências (pendentes)
-            for (let i = 0; i < 8; i++) {
-                const dataIda = new Date(hoje);
-                dataIda.setDate(hoje.getDate() + Math.floor(Math.random() * 20) + 5); // 5-25 dias futuros
-                
-                const recibo = `CVC${(622000000 + Math.floor(Math.random() * 999999)).toString()}`;
-                
-                dados.push({
-                    id: 1000 + i,
-                    numeroInforme: `MIGRADO-036-33282${i}`,
-                    vendedor: vendedores[i % vendedores.length],
-                    nomeCliente: nomes[i % nomes.length],
-                    cpfCliente: `${(100000000 + Math.floor(Math.random() * 899999999)).toString().replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')}`,
-                    whatsappCliente: `(11) 9${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}-${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}`,
-                    dataIda: dataIda.toISOString().split('T')[0],
-                    dataVolta: Math.random() > 0.5 ? new Date(dataIda.getTime() + (7 + Math.floor(Math.random() * 14)) * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : null,
-                    tipo: Math.random() > 0.3 ? 'Aéreo' : 'A+H',
-                    cia: cias[i % cias.length],
-                    tipoAereo: Math.random() > 0.3 ? 'RT' : 'OW',
-                    conferenciaFeita: false,
-                    checkinFeito: false,
-                    posVendaFeita: false,
-                    observacoes: '',
-                    recibo: recibo,
-                    locGds: `GDS${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
-                    locCia: `${cias[i % cias.length]}${Math.random().toString(36).substr(2, 4).toUpperCase()}`,
-                    temBagagem: ['Sim', 'Não', 'Não informado'][Math.floor(Math.random() * 3)],
-                    temAssento: ['Sim', 'Não', 'Não informado'][Math.floor(Math.random() * 3)],
-                    seguro: ['Sim', 'Não', 'Recusado', 'Não informado'][Math.floor(Math.random() * 4)],
-                    clienteAle: Math.random() > 0.8 ? 'Sim' : 'Não',
-                    reserva: `RES${Math.random().toString(36).substr(2, 8).toUpperCase()}`,
-                    origem: origens[Math.floor(Math.random() * origens.length)],
-                    destino: destinos[Math.floor(Math.random() * destinos.length)]
-                });
-            }
-            
-            // Gerar dados para check-ins (próximos)
-            for (let i = 0; i < 5; i++) {
-                const dataIda = new Date(hoje);
-                dataIda.setDate(hoje.getDate() + Math.floor(Math.random() * 3)); // 0-3 dias
-                
-                const recibo = `CVC${(622000000 + Math.floor(Math.random() * 999999)).toString()}`;
-                
-                dados.push({
-                    id: 2000 + i,
-                    numeroInforme: `CHECKIN-00${i}`,
-                    vendedor: vendedores[i % vendedores.length],
-                    nomeCliente: nomes[i % nomes.length] + ' (Check-in)',
-                    cpfCliente: `${(200000000 + Math.floor(Math.random() * 799999999)).toString().replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')}`,
-                    whatsappCliente: `(11) 8${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}-${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}`,
-                    dataIda: dataIda.toISOString().split('T')[0],
-                    dataVolta: Math.random() > 0.4 ? new Date(dataIda.getTime() + (5 + Math.floor(Math.random() * 10)) * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : null,
-                    tipo: Math.random() > 0.4 ? 'Aéreo' : 'A+H',
-                    cia: cias[i % cias.length],
-                    tipoAereo: Math.random() > 0.4 ? 'RT' : 'OW',
-                    conferenciaFeita: true, // Já conferido
-                    checkinFeito: false, // Pendente
-                    posVendaFeita: false,
-                    observacoes: '',
-                    recibo: recibo,
-                    locGds: `LOC${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
-                    locCia: `${cias[i % cias.length]}${Math.random().toString(36).substr(2, 4).toUpperCase()}`,
-                    temBagagem: ['Sim', 'Não'][Math.floor(Math.random() * 2)],
-                    temAssento: ['Sim', 'Não'][Math.floor(Math.random() * 2)],
-                    seguro: ['Sim', 'Não', 'Recusado'][Math.floor(Math.random() * 3)],
-                    clienteAle: Math.random() > 0.7 ? 'Sim' : 'Não',
-                    reserva: `CHK${Math.random().toString(36).substr(2, 8).toUpperCase()}`,
-                    origem: origens[Math.floor(Math.random() * origens.length)],
-                    destino: destinos[Math.floor(Math.random() * destinos.length)]
-                });
-            }
-            
-            // Gerar dados para pós-vendas (retornados)
-            for (let i = 0; i < 3; i++) {
-                const dataIda = new Date(hoje);
-                dataIda.setDate(hoje.getDate() - Math.floor(Math.random() * 10) - 5); // 5-15 dias atrás
-                
-                const dataVolta = new Date(dataIda);
-                dataVolta.setDate(dataIda.getDate() + 7 + Math.floor(Math.random() * 7)); // 7-14 dias de viagem
-                
-                const recibo = `CVC${(622000000 + Math.floor(Math.random() * 999999)).toString()}`;
-                
-                dados.push({
-                    id: 3000 + i,
-                    numeroInforme: `POSVENDA-00${i}`,
-                    vendedor: vendedores[i % vendedores.length],
-                    nomeCliente: nomes[i % nomes.length] + ' (Retornado)',
-                    cpfCliente: `${(300000000 + Math.floor(Math.random() * 699999999)).toString().replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')}`,
-                    whatsappCliente: `(11) 7${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}-${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}${Math.floor(Math.random() * 9)}`,
-                    dataIda: dataIda.toISOString().split('T')[0],
-                    dataVolta: dataVolta.toISOString().split('T')[0],
-                    tipo: 'A+H',
-                    cia: cias[i % cias.length],
-                    tipoAereo: 'RT',
-                    conferenciaFeita: true,
-                    checkinFeito: true,
-                    posVendaFeita: false, // Pendente
-                    observacoes: '',
-                    recibo: recibo,
-                    locGds: `PSGDS${Math.random().toString(36).substr(2, 5).toUpperCase()}`,
-                    locCia: `${cias[i % cias.length]}${Math.random().toString(36).substr(2, 4).toUpperCase()}`,
-                    temBagagem: 'Sim',
-                    temAssento: 'Sim',
-                    seguro: ['Sim', 'Não'][Math.floor(Math.random() * 2)],
-                    clienteAle: Math.random() > 0.6 ? 'Sim' : 'Não',
-                    reserva: `PSV${Math.random().toString(36).substr(2, 8).toUpperCase()}`,
-                    origem: origens[Math.floor(Math.random() * origens.length)],
-                    destino: destinos[Math.floor(Math.random() * destinos.length)]
-                });
-            }
-            
-            return dados;
         }
         
         // Função JSONP para compatibilidade com Google Apps Script
@@ -2712,32 +2587,7 @@
                 
             } catch (error) {
                 console.error('❌ Erro ao buscar orbiuns:', error);
-                
-                // Fallback: mostrar dados simulados
-                const orbiunsSimulados = [
-                    {
-                        id: 1,
-                        titulo: 'Cotação - Pacote Nordeste',
-                        departamento: 'Vendas',
-                        responsavel: 'Alessandro',
-                        status: 'Em Andamento',
-                        dataAbertura: '2024-12-01',
-                        prioridade: 'Normal',
-                        observacoes: 'Cliente interessado em pacote para Natal/RN'
-                    },
-                    {
-                        id: 2,
-                        titulo: 'Dúvida sobre Documentação',
-                        departamento: 'Atendimento',
-                        responsavel: 'Ana Paula',
-                        status: 'Pendente',
-                        dataAbertura: '2024-12-03',
-                        prioridade: 'Baixa',
-                        observacoes: 'Esclarecimentos sobre passaporte'
-                    }
-                ];
-                
-                mostrarModalOrbiuns(orbiunsSimulados, whatsapp, true);
+                mostrarAlerta('❌ Erro ao buscar orbiuns: ' + error.message, 'danger');
             }
         }
         
