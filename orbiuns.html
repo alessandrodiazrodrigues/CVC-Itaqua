@@ -821,7 +821,7 @@
     
     <script>
         debugLog('🚀 SYSTELOS TUR - Controle de Orbiuns v11.3 CORRIGIDA JSONP', 'info');
-        console.log("🔥 ORBIUNS v11.3 DEFINITIVA - DEPLOY 16:18h - BUILD #004 FUNCIONANDO");
+        console.log("🔥 ORBIUNS v11.3 DEFINITIVA - DEPLOY 16:18h - BUILD #005 SEM ESTATISTICAS");
         
         // ================================================================================
         // CONFIGURAÇÃO - USANDO CONFIG.JS
@@ -956,6 +956,7 @@
         async function carregarOrbiuns() {
             const loadingEl = document.getElementById('loadingMessage');
             const listEl = document.getElementById('orbiunsList');
+            if (!listEl) { debugLog("❌ Elemento orbiunsList não encontrado", "error"); mostrarAlertaErro("Erro: elemento orbiunsList não encontrado"); return; }
             
             loadingEl.style.display = 'block';
             listEl.innerHTML = '';
@@ -987,7 +988,7 @@
                     );
                     
                     renderizarOrbiuns();
-                    await carregarEstatisticas();
+                    // await carregarEstatisticas(); // TODO: API nao retorna estatisticas
                     
                 } else {
                     throw new Error(data.message || 'Erro ao carregar dados da planilha');
@@ -1060,6 +1061,7 @@
         // ================================================================================
         function renderizarOrbiuns() {
             const container = document.getElementById('orbiunsList');
+            if (!container) { debugLog("❌ Elemento orbiunsList não encontrado", "error"); return; }
             
             if (orbiunsFiltrados.length === 0) {
                 container.innerHTML = `
