@@ -1550,34 +1550,74 @@
         }
         
         // ============================================================================
-        // COMUNICAÇÃO COM API
+        // COMUNICAÇÃO COM API - JSONP PARA BYPASS CORS
         // ============================================================================
         
         async function chamarAPI(dados) {
             try {
-                const url = getApiUrl('googleScript');
+                const baseUrl = getApiUrl('googleScript');
                 
-                debugLog(`🌐 Chamando API: ${dados.action}`, 'info');
-                debugLog(`📍 URL: ${url}`, 'info');
+                debugLog(`🌐 Chamando API via JSONP: ${dados.action}`, 'info');
+                debugLog(`📍 URL: ${baseUrl}`, 'info');
                 
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(dados)
+                // Criar callback único
+                const callbackName = 'jsonpCallback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                
+                // Construir URL com parâmetros
+                const params = new URLSearchParams();
+                params.append('callback', callbackName);
+                
+                // Adicionar todos os dados como parâmetros GET
+                Object.keys(dados).forEach(key => {
+                    if (typeof dados[key] === 'object') {
+                        params.append(key, JSON.stringify(dados[key]));
+                    } else {
+                        params.append(key, dados[key]);
+                    }
                 });
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
+                const url = `${baseUrl}?${params.toString()}`;
                 
-                const result = await response.json();
-                
-                debugLog(`✅ Resposta API: ${result.success ? 'Sucesso' : 'Erro'}`, 
-                        result.success ? 'success' : 'error');
-                
-                return result;
+                // Criar promessa para JSONP
+                return new Promise((resolve, reject) => {
+                    // Criar script tag
+                    const script = document.createElement('script');
+                    
+                    // Timeout de 30 segundos
+                    const timeout = setTimeout(() => {
+                        cleanup();
+                        reject(new Error('Timeout: A requisição demorou muito'));
+                    }, 30000);
+                    
+                    // Definir callback global
+                    window[callbackName] = function(response) {
+                        cleanup();
+                        
+                        debugLog(`✅ Resposta API: ${response.success ? 'Sucesso' : 'Erro'}`, 
+                                response.success ? 'success' : 'error');
+                        
+                        resolve(response);
+                    };
+                    
+                    // Função de limpeza
+                    function cleanup() {
+                        clearTimeout(timeout);
+                        if (script.parentNode) {
+                            script.parentNode.removeChild(script);
+                        }
+                        delete window[callbackName];
+                    }
+                    
+                    // Tratar erros
+                    script.onerror = function() {
+                        cleanup();
+                        reject(new Error('Erro ao carregar script da API'));
+                    };
+                    
+                    // Adicionar script ao DOM
+                    script.src = url;
+                    document.head.appendChild(script);
+                });
                 
             } catch (error) {
                 debugLog(`❌ Erro na API: ${error.message}`, 'error');
@@ -1987,30 +2027,46 @@
             botaoSubmit.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
             
             try {
-                const dados = {
-                    action: 'cadastrar_orbium',
-                    orbium: {
-                        orbium: document.getElementById('numeroOrbium').value,
-                        status: document.getElementById('statusOrbium').value,
-                        departamento: document.getElementById('departamento').value,
-                        vendedor: document.getElementById('vendedor').value,
-                        nome_cliente: document.getElementById('nomeCliente').value,
-                        whats_cliente: document.getElementById('whatsappCliente').value,
-                        cpf_cliente: document.getElementById('cpfCliente').value || '',
-                        recibo: document.getElementById('recibo').value || '',
-                        reserva: document.getElementById('reserva').value || '',
-                        pedido: document.getElementById('pedido').value || '',
-                        cia: document.getElementById('cia').value || '',
-                        loc_gds: document.getElementById('locGds').value || '',
-                        loc_cia: document.getElementById('locCia').value || '',
-                        observacoes: document.getElementById('observacoes').value || ''
-                    }
+                // Montar dados do orbium
+                const dadosOrbium = {
+                    orbium: document.getElementById('numeroOrbium').value,
+                    status: document.getElementById('statusOrbium').value,
+                    departamento: document.getElementById('departamento').value,
+                    vendedor: document.getElementById('vendedor').value,
+                    nome_cliente: document.getElementById('nomeCliente').value,
+                    whats_cliente: document.getElementById('whatsappCliente').value,
+                    cpf_cliente: document.getElementById('cpfCliente').value || '',
+                    recibo: document.getElementById('recibo').value || '',
+                    reserva: document.getElementById('reserva').value || '',
+                    pedido: document.getElementById('pedido').value || '',
+                    cia: document.getElementById('cia').value || '',
+                    loc_gds: document.getElementById('locGds').value || '',
+                    loc_cia: document.getElementById('locCia').value || '',
+                    observacoes: document.getElementById('observacoes').value || ''
                 };
                 
                 debugLog('💾 Salvando orbium...', 'info');
-                debugLog(JSON.stringify(dados, null, 2), 'info');
+                debugLog(JSON.stringify(dadosOrbium, null, 2), 'info');
                 
-                const result = await chamarAPI(dados);
+                // Enviar via JSONP - todos os dados como parâmetros GET
+                const result = await chamarAPI({
+                    action: 'cadastrar_orbium',
+                    // Enviar cada campo individualmente
+                    'orbium': dadosOrbium.orbium,
+                    'status': dadosOrbium.status,
+                    'departamento': dadosOrbium.departamento,
+                    'vendedor': dadosOrbium.vendedor,
+                    'nome_cliente': dadosOrbium.nome_cliente,
+                    'whats_cliente': dadosOrbium.whats_cliente,
+                    'cpf_cliente': dadosOrbium.cpf_cliente,
+                    'recibo': dadosOrbium.recibo,
+                    'reserva': dadosOrbium.reserva,
+                    'pedido': dadosOrbium.pedido,
+                    'cia': dadosOrbium.cia,
+                    'loc_gds': dadosOrbium.loc_gds,
+                    'loc_cia': dadosOrbium.loc_cia,
+                    'observacoes': dadosOrbium.observacoes
+                });
                 
                 if (result.success) {
                     mostrarAlertaSucesso('✅ Orbium cadastrado com sucesso!');
