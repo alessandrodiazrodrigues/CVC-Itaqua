@@ -205,388 +205,429 @@
         .filter-section h4 {
             color: var(--systelos-azul);
             margin-bottom: 20px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .form-label {
-            font-weight: 600;
-            color: var(--systelos-azul);
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-        }
-        
-        .form-control-cvc {
-            border: 2px solid var(--systelos-border);
-            border-radius: 10px;
-            padding: 10px 15px;
-            transition: all 0.3s ease;
-            font-family: 'Nunito', sans-serif;
-        }
-        
-        .form-control-cvc:focus {
-            border-color: var(--systelos-azul);
-            box-shadow: 0 0 0 0.2rem rgba(10, 0, 180, 0.25);
-            outline: none;
-        }
-        
-        .form-select-cvc {
-            border: 2px solid var(--systelos-border);
-            border-radius: 10px;
-            padding: 10px 15px;
-            transition: all 0.3s ease;
-            font-family: 'Nunito', sans-serif;
-        }
-        
-        .form-select-cvc:focus {
-            border-color: var(--systelos-azul);
-            box-shadow: 0 0 0 0.2rem rgba(10, 0, 180, 0.25);
-            outline: none;
-        }
-        
-        /* ✨ CAMPO COLAR DADOS */
-        .colar-dados-container {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border: 2px dashed #FFB800;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 25px;
-            transition: all 0.3s ease;
-        }
-        
-        .colar-dados-container:hover {
-            border-color: #0F1B3D;
-            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-        }
-        
-        .colar-dados-title {
-            color: #0F1B3D;
-            font-weight: 600;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .colar-dados-title i {
-            color: #FFB800;
+            font-weight: 700;
             font-size: 1.2rem;
         }
         
-        .colar-dados-textarea {
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .filter-input {
             width: 100%;
-            min-height: 100px;
-            border: 2px solid #dee2e6;
-            border-radius: 10px;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            resize: vertical;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
         }
         
-        .colar-dados-textarea:focus {
+        .filter-input:focus {
+            border-color: var(--systelos-azul);
             outline: none;
-            border-color: #FFB800;
-            box-shadow: 0 0 0 0.2rem rgba(255, 184, 0, 0.25);
+            box-shadow: 0 0 0 3px rgba(15, 27, 61, 0.1);
         }
         
-        .colar-dados-btn {
-            background: linear-gradient(135deg, #FFB800 0%, #ffa500 100%);
-            color: white;
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+        
+        .btn-filtrar, .btn-limpar {
+            padding: 10px 25px;
             border: none;
-            padding: 12px 25px;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 0.95rem;
         }
         
-        .colar-dados-btn:hover {
-            background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%);
+        .btn-filtrar {
+            background: var(--systelos-azul);
+            color: white;
+        }
+        
+        .btn-filtrar:hover {
+            background: #1a2951;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 184, 0, 0.3);
+            box-shadow: 0 5px 15px rgba(15, 27, 61, 0.3);
         }
         
-        .campos-preenchidos {
-            margin-top: 15px;
-            padding: 15px;
-            background: rgba(20, 184, 166, 0.1);
-            border-left: 4px solid #14B8A6;
-            border-radius: 8px;
-            display: none;
+        .btn-limpar {
+            background: #6c757d;
+            color: white;
         }
         
-        .campos-preenchidos.show {
-            display: block;
-        }
-        
-        .campos-preenchidos h6 {
-            color: #14B8A6;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        
-        .campos-preenchidos ul {
-            margin: 0;
-            padding-left: 20px;
-            color: #0F1B3D;
-        }
-        
-        .campos-vazios {
-            margin-top: 15px;
-            padding: 15px;
-            background: rgba(255, 184, 0, 0.1);
-            border-left: 4px solid #FFB800;
-            border-radius: 8px;
-            display: none;
-        }
-        
-        .campos-vazios.show {
-            display: block;
-        }
-        
-        .campos-vazios h6 {
-            color: #FFB800;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        
-        .campos-vazios ul {
-            margin: 0;
-            padding-left: 20px;
-            color: #0F1B3D;
+        .btn-limpar:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
         }
         
         .orbium-card {
-            background: var(--systelos-branco);
+            background: white;
             border-radius: 15px;
-            padding: 20px;
+            padding: 25px;
             margin-bottom: 20px;
             box-shadow: var(--systelos-sombra-suave);
-            border-left: 4px solid var(--systelos-azul-claro);
+            border-left: 5px solid var(--systelos-azul);
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .orbium-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100px;
-            height: 100px;
-            background: var(--systelos-amarelo);
-            border-radius: 50%;
-            opacity: 0.05;
-            transform: translate(30%, -30%);
         }
         
         .orbium-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--systelos-sombra-media);
+            box-shadow: var(--systelos-sombra-forte);
+            transform: translateY(-2px);
         }
         
         .orbium-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             margin-bottom: 15px;
-            position: relative;
-            z-index: 1;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
         }
         
-        .orbium-id {
-            font-size: 1.1rem;
-            font-weight: bold;
+        .orbium-titulo {
+            font-weight: 700;
             color: var(--systelos-azul);
+            font-size: 1.3rem;
+            margin: 0;
+        }
+        
+        .orbium-status {
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        
+        .status-problema {
+            background: #fee;
+            color: #c00;
+            border: 2px solid #c00;
+        }
+        
+        .status-atendimento {
+            background: #ffeaa7;
+            color: #d63031;
+            border: 2px solid #fdcb6e;
+        }
+        
+        .status-resolvido {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+        
+        .orbium-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .orbium-info-item {
             display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .orbium-info-item i {
+            color: var(--systelos-azul);
+            font-size: 1.2rem;
+            width: 25px;
+            text-align: center;
+        }
+        
+        .orbium-info-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.85rem;
+        }
+        
+        .orbium-info-value {
+            color: #333;
+            font-size: 0.95rem;
+        }
+        
+        .orbium-observacoes {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 3px solid var(--systelos-amarelo);
+        }
+        
+        .orbium-observacoes strong {
+            color: var(--systelos-azul);
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .orbium-acoes {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+        }
+        
+        .btn-acao {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
         }
         
-        .orbium-id i {
-            color: var(--systelos-amarelo);
-        }
-        
-        .status-badge {
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .status-em-atendimento {
-            background: rgba(255, 193, 7, 0.2);
-            color: #856404;
-        }
-        
-        .status-resolvido {
-            background: rgba(40, 167, 69, 0.2);
-            color: #155724;
-        }
-        
-        .status-problema {
-            background: rgba(220, 53, 69, 0.2);
-            color: #721c24;
-        }
-        
-        .status-pendente {
-            background: rgba(13, 110, 253, 0.2);
-            color: #084298;
-        }
-        
-        .orbium-body {
-            position: relative;
-            z-index: 1;
-        }
-        
-        .orbium-info {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .orbium-info i {
-            color: var(--systelos-azul);
-            width: 20px;
-            text-align: center;
-        }
-        
-        .orbium-info strong {
-            color: var(--systelos-azul);
-            min-width: 100px;
-        }
-        
-        .orbium-footer {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--systelos-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .orbium-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn-action {
-            padding: 8px 15px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .btn-whatsapp {
-            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-            color: white;
-        }
-        
-        .btn-whatsapp:hover {
-            background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
-        }
-        
         .btn-editar {
-            background: linear-gradient(135deg, #FFB800 0%, #ffa500 100%);
+            background: #17a2b8;
             color: white;
         }
         
         .btn-editar:hover {
-            background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%);
+            background: #138496;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 184, 0, 0.3);
+        }
+        
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+        
+        .btn-whatsapp:hover {
+            background: #1fa855;
+            transform: translateY(-2px);
         }
         
         .btn-deletar {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            background: #dc3545;
             color: white;
         }
         
         .btn-deletar:hover {
-            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+            background: #c82333;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+        
+        .loading-container {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .loading-spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--systelos-azul);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: var(--systelos-cinza);
+            background: white;
+            border-radius: 15px;
+            margin: 20px 0;
         }
         
         .empty-state i {
             font-size: 4rem;
-            color: var(--systelos-border);
+            color: #ddd;
             margin-bottom: 20px;
         }
         
-        .empty-state h4 {
-            color: var(--systelos-azul);
+        .empty-state h3 {
+            color: #666;
             margin-bottom: 10px;
         }
         
         .empty-state p {
-            color: var(--systelos-cinza);
+            color: #999;
         }
         
-        .loading-container {
-            text-align: center;
-            padding: 40px 20px;
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
         }
         
-        .loading-spinner {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(15, 27, 61, 0.1);
-            border-top-color: var(--systelos-azul);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .modal-content {
+            background-color: white;
+            margin: 50px auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
         }
         
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, var(--systelos-azul) 0%, #1a2951 100%);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .close {
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            line-height: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .close:hover {
+            color: var(--systelos-amarelo);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--systelos-azul);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--systelos-azul);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(15, 27, 61, 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .required {
+            color: #dc3545;
+        }
+        
+        .form-help {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .btn-submit {
+            background: var(--systelos-azul);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .btn-submit:hover {
+            background: #1a2951;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(15, 27, 61, 0.3);
+        }
+        
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
         }
         
         .alert-custom {
             position: fixed;
             top: 20px;
             right: 20px;
-            padding: 15px 20px;
+            padding: 20px 30px;
             border-radius: 10px;
-            font-weight: 600;
-            z-index: 9999;
             box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            animation: slideIn 0.3s ease;
+            z-index: 2000;
+            animation: slideInRight 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            font-weight: 600;
             max-width: 400px;
         }
         
-        @keyframes slideIn {
+        @keyframes slideInRight {
             from {
                 transform: translateX(400px);
                 opacity: 0;
@@ -598,590 +639,917 @@
         }
         
         .alert-success-custom {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
+            background: #d4edda;
+            color: #155724;
+            border-left: 5px solid #28a745;
         }
         
         .alert-error-custom {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-            color: white;
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 5px solid #dc3545;
         }
         
-        .modal-header-systelos {
-            background: linear-gradient(135deg, var(--systelos-azul) 0%, #1a2951 100%);
-            color: white;
-            border-radius: 15px 15px 0 0;
+        .alert-custom i {
+            font-size: 1.5rem;
         }
         
-        .modal-header-systelos .btn-close {
-            filter: invert(1);
-        }
-        
-        .btn-systelos-primary {
-            background: linear-gradient(135deg, var(--systelos-azul) 0%, #1a2951 100%);
-            border: none;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-systelos-primary:hover {
-            background: linear-gradient(135deg, #1a2951 0%, var(--systelos-azul) 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(15, 27, 61, 0.3);
-        }
-        
-        .btn-systelos-secondary {
-            background: var(--systelos-cinza-claro);
-            border: 2px solid var(--systelos-border);
-            color: var(--systelos-azul);
-            padding: 12px 30px;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-systelos-secondary:hover {
-            background: var(--systelos-branco);
-            border-color: var(--systelos-azul);
-            color: var(--systelos-azul);
-        }
-        
-        /* Responsividade */
         @media (max-width: 768px) {
-            .content-section {
-                padding: 20px;
+            .orbium-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .orbium-acoes {
+                flex-direction: column;
+            }
+            
+            .btn-acao {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 20px auto;
+            }
+            
+            .filter-grid {
+                grid-template-columns: 1fr;
             }
             
             .kpis-vendedores {
                 flex-direction: column;
             }
-            
-            .kpi-vendedor {
-                width: 100%;
+        }
+
+        /* ============================================================================
+           🆕 NOTIFICAÇÕES ORBIUNS - BADGE E CARDS v13.0
+           ============================================================================ */
+
+        /* Badge de notificação no menu */
+        .badge-notificacao {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);
+            animation: pulseNotification 2s infinite;
+        }
+
+        .badge-notificacao.hidden {
+            display: none;
+        }
+
+        @keyframes pulseNotification {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);
             }
-            
-            .header-links {
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 4px 12px rgba(220, 53, 69, 0.6);
+            }
+        }
+
+        /* Seção de atualizações */
+        .secao-atualizacoes {
+            background: linear-gradient(135deg, #fff8e1 0%, #fffbf0 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 2px solid #FFB800;
+            box-shadow: 0 4px 15px rgba(255, 184, 0, 0.2);
+        }
+
+        .secao-atualizacoes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 184, 0, 0.3);
+        }
+
+        .secao-atualizacoes-titulo {
+            color: #0F1B3D;
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .secao-atualizacoes-titulo i {
+            color: #FFB800;
+            animation: ringBell 2s infinite;
+        }
+
+        @keyframes ringBell {
+            0%, 100% { transform: rotate(0deg); }
+            10%, 30% { transform: rotate(-10deg); }
+            20%, 40% { transform: rotate(10deg); }
+        }
+
+        .btn-marcar-todas-lidas {
+            background: #0F1B3D;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-marcar-todas-lidas:hover {
+            background: #1a2951;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(15, 27, 61, 0.3);
+        }
+
+        .atualizacoes-lista {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .atualizacao-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-left: 5px solid #FFB800;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .atualizacao-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .atualizacao-card.lida {
+            opacity: 0.6;
+            border-left-color: #ccc;
+        }
+
+        .atualizacao-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .atualizacao-orbium {
+            font-weight: 700;
+            color: #0F1B3D;
+            font-size: 1.1rem;
+        }
+
+        .atualizacao-status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-badge-resolvido {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge-problema {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-badge-atendimento {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .atualizacao-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .atualizacao-info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .atualizacao-info-item i {
+            color: #FFB800;
+            width: 20px;
+        }
+
+        .atualizacao-observacoes {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            color: #333;
+            border-left: 3px solid #FFB800;
+        }
+
+        .atualizacao-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+        }
+
+        .atualizacao-timestamp {
+            font-size: 0.85rem;
+            color: #999;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-marcar-lido {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-marcar-lido:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-marcar-lido.lido {
+            background: #6c757d;
+            cursor: default;
+        }
+
+        .btn-marcar-lido.lido:hover {
+            background: #6c757d;
+            transform: none;
+        }
+
+        .atualizacoes-vazio {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .atualizacoes-vazio i {
+            font-size: 3rem;
+            color: #FFB800;
+            margin-bottom: 15px;
+        }
+
+        .loading-atualizacoes {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+
+        .loading-atualizacoes i {
+            font-size: 2rem;
+            color: #FFB800;
+            animation: spin 1s linear infinite;
+        }
+
+        @media (max-width: 768px) {
+            .secao-atualizacoes-header {
                 flex-direction: column;
-            }
-            
-            .header-link {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .orbium-header {
-                flex-direction: column;
+                align-items: flex-start;
                 gap: 10px;
             }
-            
-            .orbium-footer {
+
+            .btn-marcar-todas-lidas {
+                width: 100%;
+            }
+
+            .atualizacao-info {
+                grid-template-columns: 1fr;
+            }
+
+            .atualizacao-footer {
                 flex-direction: column;
-                gap: 15px;
+                gap: 10px;
                 align-items: flex-start;
             }
-            
-            .orbium-actions {
+
+            .btn-marcar-lido {
                 width: 100%;
-                flex-wrap: wrap;
-            }
-            
-            .btn-action {
-                flex: 1;
-                min-width: 120px;
-                justify-content: center;
             }
         }
     </style>
 </head>
-<body class="systelos-body">
-    <!-- Navbar Padrão SYSTELOS TUR -->
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #0F1B3D 0%, #1a2951 100%); padding: 1rem 2rem; box-shadow: 0 4px 15px rgba(15, 27, 61, 0.3);">
-        <div class="container-fluid">
-            <!-- Logo -->
-            <a class="navbar-brand d-flex align-items-center" href="index.html" style="font-weight: 700; font-size: 1.3rem; gap: 10px;">
-                <div style="background: #FFB800; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; color: #0F1B3D;">
-                    [S]
-                </div>
+<body>
+    <div class="main-container">
+        <div class="content-section">
+            <!-- Header com título e ações -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
                 <div>
-                    <div style="line-height: 1.2; font-family: 'Poppins', sans-serif;">SYSTELOS TUR</div>
-                    <div style="font-size: 0.7rem; font-weight: 400; color: rgba(255,255,255,0.7); font-family: 'Inter', sans-serif;">Sistemas com propósito</div>
+                    <h1 style="color: var(--systelos-azul); font-weight: 800; margin: 0; font-size: 2rem;">
+                        <i class="fas fa-orbit" style="color: var(--systelos-amarelo);"></i> 
+                        Controle de Orbiuns
+                    </h1>
+                    <p style="color: #666; margin: 5px 0 0 0; font-size: 0.95rem;">
+                        Sistema de gestão de processos internos
+                    </p>
                 </div>
-            </a>
+                <button onclick="abrirModalNovoOrbium()" class="header-link">
+                    <i class="fas fa-plus-circle"></i> Novo Orbium (Ctrl+N)
+                </button>
+            </div>
 
-            <!-- Toggle para mobile -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <!-- 🆕 SEÇÃO DE ATUALIZAÇÕES RECENTES -->
+            <section class="secao-atualizacoes" id="secaoAtualizacoes" style="display: none;">
+                <div class="secao-atualizacoes-header">
+                    <h3 class="secao-atualizacoes-titulo">
+                        <i class="fas fa-bell"></i>
+                        Atualizações Recentes
+                        <span id="badgeContador" style="background: #dc3545; color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.85rem; margin-left: 10px;"></span>
+                    </h3>
+                    <button onclick="marcarTodasComoLidas()" class="btn-marcar-todas-lidas">
+                        <i class="fas fa-check-double"></i> Marcar todas como lidas
+                    </button>
+                </div>
 
-            <!-- Menu Principal -->
-            <div class="collapse navbar-collapse" id="navbarMain">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html" style="padding: 0.8rem 1.2rem; border-radius: 8px; transition: all 0.3s ease;">
-                            <i class="fas fa-home me-2"></i>Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="orcamentos.html" style="padding: 0.8rem 1.2rem; border-radius: 8px; transition: all 0.3s ease;">
-                            <i class="fas fa-wand-magic-sparkles me-2"></i>Padronizador de Orçamentos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="vendas.html" style="padding: 0.8rem 1.2rem; border-radius: 8px; transition: all 0.3s ease;">
-                            <i class="fas fa-chart-line me-2"></i>Informe de Vendas
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="vendas-automatizado.html" style="padding: 0.8rem 1.2rem; border-radius: 8px; transition: all 0.3s ease;">
-                            <i class="fas fa-robot me-2"></i>Informe Automatizado
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="embarques.html" style="padding: 0.8rem 1.2rem; border-radius: 8px; transition: all 0.3s ease;">
-                            <i class="fas fa-plane me-2"></i>Controle de Embarques
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="orbiuns.html" style="padding: 0.8rem 1.2rem; border-radius: 8px; transition: all 0.3s ease; background: #FFB800; color: #0F1B3D; font-weight: 600;">
-                            <i class="fas fa-clipboard-list me-2"></i>Controle de Orbiuns
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="importacao.html" style="padding: 0.8rem 1.2rem; border-radius: 8px; transition: all 0.3s ease;">
-                            <i class="fas fa-upload me-2"></i>Importação
-                        </a>
-                    </li>
-                </ul>
+                <div id="loadingAtualizacoes" class="loading-atualizacoes">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Carregando atualizações...</p>
+                </div>
 
-                <!-- Botões de Usuário -->
-                <div class="d-flex gap-2 align-items-center">
-                    <span style="color: rgba(255,255,255,0.8); font-size: 0.9rem; margin-right: 10px;">
-                        <i class="fas fa-crown me-2" style="color: #FFB800;"></i>
-                        Gestor SYSTELOS
-                    </span>
-                    <span style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">Gestor</span>
-                    <button onclick="window.location.href='index.html'" style="background: #FFB800; color: #0F1B3D; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
-                        <i class="fas fa-sign-out-alt me-2"></i>Sair
+                <div id="atualizacoesLista" class="atualizacoes-lista"></div>
+
+                <div id="atualizacoesVazio" class="atualizacoes-vazio" style="display: none;">
+                    <i class="fas fa-check-circle"></i>
+                    <p><strong>Nenhuma atualização pendente</strong></p>
+                    <p style="font-size: 0.9rem;">Você está em dia com todos os orbiuns!</p>
+                </div>
+            </section>
+
+            <!-- Links rápidos -->
+            <div class="header-links">
+                <a href="index.html" class="header-link">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a href="embarques.html" class="header-link">
+                    <i class="fas fa-plane-departure"></i> Embarques
+                </a>
+                <a href="https://docs.google.com/spreadsheets/d/1A7HOrMOw60Rks4_fwj0BNP5i9cZQ9H-dOJ7LKFw5Jis/edit" 
+                   target="_blank" class="header-link">
+                    <i class="fas fa-table"></i> Planilha Orbiuns
+                </a>
+            </div>
+
+            <!-- KPIs por Vendedor -->
+            <div class="kpis-container" id="kpisContainer">
+                <div class="kpis-title">
+                    <i class="fas fa-chart-bar"></i> Orbiuns Ativos por Vendedor
+                </div>
+                <div class="kpis-vendedores" id="kpisVendedores">
+                    <!-- KPIs serão inseridos aqui via JS -->
+                </div>
+                <div class="kpis-total" id="kpisTotal">
+                    <!-- Total será inserido aqui via JS -->
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filter-section">
+                <h4><i class="fas fa-filter"></i> Filtros de Busca</h4>
+                <div class="filter-grid">
+                    <input type="text" id="filtroOrbium" class="filter-input" placeholder="🔍 Número do Orbium">
+                    <select id="filtroStatus" class="filter-input">
+                        <option value="">📊 Todos os Status</option>
+                        <option value="problema">🔴 Problema</option>
+                        <option value="em atendimento">🟡 Em atendimento</option>
+                        <option value="resolvido">🟢 Resolvido</option>
+                    </select>
+                    <select id="filtroVendedor" class="filter-input">
+                        <option value="">👤 Todos os Vendedores</option>
+                    </select>
+                    <select id="filtroDepartamento" class="filter-input">
+                        <option value="">🏢 Todos os Departamentos</option>
+                        <option value="vendas">Vendas</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="rh">RH</option>
+                        <option value="financeiro">Financeiro</option>
+                        <option value="tecnologia">Tecnologia</option>
+                        <option value="gerencia">Gerência</option>
+                        <option value="atendimento">Atendimento</option>
+                    </select>
+                    <input type="text" id="filtroCliente" class="filter-input" placeholder="👥 Nome do Cliente">
+                    <input type="text" id="filtroWhatsApp" class="filter-input" placeholder="📱 WhatsApp">
+                    <input type="text" id="filtroRecibo" class="filter-input" placeholder="📄 Recibo">
+                </div>
+                <div class="button-group">
+                    <button onclick="filtrarOrbiuns()" class="btn-filtrar">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                    <button onclick="limparFiltros()" class="btn-limpar">
+                        <i class="fas fa-times"></i> Limpar
                     </button>
                 </div>
             </div>
-        </div>
-    </nav>
-    
-    <style>
-        /* Hover effects para navbar */
-        .navbar .nav-link:not(.active):hover {
-            background: rgba(255, 184, 0, 0.1) !important;
-            color: #FFB800 !important;
-        }
-    </style>
 
-    <!-- Container Principal -->
-    <div class="container-fluid" style="padding: 30px;">
-        <div class="main-container">
-            <!-- Conteúdo -->
-            <div class="content-section">
-                
-                <!-- ✨ KPIs DISCRETOS NO TOPO -->
-                <div class="kpis-container" id="kpisContainer">
-                    <div class="kpis-title">
-                        📊 Orbiuns por Vendedor
-                    </div>
-                    <div class="kpis-vendedores" id="kpisVendedores">
-                        <!-- KPIs preenchidos via JS -->
-                        <div class="loading-spinner"></div>
-                    </div>
-                    <div class="kpis-total" id="kpisTotal">
-                        TOTAL ABERTOS: <span>--</span>
-                    </div>
-                </div>
-                
-                <!-- Links Rápidos -->
-                <div class="header-links">
-                    <a href="javascript:void(0)" onclick="abrirModalNovoOrbium()" class="header-link">
-                        <i class="fas fa-plus-circle"></i> Novo Orbium
-                    </a>
-                    <a href="javascript:void(0)" onclick="carregarOrbiuns()" class="header-link">
-                        <i class="fas fa-sync-alt"></i> Atualizar
-                    </a>
-                    <a href="javascript:void(0)" onclick="limparFiltros()" class="header-link">
-                        <i class="fas fa-filter-circle-xmark"></i> Limpar Filtros
-                    </a>
-                </div>
+            <!-- Loading -->
+            <div id="loadingContainer" class="loading-container">
+                <div class="loading-spinner"></div>
+                <p style="color: var(--systelos-azul); font-weight: 600; font-size: 1.1rem;">
+                    Carregando orbiuns...
+                </p>
+            </div>
 
-                <!-- Filtros -->
-                <div class="filter-section">
-                    <h4><i class="fas fa-filter"></i> Filtros</h4>
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label">Nº Orbium</label>
-                            <input type="text" class="form-control form-control-cvc" id="filtroOrbium" 
-                                   placeholder="Ex: 2025111713093" onkeyup="filtrarOrbiuns()">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Status</label>
-                            <select class="form-select form-select-cvc" id="filtroStatus" onchange="filtrarOrbiuns()">
-                                <option value="">Todos</option>
-                                <option value="Em atendimento">Em atendimento</option>
-                                <option value="Problema">Problema</option>
-                                <option value="Pendente">Pendente</option>
-                                <option value="Resolvido">Resolvido</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Vendedor</label>
-                            <select class="form-select form-select-cvc" id="filtroVendedor" onchange="filtrarOrbiuns()">
-                                <option value="">Todos</option>
-                                <!-- Preenchido via JS -->
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Departamento</label>
-                            <select class="form-select form-select-cvc" id="filtroDepartamento" onchange="filtrarOrbiuns()">
-                                <option value="">Todos</option>
-                                <option value="Pós-Venda">Pós-Venda</option>
-                                <option value="Cotação">Cotação</option>
-                                <option value="Financeiro">Financeiro</option>
-                                <option value="Reserva">Reserva</option>
-                                <option value="Check-in">Check-in</option>
-                                <option value="Reembolso">Reembolso</option>
-                                <option value="Outro">Outro</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Nome do Cliente</label>
-                            <input type="text" class="form-control form-control-cvc" id="filtroCliente" 
-                                   placeholder="Ex: Maria Silva" onkeyup="filtrarOrbiuns()">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">WhatsApp</label>
-                            <input type="text" class="form-control form-control-cvc" id="filtroWhatsApp" 
-                                   placeholder="Ex: 11999999999" onkeyup="filtrarOrbiuns()">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Recibo</label>
-                            <input type="text" class="form-control form-control-cvc" id="filtroRecibo" 
-                                   placeholder="Ex: 6220-0000128664" onkeyup="filtrarOrbiuns()">
-                        </div>
-                    </div>
-                </div>
+            <!-- Lista de Orbiuns -->
+            <div id="orbiunsContainer"></div>
 
-                <!-- Lista de Orbiuns -->
-                <div id="orbiunsContainer">
-                    <div class="loading-container">
-                        <div class="loading-spinner"></div>
-                        <p class="mt-3">Carregando orbiuns...</p>
-                    </div>
-                </div>
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-inbox"></i>
+                <h3>Nenhum orbium encontrado</h3>
+                <p>Não há orbiuns que correspondam aos filtros aplicados.</p>
+                <button onclick="limparFiltros()" class="btn-filtrar" style="margin-top: 15px;">
+                    <i class="fas fa-redo"></i> Limpar Filtros
+                </button>
             </div>
         </div>
     </div>
 
     <!-- Modal Novo Orbium -->
-    <div class="modal fade" id="modalNovoOrbium" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header modal-header-systelos">
-                    <h5 class="modal-title">
-                        <i class="fas fa-plus-circle me-2"></i>
-                        Novo Orbium
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
+    <div id="modalNovoOrbium" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-plus-circle"></i> Novo Orbium</h2>
+                <span class="close" onclick="fecharModalNovoOrbium()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="formNovoOrbium" onsubmit="event.preventDefault(); salvarNovoOrbium();">
                     
-                    <!-- ✨ CAMPO COLAR DADOS -->
-                    <div class="colar-dados-container">
-                        <div class="colar-dados-title">
-                            <i class="fas fa-paste"></i>
-                            Cole os dados copiados do sistema externo
-                        </div>
-                        <textarea class="colar-dados-textarea" id="colarDadosTexto" 
-                                  placeholder="Cole aqui os dados copiados (RECIBO, CLIENTE, WHATSAPP, RESERVA, CIA, etc)&#10;&#10;Exemplo:&#10;RECIBO: 6220-0000128664&#10;CLIENTE: Maria Silva&#10;WHATSAPP: 11999999999&#10;CIA: GOL&#10;RESERVA: ABC123"></textarea>
-                        <button type="button" class="colar-dados-btn mt-3" onclick="analisarDadosColados()">
-                            <i class="fas fa-wand-magic-sparkles"></i>
-                            Analisar e Preencher Automático
-                        </button>
-                        
-                        <!-- Feedback Campos Preenchidos -->
-                        <div class="campos-preenchidos" id="camposPreenchidos">
-                            <h6><i class="fas fa-check-circle me-2"></i>Campos Preenchidos Automaticamente:</h6>
-                            <ul id="listaPreenchidos"></ul>
-                        </div>
-                        
-                        <!-- Alerta Campos Vazios -->
-                        <div class="campos-vazios" id="camposVazios">
-                            <h6><i class="fas fa-exclamation-triangle me-2"></i>Campos Vazios (preencha manualmente):</h6>
-                            <ul id="listaVazios"></ul>
+                    <!-- Campo COLAR DADOS -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-paste"></i> Colar Dados (Auto-preenchimento)
+                        </label>
+                        <textarea 
+                            id="colarDados" 
+                            class="form-textarea" 
+                            placeholder="Cole aqui os dados da planilha (tab-separated). Exemplo:
+123456	Problema	01/01/2025	Vendas	Alessandro	REC123	RES456	PED789	LATAM	ABCDEF	GHIJKL	Cliente com problema	João Silva	11999999999	12345678900"
+                            style="min-height: 120px; font-family: monospace; font-size: 0.85rem;"
+                        ></textarea>
+                        <div class="form-help">
+                            💡 Cole os dados da planilha e os campos abaixo serão preenchidos automaticamente
                         </div>
                     </div>
-                    
-                    <form id="formNovoOrbium" onsubmit="criarOrbium(event)">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Status</label>
-                                <select class="form-select form-select-cvc" name="status" required>
-                                    <option value="Em atendimento">Em atendimento</option>
-                                    <option value="Problema">Problema</option>
-                                    <option value="Pendente">Pendente</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Departamento</label>
-                                <select class="form-select form-select-cvc" name="departamento" id="departamento" required>
-                                    <option value="">Selecione...</option>
-                                    <option value="Pós-Venda">Pós-Venda</option>
-                                    <option value="Cotação">Cotação</option>
-                                    <option value="Financeiro">Financeiro</option>
-                                    <option value="Reserva">Reserva</option>
-                                    <option value="Check-in">Check-in</option>
-                                    <option value="Reembolso">Reembolso</option>
-                                    <option value="Outro">Outro</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Vendedor Responsável</label>
-                                <select class="form-select form-select-cvc" name="vendedor" id="vendedor" required>
-                                    <option value="">Selecione...</option>
-                                    <!-- Preenchido via JS -->
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">
-                                    <i class="fas fa-star-of-life text-danger" style="font-size: 0.5rem; vertical-align: super;"></i>
-                                    WhatsApp do Cliente
-                                </label>
-                                <input type="text" class="form-control form-control-cvc" name="whats_cliente" 
-                                       id="whats_cliente" placeholder="Ex: 11999999999" required>
-                                <small class="text-danger d-none" id="whatsappError">
-                                    <i class="fas fa-exclamation-circle me-1"></i>WhatsApp é obrigatório!
-                                </small>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Nome do Cliente</label>
-                                <input type="text" class="form-control form-control-cvc" name="nome_cliente" 
-                                       id="nome_cliente" placeholder="Ex: Maria Silva">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">CPF do Cliente</label>
-                                <input type="text" class="form-control form-control-cvc" name="cpf_cliente" 
-                                       id="cpf_cliente" placeholder="Ex: 123.456.789-00">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Recibo</label>
-                                <input type="text" class="form-control form-control-cvc" name="recibo" 
-                                       id="recibo" placeholder="Ex: 6220-0000128664">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Reserva</label>
-                                <input type="text" class="form-control form-control-cvc" name="reserva" 
-                                       id="reserva" placeholder="Ex: 302440674">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Pedido</label>
-                                <input type="text" class="form-control form-control-cvc" name="pedido" 
-                                       id="pedido" placeholder="Ex: PED123">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Companhia Aérea</label>
-                                <input type="text" class="form-control form-control-cvc" name="cia" 
-                                       id="cia" placeholder="Ex: GOL">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Localizador GDS</label>
-                                <input type="text" class="form-control form-control-cvc" name="loc_gds" 
-                                       id="loc_gds" placeholder="Ex: OCUJVF">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Localizador CIA</label>
-                                <input type="text" class="form-control form-control-cvc" name="loc_cia" 
-                                       id="loc_cia" placeholder="Ex: OCUJVF">
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">Observações</label>
-                                <textarea class="form-control form-control-cvc" name="observacoes" 
-                                          id="observacoes" rows="3" 
-                                          placeholder="Descreva o problema ou solicitação..."></textarea>
-                            </div>
+
+                    <hr style="margin: 25px 0; border: 0; border-top: 2px solid #f0f0f0;">
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            📱 WhatsApp do Cliente <span class="required">*</span>
+                        </label>
+                        <input type="text" id="whatsCliente" class="form-input" 
+                               placeholder="Ex: 11999999999" required>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label class="form-label">🔢 Número do Orbium</label>
+                            <input type="text" id="orbiumNumero" class="form-input" 
+                                   placeholder="Ex: 123456">
                         </div>
-                        <div class="mt-4 d-flex gap-3 justify-content-end">
-                            <button type="button" class="btn-systelos-secondary" data-bs-dismiss="modal">
-                                <i class="fas fa-times me-2"></i>Cancelar
-                            </button>
-                            <button type="submit" class="btn-systelos-primary">
-                                <i class="fas fa-save me-2"></i>Criar Orbium
-                            </button>
+
+                        <div class="form-group">
+                            <label class="form-label">📊 Status</label>
+                            <select id="status" class="form-select">
+                                <option value="Problema">🔴 Problema</option>
+                                <option value="Em atendimento" selected>🟡 Em atendimento</option>
+                                <option value="Resolvido">🟢 Resolvido</option>
+                            </select>
                         </div>
-                    </form>
-                </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label class="form-label">🏢 Departamento</label>
+                            <select id="departamento" class="form-select">
+                                <option value="">Selecione...</option>
+                                <option value="Vendas" selected>Vendas</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="RH">RH</option>
+                                <option value="Financeiro">Financeiro</option>
+                                <option value="Tecnologia">Tecnologia</option>
+                                <option value="Gerência">Gerência</option>
+                                <option value="Atendimento">Atendimento</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">👤 Vendedor</label>
+                            <select id="vendedor" class="form-select">
+                                <option value="">Selecione...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label class="form-label">📄 Recibo</label>
+                            <input type="text" id="recibo" class="form-input" 
+                                   placeholder="Ex: REC123">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">🎫 Reserva</label>
+                            <input type="text" id="reserva" class="form-input" 
+                                   placeholder="Ex: RES456">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">📦 Pedido</label>
+                            <input type="text" id="pedido" class="form-input" 
+                                   placeholder="Ex: PED789">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label class="form-label">✈️ CIA</label>
+                            <input type="text" id="cia" class="form-input" 
+                                   placeholder="Ex: LATAM">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">🔖 LOC GDS</label>
+                            <input type="text" id="locGds" class="form-input" 
+                                   placeholder="Ex: ABCDEF">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">🔖 LOC CIA</label>
+                            <input type="text" id="locCia" class="form-input" 
+                                   placeholder="Ex: GHIJKL">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">👥 Nome do Cliente</label>
+                        <input type="text" id="nomeCliente" class="form-input" 
+                               placeholder="Ex: João Silva">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">🆔 CPF do Cliente</label>
+                        <input type="text" id="cpfCliente" class="form-input" 
+                               placeholder="Ex: 12345678900">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">📝 Observações</label>
+                        <textarea id="observacoes" class="form-textarea" 
+                                  placeholder="Descreva o problema ou situação..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-save"></i> Salvar Orbium
+                    </button>
+                </form>
             </div>
         </div>
     </div>
 
     <!-- Modal Editar Orbium -->
-    <div class="modal fade" id="modalEditarOrbium" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header modal-header-systelos">
-                    <h5 class="modal-title">
-                        <i class="fas fa-edit me-2"></i>
-                        Editar Orbium
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="formEditarOrbium" onsubmit="editarOrbium(event)">
-                        <input type="hidden" name="id" id="edit_id">
-                        <div class="mb-3">
-                            <label class="form-label">Status</label>
-                            <select class="form-select form-select-cvc" name="status" id="edit_status" required>
-                                <option value="Em atendimento">Em atendimento</option>
-                                <option value="Problema">Problema</option>
-                                <option value="Pendente">Pendente</option>
-                                <option value="Resolvido">Resolvido</option>
+    <div id="modalEditarOrbium" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-edit"></i> Editar Orbium</h2>
+                <span class="close" onclick="fecharModalEditarOrbium()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarOrbium" onsubmit="event.preventDefault(); salvarEdicaoOrbium();">
+                    <input type="hidden" id="editarId">
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label class="form-label">🔢 Número do Orbium</label>
+                            <input type="text" id="editarOrbiumNumero" class="form-input" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">📊 Status <span class="required">*</span></label>
+                            <select id="editarStatus" class="form-select" required>
+                                <option value="Problema">🔴 Problema</option>
+                                <option value="Em atendimento">🟡 Em atendimento</option>
+                                <option value="Resolvido">🟢 Resolvido</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Observações</label>
-                            <textarea class="form-control form-control-cvc" name="observacoes" 
-                                      id="edit_observacoes" rows="4" 
-                                      placeholder="Adicione atualizações ou observações..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">📝 Observações Adicionais</label>
+                        <textarea id="editarObservacoes" class="form-textarea" 
+                                  placeholder="Adicione novas observações..."></textarea>
+                        <div class="form-help">
+                            💡 As novas observações serão adicionadas às existentes com timestamp
                         </div>
-                        <div class="d-flex gap-3 justify-content-end">
-                            <button type="button" class="btn-systelos-secondary" data-bs-dismiss="modal">
-                                <i class="fas fa-times me-2"></i>Cancelar
-                            </button>
-                            <button type="submit" class="btn-systelos-primary">
-                                <i class="fas fa-save me-2"></i>Salvar
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-save"></i> Salvar Alterações
+                    </button>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- JavaScript Principal -->
     <script>
         // ================================================================================
-        // VARIÃVEIS GLOBAIS
+        // VARIÁVEIS GLOBAIS
         // ================================================================================
         let orbiunsData = [];
         let orbiunsFiltrados = [];
+        let atualizacoesData = [];
 
         // ================================================================================
-        // DEBUG LOG (usa CONFIG_UTILS do config.js)
-        // ================================================================================
-        function debugLog(mensagem, tipo = 'info') {
-            if (typeof CONFIG_UTILS !== 'undefined' && CONFIG_UTILS.debugLog) {
-                CONFIG_UTILS.debugLog(mensagem, tipo);
-            } else {
-                console.log(`[ORBIUNS] ${mensagem}`);
-            }
-        }
-
-        // ================================================================================
-        // INICIALIZAÃ‡ÃƒO
+        // INICIALIZAÇÃO
         // ================================================================================
         document.addEventListener('DOMContentLoaded', function() {
-            debugLog('🚀 Iniciando sistema Orbiuns v12.0 CORRIGIDO', 'info');
+            debugLog('🚀 Inicializando sistema de Orbiuns v13.0 COM WEBHOOK', 'info');
             
-            // Validar config.js
-            if (typeof CVC_CONFIG === 'undefined') {
-                debugLog('❌ ERRO: config.js não carregado!', 'error');
-                alert('Erro: Configuração não carregada! Verifique config.js');
-                return;
-            }
-            
-            debugLog('✅ Config carregado: ' + CVC_CONFIG.API_URL, 'success');
-            
-            // Preencher dropdowns
+            // Preencher dropdown de vendedores
             preencherVendedores();
             
             // Carregar orbiuns
             carregarOrbiuns();
+            
+            // 🆕 Carregar atualizações recentes
+            carregarAtualizacoes();
+            
+            // Auto-refresh a cada 5 minutos
+            setInterval(() => {
+                carregarOrbiuns(true);
+                carregarAtualizacoes(true); // 🆕 Auto-refresh atualizações
+            }, 5 * 60 * 1000);
+            
+            // Event listener para colar dados
+            document.getElementById('colarDados').addEventListener('input', processarDadosColados);
         });
 
         // ================================================================================
-        // PREENCHER VENDEDORES
+        // 🆕 SISTEMA DE NOTIFICAÇÕES WEBHOOK ORBIUNS
         // ================================================================================
-        function preencherVendedores() {
-            const selectVendedor = document.getElementById('vendedor');
-            const selectFiltroVendedor = document.getElementById('filtroVendedor');
-            
-            if (!CVC_CONFIG.VENDEDORES) {
-                debugLog('⚠️ Lista de vendedores não encontrada no config', 'warn');
+
+        /**
+         * Carregar atualizações recentes
+         */
+        async function carregarAtualizacoes(silencioso = false) {
+            if (!silencioso) {
+                document.getElementById('loadingAtualizacoes').style.display = 'block';
+                document.getElementById('atualizacoesLista').innerHTML = '';
+                document.getElementById('atualizacoesVazio').style.display = 'none';
+            }
+
+            try {
+                debugLog('📥 Buscando atualizações recentes...', 'info');
+
+                const result = await chamarAPI({
+                    action: 'listar_atualizacoes_recentes'
+                });
+
+                if (result.success && result.data && result.data.atualizacoes) {
+                    atualizacoesData = result.data.atualizacoes;
+                    
+                    debugLog(`✅ ${atualizacoesData.length} atualização(ões) carregada(s)`, 'success');
+                    
+                    renderizarAtualizacoes();
+                } else {
+                    throw new Error(result.message || 'Erro ao carregar atualizações');
+                }
+
+            } catch (error) {
+                debugLog('❌ Erro ao carregar atualizações: ' + error.message, 'error');
+                document.getElementById('loadingAtualizacoes').style.display = 'none';
+                document.getElementById('atualizacoesVazio').style.display = 'block';
+                document.getElementById('atualizacoesVazio').innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p><strong>Erro ao carregar atualizações</strong></p>
+                    <p style="font-size: 0.9rem;">${error.message}</p>
+                `;
+            }
+        }
+
+        /**
+         * Renderizar atualizações na interface
+         */
+        function renderizarAtualizacoes() {
+            const container = document.getElementById('atualizacoesLista');
+            const secao = document.getElementById('secaoAtualizacoes');
+            const loading = document.getElementById('loadingAtualizacoes');
+            const vazio = document.getElementById('atualizacoesVazio');
+
+            loading.style.display = 'none';
+
+            // Filtrar atualizações não lidas
+            const naoLidas = atualizacoesData.filter(a => a.lido !== 'SIM');
+
+            if (naoLidas.length === 0) {
+                secao.style.display = 'none';
                 return;
             }
-            
-            CVC_CONFIG.VENDEDORES.forEach(vendedor => {
-                // Select do formulário
-                const option1 = document.createElement('option');
-                option1.value = vendedor;
-                option1.textContent = vendedor;
-                selectVendedor.appendChild(option1);
-                
-                // Select do filtro
-                const option2 = document.createElement('option');
-                option2.value = vendedor;
-                option2.textContent = vendedor;
-                selectFiltroVendedor.appendChild(option2);
-            });
-            
-            debugLog(`✅ ${CVC_CONFIG.VENDEDORES.length} vendedores carregados`, 'success');
+
+            // Mostrar seção
+            secao.style.display = 'block';
+            vazio.style.display = 'none';
+
+            // Atualizar contador
+            document.getElementById('badgeContador').textContent = naoLidas.length;
+
+            // Renderizar cards
+            container.innerHTML = naoLidas.map(atualizacao => {
+                const isLida = atualizacao.lido === 'SIM';
+                const statusClass = 
+                    atualizacao.status_novo === 'Resolvido' ? 'status-badge-resolvido' :
+                    atualizacao.status_novo === 'Problema' ? 'status-badge-problema' :
+                    'status-badge-atendimento';
+
+                return `
+                    <div class="atualizacao-card ${isLida ? 'lida' : ''}" data-id="${atualizacao.id}">
+                        <div class="atualizacao-header">
+                            <span class="atualizacao-orbium">
+                                <i class="fas fa-orbit"></i> Orbium ${atualizacao.orbium || 'N/A'}
+                            </span>
+                            <span class="atualizacao-status-badge ${statusClass}">
+                                ${atualizacao.status_novo}
+                            </span>
+                        </div>
+
+                        <div class="atualizacao-info">
+                            <div class="atualizacao-info-item">
+                                <i class="fas fa-user"></i>
+                                <span><strong>Cliente:</strong> ${atualizacao.nome_cliente || 'N/A'}</span>
+                            </div>
+                            <div class="atualizacao-info-item">
+                                <i class="fas fa-user-tie"></i>
+                                <span><strong>Vendedor:</strong> ${atualizacao.vendedor || 'N/A'}</span>
+                            </div>
+                            <div class="atualizacao-info-item">
+                                <i class="fas fa-building"></i>
+                                <span><strong>Depto:</strong> ${atualizacao.departamento || 'N/A'}</span>
+                            </div>
+                            ${atualizacao.recibo ? `
+                            <div class="atualizacao-info-item">
+                                <i class="fas fa-receipt"></i>
+                                <span><strong>Recibo:</strong> ${atualizacao.recibo}</span>
+                            </div>
+                            ` : ''}
+                        </div>
+
+                        ${atualizacao.observacoes ? `
+                        <div class="atualizacao-observacoes">
+                            <i class="fas fa-comment-dots"></i> ${atualizacao.observacoes}
+                        </div>
+                        ` : ''}
+
+                        <div class="atualizacao-footer">
+                            <span class="atualizacao-timestamp">
+                                <i class="far fa-clock"></i>
+                                ${formatarData(atualizacao.data_atualizacao)}
+                            </span>
+                            <button 
+                                onclick="marcarComoLida(${atualizacao.id})" 
+                                class="btn-marcar-lido ${isLida ? 'lido' : ''}"
+                                ${isLida ? 'disabled' : ''}>
+                                <i class="fas fa-check"></i> ${isLida ? '✓ Lido' : 'Marcar como lido'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Marcar atualização como lida
+         */
+        async function marcarComoLida(id) {
+            try {
+                debugLog(`📖 Marcando atualização ${id} como lida...`, 'info');
+
+                const result = await chamarAPI({
+                    action: 'marcar_como_lido',
+                    id: id
+                });
+
+                if (result.success) {
+                    debugLog('✅ Atualização marcada como lida', 'success');
+                    
+                    // Atualizar dados localmente
+                    const atualizacao = atualizacoesData.find(a => a.id == id);
+                    if (atualizacao) {
+                        atualizacao.lido = 'SIM';
+                    }
+                    
+                    // Re-renderizar
+                    renderizarAtualizacoes();
+                    
+                    mostrarAlertaSucesso('✅ Atualização marcada como lida!');
+                } else {
+                    throw new Error(result.message || 'Erro ao marcar como lida');
+                }
+
+            } catch (error) {
+                debugLog('❌ Erro ao marcar como lida: ' + error.message, 'error');
+                mostrarAlertaErro(`❌ Erro: ${error.message}`);
+            }
+        }
+
+        /**
+         * Marcar todas as atualizações como lidas
+         */
+        async function marcarTodasComoLidas() {
+            if (!confirm('Deseja marcar todas as atualizações como lidas?')) {
+                return;
+            }
+
+            try {
+                debugLog('📖 Marcando todas as atualizações como lidas...', 'info');
+
+                const result = await chamarAPI({
+                    action: 'marcar_todas_como_lidas'
+                });
+
+                if (result.success) {
+                    debugLog('✅ Todas as atualizações marcadas como lidas', 'success');
+                    
+                    // Atualizar dados localmente
+                    atualizacoesData.forEach(a => a.lido = 'SIM');
+                    
+                    // Re-renderizar
+                    renderizarAtualizacoes();
+                    
+                    mostrarAlertaSucesso('✅ Todas as atualizações marcadas como lidas!');
+                } else {
+                    throw new Error(result.message || 'Erro ao marcar todas como lidas');
+                }
+
+            } catch (error) {
+                debugLog('❌ Erro ao marcar todas como lidas: ' + error.message, 'error');
+                mostrarAlertaErro(`❌ Erro: ${error.message}`);
+            }
         }
 
         // ================================================================================
-        // CHAMAR API (JSONP para bypass CORS)
+        // CHAMADA API
         // ================================================================================
         async function chamarAPI(parametros) {
             try {
-                const url = CVC_CONFIG.API_URL;
-                const callback = 'jsonpCallback_' + Date.now();
-                
-                // Criar função de callback global
-                return new Promise((resolve, reject) => {
-                    window[callback] = function(data) {
-                        delete window[callback];
-                        resolve(data);
-                    };
-                    
-                    // Montar URL com parâmetros
-                    const params = new URLSearchParams({
-                        ...parametros,
-                        callback: callback
-                    });
-                    
-                    const scriptUrl = `${url}?${params.toString()}`;
-                    
-                    // Criar script tag
-                    const script = document.createElement('script');
-                    script.src = scriptUrl;
-                    script.onerror = () => {
-                        delete window[callback];
-                        reject(new Error('Erro ao carregar script JSONP'));
-                    };
-                    
-                    document.body.appendChild(script);
-                    
-                    // Timeout
-                    setTimeout(() => {
-                        if (window[callback]) {
-                            delete window[callback];
-                            document.body.removeChild(script);
-                            reject(new Error('Timeout na requisição'));
-                        }
-                    }, 30000);
+                const url = getApiUrl('googleScript');
+                debugLog(`🌐 Chamando API: ${url}`, 'info');
+                debugLog(`📤 Parâmetros: ${JSON.stringify(parametros)}`, 'info');
+
+                const queryString = new URLSearchParams(parametros).toString();
+                const urlCompleta = `${url}?${queryString}`;
+
+                const response = await fetch(urlCompleta, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
                 });
-                
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                debugLog(`📥 Resposta recebida: ${JSON.stringify(data)}`, 'info');
+
+                return data;
+
             } catch (error) {
-                debugLog('❌ Erro na chamada API: ' + error.message, 'error');
+                debugLog(`❌ Erro na API: ${error.message}`, 'error');
                 throw error;
             }
         }
@@ -1189,122 +1557,80 @@
         // ================================================================================
         // CARREGAR ORBIUNS
         // ================================================================================
-        async function carregarOrbiuns() {
-            debugLog('📥 Carregando orbiuns...', 'info');
-            
-            const container = document.getElementById('orbiunsContainer');
-            container.innerHTML = `
-                <div class="loading-container">
-                    <div class="loading-spinner"></div>
-                    <p class="mt-3">Carregando orbiuns...</p>
-                </div>
-            `;
-            
+        async function carregarOrbiuns(silencioso = false) {
+            if (!silencioso) {
+                document.getElementById('loadingContainer').style.display = 'block';
+                document.getElementById('orbiunsContainer').innerHTML = '';
+                document.getElementById('emptyState').style.display = 'none';
+                document.getElementById('kpisContainer').style.display = 'none';
+            }
+
             try {
-                // ✅ CORRIGIDO: action correto
-                const result = await chamarAPI({ 
+                debugLog('📥 Carregando orbiuns...', 'info');
+
+                const result = await chamarAPI({
                     action: 'listar_orbiuns'
                 });
-                
-                debugLog('📦 Resposta da API recebida', 'info', result);
-                
+
                 if (result.success && result.data && result.data.orbiuns) {
                     orbiunsData = result.data.orbiuns;
-                    debugLog(`✅ ${orbiunsData.length} orbiuns carregados`, 'success');
                     
-                    // Atualizar KPIs
-                    atualizarKPIs();
+                    debugLog(`✅ ${orbiunsData.length} orbium(s) carregado(s)`, 'success');
                     
-                    // Aplicar filtro padrão (Problema + Em atendimento)
+                    // Filtro padrão: Problemas e Em atendimento
                     orbiunsFiltrados = orbiunsData.filter(o => 
                         o.status === 'Problema' || o.status === 'Em atendimento'
                     );
-                    
+
+                    renderizarKPIs();
                     renderizarOrbiuns();
+                    document.getElementById('loadingContainer').style.display = 'none';
+                    document.getElementById('kpisContainer').style.display = 'block';
                 } else {
                     throw new Error(result.message || 'Erro ao carregar orbiuns');
                 }
-                
+
             } catch (error) {
                 debugLog('❌ Erro ao carregar orbiuns: ' + error.message, 'error');
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <h4>Erro ao Carregar</h4>
-                        <p>${error.message}</p>
-                        <button onclick="carregarOrbiuns()" class="btn-systelos-primary mt-3">
-                            <i class="fas fa-sync-alt me-2"></i>Tentar Novamente
-                        </button>
-                    </div>
-                `;
+                document.getElementById('loadingContainer').style.display = 'none';
+                mostrarAlertaErro(`❌ Erro ao carregar: ${error.message}`);
             }
         }
 
         // ================================================================================
-        // ✨ ATUALIZAR KPIs (por vendedor + total)
+        // RENDERIZAR KPIs
         // ================================================================================
-        function atualizarKPIs() {
-            const kpisVendedores = document.getElementById('kpisVendedores');
-            const kpisTotal = document.getElementById('kpisTotal');
+        function renderizarKPIs() {
+            const vendedores = {};
             
-            if (!orbiunsData || orbiunsData.length === 0) {
-                kpisVendedores.innerHTML = '<p class="text-white-50 mb-0">Nenhum orbium cadastrado</p>';
-                kpisTotal.innerHTML = 'TOTAL ABERTOS: <span>0</span>';
-                return;
-            }
-            
-            // Contar por vendedor (apenas Problema + Em atendimento + Pendente)
-            const countPorVendedor = {};
-            let totalAbertos = 0;
-            
-            orbiunsData.forEach(orbium => {
-                const status = orbium.status || '';
-                if (status === 'Problema' || status === 'Em atendimento' || status === 'Pendente') {
-                    const vendedor = orbium.vendedor || 'Sem Vendedor';
-                    countPorVendedor[vendedor] = (countPorVendedor[vendedor] || 0) + 1;
-                    totalAbertos++;
-                }
-            });
-            
-            // Renderizar KPIs dos vendedores
-            let html = '';
-            
-            // Pegar vendedores da config (garantir ordem)
-            if (CVC_CONFIG.VENDEDORES) {
-                CVC_CONFIG.VENDEDORES.forEach(vendedor => {
-                    const count = countPorVendedor[vendedor] || 0;
-                    const primeiroNome = vendedor.split(' ')[0];
-                    
-                    html += `
-                        <div class="kpi-vendedor">
-                            <div class="kpi-vendedor-nome">${primeiroNome}</div>
-                            <div class="kpi-vendedor-numero">${count}</div>
-                            <div class="kpi-vendedor-label">Pendentes</div>
-                        </div>
-                    `;
+            // Contar orbiuns ativos por vendedor
+            orbiunsData
+                .filter(o => o.status === 'Problema' || o.status === 'Em atendimento')
+                .forEach(o => {
+                    const vendedor = o.vendedor || 'Sem vendedor';
+                    vendedores[vendedor] = (vendedores[vendedor] || 0) + 1;
                 });
-            }
-            
-            // Adicionar vendedores não na lista (se houver)
-            Object.keys(countPorVendedor).forEach(vendedor => {
-                if (!CVC_CONFIG.VENDEDORES || !CVC_CONFIG.VENDEDORES.includes(vendedor)) {
-                    const count = countPorVendedor[vendedor];
-                    const primeiroNome = vendedor.split(' ')[0];
-                    
-                    html += `
-                        <div class="kpi-vendedor">
-                            <div class="kpi-vendedor-nome">${primeiroNome}</div>
-                            <div class="kpi-vendedor-numero">${count}</div>
-                            <div class="kpi-vendedor-label">Pendentes</div>
-                        </div>
-                    `;
-                }
-            });
-            
-            kpisVendedores.innerHTML = html || '<p class="text-white-50 mb-0">Sem pendências</p>';
-            kpisTotal.innerHTML = `TOTAL ABERTOS: <span>${totalAbertos}</span>`;
-            
-            debugLog(`📊 KPIs atualizados: ${totalAbertos} orbiuns abertos`, 'info');
+
+            const containerVendedores = document.getElementById('kpisVendedores');
+            const containerTotal = document.getElementById('kpisTotal');
+
+            // Renderizar KPIs por vendedor
+            containerVendedores.innerHTML = Object.entries(vendedores)
+                .sort((a, b) => b[1] - a[1])
+                .map(([vendedor, total]) => `
+                    <div class="kpi-vendedor">
+                        <div class="kpi-vendedor-nome">${vendedor}</div>
+                        <div class="kpi-vendedor-numero">${total}</div>
+                        <div class="kpi-vendedor-label">orbium${total !== 1 ? 's' : ''} ativo${total !== 1 ? 's' : ''}</div>
+                    </div>
+                `).join('');
+
+            // Total geral
+            const totalAtivos = Object.values(vendedores).reduce((a, b) => a + b, 0);
+            containerTotal.innerHTML = `
+                <i class="fas fa-chart-line"></i> Total de Orbiuns Ativos:
+                <span>${totalAtivos}</span>
+            `;
         }
 
         // ================================================================================
@@ -1312,278 +1638,266 @@
         // ================================================================================
         function renderizarOrbiuns() {
             const container = document.getElementById('orbiunsContainer');
-            
+            const emptyState = document.getElementById('emptyState');
+
             if (orbiunsFiltrados.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-inbox"></i>
-                        <h4>Nenhum Orbium Encontrado</h4>
-                        <p>Não há orbiuns que correspondam aos filtros aplicados.</p>
-                    </div>
-                `;
+                container.innerHTML = '';
+                emptyState.style.display = 'block';
                 return;
             }
-            
-            let html = '';
-            
-            orbiunsFiltrados.forEach(orbium => {
-                const statusClass = orbium.status ? orbium.status.toLowerCase().replace(/ /g, '-') : 'pendente';
-                const whatsappFormatado = formatarWhatsApp(orbium.whats_cliente);
-                const dataAbertura = formatarData(orbium.data_abertura);
-                
-                html += `
+
+            emptyState.style.display = 'none';
+
+            container.innerHTML = orbiunsFiltrados.map(orbium => {
+                const statusClass = 
+                    orbium.status === 'Problema' ? 'status-problema' :
+                    orbium.status === 'Resolvido' ? 'status-resolvido' :
+                    'status-atendimento';
+
+                return `
                     <div class="orbium-card">
                         <div class="orbium-header">
-                            <div class="orbium-id">
-                                <i class="fas fa-hashtag"></i>
-                                ${orbium.orbium || 'N/A'}
-                            </div>
-                            <span class="status-badge status-${statusClass}">
-                                ${orbium.status || 'Pendente'}
+                            <h3 class="orbium-titulo">
+                                <i class="fas fa-orbit"></i> Orbium ${orbium.orbium || 'N/A'}
+                            </h3>
+                            <span class="orbium-status ${statusClass}">
+                                ${orbium.status}
                             </span>
                         </div>
-                        <div class="orbium-body">
-                            <div class="orbium-info">
+
+                        <div class="orbium-info-grid">
+                            <div class="orbium-info-item">
                                 <i class="fas fa-calendar-alt"></i>
-                                <strong>Abertura:</strong>
-                                <span>${dataAbertura}</span>
+                                <div>
+                                    <div class="orbium-info-label">Data Abertura</div>
+                                    <div class="orbium-info-value">${formatarData(orbium.data_abertura)}</div>
+                                </div>
                             </div>
-                            <div class="orbium-info">
+
+                            <div class="orbium-info-item">
                                 <i class="fas fa-building"></i>
-                                <strong>Departamento:</strong>
-                                <span>${orbium.departamento || 'N/A'}</span>
+                                <div>
+                                    <div class="orbium-info-label">Departamento</div>
+                                    <div class="orbium-info-value">${orbium.departamento || 'N/A'}</div>
+                                </div>
                             </div>
-                            <div class="orbium-info">
+
+                            <div class="orbium-info-item">
                                 <i class="fas fa-user-tie"></i>
-                                <strong>Vendedor:</strong>
-                                <span>${orbium.vendedor || 'N/A'}</span>
+                                <div>
+                                    <div class="orbium-info-label">Vendedor</div>
+                                    <div class="orbium-info-value">${orbium.vendedor || 'N/A'}</div>
+                                </div>
                             </div>
-                            ${orbium.nome_cliente ? `
-                            <div class="orbium-info">
-                                <i class="fas fa-user"></i>
-                                <strong>Cliente:</strong>
-                                <span>${orbium.nome_cliente}</span>
-                            </div>
-                            ` : ''}
-                            ${orbium.whats_cliente ? `
-                            <div class="orbium-info">
-                                <i class="fas fa-phone"></i>
-                                <strong>WhatsApp:</strong>
-                                <span>${whatsappFormatado}</span>
-                            </div>
-                            ` : ''}
+
                             ${orbium.recibo ? `
-                            <div class="orbium-info">
+                            <div class="orbium-info-item">
                                 <i class="fas fa-receipt"></i>
-                                <strong>Recibo:</strong>
-                                <span>${orbium.recibo}</span>
+                                <div>
+                                    <div class="orbium-info-label">Recibo</div>
+                                    <div class="orbium-info-value">${orbium.recibo}</div>
+                                </div>
                             </div>
                             ` : ''}
+
                             ${orbium.reserva ? `
-                            <div class="orbium-info">
+                            <div class="orbium-info-item">
                                 <i class="fas fa-ticket-alt"></i>
-                                <strong>Reserva:</strong>
-                                <span>${orbium.reserva}</span>
+                                <div>
+                                    <div class="orbium-info-label">Reserva</div>
+                                    <div class="orbium-info-value">${orbium.reserva}</div>
+                                </div>
                             </div>
                             ` : ''}
+
+                            ${orbium.pedido ? `
+                            <div class="orbium-info-item">
+                                <i class="fas fa-box"></i>
+                                <div>
+                                    <div class="orbium-info-label">Pedido</div>
+                                    <div class="orbium-info-value">${orbium.pedido}</div>
+                                </div>
+                            </div>
+                            ` : ''}
+
                             ${orbium.cia ? `
-                            <div class="orbium-info">
+                            <div class="orbium-info-item">
                                 <i class="fas fa-plane"></i>
-                                <strong>CIA:</strong>
-                                <span>${orbium.cia}</span>
+                                <div>
+                                    <div class="orbium-info-label">CIA</div>
+                                    <div class="orbium-info-value">${orbium.cia}</div>
+                                </div>
                             </div>
                             ` : ''}
-                            ${orbium.observacoes ? `
-                            <div class="orbium-info">
-                                <i class="fas fa-comment"></i>
-                                <strong>Observações:</strong>
-                                <span>${orbium.observacoes}</span>
+
+                            ${orbium.loc_gds ? `
+                            <div class="orbium-info-item">
+                                <i class="fas fa-tag"></i>
+                                <div>
+                                    <div class="orbium-info-label">LOC GDS</div>
+                                    <div class="orbium-info-value">${orbium.loc_gds}</div>
+                                </div>
+                            </div>
+                            ` : ''}
+
+                            ${orbium.loc_cia ? `
+                            <div class="orbium-info-item">
+                                <i class="fas fa-tag"></i>
+                                <div>
+                                    <div class="orbium-info-label">LOC CIA</div>
+                                    <div class="orbium-info-value">${orbium.loc_cia}</div>
+                                </div>
+                            </div>
+                            ` : ''}
+
+                            ${orbium.nome_cliente ? `
+                            <div class="orbium-info-item">
+                                <i class="fas fa-user"></i>
+                                <div>
+                                    <div class="orbium-info-label">Cliente</div>
+                                    <div class="orbium-info-value">${orbium.nome_cliente}</div>
+                                </div>
+                            </div>
+                            ` : ''}
+
+                            ${orbium.whats_cliente ? `
+                            <div class="orbium-info-item">
+                                <i class="fab fa-whatsapp"></i>
+                                <div>
+                                    <div class="orbium-info-label">WhatsApp</div>
+                                    <div class="orbium-info-value">${formatarWhatsApp(orbium.whats_cliente)}</div>
+                                </div>
+                            </div>
+                            ` : ''}
+
+                            ${orbium.cpf_cliente ? `
+                            <div class="orbium-info-item">
+                                <i class="fas fa-id-card"></i>
+                                <div>
+                                    <div class="orbium-info-label">CPF</div>
+                                    <div class="orbium-info-value">${orbium.cpf_cliente}</div>
+                                </div>
                             </div>
                             ` : ''}
                         </div>
-                        <div class="orbium-footer">
-                            <div class="orbium-actions">
-                                ${orbium.whats_cliente ? `
-                                <button class="btn-action btn-whatsapp" onclick="abrirWhatsApp('${orbium.whats_cliente}', '${orbium.nome_cliente || 'Cliente'}')">
-                                    <i class="fab fa-whatsapp"></i> WhatsApp
-                                </button>
-                                ` : ''}
-                                <button class="btn-action btn-editar" onclick="editarOrbiumModal('${orbium.id}')">
-                                    <i class="fas fa-edit"></i> Editar
-                                </button>
-                                <button class="btn-action btn-deletar" onclick="confirmarDelete('${orbium.id}')">
-                                    <i class="fas fa-trash"></i> Deletar
-                                </button>
-                            </div>
+
+                        ${orbium.observacoes ? `
+                        <div class="orbium-observacoes">
+                            <strong><i class="fas fa-comment-dots"></i> Observações:</strong>
+                            ${orbium.observacoes}
+                        </div>
+                        ` : ''}
+
+                        <div class="orbium-acoes">
+                            <button onclick="abrirModalEditarOrbium('${orbium.id}')" class="btn-acao btn-editar">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            ${orbium.whats_cliente ? `
+                            <button onclick="abrirWhatsApp('${orbium.whats_cliente}', '${orbium.nome_cliente || 'Cliente'}')" 
+                                    class="btn-acao btn-whatsapp">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                            ` : ''}
+                            <button onclick="confirmarDelete('${orbium.id}')" class="btn-acao btn-deletar">
+                                <i class="fas fa-trash"></i> Deletar
+                            </button>
                         </div>
                     </div>
                 `;
-            });
-            
-            container.innerHTML = html;
-            debugLog(`✅ ${orbiunsFiltrados.length} orbiuns renderizados`, 'success');
+            }).join('');
         }
 
         // ================================================================================
-        // ✨ ANALISAR DADOS COLADOS
-        // ================================================================================
-        function analisarDadosColados() {
-            const texto = document.getElementById('colarDadosTexto').value.trim();
-            
-            if (!texto) {
-                mostrarAlertaErro('⚠️ Cole os dados primeiro!');
-                return;
-            }
-            
-            debugLog('🔍 Analisando dados colados...', 'info');
-            
-            // Detectar padrões
-            const padroes = {
-                recibo: /(?:recibo|rcb|reb)[\s:=-]*([0-9\-]+)/i,
-                nome_cliente: /(?:cliente|nome|client)[\s:=-]*([^\n\r]+)/i,
-                whats_cliente: /(?:whatsapp|whats|wpp|tel|telefone|fone)[\s:=-]*([0-9]+)/i,
-                cpf_cliente: /(?:cpf)[\s:=-]*([0-9.\-]+)/i,
-                reserva: /(?:reserva|res|rsv)[\s:=-]*([a-z0-9]+)/i,
-                pedido: /(?:pedido|ped)[\s:=-]*([a-z0-9]+)/i,
-                cia: /(?:cia|companhia|comp)[\s:=-]*([a-z]+)/i,
-                loc_gds: /(?:loc\s*gds|gds|localizador\s*gds)[\s:=-]*([a-z0-9]+)/i,
-                loc_cia: /(?:loc\s*cia|localizador\s*cia)[\s:=-]*([a-z0-9]+)/i
-            };
-            
-            const camposPreenchidos = [];
-            const camposVazios = [];
-            
-            // Extrair dados
-            Object.keys(padroes).forEach(campo => {
-                const match = texto.match(padroes[campo]);
-                if (match && match[1]) {
-                    const valor = match[1].trim();
-                    document.getElementById(campo).value = valor;
-                    camposPreenchidos.push({ campo, valor });
-                    debugLog(`✅ ${campo}: ${valor}`, 'success');
-                } else {
-                    camposVazios.push(campo);
-                }
-            });
-            
-            // Mostrar feedback
-            const divPreenchidos = document.getElementById('camposPreenchidos');
-            const divVazios = document.getElementById('camposVazios');
-            const listaPreenchidos = document.getElementById('listaPreenchidos');
-            const listaVazios = document.getElementById('listaVazios');
-            
-            if (camposPreenchidos.length > 0) {
-                listaPreenchidos.innerHTML = camposPreenchidos.map(c => 
-                    `<li><strong>${formatarNomeCampo(c.campo)}:</strong> ${c.valor}</li>`
-                ).join('');
-                divPreenchidos.classList.add('show');
-            } else {
-                divPreenchidos.classList.remove('show');
-            }
-            
-            if (camposVazios.length > 0) {
-                listaVazios.innerHTML = camposVazios.map(c => 
-                    `<li>${formatarNomeCampo(c)}</li>`
-                ).join('');
-                divVazios.classList.add('show');
-            } else {
-                divVazios.classList.remove('show');
-            }
-            
-            if (camposPreenchidos.length > 0) {
-                mostrarAlertaSucesso(`✅ ${camposPreenchidos.length} campos preenchidos automaticamente!`);
-            } else {
-                mostrarAlertaErro('⚠️ Nenhum campo foi detectado. Verifique o formato dos dados.');
-            }
-        }
-        
-        function formatarNomeCampo(campo) {
-            const nomes = {
-                recibo: 'Recibo',
-                nome_cliente: 'Nome do Cliente',
-                whats_cliente: 'WhatsApp',
-                cpf_cliente: 'CPF',
-                reserva: 'Reserva',
-                pedido: 'Pedido',
-                cia: 'Companhia Aérea',
-                loc_gds: 'Localizador GDS',
-                loc_cia: 'Localizador CIA'
-            };
-            return nomes[campo] || campo;
-        }
-
-        // ================================================================================
-        // ABRIR MODAL NOVO ORBIUM
+        // MODAL NOVO ORBIUM
         // ================================================================================
         function abrirModalNovoOrbium() {
-            // Limpar formulário
+            document.getElementById('modalNovoOrbium').style.display = 'block';
             document.getElementById('formNovoOrbium').reset();
-            document.getElementById('colarDadosTexto').value = '';
-            document.getElementById('camposPreenchidos').classList.remove('show');
-            document.getElementById('camposVazios').classList.remove('show');
-            
-            const modal = new bootstrap.Modal(document.getElementById('modalNovoOrbium'));
-            modal.show();
+        }
+
+        function fecharModalNovoOrbium() {
+            document.getElementById('modalNovoOrbium').style.display = 'none';
         }
 
         // ================================================================================
-        // CRIAR ORBIUM
+        // PROCESSAR DADOS COLADOS
         // ================================================================================
-        async function criarOrbium(e) {
-            e.preventDefault();
+        function processarDadosColados() {
+            const texto = document.getElementById('colarDados').value.trim();
+            if (!texto) return;
+
+            const colunas = texto.split('\t');
             
-            const botaoSubmit = e.target.querySelector('button[type="submit"]');
-            const textoOriginal = botaoSubmit.innerHTML;
-            
-            // Validar WhatsApp (OBRIGATÓRIO)
-            const whatsapp = document.getElementById('whats_cliente').value.trim();
-            if (!whatsapp) {
-                document.getElementById('whatsappError').classList.remove('d-none');
-                mostrarAlertaErro('⚠️ WhatsApp do cliente é obrigatório!');
-                return;
+            if (colunas.length >= 15) {
+                document.getElementById('orbiumNumero').value = colunas[0] || '';
+                document.getElementById('status').value = colunas[1] || 'Em atendimento';
+                document.getElementById('departamento').value = colunas[3] || 'Vendas';
+                document.getElementById('vendedor').value = colunas[4] || '';
+                document.getElementById('recibo').value = colunas[5] || '';
+                document.getElementById('reserva').value = colunas[6] || '';
+                document.getElementById('pedido').value = colunas[7] || '';
+                document.getElementById('cia').value = colunas[8] || '';
+                document.getElementById('locGds').value = colunas[9] || '';
+                document.getElementById('locCia').value = colunas[10] || '';
+                document.getElementById('observacoes').value = colunas[11] || '';
+                document.getElementById('nomeCliente').value = colunas[12] || '';
+                document.getElementById('whatsCliente').value = colunas[13] || '';
+                document.getElementById('cpfCliente').value = colunas[14] || '';
+                
+                mostrarAlertaSucesso('✅ Dados preenchidos automaticamente!');
             }
-            document.getElementById('whatsappError').classList.add('d-none');
-            
-            botaoSubmit.disabled = true;
-            botaoSubmit.innerHTML = '<span class="loading-spinner"></span> Criando...';
+        }
+
+        // ================================================================================
+        // SALVAR NOVO ORBIUM
+        // ================================================================================
+        async function salvarNovoOrbium() {
+            const botaoSubmit = document.querySelector('#formNovoOrbium button[type="submit"]');
+            const textoOriginal = botaoSubmit.innerHTML;
 
             try {
-                const formData = new FormData(e.target);
-                const dados = Object.fromEntries(formData.entries());
+                botaoSubmit.disabled = true;
+                botaoSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
 
-                // Gerar número do orbium
-                const agora = new Date();
-                const ano = agora.getFullYear();
-                const mes = String(agora.getMonth() + 1).padStart(2, '0');
-                const dia = String(agora.getDate()).padStart(2, '0');
-                const hora = String(agora.getHours()).padStart(2, '0');
-                const min = String(agora.getMinutes()).padStart(2, '0');
-                const seg = String(agora.getSeconds()).padStart(2, '0');
-                dados.orbium = `${ano}${mes}${dia}${hora}${min}${seg}`;
-
-                debugLog('📝 Criando orbium', 'info', dados);
-
-                // ✅ CORRIGIDO: action correto + campos corretos
-                const result = await chamarAPI({
+                const dados = {
                     action: 'cadastrar_orbium',
-                    ...dados
-                });
+                    orbium: document.getElementById('orbiumNumero').value,
+                    status: document.getElementById('status').value,
+                    departamento: document.getElementById('departamento').value,
+                    vendedor: document.getElementById('vendedor').value,
+                    recibo: document.getElementById('recibo').value,
+                    reserva: document.getElementById('reserva').value,
+                    pedido: document.getElementById('pedido').value,
+                    cia: document.getElementById('cia').value,
+                    loc_gds: document.getElementById('locGds').value,
+                    loc_cia: document.getElementById('locCia').value,
+                    observacoes: document.getElementById('observacoes').value,
+                    nome_cliente: document.getElementById('nomeCliente').value,
+                    whats_cliente: document.getElementById('whatsCliente').value,
+                    cpf_cliente: document.getElementById('cpfCliente').value
+                };
+
+                if (!dados.whats_cliente) {
+                    throw new Error('WhatsApp do cliente é obrigatório!');
+                }
+
+                debugLog('💾 Salvando novo orbium...', 'info');
+
+                const result = await chamarAPI(dados);
 
                 if (result.success) {
-                    mostrarAlertaSucesso('✅ Orbium criado com sucesso!');
-                    bootstrap.Modal.getInstance(document.getElementById('modalNovoOrbium')).hide();
-                    
+                    mostrarAlertaSucesso('✅ Orbium cadastrado com sucesso!');
+                    fecharModalNovoOrbium();
                     setTimeout(() => {
                         carregarOrbiuns();
                     }, 1000);
                 } else {
-                    throw new Error(result.message || 'Erro ao criar orbium');
+                    throw new Error(result.message || 'Erro ao cadastrar orbium');
                 }
 
             } catch (error) {
-                debugLog('❌ Erro ao criar orbium: ' + error.message, 'error');
+                debugLog('❌ Erro ao salvar: ' + error.message, 'error');
                 mostrarAlertaErro(`❌ Erro: ${error.message}`);
-                
             } finally {
                 botaoSubmit.disabled = false;
                 botaoSubmit.innerHTML = textoOriginal;
@@ -1591,61 +1905,64 @@
         }
 
         // ================================================================================
-        // EDITAR ORBIUM
+        // MODAL EDITAR ORBIUM
         // ================================================================================
-        function editarOrbiumModal(id) {
-            const orbium = orbiunsData.find(o => o.id === id);
+        function abrirModalEditarOrbium(id) {
+            const orbium = orbiunsData.find(o => o.id == id);
             if (!orbium) {
-                mostrarAlertaErro('Orbium não encontrado!');
+                mostrarAlertaErro('⚠️ Orbium não encontrado!');
                 return;
             }
 
-            document.getElementById('edit_id').value = id;
-            document.getElementById('edit_status').value = orbium.status;
-            document.getElementById('edit_observacoes').value = orbium.observacoes || '';
+            document.getElementById('editarId').value = id;
+            document.getElementById('editarOrbiumNumero').value = orbium.orbium || '';
+            document.getElementById('editarStatus').value = orbium.status || 'Em atendimento';
+            document.getElementById('editarObservacoes').value = '';
 
-            const modal = new bootstrap.Modal(document.getElementById('modalEditarOrbium'));
-            modal.show();
+            document.getElementById('modalEditarOrbium').style.display = 'block';
         }
 
-        async function editarOrbium(e) {
-            e.preventDefault();
-            
-            const botaoSubmit = e.target.querySelector('button[type="submit"]');
+        function fecharModalEditarOrbium() {
+            document.getElementById('modalEditarOrbium').style.display = 'none';
+        }
+
+        // ================================================================================
+        // SALVAR EDIÇÃO ORBIUM
+        // ================================================================================
+        async function salvarEdicaoOrbium() {
+            const botaoSubmit = document.querySelector('#formEditarOrbium button[type="submit"]');
             const textoOriginal = botaoSubmit.innerHTML;
-            
-            botaoSubmit.disabled = true;
-            botaoSubmit.innerHTML = '<span class="loading-spinner"></span> Salvando...';
 
             try {
-                const formData = new FormData(e.target);
-                const dados = Object.fromEntries(formData.entries());
+                botaoSubmit.disabled = true;
+                botaoSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
 
-                debugLog('📝 Editando orbium', 'info', dados);
+                const id = document.getElementById('editarId').value;
+                const novoStatus = document.getElementById('editarStatus').value;
+                const observacoesAdicionais = document.getElementById('editarObservacoes').value;
 
-                // ✅ CORRIGIDO: action correto
+                debugLog('💾 Atualizando orbium: ' + id, 'info');
+
                 const result = await chamarAPI({
                     action: 'atualizar_status_orbium',
-                    id: dados.id,
-                    status: dados.status,
-                    observacoes: dados.observacoes
+                    id: id,
+                    novo_status: novoStatus,
+                    observacoes: observacoesAdicionais
                 });
 
                 if (result.success) {
                     mostrarAlertaSucesso('✅ Orbium atualizado com sucesso!');
-                    bootstrap.Modal.getInstance(document.getElementById('modalEditarOrbium')).hide();
-                    
+                    fecharModalEditarOrbium();
                     setTimeout(() => {
                         carregarOrbiuns();
                     }, 1000);
                 } else {
-                    throw new Error(result.message || 'Erro ao editar orbium');
+                    throw new Error(result.message || 'Erro ao atualizar orbium');
                 }
 
             } catch (error) {
-                debugLog('❌ Erro ao editar orbium: ' + error.message, 'error');
+                debugLog('❌ Erro ao atualizar: ' + error.message, 'error');
                 mostrarAlertaErro(`❌ Erro: ${error.message}`);
-                
             } finally {
                 botaoSubmit.disabled = false;
                 botaoSubmit.innerHTML = textoOriginal;
@@ -1663,7 +1980,6 @@
             try {
                 debugLog('🗑️ Deletando orbium: ' + id, 'info');
 
-                // ✅ CORRIGIDO: action correto
                 const result = await chamarAPI({
                     action: 'deletar_orbium',
                     id: id
@@ -1693,14 +2009,9 @@
                 return;
             }
             
-            // Limpar número (apenas dígitos)
             const numeroLimpo = numero.toString().replace(/\D/g, '');
-            
-            // Mensagem padrão
             const mensagem = `Olá ${nome || 'Cliente'}! Aqui é da CVC Itaquá. Como posso ajudar?`;
             const mensagemEncoded = encodeURIComponent(mensagem);
-            
-            // Abrir WhatsApp
             const url = `https://wa.me/55${numeroLimpo}?text=${mensagemEncoded}`;
             window.open(url, '_blank');
             
@@ -1724,12 +2035,10 @@
             const temFiltroAtivo = Object.values(filtros).some(v => v !== '');
             
             if (!temFiltroAtivo) {
-                // Sem filtros ativos: mostrar apenas Problemas e Em atendimento
                 orbiunsFiltrados = orbiunsData.filter(o => 
                     o.status === 'Problema' || o.status === 'Em atendimento'
                 );
             } else {
-                // Com filtros: aplicar em todos os dados
                 orbiunsFiltrados = orbiunsData.filter(orbium => {
                     if (filtros.orbium && (!orbium.orbium || !orbium.orbium.toString().toLowerCase().includes(filtros.orbium))) {
                         return false;
@@ -1769,7 +2078,6 @@
             document.getElementById('filtroWhatsApp').value = '';
             document.getElementById('filtroRecibo').value = '';
             
-            // Voltar ao filtro padrão: Problemas e Em atendimento
             orbiunsFiltrados = orbiunsData.filter(o => 
                 o.status === 'Problema' || o.status === 'Em atendimento'
             );
@@ -1779,6 +2087,25 @@
         // ================================================================================
         // FUNÇÕES AUXILIARES
         // ================================================================================
+        function preencherVendedores() {
+            const select = document.getElementById('vendedor');
+            const selectFiltro = document.getElementById('filtroVendedor');
+            
+            const vendedores = SYSTELOS_CONFIG.vendedores || [];
+            
+            vendedores.forEach(vendedor => {
+                const option = document.createElement('option');
+                option.value = vendedor;
+                option.textContent = vendedor;
+                select.appendChild(option);
+                
+                const optionFiltro = document.createElement('option');
+                optionFiltro.value = vendedor;
+                optionFiltro.textContent = vendedor;
+                selectFiltro.appendChild(optionFiltro);
+            });
+        }
+
         function formatarWhatsApp(numero) {
             if (!numero) return 'N/A';
             const numeroLimpo = numero.toString().replace(/\D/g, '');
@@ -1831,6 +2158,13 @@
             }, 5000);
         }
 
+        // Fechar modais ao clicar fora
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
         // Atalho de teclado para novo orbium
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey && e.key === 'n') {
@@ -1839,14 +2173,15 @@
             }
         });
 
-        debugLog('✅ Sistema de Orbiuns v12.0 CORRIGIDO - COMPLETO!', 'success');
-        debugLog('🔧 CORREÇÕES v12.0:', 'info');
-        debugLog('   1. ✅ KPIs discretos por vendedor', 'info');
-        debugLog('   2. ✅ Campo Colar Dados com auto-preenchimento', 'info');
-        debugLog('   3. ✅ Actions da API corrigidas', 'info');
-        debugLog('   4. ✅ Nomes dos campos corrigidos', 'info');
-        debugLog('   5. ✅ WhatsApp como único campo obrigatório', 'info');
-        debugLog('   6. ✅ Senha hardcoded removida', 'info');
+        debugLog('✅ Sistema de Orbiuns v13.0 WEBHOOK COMPLETO!', 'success');
+        debugLog('🔧 NOVIDADES v13.0:', 'info');
+        debugLog('   1. 🆕 Seção de atualizações recentes', 'info');
+        debugLog('   2. 🆕 Badge de notificações', 'info');
+        debugLog('   3. 🆕 Cards de atualização', 'info');
+        debugLog('   4. 🆕 Marcar como lido individual', 'info');
+        debugLog('   5. 🆕 Marcar todas como lidas', 'info');
+        debugLog('   6. 🆕 Auto-refresh a cada 5 minutos', 'info');
+        debugLog('   7. ✅ Integração completa com webhook', 'info');
         debugLog('✅ Sistema pronto para uso!', 'success');
     </script>
 </body>
