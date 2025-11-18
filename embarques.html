@@ -31,7 +31,7 @@
     
     <style>
         /* ================================================================================
-         * ESTILOS ESPECÍFICOS PARA EMBARQUES v12.4 - CORREÇÃO MODALDATA E FORMATO DE DATAS
+         * ESTILOS ESPECÍFICOS PARA EMBARQUES v12.5 - RESET DE BOTÕES DOS MODAIS
          * ================================================================================ */
         
         .main-container {
@@ -572,7 +572,7 @@
     <div class="loading-overlay" id="loadingOverlay">
         <div class="text-center text-white">
             <div class="loading-spinner"></div>
-            <div class="mt-3">Carregando embarques v12.4...</div>
+            <div class="mt-3">Carregando embarques v12.5...</div>
         </div>
     </div>
 
@@ -848,7 +848,7 @@
     
     <script>
         // ================================================================================
-        // SYSTELOS TUR - EMBARQUES v12.4 - CORREÇÃO MODALDATA E FORMATO DE DATAS
+        // SYSTELOS TUR - EMBARQUES v12.5 - CORREÇÃO MODALDATA E FORMATO DE DATAS
         // ================================================================================
         
         // Variáveis globais
@@ -1543,6 +1543,25 @@
             
             modalData.conferencia = informe;
             
+            // ✅ RESETAR BOTÕES DO MODAL (corrige bug de botões desabilitados)
+            setTimeout(() => {
+                const btnConfirmar = document.querySelector('button[onclick="confirmarConferencia()"]');
+                const btnSalvar = document.querySelector('button[onclick="salvarEdicoes(\'conferencia\')"]');
+                const btnCancelar = document.querySelector('.modal#modalConferencia .btn-secondary[data-bs-dismiss="modal"]');
+                
+                if (btnConfirmar) {
+                    btnConfirmar.disabled = false;
+                    btnConfirmar.innerHTML = '<i class="fas fa-check"></i> Conferir Informe';
+                    btnConfirmar.classList.remove('btn-loading', 'btn-success-feedback', 'btn-error-feedback');
+                }
+                if (btnSalvar) {
+                    btnSalvar.disabled = false;
+                }
+                if (btnCancelar) {
+                    btnCancelar.disabled = false;
+                }
+            }, 100);
+            
             document.getElementById('conferencia-info').innerHTML = `
                 <div class="row mb-4">
                     <div class="col-md-8">
@@ -1844,6 +1863,25 @@
             
             modalData.checkin = voo;
             
+            // ✅ RESETAR BOTÕES DO MODAL (corrige bug de botões desabilitados)
+            setTimeout(() => {
+                const btnConfirmar = document.querySelector('button[onclick="confirmarCheckin()"]');
+                const btnSalvar = document.querySelector('.modal#modalCheckin button[onclick="salvarEdicoes(\'checkin\')"]');
+                const btnCancelar = document.querySelector('.modal#modalCheckin .btn-secondary[data-bs-dismiss="modal"]');
+                
+                if (btnConfirmar) {
+                    btnConfirmar.disabled = false;
+                    btnConfirmar.innerHTML = '<i class="fas fa-check"></i> Fazer Check-in';
+                    btnConfirmar.classList.remove('btn-loading', 'btn-success-feedback', 'btn-error-feedback');
+                }
+                if (btnSalvar) {
+                    btnSalvar.disabled = false;
+                }
+                if (btnCancelar) {
+                    btnCancelar.disabled = false;
+                }
+            }, 100);
+            
             document.getElementById('checkin-info').innerHTML = `
                 <div class="row mb-4">
                     <div class="col-md-8">
@@ -2143,6 +2181,21 @@
             if (!informe) return;
             
             modalData.posVenda = informe;
+            
+            // ✅ RESETAR BOTÕES DO MODAL (corrige bug de botões desabilitados)
+            setTimeout(() => {
+                const btnConfirmar = document.querySelector('button[onclick="confirmarPosVenda()"]');
+                const btnCancelar = document.querySelector('.modal#modalPosVenda .btn-secondary[data-bs-dismiss="modal"]');
+                
+                if (btnConfirmar) {
+                    btnConfirmar.disabled = false;
+                    btnConfirmar.innerHTML = '<i class="fas fa-check"></i> Confirmar Pós-venda';
+                    btnConfirmar.classList.remove('btn-loading', 'btn-success-feedback', 'btn-error-feedback');
+                }
+                if (btnCancelar) {
+                    btnCancelar.disabled = false;
+                }
+            }, 100);
             
             document.getElementById('pos-venda-info').innerHTML = `
                 <div class="row">
