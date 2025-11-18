@@ -1,18 +1,18 @@
 // ================================================================================
-// ⚙️ SYSTELOS TUR - CONFIGURAÇÃO CENTRALIZADA v9.1 - CORRIGIDO
+// ⚙️ SYSTELOS TUR - CONFIGURAÇÃO CENTRALIZADA v9.2 - ORBIUNS CORRIGIDO
 // ================================================================================
 // 🎯 ARQUIVO ÚNICO DE CONFIGURAÇÃO
 // Todas as URLs, cores, APIs e configurações em UM SÓ LUGAR
 // Se precisar mudar algo, muda APENAS aqui!
 // 
-// ✅ CORREÇÕES v9.1:
-// - Vendedores carregados da aba USUARIOS
-// - URL da API Google Apps Script configurada
-// - Alias CVC_CONFIG criado para compatibilidade
-// - Sistema 100% funcional
+// ✅ CORREÇÕES v9.2:
+// - Planilha ORBIUNS agora aponta para planilha única (1dF8dfIh8EyvX...)
+// - Aba "ORBIUNS" especificada (antes era "Dados")
+// - Nova URL da API Google Apps Script atualizada (18/11/2025)
+// - Sistema 100% funcional com planilha unificada
 // ================================================================================
 
-console.log('⚙️ Carregando SYSTELOS TUR - Configuração Centralizada v9.1 CORRIGIDA...');
+console.log('⚙️ Carregando SYSTELOS TUR - Configuração Centralizada v9.2 ORBIUNS CORRIGIDO...');
 
 // ================================================================================
 // 🏢 INFORMAÇÕES DO SISTEMA
@@ -24,7 +24,7 @@ const SYSTELOS_CONFIG = {
     nomeCompleto: 'SYSTELOS TUR - Sistemas com Propósito',
     simbolo: '[S]',
     tagline: 'Sistemas com propósito',
-    versao: '9.1',
+    versao: '9.2',
     ambiente: 'production', // 'development' ou 'production'
     
     // 🏢 Configurações da Filial
@@ -44,8 +44,8 @@ const SYSTELOS_CONFIG = {
         // Frontend (Vercel)
         frontend: window.location.origin, // Pega automaticamente
         
-        // 🆕 API Google Apps Script (PRODUÇÃO) - NOVO DEPLOY 17/11/2025 15:54
-        apiGoogleScript: 'https://script.google.com/macros/s/AKfycbyuKtEC2_BGAdh7ZrEvZxHvLTCb2oC1WEYYnubYxMXhJhLn7KWyymFVeqnj2Zm7i6NmUA/exec',
+        // 🆕 API Google Apps Script (PRODUÇÃO) - ATUALIZADO 18/11/2025
+        apiGoogleScript: 'https://script.google.com/macros/s/AKfycbzuX_qdjqcsr8J-_AUspG9CffWdk-P7PpRFm4IC_WO0vPRC_JfhB6Zf1AbeoXZmYdJ2Ow/exec',
         
         // APIs do Backend (Vercel Serverless Functions)
         api: {
@@ -57,18 +57,33 @@ const SYSTELOS_CONFIG = {
             debug: '/api/debug-orbiuns'           // Debug API
         },
         
-        // Google Sheets (se precisar acesso direto)
+        // Google Sheets (PLANILHA ÚNICA)
         googleSheets: {
-            // Planilha EMBARQUES (Principal)
+            // Planilha Principal (ÚNICA) - Contém TODAS as abas
             embarques: {
                 planilhaId: '1dF8dfIh8EyvX-5_sISpVc4dMsLNOqpwovQsbsxl9ywc',
+                aba: 'EMBARQUES',
                 urlBase: 'https://docs.google.com/spreadsheets/d/1dF8dfIh8EyvX-5_sISpVc4dMsLNOqpwovQsbsxl9ywc'
             },
             
-            // Planilha ORBIUNS (Secundária)
+            // ✅ CORRIGIDO v9.2: ORBIUNS na mesma planilha, aba "ORBIUNS"
             orbiuns: {
-                planilhaId: '1A7HOrMOw60Rks4_fwj0BNP5i9cZQ9H-dOJ7LKFw5Jis',
-                urlBase: 'https://docs.google.com/spreadsheets/d/1A7HOrMOw60Rks4_fwj0BNP5i9cZQ9H-dOJ7LKFw5Jis'
+                planilhaId: '1dF8dfIh8EyvX-5_sISpVc4dMsLNOqpwovQsbsxl9ywc', // ← Mesma planilha!
+                aba: 'ORBIUNS', // ← Aba específica (antes era "Dados")
+                urlBase: 'https://docs.google.com/spreadsheets/d/1dF8dfIh8EyvX-5_sISpVc4dMsLNOqpwovQsbsxl9ywc'
+            },
+            
+            // Outras abas da planilha única
+            usuarios: {
+                planilhaId: '1dF8dfIh8EyvX-5_sISpVc4dMsLNOqpwovQsbsxl9ywc',
+                aba: 'USUARIOS',
+                urlBase: 'https://docs.google.com/spreadsheets/d/1dF8dfIh8EyvX-5_sISpVc4dMsLNOqpwovQsbsxl9ywc'
+            },
+            
+            placarVendas: {
+                planilhaId: '1dF8dfIh8EyvX-5_sISpVc4dMsLNOqpwovQsbsxl9ywc',
+                aba: 'PLACAR VENDAS',
+                urlBase: 'https://docs.google.com/spreadsheets/d/1dF8dfIh8EyvX-5_sISpVc4dMsLNOqpwovQsbsxl9ywc'
             }
         }
     }
@@ -415,7 +430,7 @@ const CONFIG_UTILS = {
      */
     getApiUrl: function(tipo) {
         // Se pedir API do Google Apps Script, retorna ela
-        if (tipo === 'googleScript' || tipo === 'embarques' || tipo === 'vendas') {
+        if (tipo === 'googleScript' || tipo === 'embarques' || tipo === 'vendas' || tipo === 'orbiuns') {
             return SYSTELOS_CONFIG.urls.apiGoogleScript;
         }
         
@@ -544,6 +559,10 @@ const CONFIG_UTILS = {
             erros.push('ID da planilha EMBARQUES não configurado');
         }
         
+        if (!SYSTELOS_CONFIG.urls.googleSheets.orbiuns.planilhaId) {
+            erros.push('ID da planilha ORBIUNS não configurado');
+        }
+        
         // Validar vendedores
         if (!SYSTELOS_CONFIG.vendedores || SYSTELOS_CONFIG.vendedores.length === 0) {
             erros.push('Lista de vendedores vazia');
@@ -565,7 +584,7 @@ const CONFIG_UTILS = {
 // 🚀 INICIALIZAÇÃO AUTOMÁTICA
 // ================================================================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🌟 SYSTELOS TUR v9.1');
+    console.log('🌟 SYSTELOS TUR v9.2 - ORBIUNS CORRIGIDO');
     console.log('[S] Sistemas com Propósito');
     
     // Validar configuração
@@ -632,7 +651,7 @@ window.CVC_CONFIG = {
     // Lista de vendedores ativos
     VENDEDORES: SYSTELOS_CONFIG.vendedores,
     
-    // Planilhas
+    // Planilhas (CORRIGIDO: ambas apontam para planilha única)
     PLANILHA_EMBARQUES: SYSTELOS_CONFIG.urls.googleSheets.embarques.planilhaId,
     PLANILHA_ORBIUNS: SYSTELOS_CONFIG.urls.googleSheets.orbiuns.planilhaId,
     
@@ -644,6 +663,8 @@ console.log('✅ Alias CVC_CONFIG criado para compatibilidade');
 console.log('🔗 API URL:', CVC_CONFIG.API_URL);
 console.log('🏢 Filial:', CVC_CONFIG.FILIAL_PADRAO);
 console.log('👥 Vendedores:', CVC_CONFIG.VENDEDORES.length);
+console.log('📊 Planilha EMBARQUES:', CVC_CONFIG.PLANILHA_EMBARQUES);
+console.log('📋 Planilha ORBIUNS:', CVC_CONFIG.PLANILHA_ORBIUNS);
 
 // ================================================================================
 // 📝 LOGS FINAIS
@@ -658,5 +679,8 @@ console.log('  📋 Templates:', IA_CONFIG.templates.total);
 console.log('  💾 Estado:', Object.keys(ESTADO_CONFIG.keys).length, 'chaves');
 console.log('  👥 Vendedores:', SYSTELOS_CONFIG.vendedores.length);
 console.log('  🏢 Filial:', SYSTELOS_CONFIG.filial);
-console.log('✅ Config SYSTELOS TUR v9.1 pronto para uso!');
+console.log('✅ ORBIUNS v9.2: Planilha única configurada!');
+console.log('   - Planilha ID:', SYSTELOS_CONFIG.urls.googleSheets.orbiuns.planilhaId);
+console.log('   - Aba ORBIUNS:', SYSTELOS_CONFIG.urls.googleSheets.orbiuns.aba);
+console.log('✅ Config SYSTELOS TUR v9.2 pronto para uso!');
 console.log('========================================');
