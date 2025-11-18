@@ -697,63 +697,91 @@
     </style>
 </head>
 <body class="systelos-body">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark systelos-navbar">
+    <!-- Navbar Padrão SYSTELOS TUR -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #0F1B3D 0%, #1a2951 100%); padding: 1rem 2rem; box-shadow: 0 4px 15px rgba(15, 27, 61, 0.3);">
         <div class="container-fluid">
-            <a class="navbar-brand systelos-brand" href="index.html">
-                <span class="brand-brackets">[</span>
-                <span class="brand-text">S</span>
-                <span class="brand-brackets">]</span>
-                <span class="ms-2">SYSTELOS TUR</span>
+            <!-- Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="index.html" style="font-weight: 700; font-size: 1.3rem; gap: 10px;">
+                <div style="background: #FFB800; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; color: #0F1B3D;">
+                    [S]
+                </div>
+                <div>
+                    <div style="line-height: 1.2; font-family: 'Poppins', sans-serif;">SYSTELOS TUR</div>
+                    <div style="font-size: 0.7rem; font-weight: 400; color: rgba(255,255,255,0.7); font-family: 'Inter', sans-serif;">Sistemas com propósito</div>
+                </div>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+            <!-- Toggle para mobile -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+
+            <!-- Menu Principal -->
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">
+                        <a class="nav-link" href="index.html" style="padding: 0.8rem 1.2rem; border-radius: 8px; transition: all 0.3s ease;">
                             <i class="fas fa-home me-2"></i>Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="embarques.html">
-                            <i class="fas fa-plane me-2"></i>Embarques
+                        <a class="nav-link" href="orcamentos.html" style="padding: 0.8rem 1.2rem; border-radius: 8px; transition: all 0.3s ease;">
+                            <i class="fas fa-wand-magic-sparkles me-2"></i>Padronizador de Orçamentos
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="vendas.html">
-                            <i class="fas fa-chart-line me-2"></i>Vendas
+                        <a class="nav-link" href="vendas.html" style="padding: 0.8rem 1.2rem; border-radius: 8px; transition: all 0.3s ease;">
+                            <i class="fas fa-chart-line me-2"></i>Informe de Vendas
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="orbiuns.html">
-                            <i class="fas fa-tasks me-2"></i>Orbiuns
+                        <a class="nav-link" href="vendas-automatizado.html" style="padding: 0.8rem 1.2rem; border-radius: 8px; transition: all 0.3s ease;">
+                            <i class="fas fa-robot me-2"></i>Informe Automatizado
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="embarques.html" style="padding: 0.8rem 1.2rem; border-radius: 8px; transition: all 0.3s ease;">
+                            <i class="fas fa-plane me-2"></i>Controle de Embarques
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="orbiuns.html" style="padding: 0.8rem 1.2rem; border-radius: 8px; transition: all 0.3s ease; background: #FFB800; color: #0F1B3D; font-weight: 600;">
+                            <i class="fas fa-clipboard-list me-2"></i>Controle de Orbiuns
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="importacao.html" style="padding: 0.8rem 1.2rem; border-radius: 8px; transition: all 0.3s ease;">
+                            <i class="fas fa-upload me-2"></i>Importação
                         </a>
                     </li>
                 </ul>
+
+                <!-- Botões de Usuário -->
+                <div class="d-flex gap-2 align-items-center">
+                    <span style="color: rgba(255,255,255,0.8); font-size: 0.9rem; margin-right: 10px;">
+                        <i class="fas fa-crown me-2" style="color: #FFB800;"></i>
+                        Gestor SYSTELOS
+                    </span>
+                    <span style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">Gestor</span>
+                    <button onclick="window.location.href='index.html'" style="background: #FFB800; color: #0F1B3D; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-sign-out-alt me-2"></i>Sair
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
+    
+    <style>
+        /* Hover effects para navbar */
+        .navbar .nav-link:not(.active):hover {
+            background: rgba(255, 184, 0, 0.1) !important;
+            color: #FFB800 !important;
+        }
+    </style>
 
     <!-- Container Principal -->
-    <div class="container-fluid">
+    <div class="container-fluid" style="padding: 30px;">
         <div class="main-container">
-            <!-- Header com Título -->
-            <div class="systelos-header">
-                <div class="systelos-header-content">
-                    <div>
-                        <h1 class="systelos-page-title">
-                            <i class="fas fa-tasks me-3"></i>
-                            Controle de Orbiuns
-                        </h1>
-                        <p class="systelos-page-subtitle">
-                            Gerenciamento de processos administrativos e atendimentos
-                        </p>
-                    </div>
-                </div>
-            </div>
-
             <!-- Conteúdo -->
             <div class="content-section">
                 
