@@ -20,6 +20,182 @@
     <link rel="icon" type="image/x-icon" href="assets/images/systelos-favicon.ico">
     
     <style>
+        /* ============================================================================
+           HEADER FIXO NO TOPO
+           ============================================================================ */
+
+        .systelos-header {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            z-index: 1000 !important;
+            background: linear-gradient(135deg, #0F1B3D 0%, #1a2951 100%) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
+            height: 70px;
+        }
+
+        body {
+            padding-top: 85px !important;
+        }
+
+        /* ============================================================================
+           MENU HAMBÚRGUER
+           ============================================================================ */
+
+        #menuToggle {
+            display: block !important;
+            position: absolute !important;
+            left: 20px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 1001 !important;
+            border: 2px solid #FFB800 !important;
+            padding: 8px 12px !important;
+            background: rgba(255, 184, 0, 0.2) !important;
+            border-radius: 8px !important;
+            transition: all 0.3s ease !important;
+            width: 50px !important;
+            height: 40px !important;
+            cursor: pointer;
+        }
+
+        #menuToggle:hover {
+            background: rgba(255, 184, 0, 0.4) !important;
+            transform: translateY(-50%) scale(1.05) !important;
+        }
+
+        #menuToggle .navbar-toggler-icon {
+            display: inline-block !important;
+            width: 1.5em !important;
+            height: 1.5em !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 184, 0, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        .systelos-logo {
+            margin-left: 60px !important;
+        }
+
+        /* ============================================================================
+           SIDEBAR MENU LATERAL
+           ============================================================================ */
+
+        .sidebar-menu {
+            position: fixed;
+            left: -340px;
+            top: 0;
+            width: 320px;
+            height: 100vh;
+            background: #0F1B3D;
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 9999;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.5);
+            overflow-y: auto;
+        }
+
+        .sidebar-menu.show {
+            left: 0;
+        }
+
+        .sidebar-menu::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-menu::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .sidebar-menu::-webkit-scrollbar-thumb {
+            background: rgba(255,184,0,0.5);
+            border-radius: 3px;
+        }
+
+        .sidebar-menu::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,184,0,0.7);
+        }
+
+        .sidebar-header {
+            position: relative;
+            border-bottom: 1px solid rgba(255,184,0,0.3);
+            padding: 20px;
+        }
+
+        .sidebar-header h3 {
+            color: #FFB800;
+            font-family: Poppins, sans-serif;
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        #closeSidebar {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        #closeSidebar:hover {
+            background: rgba(255,184,0,0.2) !important;
+            transform: rotate(90deg);
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li a {
+            display: block;
+            padding: 18px 25px;
+            color: white;
+            text-decoration: none;
+            transition: 0.3s;
+            font-family: Inter, sans-serif;
+            font-size: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-menu li a:hover {
+            background: rgba(255,184,0,0.1) !important;
+            color: #FFB800 !important;
+            padding-left: 30px !important;
+        }
+
+        /* Item ativo da sidebar */
+        .sidebar-menu li a.active {
+            color: #FFB800 !important;
+            background: rgba(255,184,0,0.2) !important;
+            border-left: 4px solid #FFB800 !important;
+            font-weight: 600 !important;
+        }
+
+        #sidebarOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 9998;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
         /* Estilos específicos do dashboard */
         .dashboard-container {
             opacity: 0;
@@ -60,9 +236,10 @@
             margin-bottom: 30px;
         }
         
+        /* ✅ CORRIGIDO: Botão Google agora visível */
         .google-btn {
-            background: var(--systelos-azul);
-            color: white;
+            background: #0F1B3D !important;
+            color: white !important;
             border: none;
             padding: 12px 25px;
             border-radius: 25px;
@@ -70,11 +247,13 @@
             width: 100%;
             margin-bottom: 20px;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         
         .google-btn:hover {
-            background: var(--systelos-azul);
+            background: #1a2951 !important;
             transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(15, 27, 61, 0.3);
         }
         
         .senha-input {
@@ -116,6 +295,7 @@
             background: white;
             padding: 0 15px;
             color: #999;
+            position: relative;
         }
         
         /* Dashboard específico */
@@ -298,26 +478,64 @@
         
         /* Responsivo */
         @media (max-width: 768px) {
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            
             .vendedor-stats {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 10px;
-            }
-            
-            .vendedor-stat {
-                padding: 8px;
-            }
-            
-            .vendedor-stat-number {
-                font-size: 1.2rem;
-            }
-            
-            .vendedor-stat-label {
-                font-size: 0.7rem;
+                grid-template-columns: 1fr 1fr;
             }
         }
     </style>
 </head>
+
 <body>
+    <!-- NAVBAR FIXO NO TOPO -->
+    <header class="systelos-header">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center py-3" style="position: relative;">
+                <!-- Botão Hamburguer -->
+                <button id="menuToggle" class="navbar-toggler">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Logo SYSTELOS CENTRALIZADO -->
+                <div style="position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 15px;">
+                    <div style="background: #FFB800; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; color: #0F1B3D;">
+                        [S]
+                    </div>
+                    <div>
+                        <div style="color: white; font-weight: 700; font-size: 1.3rem; font-family: 'Poppins', sans-serif; line-height: 1.2;">
+                            SYSTELOS TUR
+                        </div>
+                        <div style="color: rgba(255,255,255,0.7); font-size: 0.75rem; font-weight: 400; font-family: 'Inter', sans-serif;">
+                            Sistemas com propósito
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- SIDEBAR MENU LATERAL -->
+    <nav id="sidebarMenu" class="sidebar-menu">
+        <div class="sidebar-header">
+            <h3>[S] SYSTELOS TUR</h3>
+            <button id="closeSidebar">&times;</button>
+        </div>
+        <ul>
+            <li><a href="index.html" class="active" data-page="index">Início</a></li>
+            <li><a href="orcamentos.html" data-page="orcamentos">Padronizador de Orçamentos</a></li>
+            <li><a href="embarques.html" data-page="embarques">Controle de Embarques</a></li>
+            <li><a href="vendas.html" data-page="vendas">Informe de Vendas</a></li>
+            <li><a href="orbiuns.html" data-page="orbiuns">Orbiuns (Processos)</a></li>
+            <li><a href="importacao.html" data-page="importacao">Importação de Dados</a></li>
+        </ul>
+    </nav>
+
+    <!-- OVERLAY ESCURO -->
+    <div id="sidebarOverlay"></div>
+
     <!-- Tela de Login -->
     <div id="loginContainer" class="login-container">
         <div class="login-card">
@@ -358,212 +576,91 @@
 
     <!-- Dashboard Principal -->
     <div id="dashboardContainer" class="dashboard-container">
-        <!-- HEADER SYSTELOS -->
-        <header class="systelos-header">
-            <div class="container-fluid">
-                <div class="row align-items-center py-3">
-                    <!-- Logo SYSTELOS -->
-                    <div class="col-md-4">
-                        <div class="systelos-logo">
-                            <div class="systelos-logo-symbol">[S]</div>
-                            <div>
-                                <div class="systelos-logo-text">SYSTELOS TUR</div>
-                                <p class="systelos-subtitle">Sistemas com propósito</p>
-                            </div>
+        <!-- User Info Section -->
+        <div class="container-fluid mb-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="user-info justify-content-end">
+                        <img id="userAvatar" class="user-avatar" src="" alt="Avatar" style="display:none;">
+                        <div class="me-3">
+                            <p class="user-name" id="userName">Carregando...</p>
+                            <p class="user-role" id="userRole">...</p>
                         </div>
-                    </div>
-                    
-                    <!-- Título da Página -->
-                    <div class="col-md-4 text-center">
-                        <h1 class="page-title mb-0" style="border: none; padding: 0; color: var(--systelos-azul-principal);">
-                            <i class="fas fa-tachometer-alt"></i> Dashboard Principal
-                        </h1>
-                    </div>
-                    
-                    <!-- Informações do Usuário -->
-                    <div class="col-md-4">
-                        <div class="user-info justify-content-end">
-                            <img id="userAvatar" class="user-avatar" src="" alt="Avatar" style="display:none;">
-                            <div class="me-3">
-                                <p class="user-name" id="userName">Carregando...</p>
-                                <p class="user-role" id="userRole">...</p>
-                            </div>
-                            <div id="adminBadge" class="admin-indicator" style="display:none;">
-                                <i class="fas fa-crown"></i> GESTOR
-                            </div>
-                            <button class="logout-btn" onclick="logout()">
-                                <i class="fas fa-sign-out-alt"></i> Sair
-                            </button>
+                        <div id="adminBadge" class="admin-indicator" style="display:none;">
+                            <i class="fas fa-crown"></i> GESTOR
                         </div>
+                        <button class="logout-btn" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Sair
+                        </button>
                     </div>
                 </div>
             </div>
-        </header>
+        </div>
+        
+        <div class="container-fluid">
+            <!-- Ações Rápidas -->
+            <h2 class="section-title mb-4">
+                <i class="fas fa-rocket"></i> Acesso Rápido
+            </h2>
+            
+            <div class="quick-actions">
+                <a href="importacao.html" class="action-card importacao">
+                    <span class="action-badge">NOVO</span>
+                    <div class="action-icon">
+                        <i class="fas fa-file-upload"></i>
+                    </div>
+                    <div class="action-title">Importação de Dados</div>
+                    <div class="action-desc">Upload CSV e PDFs automatizados</div>
+                </a>
 
-        <!-- NAVEGAÇÃO SYSTELOS -->
-        <nav class="systelos-nav">
-            <div class="container-fluid">
-                <ul class="nav nav-pills justify-content-center mb-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="index.html">
-                            <i class="fas fa-tachometer-alt"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="orcamentos.html">
-                            <i class="fas fa-calculator"></i> Padronizador de Orçamentos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="vendas.html">
-                            <i class="fas fa-chart-line"></i> Informe de Vendas
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="vendas-automatizado.html">
-                            <i class="fas fa-robot"></i> Informe Automatizado
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="embarques.html">
-                            <i class="fas fa-plane-departure"></i> Controle de Embarques
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="orbiuns.html">
-                            <i class="fas fa-clipboard-list"></i> Controle de Orbiuns
-                        </a>
-                    </li>
-                    <!-- NOVO: Link para Importação -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="importacao.html">
-                            <i class="fas fa-cloud-upload-alt"></i> Importação
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
-        <!-- ÁREA DE CONTEÚDO -->
-        <div class="content-area">
-            <div class="container-fluid">
+                <a href="orcamentos.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <div class="action-title">Padronizador de Orçamentos</div>
+                    <div class="action-desc">Crie orçamentos com IA</div>
+                </a>
                 
-                <!-- Estatísticas Gerais -->
-                <section class="mb-4">
-                    <h2 class="section-title">
-                        <i class="fas fa-chart-bar"></i> Resumo Geral
-                    </h2>
-                    <div class="stats-grid">
-                        <div class="stat-card vendas">
-                            <div class="stat-number" id="totalVendas">R$ 0</div>
-                            <div class="stat-label">Vendas da Loja</div>
-                            <div class="stat-description">Este mês</div>
-                        </div>
-                        
-                        <div class="stat-card performance">
-                            <div class="stat-number" id="metaLoja">0%</div>
-                            <div class="stat-label">Meta da Loja</div>
-                            <div class="stat-description">Performance mensal</div>
-                        </div>
-                        
-                        <div class="stat-card embarques">
-                            <div class="stat-number" id="totalEmbarques">0</div>
-                            <div class="stat-label">Embarques Próximos</div>
-                            <div class="stat-description">Próximos 7 dias</div>
-                        </div>
-                        
-                        <div class="stat-card urgente">
-                            <div class="stat-number" id="embarquesUrgentes">0</div>
-                            <div class="stat-label">Urgentes</div>
-                            <div class="stat-description">Próximas 24h</div>
-                        </div>
+                <a href="embarques.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-plane-departure"></i>
                     </div>
-                </section>
+                    <div class="action-title">Controle de Embarques</div>
+                    <div class="action-desc">Gerencie conferências e check-ins</div>
+                </a>
+                
+                <a href="vendas.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="action-title">Informe de Vendas</div>
+                    <div class="action-desc">Cadastre novas vendas</div>
+                </a>
 
-                <!-- Dashboard por Vendedores -->
-                <section class="mb-4">
-                    <h2 class="section-title">
-                        <i class="fas fa-users"></i> Dashboard por Vendedores
-                    </h2>
-                    <div class="vendedores-dashboard" id="vendedoresDashboard">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <p class="mb-0 text-muted">Acompanhamento individual de vendas, check-ins e pós-vendas</p>
-                            <button class="btn btn-systelos-outline btn-sm" onclick="atualizarDashboardVendedores()">
-                                <i class="fas fa-sync-alt"></i> Atualizar
-                            </button>
-                        </div>
-                        <div id="vendedoresContainer">
-                            <!-- Conteúdo será preenchido dinamicamente -->
-                        </div>
+                <a href="vendas-automatizado.html" class="action-card automatizado">
+                    <div class="action-icon">
+                        <i class="fas fa-magic"></i>
                     </div>
-                </section>
-
-                <!-- Ações Rápidas -->
-                <section class="mb-4">
-                    <h2 class="section-title">
-                        <i class="fas fa-bolt"></i> Acesso Rápido
-                    </h2>
-                    <div class="quick-actions">
-                        <a href="orcamentos.html" class="action-card">
-                            <div class="action-icon">
-                                <i class="fas fa-calculator"></i>
-                            </div>
-                            <div class="action-title">Gerar Orçamento</div>
-                            <div class="action-desc">IA otimizada para múltiplas opções</div>
-                        </a>
-                        
-                        <a href="vendas.html" class="action-card">
-                            <div class="action-icon">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                            <div class="action-title">Informe de Vendas</div>
-                            <div class="action-desc">Cadastro manual tradicional</div>
-                        </a>
-                        
-                        <!-- NOVA ABA: INFORME AUTOMATIZADO -->
-                        <a href="vendas-automatizado.html" class="action-card automatizado">
-                            <div class="action-icon">
-                                <i class="fas fa-robot"></i>
-                            </div>
-                            <div class="action-title">Informe Automatizado</div>
-                            <div class="action-desc">Complete suas vendas pendentes</div>
-                        </a>
-                        
-                        <!-- 🔥 NOVO CARD DE IMPORTAÇÃO -->
-                        <a href="importacao.html" class="action-card importacao">
-                            <div class="action-badge">NOVO</div>
-                            <div class="action-icon">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                            </div>
-                            <div class="action-title">🔥 Importação Automática</div>
-                            <div class="action-desc">Upload CSV/PDF - 90% automação</div>
-                        </a>
-                        
-                        <a href="embarques.html" class="action-card">
-                            <div class="action-icon">
-                                <i class="fas fa-plane-departure"></i>
-                            </div>
-                            <div class="action-title">Controle de Embarques</div>
-                            <div class="action-desc">Check-ins e conferências</div>
-                        </a>
-                        
-                        <a href="orbiuns.html" class="action-card">
-                            <div class="action-icon">
-                                <i class="fas fa-clipboard-list"></i>
-                            </div>
-                            <div class="action-title">Orbiuns</div>
-                            <div class="action-desc">Controle de processos</div>
-                        </a>
-                        
-                        <div class="action-card" id="actionAdmin" style="display:none;" onclick="window.location.href='admin.html'">
-                            <div class="action-icon">
-                                <i class="fas fa-crown"></i>
-                            </div>
-                            <div class="action-title">Área do Gestor</div>
-                            <div class="action-desc">Usuários e configurações</div>
-                        </div>
+                    <div class="action-title">Vendas Automatizado</div>
+                    <div class="action-desc">Sistema inteligente com IA</div>
+                </a>
+                
+                <a href="orbiuns.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-tasks"></i>
                     </div>
-                </section>
+                    <div class="action-title">Orbiuns</div>
+                    <div class="action-desc">Processos administrativos</div>
+                </a>
+            </div>
+            
+            <!-- Dashboard por Vendedores -->
+            <h2 class="section-title mb-4">
+                <i class="fas fa-chart-line"></i> Performance por Vendedor
+            </h2>
+            
+            <div class="vendedores-dashboard" id="vendedoresDashboard">
+                <p class="text-center text-muted">Carregando dados dos vendedores...</p>
             </div>
         </div>
     </div>
@@ -573,205 +670,262 @@
     <script src="config.js"></script>
     
     <script>
-        // Variáveis globais
-        let currentUser = null;
-        let isAdmin = false;
+        // ============================================================================
+        // INICIALIZAÇÃO DA SIDEBAR
+        // ============================================================================
 
-        // ================================================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarMenu = document.getElementById('sidebarMenu');
+            const menuToggle = document.getElementById('menuToggle');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            // Abrir menu
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    sidebarMenu.classList.add('show');
+                    overlay.style.display = 'block';
+                    setTimeout(() => { overlay.style.opacity = '1'; }, 10);
+                });
+            }
+            
+            // Fechar menu - botão X
+            if (closeSidebar) {
+                closeSidebar.addEventListener('click', function() {
+                    sidebarMenu.classList.remove('show');
+                    overlay.style.opacity = '0';
+                    setTimeout(() => { overlay.style.display = 'none'; }, 300);
+                });
+            }
+            
+            // Fechar menu - clique no overlay
+            if (overlay) {
+                overlay.addEventListener('click', function() {
+                    sidebarMenu.classList.remove('show');
+                    overlay.style.opacity = '0';
+                    setTimeout(() => { overlay.style.display = 'none'; }, 300);
+                });
+            }
+            
+            // Fechar menu - tecla ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && sidebarMenu && sidebarMenu.classList.contains('show')) {
+                    sidebarMenu.classList.remove('show');
+                    overlay.style.opacity = '0';
+                    setTimeout(() => { overlay.style.display = 'none'; }, 300);
+                }
+            });
+        });
+
+        // ============================================================================
         // SISTEMA DE LOGIN
-        // ================================================================================
+        // ============================================================================
         
+        let currentUser = null;
+        
+        // Login Google (Simulado)
         function loginGoogle() {
-            // Simulação de login Google
             const userData = {
-                name: 'Gestor SYSTELOS',
-                email: 'gestor@systelos.tur',
-                avatar: 'https://ui-avatars.com/api/?name=Gestor+SYSTELOS&background=0F1B3D&color=FFB800&bold=true',
-                role: 'Gestor',
+                nome: 'Alessandro Diaz Rodrigues',
+                email: 'alessandrorodrigues@cvc.com.br',
+                foto: 'https://ui-avatars.com/api/?name=Alessandro+Rodrigues&background=0F1B3D&color=FFB800&size=100',
                 isAdmin: true
             };
-
             processLogin(userData);
         }
         
+        // Login por senha
         function loginSenha() {
-            const senha = document.getElementById('senhaInput').value.trim();
+            const senha = document.getElementById('senhaInput').value;
             
-            if (!senha) {
-                alert('Digite uma senha válida');
-                return;
-            }
-            
-            // Verificar se é um vendedor válido (simplificado)
-            const vendedores = ['Alessandro', 'Ana Paula', 'Claudia', 'Fernanda', 'Julia', 'Marcos', 'Patricia', 'Rafael']; // Lista de vendedores SYSTELOS TUR
-            const vendedorEncontrado = vendedores.find(v => 
-                v.toLowerCase().replace(/\s+/g, '') === senha.toLowerCase()
-            );
-            
-            if (vendedorEncontrado) {
-                const userData = {
-                    name: vendedorEncontrado,
-                    email: `${vendedorEncontrado.toLowerCase().replace(/\s+/g, '')}@systelos.tur`,
-                    avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(vendedorEncontrado)}&background=0F1B3D&color=FFB800&bold=true`,
-                    role: 'Consultor de Viagens',
+            // Senhas dos vendedores (exemplo)
+            const senhas = {
+                'ale123': {
+                    nome: 'Alessandro Diaz Rodrigues',
+                    email: 'alessandrorodrigues@cvc.com.br',
+                    foto: 'https://ui-avatars.com/api/?name=Alessandro+Rodrigues&background=0F1B3D&color=FFB800&size=100',
+                    isAdmin: true
+                },
+                'ana123': {
+                    nome: 'Ana Paula Muniz',
+                    email: 'anasouza.6220@cvc.com.br',
+                    foto: 'https://ui-avatars.com/api/?name=Ana+Paula&background=0F1B3D&color=FFB800&size=100',
                     isAdmin: false
-                };
-
-                processLogin(userData);
+                },
+                'adrielly123': {
+                    nome: 'Adrielly Correa de Sousa',
+                    email: 'adriellysousa.6220@cvc.com.br',
+                    foto: 'https://ui-avatars.com/api/?name=Adrielly+Sousa&background=0F1B3D&color=FFB800&size=100',
+                    isAdmin: false
+                },
+                'daina123': {
+                    nome: 'Daina Adriana Silva',
+                    email: 'dainabrito.6223@cvc.com.br',
+                    foto: 'https://ui-avatars.com/api/?name=Daina+Silva&background=0F1B3D&color=FFB800&size=100',
+                    isAdmin: false
+                }
+            };
+            
+            if (senhas[senha]) {
+                processLogin(senhas[senha]);
             } else {
-                alert('Senha incorreta. Tente novamente.');
-                document.getElementById('senhaInput').value = '';
+                alert('❌ Senha incorreta! Tente novamente.');
             }
         }
         
+        // Processar login
         function processLogin(userData) {
             currentUser = userData;
-            isAdmin = userData.isAdmin;
-
-            // Salvar no localStorage para persistência
+            
+            // Salvar no localStorage
             ESTADO_CONFIG.salvar('systelos_user', JSON.stringify(userData));
             
-            // Ocultar login e mostrar dashboard
+            // Esconder tela de login
             document.getElementById('loginContainer').style.display = 'none';
-            document.getElementById('dashboardContainer').style.display = 'block';
             
-            // Aplicar dados do usuário
+            // Mostrar dashboard
+            const dashboard = document.getElementById('dashboardContainer');
+            dashboard.style.display = 'block';
             setTimeout(() => {
-                updateUserInfo();
-                loadDashboardData();
-                document.getElementById('dashboardContainer').classList.add('show');
+                dashboard.classList.add('show');
             }, 100);
-        }
-        
-        function logout() {
-            ESTADO_CONFIG.remover('systelos_user');
-            currentUser = null;
-            isAdmin = false;
             
-            document.getElementById('dashboardContainer').classList.remove('show');
-            setTimeout(() => {
-                document.getElementById('dashboardContainer').style.display = 'none';
-                document.getElementById('loginContainer').style.display = 'flex';
-            }, 300);
+            // Atualizar informações do usuário
+            updateUserInfo();
+            
+            // Carregar dados do dashboard
+            loadDashboardData();
         }
         
-        // ================================================================================
-        // INTERFACE DO USUÁRIO
-        // ================================================================================
-        
+        // Atualizar informações do usuário
         function updateUserInfo() {
-            if (!currentUser) return;
-            
-            document.getElementById('userName').textContent = currentUser.name;
-            document.getElementById('userRole').textContent = currentUser.role;
-            
-            const avatar = document.getElementById('userAvatar');
-            avatar.src = currentUser.avatar;
-            avatar.style.display = 'block';
-            
-            // Mostrar badge de admin se aplicável
+            const userName = document.getElementById('userName');
+            const userRole = document.getElementById('userRole');
+            const userAvatar = document.getElementById('userAvatar');
             const adminBadge = document.getElementById('adminBadge');
-            const actionAdmin = document.getElementById('actionAdmin');
             
-            if (isAdmin) {
-                adminBadge.style.display = 'block';
-                if (actionAdmin) actionAdmin.style.display = 'block';
+            if (currentUser) {
+                userName.textContent = currentUser.nome;
+                userRole.textContent = currentUser.email;
+                
+                if (currentUser.foto) {
+                    userAvatar.src = currentUser.foto;
+                    userAvatar.style.display = 'block';
+                }
+                
+                if (currentUser.isAdmin) {
+                    adminBadge.style.display = 'block';
+                }
             }
         }
         
-        // ================================================================================
-        // DASHBOARD DE DADOS
-        // ================================================================================
-        
-        function loadDashboardData() {
-            // Simular carregamento de dados gerais
-            setTimeout(() => {
-                document.getElementById('totalVendas').textContent = 'R$ 125.430';
-                document.getElementById('metaLoja').textContent = '87%';
-                document.getElementById('totalEmbarques').textContent = '23';
-                document.getElementById('embarquesUrgentes').textContent = '5';
-            }, 500);
+        // Logout
+        function logout() {
+            // Remover do localStorage
+            ESTADO_CONFIG.remover('systelos_user');
             
-            // Carregar dashboard dos vendedores
-            atualizarDashboardVendedores();
+            currentUser = null;
+            
+            // Esconder dashboard
+            const dashboard = document.getElementById('dashboardContainer');
+            dashboard.classList.remove('show');
+            setTimeout(() => {
+                dashboard.style.display = 'none';
+            }, 300);
+            
+            // Mostrar tela de login
+            document.getElementById('loginContainer').style.display = 'flex';
+            
+            // Limpar senha
+            document.getElementById('senhaInput').value = '';
         }
         
-        function atualizarDashboardVendedores() {
-            const container = document.getElementById('vendedoresContainer');
-            const vendedores = ['Alessandro', 'Ana Paula', 'Claudia', 'Fernanda', 'Julia', 'Marcos', 'Patricia', 'Rafael']; // Lista de vendedores SYSTELOS TUR
+        // Carregar dados do dashboard
+        function loadDashboardData() {
+            // Simular dados dos vendedores
+            const vendedores = [
+                {
+                    nome: 'Alessandro Diaz Rodrigues',
+                    vendas: 8,
+                    checkins: 12,
+                    posVendas: 5
+                },
+                {
+                    nome: 'Ana Paula Muniz',
+                    vendas: 6,
+                    checkins: 10,
+                    posVendas: 4
+                },
+                {
+                    nome: 'Adrielly Correa',
+                    vendas: 7,
+                    checkins: 9,
+                    posVendas: 3
+                },
+                {
+                    nome: 'Daina Adriana Silva',
+                    vendas: 5,
+                    checkins: 8,
+                    posVendas: 2
+                }
+            ];
             
-            // Mostrar loading
-            container.innerHTML = '<div class="text-center py-4"><div class="loading-spinner"></div><p class="mt-2">Carregando dados dos vendedores...</p></div>';
+            const dashboard = document.getElementById('vendedoresDashboard');
+            dashboard.innerHTML = '';
             
-            // Simular delay de carregamento
-            setTimeout(() => {
-                let html = '';
-                
-                vendedores.forEach((vendedor, index) => {
-                    // Dados simulados para demonstração
-                    const vendas = Math.floor(Math.random() * 15) + 1;
-                    const checkins = Math.floor(Math.random() * 8) + 1;
-                    const posVendas = Math.floor(Math.random() * 5) + 1;
-                    
-                    html += `
-                        <div class="vendedor-card fade-in" style="animation-delay: ${index * 0.1}s">
-                            <div class="vendedor-nome">
-                                <i class="fas fa-user"></i> ${vendedor}
+            vendedores.forEach(vendedor => {
+                const card = `
+                    <div class="vendedor-card">
+                        <div class="vendedor-nome">
+                            <i class="fas fa-user"></i>
+                            ${vendedor.nome}
+                        </div>
+                        <div class="vendedor-stats">
+                            <div class="vendedor-stat vendas">
+                                <div class="vendedor-stat-number">${vendedor.vendas}</div>
+                                <div class="vendedor-stat-label">Vendas</div>
                             </div>
-                            <div class="vendedor-stats">
-                                <div class="vendedor-stat vendas">
-                                    <div class="vendedor-stat-number">${vendas}</div>
-                                    <div class="vendedor-stat-label">Vendas</div>
-                                </div>
-                                <div class="vendedor-stat checkin">
-                                    <div class="vendedor-stat-number">${checkins}</div>
-                                    <div class="vendedor-stat-label">Check-ins</div>
-                                </div>
-                                <div class="vendedor-stat pos-venda">
-                                    <div class="vendedor-stat-number">${posVendas}</div>
-                                    <div class="vendedor-stat-label">Pós-vendas</div>
-                                </div>
+                            <div class="vendedor-stat checkin">
+                                <div class="vendedor-stat-number">${vendedor.checkins}</div>
+                                <div class="vendedor-stat-label">Check-ins</div>
+                            </div>
+                            <div class="vendedor-stat pos-venda">
+                                <div class="vendedor-stat-number">${vendedor.posVendas}</div>
+                                <div class="vendedor-stat-label">Pós-vendas</div>
                             </div>
                         </div>
-                    `;
-                });
-                
-                container.innerHTML = html;
-            }, 1000);
+                    </div>
+                `;
+                dashboard.innerHTML += card;
+            });
         }
         
-        // ================================================================================
-        // INICIALIZAÇÃO
-        // ================================================================================
-        
+        // Verificar se já está logado ao carregar a página
         document.addEventListener('DOMContentLoaded', function() {
-            debugLog('🏢 Dashboard SYSTELOS TUR carregado', 'success');
-
-            // Verificar se já está logado
             const savedUser = ESTADO_CONFIG.carregar('systelos_user');
+            
             if (savedUser) {
                 try {
                     const userData = JSON.parse(savedUser);
                     processLogin(userData);
                 } catch (e) {
+                    console.error('Erro ao carregar usuário salvo:', e);
                     ESTADO_CONFIG.remover('systelos_user');
                 }
             }
-            
-            // Event listeners
-            document.getElementById('senhaInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    loginSenha();
-                }
-            });
-            
-            debugLog('🎯 Dashboard SYSTELOS TUR - Sistemas com propósito v11.2', 'info');
-            debugLog('📊 Recursos disponíveis:', 'info');
-            debugLog('   ✅ Dashboard geral da loja', 'info');
-            debugLog('   ✅ Dashboard por vendedores (vendas, check-ins, pós-vendas)', 'info');
-            debugLog('   ✅ Login Google e por senha', 'info');
-            debugLog('   ✅ Interface responsiva', 'info');
-            debugLog('   ✅ 🔥 NOVO: Importação Automática de Embarques', 'info');
+        });
+        
+        // Enter para login
+        document.addEventListener('DOMContentLoaded', function() {
+            const senhaInput = document.getElementById('senhaInput');
+            if (senhaInput) {
+                senhaInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        loginSenha();
+                    }
+                });
+            }
         });
     </script>
 </body>
