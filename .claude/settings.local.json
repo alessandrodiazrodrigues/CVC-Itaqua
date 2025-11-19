@@ -13,7 +13,10 @@
       "Bash(echo:*)",
       "Bash(done)",
       "Bash(dir:*)",
-      "Bash(ren cvc-styles.css systelos-styles.css)"
+      "Bash(ren cvc-styles.css systelos-styles.css)",
+      "Bash(findstr:*)",
+      "Bash(powershell -Command \"(Get-Content ''C:\\SYSTELOS\\TUR\\CVC-Itaqua\\orbiuns.html'' | Measure-Object -Line).Lines\")",
+      "Bash(start \"C:\\SYSTELOS\\TUR\\CVC-Itaqua\\orbiuns.html\")"
     ],
     "deny": [],
     "ask": []
