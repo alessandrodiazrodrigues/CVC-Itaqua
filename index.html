@@ -586,7 +586,7 @@
             </h2>
             
             <div class="vendedores-dashboard" id="vendedoresDashboard">
-                <p class="text-center text-muted">Carregando dados dos vendedores...</p>
+                <p class="text-center text-muted">Nenhum dado disponível no momento.</p>
             </div>
         </div>
     </div>
@@ -774,62 +774,9 @@
         
         // Carregar dados do dashboard
         function loadDashboardData() {
-            // Simular dados dos vendedores
-            const vendedores = [
-                {
-                    nome: 'Alessandro Diaz Rodrigues',
-                    vendas: 8,
-                    checkins: 12,
-                    posVendas: 5
-                },
-                {
-                    nome: 'Ana Paula Muniz',
-                    vendas: 6,
-                    checkins: 10,
-                    posVendas: 4
-                },
-                {
-                    nome: 'Adrielly Correa',
-                    vendas: 7,
-                    checkins: 9,
-                    posVendas: 3
-                },
-                {
-                    nome: 'Daina Adriana Silva',
-                    vendas: 5,
-                    checkins: 8,
-                    posVendas: 2
-                }
-            ];
-            
+            // Dashboard vazio - dados serão carregados da API futuramente
             const dashboard = document.getElementById('vendedoresDashboard');
-            dashboard.innerHTML = '';
-            
-            vendedores.forEach(vendedor => {
-                const card = `
-                    <div class="vendedor-card">
-                        <div class="vendedor-nome">
-                            <i class="fas fa-user"></i>
-                            ${vendedor.nome}
-                        </div>
-                        <div class="vendedor-stats">
-                            <div class="vendedor-stat vendas">
-                                <div class="vendedor-stat-number">${vendedor.vendas}</div>
-                                <div class="vendedor-stat-label">Vendas</div>
-                            </div>
-                            <div class="vendedor-stat checkin">
-                                <div class="vendedor-stat-number">${vendedor.checkins}</div>
-                                <div class="vendedor-stat-label">Check-ins</div>
-                            </div>
-                            <div class="vendedor-stat pos-venda">
-                                <div class="vendedor-stat-number">${vendedor.posVendas}</div>
-                                <div class="vendedor-stat-label">Pós-vendas</div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                dashboard.innerHTML += card;
-            });
+            dashboard.innerHTML = '<p class="text-center text-muted">Nenhum dado disponível no momento.</p>';
         }
         
         // Verificar se já está logado ao carregar a página
