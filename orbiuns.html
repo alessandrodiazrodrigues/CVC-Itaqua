@@ -2455,8 +2455,14 @@
             botaoSubmit.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
             
             try {
+                // Verificar se está editando
+                const modal = document.getElementById('modalNovoOrbium');
+                const editandoId = modal.dataset.editandoId;
+                const isEdicao = !!editandoId;
+                
                 // Montar dados do orbium
                 const dadosOrbium = {
+                    action: isEdicao ? 'atualizar_orbium' : 'cadastrar_orbium',
                     orbium: document.getElementById('numeroOrbium').value,
                     status: document.getElementById('statusOrbium').value,
                     categoria: document.getElementById('categoria').value,
@@ -2473,41 +2479,32 @@
                     observacoes: document.getElementById('observacoes').value || ''
                 };
                 
-                debugLog('💾 Salvando orbium...', 'info');
+                // Adicionar ID se for edição
+                if (isEdicao) {
+                    dadosOrbium.id = editandoId;
+                }
+                
+                debugLog(`💾 ${isEdicao ? 'Atualizando' : 'Salvando'} orbium...`, 'info');
                 debugLog(JSON.stringify(dadosOrbium, null, 2), 'info');
                 
-                // Enviar via JSONP - todos os dados como parâmetros GET
-                const result = await chamarAPI({
-                    action: 'cadastrar_orbium',
-                    // Enviar cada campo individualmente
-                    'orbium': dadosOrbium.orbium,
-                    'status': dadosOrbium.status,
-                    'categoria': dadosOrbium.categoria,
-                    'vendedor': dadosOrbium.vendedor,
-                    'nome_cliente': dadosOrbium.nome_cliente,
-                    'whats_cliente': dadosOrbium.whats_cliente,
-                    'cpf_cliente': dadosOrbium.cpf_cliente,
-                    'recibo': dadosOrbium.recibo,
-                    'reserva': dadosOrbium.reserva,
-                    'pedido': dadosOrbium.pedido,
-                    'cia': dadosOrbium.cia,
-                    'loc_gds': dadosOrbium.loc_gds,
-                    'loc_cia': dadosOrbium.loc_cia,
-                    'observacoes': dadosOrbium.observacoes
-                });
+                // Enviar via JSONP
+                const result = await chamarAPI(dadosOrbium);
                 
                 if (result.success) {
-                    mostrarAlertaSucesso('✅ Orbium cadastrado com sucesso!');
+                    mostrarAlertaSucesso(`✅ Orbium ${isEdicao ? 'atualizado' : 'cadastrado'} com sucesso!`);
+                    
+                    // Limpar flag de edição
+                    delete modal.dataset.editandoId;
                     
                     // Fechar modal
-                    bootstrap.Modal.getInstance(document.getElementById('modalNovoOrbium')).hide();
+                    bootstrap.Modal.getInstance(modal).hide();
                     
                     // Recarregar lista
                     setTimeout(() => {
                         carregarOrbiuns();
                     }, 1000);
                 } else {
-                    throw new Error(result.message || 'Erro ao cadastrar orbium');
+                    throw new Error(result.message || `Erro ao ${isEdicao ? 'atualizar' : 'cadastrar'} orbium`);
                 }
                 
             } catch (error) {
@@ -2520,11 +2517,50 @@
         }
         
         // ============================================================================
-        // EDITAR ORBIUM (PLACEHOLDER)
+        // EDITAR ORBIUM
         // ============================================================================
         
-        function editarOrbium(id) {
-            mostrarAlertaErro('⚠️ Função de edição em desenvolvimento');
+        async function editarOrbium(id) {
+            try {
+                debugLog(`✏️ Carregando orbium para edição: ${id}`, 'info');
+                
+                // Buscar dados do orbium
+                const orbium = orbiunsData.find(o => o.id === id);
+                
+                if (!orbium) {
+                    mostrarAlertaErro('⚠️ Orbium não encontrado!');
+                    return;
+                }
+                
+                // Abrir modal
+                const modal = new bootstrap.Modal(document.getElementById('modalNovoOrbium'));
+                modal.show();
+                
+                // Preencher formulário
+                document.getElementById('numeroOrbium').value = orbium.orbium || '';
+                document.getElementById('statusOrbium').value = orbium.status || '';
+                document.getElementById('categoria').value = orbium.departamento || '';
+                document.getElementById('vendedor').value = orbium.vendedor || '';
+                document.getElementById('nomeCliente').value = orbium.nome_cliente || '';
+                document.getElementById('whatsappCliente').value = orbium.whats_cliente || '';
+                document.getElementById('cpfCliente').value = orbium.cpf_cliente || '';
+                document.getElementById('recibo').value = orbium.recibo || '';
+                document.getElementById('reserva').value = orbium.reserva || '';
+                document.getElementById('pedido').value = orbium.pedido || '';
+                document.getElementById('cia').value = orbium.cia || '';
+                document.getElementById('locGds').value = orbium.loc_gds || '';
+                document.getElementById('locCia').value = orbium.loc_cia || '';
+                document.getElementById('observacoes').value = orbium.observacoes || '';
+                
+                // Guardar ID para atualização
+                document.getElementById('modalNovoOrbium').dataset.editandoId = id;
+                
+                debugLog(`✅ Formulário preenchido para edição`, 'success');
+                
+            } catch (error) {
+                debugLog(`❌ Erro ao editar orbium: ${error.message}`, 'error');
+                mostrarAlertaErro(`❌ Erro: ${error.message}`);
+            }
         }
         
         // ============================================================================
