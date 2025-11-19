@@ -949,6 +949,39 @@
                 justify-content: center;
             }
         }
+
+        /* ============================================================================
+           BOTÕES DE COPIAR - CORREÇÃO PONTUAL
+           ============================================================================ */
+        
+        .btn-copiar-inline {
+            background: rgba(255, 184, 0, 0.1);
+            border: 1px solid rgba(255, 184, 0, 0.3);
+            color: #FFB800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        .btn-copiar-inline:hover {
+            background: #FFB800;
+            color: #0F1B3D;
+            transform: scale(1.1);
+        }
+        
+        .btn-copiar-inline.copiado {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+        
+        .btn-copiar-inline i {
+            margin: 0;
+        }
     </style>
 </head>
 <body class="systelos-body" style="padding-top: 80px;">
@@ -1180,6 +1213,39 @@
             display: none;
             transition: opacity 0.3s;
             backdrop-filter: blur(3px);
+        }
+
+        /* ============================================================================
+           BOTÕES DE COPIAR - CORREÇÃO PONTUAL
+           ============================================================================ */
+        
+        .btn-copiar-inline {
+            background: rgba(255, 184, 0, 0.1);
+            border: 1px solid rgba(255, 184, 0, 0.3);
+            color: #FFB800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        .btn-copiar-inline:hover {
+            background: #FFB800;
+            color: #0F1B3D;
+            transform: scale(1.1);
+        }
+        
+        .btn-copiar-inline.copiado {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+        
+        .btn-copiar-inline i {
+            margin: 0;
         }
     </style>
 
@@ -1904,7 +1970,11 @@
         // COMUNICAÇÃO COM API - JSONP PARA BYPASS CORS
         // ============================================================================
         
-        async function chamarAPI(dados) {
+        async function chamarAPI(dados, tentativa = 1, maxTentativas = 3) {
+            // ✅ RETRY AUTOMÁTICO - CORREÇÃO PONTUAL
+            if (tentativa > 1) {
+                debugLog(`🔄 Tentativa ${tentativa}/${maxTentativas}...`, 'info');
+            }
             try {
                 const baseUrl = getApiUrl('googleScript');
                 
@@ -1971,7 +2041,15 @@
                 });
                 
             } catch (error) {
-                debugLog(`❌ Erro na API: ${error.message}`, 'error');
+                debugLog(`❌ Erro na API (tentativa ${tentativa}): ${error.message}`, 'error');
+                
+                // ✅ RETRY AUTOMÁTICO - CORREÇÃO PONTUAL
+                if (tentativa < maxTentativas) {
+                    debugLog(`⏳ Aguardando 2s antes de tentar novamente...`, 'info');
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    return chamarAPI(dados, tentativa + 1, maxTentativas);
+                }
+                
                 throw error;
             }
         }
@@ -2045,7 +2123,7 @@
                     <div class="orbium-header">
                         <div class="orbium-numero">
                             Orbium ${orbium.orbium || 'N/A'}
-                        </div>
+                        <button class="btn-copiar-inline" onclick="event.stopPropagation(); copiarTexto(\'\${orbium.orbium}\', this)" title="Copiar Nº Orbium"><i class="fas fa-copy"></i></button> </div>
                         <div class="orbium-status ${(orbium.status || '').toLowerCase().replace(/\s+/g, '-')}">
                             ${orbium.status || 'Pendente'}
                         </div>
@@ -2080,7 +2158,7 @@
                             <i class="fas fa-phone"></i>
                             <div>
                                 <div class="orbium-info-label">WHATSAPP</div>
-                                <div class="orbium-info-value">${formatarWhatsApp(orbium.whats_cliente)}</div>
+                                <div class="orbium-info-value">${formatarWhatsApp(orbium.whats_cliente)} <button class="btn-copiar-inline" onclick="event.stopPropagation(); copiarTexto(\'\${orbium.whats_cliente}\', this)" title="Copiar"><i class="fas fa-copy"></i></button></div>
                             </div>
                         </div>
                         
@@ -2089,7 +2167,7 @@
                                 <i class="fas fa-receipt"></i>
                                 <div>
                                     <div class="orbium-info-label">RECIBO</div>
-                                    <div class="orbium-info-value">${orbium.recibo}</div>
+                                    <div class="orbium-info-value">${orbium.recibo} <button class="btn-copiar-inline" onclick="event.stopPropagation(); copiarTexto(\'\${orbium.recibo}\', this)" title="Copiar"><i class="fas fa-copy"></i></button></div>
                                 </div>
                             </div>
                         ` : ''}
@@ -2099,7 +2177,7 @@
                                 <i class="fas fa-ticket-alt"></i>
                                 <div>
                                     <div class="orbium-info-label">RESERVA</div>
-                                    <div class="orbium-info-value">${orbium.reserva}</div>
+                                    <div class="orbium-info-value">${orbium.reserva} <button class="btn-copiar-inline" onclick="event.stopPropagation(); copiarTexto(\'\${orbium.reserva}\', this)" title="Copiar"><i class="fas fa-copy"></i></button></div>
                                 </div>
                             </div>
                         ` : ''}
@@ -2110,6 +2188,27 @@
                                 <div>
                                     <div class="orbium-info-label">CIA</div>
                                     <div class="orbium-info-value">${orbium.cia}</div>
+                                </div>
+                            </div>
+                        ` : ''}
+                    
+                        
+                        ${orbium.loc_gds ? `
+                            <div class="orbium-info">
+                                <i class="fas fa-code"></i>
+                                <div>
+                                    <div class="orbium-info-label">LOC GDS</div>
+                                    <div class="orbium-info-value">${orbium.loc_gds} <button class="btn-copiar-inline" onclick="event.stopPropagation(); copiarTexto('${orbium.loc_gds}', this)" title="Copiar"><i class="fas fa-copy"></i></button></div>
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        ${orbium.loc_cia ? `
+                            <div class="orbium-info">
+                                <i class="fas fa-plane-departure"></i>
+                                <div>
+                                    <div class="orbium-info-label">LOC CIA</div>
+                                    <div class="orbium-info-value">${orbium.loc_cia} <button class="btn-copiar-inline" onclick="event.stopPropagation(); copiarTexto('${orbium.loc_cia}', this)" title="Copiar"><i class="fas fa-copy"></i></button></div>
                                 </div>
                             </div>
                         ` : ''}
@@ -2467,7 +2566,7 @@
                     status: document.getElementById('statusOrbium').value,
                     categoria: document.getElementById('categoria').value,
                     vendedor: document.getElementById('vendedor').value,
-                    nome_cliente: document.getElementById('nomeCliente').value,
+                    nome_cliente: document.getElementById('nomeCliente').value.toUpperCase(),
                     whats_cliente: document.getElementById('whatsappCliente').value,
                     cpf_cliente: document.getElementById('cpfCliente').value || '',
                     recibo: document.getElementById('recibo').value || '',
