@@ -951,11 +951,11 @@
         }
     </style>
 </head>
-<body class="systelos-body">
+<body class="systelos-body" style="padding-top: 80px;">
     <!-- ============================================================================
          NAVBAR PADRÃO SYSTELOS TUR
          ============================================================================ -->
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #0F1B3D 0%, #1a2951 100%); padding: 1rem 2rem; box-shadow: 0 4px 15px rgba(15, 27, 61, 0.3);">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: linear-gradient(135deg, #0F1B3D 0%, #1a2951 100%); padding: 1rem 2rem; box-shadow: 0 4px 15px rgba(15, 27, 61, 0.3);">
         <div class="container-fluid">
             <!-- Logo -->
             <a class="navbar-brand d-flex align-items-center" href="index.html" style="font-weight: 700; font-size: 1.3rem; gap: 10px;">
@@ -978,37 +978,33 @@
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="index.html">
-                            <i class="fas fa-home me-2"></i>Dashboard
+                            Início
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="orcamentos.html">
-                            <i class="fas fa-wand-magic-sparkles me-2"></i>Padronizador de Orçamentos
+                            Padronizador de Orçamentos
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="vendas.html">
-                            <i class="fas fa-chart-line me-2"></i>Informe de Vendas
+                            Informe de Vendas
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="vendas-automatizado.html">
-                            <i class="fas fa-robot me-2"></i>Informe Automatizado
-                        </a>
-                    </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="embarques.html">
-                            <i class="fas fa-plane me-2"></i>Controle de Embarques
+                            Controle de Embarques
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="orbiuns.html">
-                            <i class="fas fa-clipboard-list me-2"></i>Controle de Orbiuns
+                            Orbiuns (Processos)
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="importacao.html">
-                            <i class="fas fa-upload me-2"></i>Importação
+                            Importação de Dados
                         </a>
                     </li>
                 </ul>
@@ -2201,6 +2197,27 @@
         // ============================================================================
         
         function analisarDadosColados() {
+
+    // CORREÇÃO #7: Mapeamento de siglas de CIA
+    const mapeamentoCIA = {
+        'AD': 'AZUL (AD)', 'G3': 'GOL (G3)', 'LA': 'LATAM (LA)',
+        '2Z': 'VOEPASS (2Z)', 'O6': 'AVIANCA (O6)', 'AA': 'AMERICAN AIRLINES (AA)',
+        'DL': 'DELTA (DL)', 'UA': 'UNITED (UA)', 'LH': 'LUFTHANSA (LH)',
+        'AF': 'AIR FRANCE (AF)', 'KL': 'KLM (KL)', 'BA': 'BRITISH AIRWAYS (BA)',
+        'IB': 'IBERIA (IB)', 'TP': 'TAP PORTUGAL (TP)', 'AZ': 'ALITALIA (AZ)',
+        'LX': 'SWISS (LX)', 'TK': 'TURKISH AIRLINES (TK)', 'EK': 'EMIRATES (EK)',
+        'QR': 'QATAR AIRWAYS (QR)', 'EY': 'ETIHAD (EY)', 'AC': 'AIR CANADA (AC)',
+        'AM': 'AEROMEXICO (AM)', 'CM': 'COPA AIRLINES (CM)', 'AV': 'AVIANCA (AV)',
+        'AR': 'AEROLINEAS ARGENTINAS (AR)', 'B6': 'JET BLUE (B6)', 'NK': 'SPIRIT (NK)',
+        'F9': 'FRONTIER (F9)', 'UX': 'AIR EUROPA (UX)', 'DY': 'NORWEGIAN (DY)',
+        'SU': 'AEROFLOT (SU)', 'CA': 'AIR CHINA (CA)', 'MU': 'CHINA EASTERN (MU)',
+        'CZ': 'CHINA SOUTHERN (CZ)', 'SQ': 'SINGAPORE AIRLINES (SQ)',
+        'CX': 'CATHAY PACIFIC (CX)', 'JL': 'JAPAN AIRLINES (JL)', 'NH': 'ANA (NH)',
+        'KE': 'KOREAN AIR (KE)', 'TG': 'THAI AIRWAYS (TG)',
+        'MH': 'MALAYSIA AIRLINES (MH)', 'QF': 'QANTAS (QF)',
+        'NZ': 'AIR NEW ZEALAND (NZ)', 'SA': 'SOUTH AFRICAN AIRWAYS (SA)'
+    };
+    
             const texto = document.getElementById('colarDadosTexto').value;
             
             if (!texto.trim()) {
