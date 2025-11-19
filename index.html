@@ -21,60 +21,37 @@
     
     <style>
         /* ============================================================================
-           HEADER FIXO NO TOPO
+           NAVBAR E SIDEBAR - PADRÃO SYSTELOS
            ============================================================================ */
-
-        .systelos-header {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            width: 100% !important;
-            z-index: 1000 !important;
-            background: linear-gradient(135deg, #0F1B3D 0%, #1a2951 100%) !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
-            height: 70px;
-        }
 
         body {
-            padding-top: 85px !important;
+            padding-top: 80px;
         }
 
-        /* ============================================================================
-           MENU HAMBÚRGUER
-           ============================================================================ */
-
-        #menuToggle {
-            display: block !important;
-            position: absolute !important;
-            left: 20px !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-            z-index: 1001 !important;
-            border: 2px solid #FFB800 !important;
-            padding: 8px 12px !important;
-            background: rgba(255, 184, 0, 0.2) !important;
-            border-radius: 8px !important;
-            transition: all 0.3s ease !important;
-            width: 50px !important;
-            height: 40px !important;
-            cursor: pointer;
+        /* Botão Hambúrguer - Sempre à esquerda */
+        .navbar-toggler {
+            transition: all 0.3s ease;
         }
 
-        #menuToggle:hover {
+        .navbar-toggler:hover {
             background: rgba(255, 184, 0, 0.4) !important;
-            transform: translateY(-50%) scale(1.05) !important;
+            transform: scale(1.05);
         }
 
-        #menuToggle .navbar-toggler-icon {
-            display: inline-block !important;
-            width: 1.5em !important;
-            height: 1.5em !important;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 184, 0, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 184, 0, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
         }
 
-        .systelos-logo {
-            margin-left: 60px !important;
+        /* Hover effects para navbar */
+        .navbar .nav-link:not(.active):hover {
+            background: rgba(255, 184, 0, 0.1) !important;
+            color: #FFB800 !important;
+        }
+
+        .nav-link.active {
+            background: rgba(255, 184, 0, 0.2) !important;
+            color: #FFB800 !important;
+            font-weight: 600 !important;
         }
 
         /* ============================================================================
@@ -115,72 +92,15 @@
             background: rgba(255,184,0,0.7);
         }
 
-        .sidebar-header {
-            position: relative;
-            border-bottom: 1px solid rgba(255,184,0,0.3);
-            padding: 20px;
-        }
-
-        .sidebar-header h3 {
-            color: #FFB800;
-            font-family: Poppins, sans-serif;
-            margin: 0;
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-
-        #closeSidebar {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 32px;
-            cursor: pointer;
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: 0.3s;
-        }
-
-        #closeSidebar:hover {
-            background: rgba(255,184,0,0.2) !important;
-            transform: rotate(90deg);
-        }
-
-        .sidebar-menu ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .sidebar-menu li a {
-            display: block;
-            padding: 18px 25px;
-            color: white;
-            text-decoration: none;
-            transition: 0.3s;
-            font-family: Inter, sans-serif;
-            font-size: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .sidebar-menu li a:hover {
+        .sidebar-menu ul li a:hover {
             background: rgba(255,184,0,0.1) !important;
             color: #FFB800 !important;
             padding-left: 30px !important;
         }
 
-        /* Item ativo da sidebar */
-        .sidebar-menu li a.active {
-            color: #FFB800 !important;
+        #closeSidebar:hover {
             background: rgba(255,184,0,0.2) !important;
-            border-left: 4px solid #FFB800 !important;
-            font-weight: 600 !important;
+            transform: rotate(90deg);
         }
 
         #sidebarOverlay {
@@ -195,6 +115,11 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
+
+        /* ============================================================================
+           ESTILOS ESPECÍFICOS DO DASHBOARD
+           ============================================================================ */
+
 
         /* Estilos específicos do dashboard */
         .dashboard-container {
@@ -490,46 +415,49 @@
 </head>
 
 <body>
-    <!-- NAVBAR FIXO NO TOPO -->
-    <header class="systelos-header">
+    <!-- ============================================================================
+         NAVBAR PADRÃO SYSTELOS TUR
+         ============================================================================ -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: linear-gradient(135deg, #0F1B3D 0%, #1a2951 100%); padding: 1rem 2rem; box-shadow: 0 4px 15px rgba(15, 27, 61, 0.3);">
         <div class="container-fluid">
-            <div class="d-flex align-items-center py-3" style="position: relative;">
-                <!-- Botão Hamburguer -->
-                <button id="menuToggle" class="navbar-toggler">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+            <!-- Toggle para mobile - PRIMEIRO -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" style="margin-right: 15px;">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <!-- Logo SYSTELOS CENTRALIZADO -->
-                <div style="position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 15px;">
-                    <div style="background: #FFB800; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; color: #0F1B3D;">
-                        [S]
-                    </div>
-                    <div>
-                        <div style="color: white; font-weight: 700; font-size: 1.3rem; font-family: 'Poppins', sans-serif; line-height: 1.2;">
-                            SYSTELOS TUR
-                        </div>
-                        <div style="color: rgba(255,255,255,0.7); font-size: 0.75rem; font-weight: 400; font-family: 'Inter', sans-serif;">
-                            Sistemas com propósito
-                        </div>
-                    </div>
+            <!-- Logo - DEPOIS DO HAMBÚRGUER -->
+            <a class="navbar-brand d-flex align-items-center" href="index.html" style="font-weight: 700; font-size: 1.3rem; gap: 10px;">
+                <div style="background: #FFB800; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; color: #0F1B3D;">
+                    [S]
                 </div>
+                <div>
+                    <div style="line-height: 1.2; font-family: 'Poppins', sans-serif;">SYSTELOS TUR</div>
+                    <div style="font-size: 0.7rem; font-weight: 400; color: rgba(255,255,255,0.7); font-family: 'Inter', sans-serif;">Sistemas com propósito</div>
+                </div>
+            </a>
+
+            <!-- Menu Principal (escondido - usando sidebar) -->
+            <div class="collapse navbar-collapse" id="navbarMain" style="display: none !important;">
+                <!-- Vazio - menu está na sidebar -->
             </div>
         </div>
-    </header>
+    </nav>
 
-    <!-- SIDEBAR MENU LATERAL -->
+    <!-- ============================================================================
+         MENU LATERAL (SIDEBAR)
+         ============================================================================ -->
     <nav id="sidebarMenu" class="sidebar-menu">
-        <div class="sidebar-header">
-            <h3>[S] SYSTELOS TUR</h3>
-            <button id="closeSidebar">&times;</button>
+        <div class="sidebar-header" style="position: relative; border-bottom: 1px solid rgba(255,184,0,0.3); padding: 20px;">
+            <h3 style="color: #FFB800; font-family: Poppons, sans-serif; margin: 0; font-size: 1.2rem; font-weight: 700;">[S] SYSTELOS TUR</h3>
+            <button id="closeSidebar" style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; color: white; font-size: 32px; cursor: pointer; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s;">&times;</button>
         </div>
-        <ul>
-            <li><a href="index.html" class="active" data-page="index">Início</a></li>
-            <li><a href="orcamentos.html" data-page="orcamentos">Padronizador de Orçamentos</a></li>
-            <li><a href="embarques.html" data-page="embarques">Controle de Embarques</a></li>
-            <li><a href="vendas.html" data-page="vendas">Informe de Vendas</a></li>
-            <li><a href="orbiuns.html" data-page="orbiuns">Orbiuns (Processos)</a></li>
-            <li><a href="importacao.html" data-page="importacao">Importação de Dados</a></li>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+            <li><a href="index.html" style="display: block; padding: 18px 25px; color: #FFB800; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; background: rgba(255,184,0,0.2); border-left: 4px solid #FFB800; font-weight: 600;">Início</a></li>
+            <li><a href="orcamentos.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">Padronizador de Orçamentos</a></li>
+            <li><a href="embarques.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">Controle de Embarques</a></li>
+            <li><a href="vendas.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">Informe de Vendas</a></li>
+            <li><a href="orbiuns.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">Orbiuns (Processos)</a></li>
+            <li><a href="importacao.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px;">Importação de Dados</a></li>
         </ul>
     </nav>
 
@@ -671,47 +599,48 @@
     
     <script>
         // ============================================================================
-        // INICIALIZAÇÃO DA SIDEBAR
+        // SIDEBAR MENU LATERAL - CONTROLES
         // ============================================================================
 
         document.addEventListener('DOMContentLoaded', function() {
-            const sidebarMenu = document.getElementById('sidebarMenu');
-            const menuToggle = document.getElementById('menuToggle');
-            const closeSidebar = document.getElementById('closeSidebar');
+            const sidebar = document.getElementById('sidebarMenu');
+            const closeSidebarBtn = document.getElementById('closeSidebar');
+            const navbarToggler = document.querySelector('.navbar-toggler');
             const overlay = document.getElementById('sidebarOverlay');
-            
-            // Abrir menu
-            if (menuToggle) {
-                menuToggle.addEventListener('click', function(e) {
+
+            // Abrir sidebar
+            if (navbarToggler) {
+                navbarToggler.addEventListener('click', function(e) {
+                    e.preventDefault();
                     e.stopPropagation();
-                    sidebarMenu.classList.add('show');
+                    sidebar.classList.add('show');
                     overlay.style.display = 'block';
                     setTimeout(() => { overlay.style.opacity = '1'; }, 10);
                 });
             }
-            
-            // Fechar menu - botão X
-            if (closeSidebar) {
-                closeSidebar.addEventListener('click', function() {
-                    sidebarMenu.classList.remove('show');
+
+            // Fechar sidebar (botão X)
+            if (closeSidebarBtn) {
+                closeSidebarBtn.addEventListener('click', function() {
+                    sidebar.classList.remove('show');
                     overlay.style.opacity = '0';
                     setTimeout(() => { overlay.style.display = 'none'; }, 300);
                 });
             }
-            
-            // Fechar menu - clique no overlay
+
+            // Fechar sidebar (clique no overlay)
             if (overlay) {
                 overlay.addEventListener('click', function() {
-                    sidebarMenu.classList.remove('show');
+                    sidebar.classList.remove('show');
                     overlay.style.opacity = '0';
                     setTimeout(() => { overlay.style.display = 'none'; }, 300);
                 });
             }
-            
-            // Fechar menu - tecla ESC
+
+            // Fechar sidebar (tecla ESC)
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && sidebarMenu && sidebarMenu.classList.contains('show')) {
-                    sidebarMenu.classList.remove('show');
+                if (e.key === 'Escape' && sidebar.classList.contains('show')) {
+                    sidebar.classList.remove('show');
                     overlay.style.opacity = '0';
                     setTimeout(() => { overlay.style.display = 'none'; }, 300);
                 }
