@@ -1085,6 +1085,7 @@
 
         /* Botão menu hambúrguer posicionado à esquerda */
         .navbar-toggler, #menuToggle {
+            display: block !important;
             position: absolute !important;
             left: 20px !important;
             top: 50% !important;
@@ -1092,7 +1093,25 @@
             z-index: 1001 !important;
             border: 2px solid #FFB800 !important;
             padding: 8px 12px !important;
-            background: transparent !important;
+            background: rgba(255, 184, 0, 0.2) !important;
+            border-radius: 8px !important;
+            transition: all 0.3s ease !important;
+            width: auto !important;
+            height: auto !important;
+            min-width: 50px !important;
+            min-height: 40px !important;
+        }
+        
+        .navbar-toggler:hover, #menuToggle:hover {
+            background: rgba(255, 184, 0, 0.4) !important;
+            transform: translateY(-50%) scale(1.05) !important;
+        }
+        
+        /* Garantir que o ícone dentro do botão apareça */
+        .navbar-toggler-icon {
+            display: inline-block !important;
+            width: 1.5em !important;
+            height: 1.5em !important;
         }
 
         .navbar-toggler-icon {
