@@ -586,14 +586,6 @@
             background: #d39e00;
         }
         
-        .btn-deletar {
-            background: var(--systelos-erro);
-            color: white;
-        }
-        
-        .btn-deletar:hover {
-            background: #c82333;
-        }
         
         /* ============================================================================
            MODAL
@@ -2238,10 +2230,6 @@
                             <button class="btn-action btn-editar" onclick="editarOrbium('${orbium.id}')">
                                 <i class="fas fa-edit"></i> Editar
                             </button>
-                            
-                            <button class="btn-action btn-deletar" onclick="confirmarDelete('${orbium.id}')">
-                                <i class="fas fa-trash"></i> Deletar
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -2561,7 +2549,7 @@
                 
                 // Montar dados do orbium
                 const dadosOrbium = {
-                    action: isEdicao ? 'atualizar_orbium' : 'cadastrar_orbium',
+                    action: isEdicao ? 'editar' : 'cadastrar',
                     orbium: document.getElementById('numeroOrbium').value,
                     status: document.getElementById('statusOrbium').value,
                     categoria: document.getElementById('categoria').value,
@@ -2662,37 +2650,6 @@
             }
         }
         
-        // ============================================================================
-        // DELETAR ORBIUM
-        // ============================================================================
-        
-        async function confirmarDelete(id) {
-            if (!confirm('⚠️ Tem certeza que deseja deletar este orbium?\n\nEsta ação não pode ser desfeita!')) {
-                return;
-            }
-            
-            try {
-                debugLog(`🗑️ Deletando orbium: ${id}`, 'info');
-                
-                const result = await chamarAPI({
-                    action: 'deletar_orbium',
-                    id: id
-                });
-                
-                if (result.success) {
-                    mostrarAlertaSucesso('✅ Orbium deletado com sucesso!');
-                    setTimeout(() => {
-                        carregarOrbiuns();
-                    }, 1000);
-                } else {
-                    throw new Error(result.message || 'Erro ao deletar orbium');
-                }
-                
-            } catch (error) {
-                debugLog(`❌ Erro ao deletar orbium: ${error.message}`, 'error');
-                mostrarAlertaErro(`❌ Erro: ${error.message}`);
-            }
-        }
         
         // ============================================================================
         // ABRIR WHATSAPP
@@ -2712,6 +2669,58 @@
             window.open(url, '_blank');
             
             debugLog(`📱 WhatsApp aberto: ${numeroLimpo}`, 'info');
+        }
+        
+        // ============================================================================
+        // COPIAR TEXTO PARA CLIPBOARD
+        // ============================================================================
+        
+        function copiarTexto(texto, botao) {
+            if (!texto || texto === 'N/A' || texto === 'undefined') {
+                mostrarAlertaErro('⚠️ Nada para copiar');
+                return;
+            }
+            
+            // Criar input temporário
+            const input = document.createElement('input');
+            input.value = texto;
+            input.style.position = 'absolute';
+            input.style.left = '-9999px';
+            document.body.appendChild(input);
+            
+            // Selecionar e copiar
+            input.select();
+            input.setSelectionRange(0, 99999); // Para mobile
+            
+            try {
+                const sucesso = document.execCommand('copy');
+                
+                if (sucesso) {
+                    debugLog(`✅ Copiado: ${texto}`, 'success');
+                    
+                    // Feedback visual no botão
+                    const textoOriginal = botao.innerHTML;
+                    botao.classList.add('copiado');
+                    botao.innerHTML = '<i class="fas fa-check"></i>';
+                    
+                    // Voltar ao normal após 2s
+                    setTimeout(() => {
+                        botao.classList.remove('copiado');
+                        botao.innerHTML = textoOriginal;
+                    }, 2000);
+                } else {
+                    throw new Error('document.execCommand retornou false');
+                }
+                
+            } catch (err) {
+                debugLog(`❌ Erro ao copiar: ${err}`, 'error');
+                
+                // Fallback: mostrar prompt para copiar manualmente
+                prompt('Copie o texto abaixo (Ctrl+C):', texto);
+            }
+            
+            // Remover input temporário
+            document.body.removeChild(input);
         }
         
         // ============================================================================
