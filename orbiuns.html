@@ -1219,16 +1219,18 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label">Departamento</label>
-                            <select class="form-select form-select-cvc" id="filtroDepartamento" onchange="filtrarOrbiuns()">
+                            <label class="form-label">Categoria</label>
+                            <select class="form-select form-select-cvc" id="filtroCategoria" onchange="filtrarOrbiuns()">
                                 <option value="">Todos</option>
-                                <option value="Pós-Venda">Pós-Venda</option>
-                                <option value="Cotação">Cotação</option>
-                                <option value="Financeiro">Financeiro</option>
-                                <option value="Reserva">Reserva</option>
-                                <option value="Check-in">Check-in</option>
-                                <option value="Reembolso">Reembolso</option>
-                                <option value="Outro">Outro</option>
+                                <option value="CCO">CCO</option>
+                                <option value="DV">DV</option>
+                                <option value="PRODUTOS">PRODUTOS</option>
+                                <option value="GRUPOS ESPECÍFICOS">GRUPOS ESPECÍFICOS</option>
+                                <option value="CSC">CSC</option>
+                                <option value="B2B">B2B</option>
+                                <option value="MULTIMARCAS">MULTIMARCAS</option>
+                                <option value="TESTES TI">TESTES TI</option>
+                                <option value="GRUPOS MARÍTIMOS">GRUPOS MARÍTIMOS</option>
                             </select>
                         </div>
                         <div class="col-md-4">
@@ -1335,17 +1337,19 @@
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">
-                                    Departamento <span class="campo-obrigatorio">*</span>
+                                    Categoria <span class="campo-obrigatorio">*</span>
                                 </label>
-                                <select class="form-select form-select-cvc" id="departamento" required>
+                                <select class="form-select form-select-cvc" id="categoria" required>
                                     <option value="">Selecione...</option>
-                                    <option value="Pós-Venda">Pós-Venda</option>
-                                    <option value="Cotação">Cotação</option>
-                                    <option value="Financeiro">Financeiro</option>
-                                    <option value="Reserva">Reserva</option>
-                                    <option value="Check-in">Check-in</option>
-                                    <option value="Reembolso">Reembolso</option>
-                                    <option value="Outro">Outro</option>
+                                    <option value="CCO">CCO</option>
+                                    <option value="DV">DV</option>
+                                    <option value="PRODUTOS">PRODUTOS</option>
+                                    <option value="GRUPOS ESPECÍFICOS">GRUPOS ESPECÍFICOS</option>
+                                    <option value="CSC">CSC</option>
+                                    <option value="B2B">B2B</option>
+                                    <option value="MULTIMARCAS">MULTIMARCAS</option>
+                                    <option value="TESTES TI">TESTES TI</option>
+                                    <option value="GRUPOS MARÍTIMOS">GRUPOS MARÍTIMOS</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
@@ -1419,8 +1423,58 @@
                         <div class="row g-3 mb-3">
                             <div class="col-md-4">
                                 <label class="form-label">Companhia Aérea</label>
-                                <input type="text" class="form-control form-control-cvc" id="cia" 
-                                       placeholder="Ex: GOL, LATAM, AZUL">
+                                <input type="text" class="form-control form-control-cvc" id="cia" list="listaCias"
+                                       placeholder="Digite nome ou sigla...">
+                                <datalist id="listaCias">
+                                    <!-- NACIONAIS -->
+                                    <option value="AZUL (AD)">AZUL (AD)</option>
+                                    <option value="GOL (G3)">GOL (G3)</option>
+                                    <option value="LATAM (LA)">LATAM (LA)</option>
+                                    <option value="VOEPASS (2Z)">VOEPASS (2Z) - antiga Passaredo</option>
+                                    <option value="AVIANCA (O6)">AVIANCA (O6)</option>
+
+                                    <!-- INTERNACIONAIS PRINCIPAIS -->
+                                    <option value="AMERICAN AIRLINES (AA)">AMERICAN AIRLINES (AA)</option>
+                                    <option value="DELTA (DL)">DELTA (DL)</option>
+                                    <option value="UNITED (UA)">UNITED (UA)</option>
+                                    <option value="LUFTHANSA (LH)">LUFTHANSA (LH)</option>
+                                    <option value="AIR FRANCE (AF)">AIR FRANCE (AF)</option>
+                                    <option value="KLM (KL)">KLM (KL)</option>
+                                    <option value="BRITISH AIRWAYS (BA)">BRITISH AIRWAYS (BA)</option>
+                                    <option value="IBERIA (IB)">IBERIA (IB)</option>
+                                    <option value="TAP PORTUGAL (TP)">TAP PORTUGAL (TP)</option>
+                                    <option value="ALITALIA (AZ)">ALITALIA (AZ)</option>
+                                    <option value="SWISS (LX)">SWISS (LX)</option>
+                                    <option value="TURKISH AIRLINES (TK)">TURKISH AIRLINES (TK)</option>
+                                    <option value="EMIRATES (EK)">EMIRATES (EK)</option>
+                                    <option value="QATAR AIRWAYS (QR)">QATAR AIRWAYS (QR)</option>
+                                    <option value="ETIHAD (EY)">ETIHAD (EY)</option>
+                                    <option value="AIR CANADA (AC)">AIR CANADA (AC)</option>
+                                    <option value="AEROMEXICO (AM)">AEROMEXICO (AM)</option>
+                                    <option value="COPA AIRLINES (CM)">COPA AIRLINES (CM)</option>
+                                    <option value="AVIANCA (AV)">AVIANCA (AV)</option>
+                                    <option value="AEROLINEAS ARGENTINAS (AR)">AEROLINEAS ARGENTINAS (AR)</option>
+                                    <option value="JET BLUE (B6)">JET BLUE (B6)</option>
+                                    <option value="SPIRIT (NK)">SPIRIT (NK)</option>
+                                    <option value="FRONTIER (F9)">FRONTIER (F9)</option>
+                                    <option value="AIR EUROPA (UX)">AIR EUROPA (UX)</option>
+                                    <option value="NORWEGIAN (DY)">NORWEGIAN (DY)</option>
+                                    <option value="AEROFLOT (SU)">AEROFLOT (SU)</option>
+                                    <option value="AIR CHINA (CA)">AIR CHINA (CA)</option>
+                                    <option value="CHINA EASTERN (MU)">CHINA EASTERN (MU)</option>
+                                    <option value="CHINA SOUTHERN (CZ)">CHINA SOUTHERN (CZ)</option>
+                                    <option value="SINGAPORE AIRLINES (SQ)">SINGAPORE AIRLINES (SQ)</option>
+                                    <option value="CATHAY PACIFIC (CX)">CATHAY PACIFIC (CX)</option>
+                                    <option value="JAPAN AIRLINES (JL)">JAPAN AIRLINES (JL)</option>
+                                    <option value="ANA (NH)">ANA (NH)</option>
+                                    <option value="KOREAN AIR (KE)">KOREAN AIR (KE)</option>
+                                    <option value="THAI AIRWAYS (TG)">THAI AIRWAYS (TG)</option>
+                                    <option value="MALAYSIA AIRLINES (MH)">MALAYSIA AIRLINES (MH)</option>
+                                    <option value="QANTAS (QF)">QANTAS (QF)</option>
+                                    <option value="AIR NEW ZEALAND (NZ)">AIR NEW ZEALAND (NZ)</option>
+                                    <option value="SOUTH AFRICAN AIRWAYS (SA)">SOUTH AFRICAN AIRWAYS (SA)</option>
+                                    <option value="OUTRAS">OUTRAS</option>
+                                </datalist>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">LOC GDS</label>
@@ -1494,9 +1548,9 @@
             debugLog('   5. ✅ Campo Colar Dados com auto-preenchimento', 'info');
             debugLog('   6. ✅ Feedback visual de campos preenchidos', 'info');
             
-            // Preencher select de vendedores
-            preencherSelectVendedores();
-            
+            // Carregar vendedores da planilha USUARIOS
+            await carregarVendedores();
+
             // Carregar dados
             await carregarAtualizacoes();
             await carregarOrbiuns();
@@ -1507,6 +1561,52 @@
                 await carregarAtualizacoes();
                 await carregarOrbiuns();
             }, 5 * 60 * 1000); // 5 minutos
+
+            // ============================================================================
+            // BUSCA AUTOMÁTICA POR WHATSAPP → CPF + NOME
+            // ============================================================================
+
+            const campoWhatsApp = document.getElementById('whatsappCliente');
+            if (campoWhatsApp) {
+                campoWhatsApp.addEventListener('blur', async function() {
+                    const whatsapp = this.value.replace(/\D/g, '');
+
+                    if (whatsapp.length >= 10) {
+                        try {
+                            debugLog('🔍 Buscando cliente por WhatsApp: ' + whatsapp, 'info');
+
+                            const result = await chamarAPI({
+                                action: 'buscar_por_whatsapp',
+                                whatsapp: whatsapp
+                            });
+
+                            if (result.success && result.data) {
+                                // Preencher CPF
+                                if (result.data.cpf) {
+                                    document.getElementById('cpfCliente').value = result.data.cpf;
+                                    debugLog('✅ CPF preenchido automaticamente', 'success');
+                                }
+
+                                // Preencher Nome
+                                if (result.data.nome) {
+                                    document.getElementById('nomeCliente').value = result.data.nome;
+                                    debugLog('✅ Nome preenchido automaticamente', 'success');
+                                }
+
+                                // Feedback visual
+                                this.style.borderColor = '#28a745';
+                                setTimeout(() => { this.style.borderColor = ''; }, 2000);
+                            } else {
+                                debugLog('ℹ️ Cliente não encontrado no sistema', 'warning');
+                                this.style.borderColor = '#ffc107';
+                                setTimeout(() => { this.style.borderColor = ''; }, 2000);
+                            }
+                        } catch (error) {
+                            debugLog('❌ Erro ao buscar cliente: ' + error.message, 'error');
+                        }
+                    }
+                });
+            }
         });
         
         // ============================================================================
@@ -1583,7 +1683,7 @@
                             </div>
                             <div class="atualizacao-info">
                                 <i class="fas fa-building"></i>
-                                <span>${atualizacao.departamento || 'N/A'}</span>
+                                <span>${atualizacao.categoria || 'N/A'}</span>
                             </div>
                         </div>
                         ${atualizacao.observacoes ? `
@@ -1844,8 +1944,8 @@
                         <div class="orbium-info">
                             <i class="fas fa-building"></i>
                             <div>
-                                <div class="orbium-info-label">DEPARTAMENTO</div>
-                                <div class="orbium-info-value">${orbium.departamento || 'N/A'}</div>
+                                <div class="orbium-info-label">CATEGORIA</div>
+                                <div class="orbium-info-value">${orbium.categoria || 'N/A'}</div>
                             </div>
                         </div>
                         
@@ -2063,8 +2163,8 @@
                 camposPreenchidos.push('LOC CIA');
             }
             
-            // Adicionar departamento e vendedor aos vazios (sempre precisam ser preenchidos)
-            camposVazios.push('Status', 'Departamento', 'Vendedor');
+            // Adicionar categoria e vendedor aos vazios (sempre precisam ser preenchidos)
+            camposVazios.push('Status', 'Categoria', 'Vendedor');
             
             // Mostrar feedback
             mostrarFeedbackPreenchimento(camposPreenchidos, camposVazios);
@@ -2075,17 +2175,17 @@
         function extrairDados(texto) {
             const dados = {};
             
-            // Padrões de extração
+            // Padrões de extração melhorados
             const padroes = {
                 orbium: /(?:orbium|protocolo|n[uú]mero)[:\s]*(\d+)/i,
-                recibo: /(?:recibo)[:\s]*([\w\d-]+)/i,
+                recibo: /(?:recibo|contrato)[:\s]*([\w\d-]+)/i,
                 cliente: /(?:cliente|passageiro|nome)[:\s]*([^\n]+)/i,
                 whatsapp: /(?:whatsapp|whats|telefone|fone|celular)[:\s]*(\d{10,11})/i,
                 cpf: /(?:cpf)[:\s]*([\d.-]+)/i,
-                reserva: /(?:reserva|loc)[:\s]*([\w\d]+)/i,
+                reserva: /(?:reserva)[:\s]*([\w\d]+)/i,
                 pedido: /(?:pedido|n[uú]mero do pedido)[:\s]*([\w\d-]+)/i,
-                cia: /(?:cia|companhia|a[ée]rea)[:\s]*([^\n]+)/i,
-                locGds: /(?:loc\s*gds|gds)[:\s]*([\w\d]+)/i,
+                cia: /(?:fornecedor\s*a[ée]reo|cia|companhia)[:\s]*([^\n]+)/i,
+                locGds: /(?:localizador\s*a[ée]reo|loc\s*gds|gds)[:\s]*([\w\d]+)/i,
                 locCia: /(?:loc\s*cia)[:\s]*([\w\d]+)/i
             };
             
@@ -2109,7 +2209,63 @@
                     dados.cpf = dados.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
                 }
             }
-            
+
+            // Mapear siglas de companhias aéreas
+            if (dados.cia) {
+                const mapaSignas = {
+                    'AD': 'AZUL (AD)',
+                    'G3': 'GOL (G3)',
+                    'LA': 'LATAM (LA)',
+                    '2Z': 'VOEPASS (2Z)',
+                    'O6': 'AVIANCA (O6)',
+                    'AA': 'AMERICAN AIRLINES (AA)',
+                    'DL': 'DELTA (DL)',
+                    'UA': 'UNITED (UA)',
+                    'LH': 'LUFTHANSA (LH)',
+                    'AF': 'AIR FRANCE (AF)',
+                    'KL': 'KLM (KL)',
+                    'BA': 'BRITISH AIRWAYS (BA)',
+                    'IB': 'IBERIA (IB)',
+                    'TP': 'TAP PORTUGAL (TP)',
+                    'AZ': 'ALITALIA (AZ)',
+                    'LX': 'SWISS (LX)',
+                    'TK': 'TURKISH AIRLINES (TK)',
+                    'EK': 'EMIRATES (EK)',
+                    'QR': 'QATAR AIRWAYS (QR)',
+                    'EY': 'ETIHAD (EY)',
+                    'AC': 'AIR CANADA (AC)',
+                    'AM': 'AEROMEXICO (AM)',
+                    'CM': 'COPA AIRLINES (CM)',
+                    'AV': 'AVIANCA (AV)',
+                    'AR': 'AEROLINEAS ARGENTINAS (AR)',
+                    'B6': 'JET BLUE (B6)',
+                    'NK': 'SPIRIT (NK)',
+                    'F9': 'FRONTIER (F9)',
+                    'UX': 'AIR EUROPA (UX)',
+                    'DY': 'NORWEGIAN (DY)',
+                    'SU': 'AEROFLOT (SU)',
+                    'CA': 'AIR CHINA (CA)',
+                    'MU': 'CHINA EASTERN (MU)',
+                    'CZ': 'CHINA SOUTHERN (CZ)',
+                    'SQ': 'SINGAPORE AIRLINES (SQ)',
+                    'CX': 'CATHAY PACIFIC (CX)',
+                    'JL': 'JAPAN AIRLINES (JL)',
+                    'NH': 'ANA (NH)',
+                    'KE': 'KOREAN AIR (KE)',
+                    'TG': 'THAI AIRWAYS (TG)',
+                    'MH': 'MALAYSIA AIRLINES (MH)',
+                    'QF': 'QANTAS (QF)',
+                    'NZ': 'AIR NEW ZEALAND (NZ)',
+                    'SA': 'SOUTH AFRICAN AIRWAYS (SA)'
+                };
+
+                const ciaSigla = dados.cia.toUpperCase().trim();
+                if (mapaSignas[ciaSigla]) {
+                    dados.cia = mapaSignas[ciaSigla];
+                    debugLog(`✈️ Sigla CIA convertida: ${ciaSigla} → ${dados.cia}`, 'success');
+                }
+            }
+
             return dados;
         }
         
@@ -2155,7 +2311,7 @@
                 const dadosOrbium = {
                     orbium: document.getElementById('numeroOrbium').value,
                     status: document.getElementById('statusOrbium').value,
-                    departamento: document.getElementById('departamento').value,
+                    categoria: document.getElementById('categoria').value,
                     vendedor: document.getElementById('vendedor').value,
                     nome_cliente: document.getElementById('nomeCliente').value,
                     whats_cliente: document.getElementById('whatsappCliente').value,
@@ -2178,7 +2334,7 @@
                     // Enviar cada campo individualmente
                     'orbium': dadosOrbium.orbium,
                     'status': dadosOrbium.status,
-                    'departamento': dadosOrbium.departamento,
+                    'categoria': dadosOrbium.categoria,
                     'vendedor': dadosOrbium.vendedor,
                     'nome_cliente': dadosOrbium.nome_cliente,
                     'whats_cliente': dadosOrbium.whats_cliente,
@@ -2284,7 +2440,7 @@
                 orbium: document.getElementById('filtroOrbium').value.toLowerCase(),
                 status: document.getElementById('filtroStatus').value.toLowerCase(),
                 vendedor: document.getElementById('filtroVendedor').value.toLowerCase(),
-                departamento: document.getElementById('filtroDepartamento').value.toLowerCase(),
+                categoria: document.getElementById('filtroCategoria').value.toLowerCase(),
                 cliente: document.getElementById('filtroCliente').value.toLowerCase(),
                 whatsapp: document.getElementById('filtroWhatsApp').value,
                 recibo: document.getElementById('filtroRecibo').value.toLowerCase()
@@ -2309,7 +2465,7 @@
                     if (filtros.vendedor && (!orbium.vendedor || !orbium.vendedor.toString().toLowerCase().includes(filtros.vendedor))) {
                         return false;
                     }
-                    if (filtros.departamento && (!orbium.departamento || !orbium.departamento.toString().toLowerCase().includes(filtros.departamento))) {
+                    if (filtros.categoria && (!orbium.categoria || !orbium.categoria.toString().toLowerCase().includes(filtros.categoria))) {
                         return false;
                     }
                     if (filtros.cliente && (!orbium.nome_cliente || !orbium.nome_cliente.toString().toLowerCase().includes(filtros.cliente))) {
@@ -2333,7 +2489,7 @@
             document.getElementById('filtroOrbium').value = '';
             document.getElementById('filtroStatus').value = '';
             document.getElementById('filtroVendedor').value = '';
-            document.getElementById('filtroDepartamento').value = '';
+            document.getElementById('filtroCategoria').value = '';
             document.getElementById('filtroCliente').value = '';
             document.getElementById('filtroWhatsApp').value = '';
             document.getElementById('filtroRecibo').value = '';
@@ -2369,22 +2525,93 @@
             }
         }
         
-        function preencherSelectVendedores() {
-            const selectVendedor = document.getElementById('vendedor');
-            const selectFiltroVendedor = document.getElementById('filtroVendedor');
-            
-            const vendedores = SYSTELOS_CONFIG.vendedores || [
-                'ANA PAULA MUNIZ DE SOUZA',
-                'ADRIELLY CORREA DE SOUSA',
-                'DAINA ADRIANA SILVA DE BRITO',
-                'ALESSANDRO DIAZ RODRIGUES',
-                'CONCEPCION DIAZ RODRIGUES'
-            ];
-            
-            vendedores.forEach(vendedor => {
-                selectVendedor.innerHTML += `<option value="${vendedor}">${vendedor}</option>`;
-                selectFiltroVendedor.innerHTML += `<option value="${vendedor}">${vendedor}</option>`;
-            });
+        async function carregarVendedores() {
+            try {
+                debugLog('📥 Buscando vendedores da planilha USUARIOS...', 'info');
+
+                const result = await chamarAPI({
+                    action: 'listar_usuarios'
+                });
+
+                if (result.success && result.data) {
+                    const selectVendedor = document.getElementById('vendedor');
+                    const selectFiltroVendedor = document.getElementById('filtroVendedor');
+
+                    selectVendedor.innerHTML = '<option value="">Selecione...</option>';
+                    selectFiltroVendedor.innerHTML = '<option value="">Todos</option>';
+
+                    // Vendedores ATIVOS
+                    const ativos = result.data.filter(u => u.status === 'ATIVO');
+                    if (ativos.length > 0) {
+                        const optgroupAtivos = document.createElement('optgroup');
+                        optgroupAtivos.label = '✅ ATIVOS';
+                        ativos.forEach(vendedor => {
+                            const option = document.createElement('option');
+                            option.value = vendedor.nome;
+                            option.textContent = vendedor.nome;
+                            optgroupAtivos.appendChild(option);
+                        });
+                        selectVendedor.appendChild(optgroupAtivos);
+
+                        // Adicionar ao filtro também
+                        ativos.forEach(vendedor => {
+                            const option = document.createElement('option');
+                            option.value = vendedor.nome;
+                            option.textContent = vendedor.nome;
+                            selectFiltroVendedor.appendChild(option);
+                        });
+                    }
+
+                    // Vendedores DESATIVADOS
+                    const desativados = result.data.filter(u => u.status === 'DESLIGADO');
+                    if (desativados.length > 0) {
+                        const optgroupDesativados = document.createElement('optgroup');
+                        optgroupDesativados.label = '❌ DESATIVADOS';
+                        desativados.forEach(vendedor => {
+                            const option = document.createElement('option');
+                            option.value = vendedor.nome;
+                            option.textContent = vendedor.nome;
+                            option.style.color = '#999';
+                            optgroupDesativados.appendChild(option);
+                        });
+                        selectVendedor.appendChild(optgroupDesativados);
+                    }
+
+                    debugLog(`✅ ${result.data.length} vendedores carregados`, 'success');
+                } else {
+                    throw new Error('Erro ao carregar vendedores da API');
+                }
+            } catch (error) {
+                debugLog(`❌ Erro ao carregar vendedores: ${error.message}`, 'error');
+                debugLog('⚠️ Usando lista de fallback', 'warning');
+
+                // Fallback para lista básica
+                const vendedoresFallback = [
+                    'ALESSANDRO DIAZ RODRIGUES',
+                    'ANA PAULA MUNIZ DE SOUZA',
+                    'ADRIELLY CORREA DE SOUSA',
+                    'DAINA ADRIANA SILVA DE BRITO',
+                    'CONCEPCION DIAZ RODRIGUES'
+                ];
+
+                const selectVendedor = document.getElementById('vendedor');
+                const selectFiltroVendedor = document.getElementById('filtroVendedor');
+
+                selectVendedor.innerHTML = '<option value="">Selecione...</option>';
+                selectFiltroVendedor.innerHTML = '<option value="">Todos</option>';
+
+                vendedoresFallback.forEach(v => {
+                    const opt = document.createElement('option');
+                    opt.value = v;
+                    opt.textContent = v;
+                    selectVendedor.appendChild(opt);
+
+                    const optFiltro = document.createElement('option');
+                    optFiltro.value = v;
+                    optFiltro.textContent = v;
+                    selectFiltroVendedor.appendChild(optFiltro);
+                });
+            }
         }
         
         // ============================================================================
