@@ -21,41 +21,264 @@
     
     <style>
         /* ============================================================================
-           NAVBAR E SIDEBAR - PADRÃO SYSTELOS
+           HEADER SYSTELOS - PADRÃO UNIFICADO
            ============================================================================ */
 
         body {
-            padding-top: 80px;
+            padding-top: 70px;
         }
 
-        /* Botão Hambúrguer - Sempre à esquerda */
-        .navbar-toggler {
+        .systelos-header {
+            background: linear-gradient(135deg, #0F1B3D 0%, #1a2642 100%);
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #FFB800;
+        }
+
+        /* ============================================
+           BOTÃO MENU HAMBÚRGUER (ESQUERDA)
+           ============================================ */
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: #FFB800;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
             transition: all 0.3s ease;
+            margin-right: 16px;
         }
 
-        .navbar-toggler:hover {
-            background: rgba(255, 184, 0, 0.4) !important;
-            transform: scale(1.05);
+        .menu-toggle:hover {
+            background: rgba(255, 184, 0, 0.1);
+            transform: scale(1.1);
         }
 
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 184, 0, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        .menu-toggle:active {
+            transform: scale(0.95);
         }
 
-        .navbar-toggler:focus {
-            box-shadow: 0 0 0 0.25rem rgba(255, 184, 0, 0.25);
+        /* ============================================
+           LOGO SYSTELOS (CENTRO-ESQUERDA)
+           ============================================ */
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
         }
 
-        /* Hover effects para navbar */
-        .navbar .nav-link:not(.active):hover {
-            background: rgba(255, 184, 0, 0.1) !important;
-            color: #FFB800 !important;
+        .logo-icon {
+            background: #FFB800;
+            color: #0F1B3D;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 12px rgba(255, 184, 0, 0.3);
         }
 
-        .nav-link.active {
-            background: rgba(255, 184, 0, 0.2) !important;
-            color: #FFB800 !important;
-            font-weight: 600 !important;
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .logo-title {
+            color: #FFFFFF;
+            font-size: 20px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 0.5px;
+            line-height: 1;
+        }
+
+        .logo-subtitle {
+            color: #FFB800;
+            font-size: 11px;
+            font-weight: 400;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.3px;
+            line-height: 1;
+        }
+
+        /* ============================================
+           INFORMAÇÕES DO USUÁRIO (DIREITA)
+           ============================================ */
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-left: auto;
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFB800 0%, #ffc933 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: #0F1B3D;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 2px 8px rgba(255, 184, 0, 0.3);
+            flex-shrink: 0;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: right;
+        }
+
+        .user-name {
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.2;
+        }
+
+        .user-email {
+            color: #14B8A6;
+            font-size: 12px;
+            font-weight: 400;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.2;
+        }
+
+        .btn-gestor {
+            background: rgba(20, 184, 166, 0.15);
+            border: 1px solid #14B8A6;
+            color: #14B8A6;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .btn-gestor:hover {
+            background: #14B8A6;
+            color: #0F1B3D;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(20, 184, 166, 0.4);
+        }
+
+        .btn-sair {
+            background: rgba(255, 184, 0, 0.15);
+            border: 1px solid #FFB800;
+            color: #FFB800;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .btn-sair:hover {
+            background: #FFB800;
+            color: #0F1B3D;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 184, 0, 0.4);
+        }
+
+        .btn-sair:active,
+        .btn-gestor:active {
+            transform: translateY(0);
+        }
+
+        /* ============================================
+           RESPONSIVIDADE
+           ============================================ */
+
+        @media (max-width: 768px) {
+            .systelos-header {
+                padding: 0 16px;
+                height: 60px;
+            }
+
+            body {
+                padding-top: 60px;
+            }
+
+            .logo-title {
+                font-size: 16px;
+            }
+
+            .logo-subtitle {
+                font-size: 9px;
+            }
+
+            .user-details {
+                display: none;
+            }
+
+            .btn-gestor {
+                display: none;
+            }
+
+            .btn-sair {
+                padding: 8px 12px;
+                font-size: 0;
+            }
+
+            .btn-sair i {
+                font-size: 18px;
+                margin: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .systelos-header {
+                padding: 0 12px;
+            }
+
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .user-avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
         }
 
         /* ============================================================================
@@ -124,8 +347,6 @@
            ESTILOS ESPECÍFICOS DO DASHBOARD
            ============================================================================ */
 
-
-        /* Estilos específicos do dashboard */
         .dashboard-container {
             opacity: 0;
             transition: opacity 0.5s ease-in;
@@ -165,7 +386,6 @@
             margin-bottom: 30px;
         }
         
-        /* ✅ CORRIGIDO: Botão Google agora visível */
         .google-btn {
             background: #0F1B3D !important;
             color: white !important;
@@ -223,369 +443,269 @@
         .ou-divider span {
             background: white;
             padding: 0 15px;
-            color: #999;
             position: relative;
+            color: #666;
+            font-size: 14px;
         }
         
-        /* Dashboard específico */
-        .quick-actions {
+        .quick-access-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
         
-        .action-card {
-            background: var(--systelos-branco);
+        .access-card {
+            background: white;
             border-radius: 15px;
             padding: 25px;
             text-align: center;
             box-shadow: var(--systelos-sombra-suave);
             transition: all 0.3s ease;
             cursor: pointer;
+            border: 2px solid transparent;
             text-decoration: none;
             color: inherit;
-            position: relative;
         }
         
-        .action-card:hover {
+        .access-card:hover {
             transform: translateY(-5px);
-            box-shadow: var(--systelos-sombra-media);
-            text-decoration: none;
-            color: inherit;
+            box-shadow: var(--systelos-sombra-forte);
+            border-color: var(--systelos-tur-amarelo);
         }
         
-        /* Card de Importação - NOVO */
-        .action-card.importacao {
-            background: var(--systelos-tur-amarelo);
-            border: 2px solid var(--systelos-amarelo);
-            transform: scale(1.02);
-        }
-        
-        .action-card.importacao:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 15px 35px rgba(255, 230, 0, 0.3);
-        }
-        
-        .action-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: var(--systelos-error);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        
-        .action-icon {
-            font-size: 3rem;
-            color: var(--systelos-azul-principal);
+        .access-card i {
+            font-size: 2.5rem;
             margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--systelos-azul-principal), #1a2951);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
-        .action-card.importacao .action-icon {
+        .access-card h5 {
             color: var(--systelos-azul-principal);
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
-        }
-        
-        .action-title {
             font-weight: 700;
-            color: var(--systelos-azul-principal);
             margin-bottom: 8px;
         }
         
-        .action-desc {
+        .access-card p {
             color: var(--systelos-cinza);
             font-size: 0.9rem;
+            margin: 0;
         }
         
-        /* Card Automatizado - NOVO */
-        .action-card.automatizado {
-            background: var(--systelos-tur-verde-agua);
-            border: 2px solid var(--systelos-verde);
+        .access-card.novo-badge {
+            position: relative;
+            overflow: visible;
         }
         
-        .action-card.automatizado:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 15px 35px rgba(0, 212, 170, 0.2);
-        }
-        
-        .action-card.automatizado .action-icon {
-            color: var(--systelos-azul-principal);
-        }
-        
-        .action-card.automatizado .action-desc {
-            color: var(--systelos-azul-principal);
-            font-weight: 600;
-        }
-        
-        /* Dashboard por vendedores */
-        .vendedores-dashboard {
-            background: var(--systelos-branco);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: var(--systelos-sombra-suave);
-            margin-bottom: 30px;
-        }
-        
-        .vendedor-card {
-            background: var(--systelos-cinza-claro);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
-        }
-        
-        .vendedor-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--systelos-sombra-suave);
-        }
-        
-        .vendedor-nome {
+        .access-card.novo-badge::before {
+            content: 'NOVO';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #FF4444;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
             font-weight: 700;
-            color: var(--systelos-azul-principal);
-            font-size: 1.1rem;
-            margin-bottom: 15px;
+        }
+
+        .section-title {
             display: flex;
             align-items: center;
-        }
-        
-        .vendedor-nome i {
-            margin-right: 8px;
-            color: var(--systelos-amarelo);
-        }
-        
-        .vendedor-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-        }
-        
-        .vendedor-stat {
-            text-align: center;
-            padding: 10px;
-            background: var(--systelos-branco);
-            border-radius: 8px;
-            border-left: 3px solid var(--systelos-amarelo);
-        }
-        
-        .vendedor-stat.vendas { border-left-color: var(--systelos-success); }
-        .vendedor-stat.checkin { border-left-color: var(--systelos-info); }
-        .vendedor-stat.pos-venda { border-left-color: var(--systelos-warning); }
-        
-        .vendedor-stat-number {
-            font-size: 1.5rem;
-            font-weight: 900;
+            gap: 10px;
             color: var(--systelos-azul-principal);
-            line-height: 1;
-        }
-        
-        .vendedor-stat-label {
-            font-size: 0.8rem;
-            color: var(--systelos-cinza);
-            margin-top: 5px;
-        }
-        
-        .admin-indicator {
-            background: var(--systelos-tur-amarelo);
-            color: var(--systelos-azul-principal);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
             font-weight: 700;
+            margin-bottom: 20px;
         }
-        
-        /* Responsivo */
-        @media (max-width: 768px) {
-            .quick-actions {
-                grid-template-columns: 1fr;
-            }
-            
-            .vendedor-stats {
-                grid-template-columns: 1fr 1fr;
-            }
+
+        .section-title i {
+            color: var(--systelos-tur-amarelo);
         }
     </style>
 </head>
-
 <body>
     <!-- ============================================================================
-         NAVBAR PADRÃO SYSTELOS TUR
+         HEADER SYSTELOS - PADRÃO UNIFICADO
          ============================================================================ -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: linear-gradient(135deg, #0F1B3D 0%, #1a2951 100%); padding: 1rem 2rem; box-shadow: 0 4px 15px rgba(15, 27, 61, 0.3);">
-        <div class="container-fluid">
-            <div class="d-flex align-items-center justify-content-between w-100">
-                <!-- ESQUERDA: Menu Hambúrguer + Logo -->
-                <div class="d-flex align-items-center">
-                    <!-- Botão Hambúrguer -->
-                    <button class="navbar-toggler" type="button" style="border: 2px solid #FFB800; background: rgba(255, 184, 0, 0.2); padding: 8px 12px; border-radius: 8px; margin-right: 15px;">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+    <header class="systelos-header">
+        <!-- Botão Menu Hambúrguer (Esquerda) -->
+        <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Menu">
+            <i class="fas fa-bars"></i>
+        </button>
 
-                    <!-- Logo -->
-                    <a class="navbar-brand d-flex align-items-center mb-0" href="index.html" style="font-weight: 700; font-size: 1.3rem; gap: 10px;">
-                        <div style="background: #FFB800; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; color: #0F1B3D;">
-                            [S]
-                        </div>
-                        <div>
-                            <div style="line-height: 1.2; font-family: 'Poppins', sans-serif;">SYSTELOS TUR</div>
-                            <div style="font-size: 0.7rem; font-weight: 400; color: rgba(255,255,255,0.7); font-family: 'Inter', sans-serif;">Sistemas com propósito</div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- DIREITA: Informações do Usuário -->
-                <div id="userInfoHeader" class="d-flex gap-2 align-items-center" style="display: none !important;">
-                    <img id="userAvatarHeader" class="user-avatar" src="" alt="Avatar" style="display:none; width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                    <div class="me-3">
-                        <p class="mb-0" id="userNameHeader" style="color: white; font-weight: 600; font-size: 0.9rem;">Carregando...</p>
-                        <p class="mb-0" id="userRoleHeader" style="color: rgba(255,255,255,0.7); font-size: 0.8rem;">...</p>
-                    </div>
-                    <div id="adminBadgeHeader" style="display:none; background: #FFB800; color: #0F1B3D; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">
-                        <i class="fas fa-crown"></i> GESTOR
-                    </div>
-                    <button onclick="logout()" style="background: #FFB800; color: #0F1B3D; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
-                        <i class="fas fa-sign-out-alt me-2"></i>Sair
-                    </button>
-                </div>
+        <!-- Logo SYSTELOS (Centro-Esquerda) -->
+        <div class="logo-container">
+            <div class="logo-icon">[S]</div>
+            <div class="logo-text">
+                <div class="logo-title">SYSTELOS TUR</div>
+                <div class="logo-subtitle">Sistemas com propósito</div>
             </div>
         </div>
-    </nav>
+
+        <!-- Informações do Usuário (Direita) -->
+        <div class="user-info" id="userInfoHeader" style="display: none;">
+            <div class="user-avatar" id="userAvatar">
+                <span id="userInitials">AR</span>
+            </div>
+            <div class="user-details">
+                <div class="user-name" id="userName">Alessandro Diaz Rodrigues</div>
+                <div class="user-email" id="userEmail">alessandrorodrigues@cvc.com.br</div>
+            </div>
+            <button class="btn-gestor" id="adminBadgeHeader" style="display: none;">
+                <i class="fas fa-crown"></i> Gestor
+            </button>
+            <button class="btn-sair" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </header>
 
     <!-- ============================================================================
-         MENU LATERAL (SIDEBAR)
+         SIDEBAR MENU LATERAL
          ============================================================================ -->
-    <nav id="sidebarMenu" class="sidebar-menu">
-        <div class="sidebar-header" style="position: relative; border-bottom: 1px solid rgba(255,184,0,0.3); padding: 20px;">
-            <h3 style="color: #FFB800; font-family: Poppons, sans-serif; margin: 0; font-size: 1.2rem; font-weight: 700;">[S] SYSTELOS TUR</h3>
-            <button id="closeSidebar" style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; color: white; font-size: 32px; cursor: pointer; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s;">&times;</button>
+    <nav class="sidebar-menu" id="sidebarMenu">
+        <div style="padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="background: #FFB800; color: #0F1B3D; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; font-family: 'Poppins', sans-serif;">[S]</div>
+                    <div>
+                        <div style="color: #FFFFFF; font-size: 18px; font-weight: 700; font-family: 'Poppins', sans-serif; line-height: 1;">SYSTELOS TUR</div>
+                        <div style="color: #FFB800; font-size: 10px; font-weight: 400; font-family: 'Inter', sans-serif;">Sistemas com propósito</div>
+                    </div>
+                </div>
+                <button id="closeSidebar" style="background: none; border: none; color: #FFB800; font-size: 24px; cursor: pointer; padding: 5px; transition: all 0.3s;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         </div>
-        <ul style="list-style: none; padding: 0; margin: 0;">
-            <li><a href="index.html" style="display: block; padding: 18px 25px; color: #FFB800; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; background: rgba(255,184,0,0.2); border-left: 4px solid #FFB800; font-weight: 600;">Início</a></li>
-            <li><a href="orcamentos.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">Padronizador de Orçamentos</a></li>
-            <li><a href="embarques.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">Controle de Embarques</a></li>
-            <li><a href="vendas.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">Informe de Vendas</a></li>
-            <li><a href="orbiuns.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">Orbiuns (Processos)</a></li>
-            <li><a href="importacao.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px;">Importação de Dados</a></li>
+
+        <ul style="list-style: none; padding: 0; margin: 20px 0;">
+            <li>
+                <a href="index.html" style="display: flex; align-items: center; gap: 12px; padding: 15px 20px; color: #FFFFFF; text-decoration: none; transition: all 0.3s; font-family: 'Inter', sans-serif; font-weight: 500; background: rgba(255,184,0,0.1);">
+                    <i class="fas fa-home" style="width: 20px; color: #FFB800;"></i>
+                    <span>Início</span>
+                </a>
+            </li>
+            <li>
+                <a href="orcamentos.html" style="display: flex; align-items: center; gap: 12px; padding: 15px 20px; color: #FFFFFF; text-decoration: none; transition: all 0.3s; font-family: 'Inter', sans-serif; font-weight: 500;">
+                    <i class="fas fa-file-invoice-dollar" style="width: 20px;"></i>
+                    <span>Padronizador de Orçamentos</span>
+                </a>
+            </li>
+            <li>
+                <a href="embarques.html" style="display: flex; align-items: center; gap: 12px; padding: 15px 20px; color: #FFFFFF; text-decoration: none; transition: all 0.3s; font-family: 'Inter', sans-serif; font-weight: 500;">
+                    <i class="fas fa-plane-departure" style="width: 20px;"></i>
+                    <span>Controle de Embarques</span>
+                </a>
+            </li>
+            <li>
+                <a href="vendas.html" style="display: flex; align-items: center; gap: 12px; padding: 15px 20px; color: #FFFFFF; text-decoration: none; transition: all 0.3s; font-family: 'Inter', sans-serif; font-weight: 500;">
+                    <i class="fas fa-shopping-cart" style="width: 20px;"></i>
+                    <span>Informe de Vendas</span>
+                </a>
+            </li>
+            <li>
+                <a href="orbiuns.html" style="display: flex; align-items: center; gap: 12px; padding: 15px 20px; color: #FFFFFF; text-decoration: none; transition: all 0.3s; font-family: 'Inter', sans-serif; font-weight: 500;">
+                    <i class="fas fa-tasks" style="width: 20px;"></i>
+                    <span>Orbiuns (Processos)</span>
+                </a>
+            </li>
+            <li>
+                <a href="importacao.html" style="display: flex; align-items: center; gap: 12px; padding: 15px 20px; color: #FFFFFF; text-decoration: none; transition: all 0.3s; font-family: 'Inter', sans-serif; font-weight: 500;">
+                    <i class="fas fa-file-upload" style="width: 20px;"></i>
+                    <span>Importação de Dados</span>
+                </a>
+            </li>
         </ul>
     </nav>
 
-    <!-- OVERLAY ESCURO -->
+    <!-- Overlay do Sidebar -->
     <div id="sidebarOverlay"></div>
 
-    <!-- Tela de Login -->
+    <!-- ============================================================================
+         TELA DE LOGIN
+         ============================================================================ -->
     <div id="loginContainer" class="login-container">
         <div class="login-card">
-            <div class="login-logo">
-                <div class="systelos-logo-symbol mx-auto mb-3" style="width: 60px; height: 60px; font-size: 20px;">
-                    [S]
-                </div>
-                <h2>SYSTELOS TUR</h2>
-                <p class="login-subtitle">Sistemas com propósito</p>
-            </div>
+            <div class="login-logo">[S] SYSTELOS TUR</div>
+            <p class="login-subtitle">Sistemas com propósito</p>
             
-            <h3 style="color: var(--systelos-azul-principal); margin-bottom: 25px;">Acesso ao Sistema</h3>
-            
-            <!-- Login Google -->
             <button class="google-btn" onclick="loginGoogle()">
-                <i class="fab fa-google me-2"></i>
-                Entrar com Google
+                <i class="fab fa-google"></i> Entrar com Google
             </button>
             
             <div class="ou-divider">
-                <span>ou</span>
+                <span>OU</span>
             </div>
             
-            <!-- Login por Senha -->
-            <div class="senha-form">
-                <input type="password" class="senha-input" id="senhaInput" placeholder="Digite a senha do vendedor" maxlength="20">
-                <button class="senha-btn" onclick="loginSenha()">
-                    <i class="fas fa-lock me-2"></i> Entrar com Senha
-                </button>
-            </div>
+            <input type="password" id="senhaInput" class="senha-input" placeholder="Digite sua senha" />
+            <button class="senha-btn" onclick="loginSenha()">Entrar</button>
             
-            <div style="margin-top: 2rem; font-size: 0.8rem; color: #666; text-align: center;">
-                <p><i class="fas fa-crown"></i> <strong>Gestores:</strong> Use login Google</p>
-                <p><i class="fas fa-chart-line"></i> <strong>Vendedores:</strong> Use senha fornecida</p>
-            </div>
+            <p style="margin-top: 20px; font-size: 12px; color: #999;">
+                Senhas de teste: ale123, ana123, adrielly123, daina123
+            </p>
         </div>
     </div>
 
-    <!-- Dashboard Principal -->
-    <div id="dashboardContainer" class="dashboard-container">
-        <div class="container-fluid">
-            <!-- Ações Rápidas -->
-            <h2 class="section-title mb-4">
-                <i class="fas fa-rocket"></i> Acesso Rápido
-            </h2>
+    <!-- ============================================================================
+         DASHBOARD PRINCIPAL
+         ============================================================================ -->
+    <div id="dashboardContainer" class="dashboard-container" style="display: none;">
+        <div class="container py-4">
+            <!-- Acesso Rápido -->
+            <h3 class="section-title">
+                <i class="fas fa-bolt"></i>
+                Acesso Rápido
+            </h3>
             
-            <div class="quick-actions">
-                <a href="importacao.html" class="action-card importacao">
-                    <span class="action-badge">NOVO</span>
-                    <div class="action-icon">
-                        <i class="fas fa-file-upload"></i>
-                    </div>
-                    <div class="action-title">Importação de Dados</div>
-                    <div class="action-desc">Upload CSV e PDFs automatizados</div>
-                </a>
-
-                <a href="orcamentos.html" class="action-card">
-                    <div class="action-icon">
-                        <i class="fas fa-file-invoice-dollar"></i>
-                    </div>
-                    <div class="action-title">Padronizador de Orçamentos</div>
-                    <div class="action-desc">Crie orçamentos com IA</div>
+            <div class="quick-access-grid">
+                <a href="importacao.html" class="access-card novo-badge">
+                    <i class="fas fa-file-upload"></i>
+                    <h5>Importação de Dados</h5>
+                    <p>Upload CSV e PDFs automatizados</p>
                 </a>
                 
-                <a href="embarques.html" class="action-card">
-                    <div class="action-icon">
-                        <i class="fas fa-plane-departure"></i>
-                    </div>
-                    <div class="action-title">Controle de Embarques</div>
-                    <div class="action-desc">Gerencie conferências e check-ins</div>
+                <a href="orcamentos.html" class="access-card">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <h5>Padronizador de Orçamentos</h5>
+                    <p>Crie orçamentos com IA</p>
                 </a>
                 
-                <a href="vendas.html" class="action-card">
-                    <div class="action-icon">
-                        <i class="fas fa-shopping-cart"></i>
-                    </div>
-                    <div class="action-title">Informe de Vendas</div>
-                    <div class="action-desc">Cadastre novas vendas</div>
-                </a>
-
-                <a href="vendas-automatizado.html" class="action-card automatizado">
-                    <div class="action-icon">
-                        <i class="fas fa-magic"></i>
-                    </div>
-                    <div class="action-title">Vendas Automatizado</div>
-                    <div class="action-desc">Sistema inteligente com IA</div>
+                <a href="embarques.html" class="access-card">
+                    <i class="fas fa-plane-departure"></i>
+                    <h5>Controle de Embarques</h5>
+                    <p>Gerencie conferências e check-ins</p>
                 </a>
                 
-                <a href="orbiuns.html" class="action-card">
-                    <div class="action-icon">
-                        <i class="fas fa-tasks"></i>
-                    </div>
-                    <div class="action-title">Orbiuns</div>
-                    <div class="action-desc">Processos administrativos</div>
+                <a href="vendas.html" class="access-card">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h5>Informe de Vendas</h5>
+                    <p>Cadastre novas vendas</p>
+                </a>
+                
+                <a href="vendas-automatizado.html" class="access-card">
+                    <i class="fas fa-edit"></i>
+                    <h5>Vendas Automatizado</h5>
+                    <p>Sistema inteligente com IA</p>
+                </a>
+                
+                <a href="orbiuns.html" class="access-card">
+                    <i class="fas fa-tasks"></i>
+                    <h5>Orbiuns</h5>
+                    <p>Processos administrativos</p>
                 </a>
             </div>
+
+            <!-- Performance por Vendedor -->
+            <h3 class="section-title">
+                <i class="fas fa-chart-line"></i>
+                Performance por Vendedor
+            </h3>
             
-            <!-- Dashboard por Vendedores -->
-            <h2 class="section-title mb-4">
-                <i class="fas fa-chart-line"></i> Performance por Vendedor
-            </h2>
-            
-            <div class="vendedores-dashboard" id="vendedoresDashboard">
+            <div id="vendedoresDashboard">
                 <p class="text-center text-muted">Nenhum dado disponível no momento.</p>
             </div>
         </div>
@@ -600,22 +720,25 @@
         // SIDEBAR MENU LATERAL - CONTROLES
         // ============================================================================
 
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebarMenu');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.toggle('show');
+            
+            if (sidebar.classList.contains('show')) {
+                overlay.style.display = 'block';
+                setTimeout(() => { overlay.style.opacity = '1'; }, 10);
+            } else {
+                overlay.style.opacity = '0';
+                setTimeout(() => { overlay.style.display = 'none'; }, 300);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const sidebar = document.getElementById('sidebarMenu');
             const closeSidebarBtn = document.getElementById('closeSidebar');
-            const navbarToggler = document.querySelector('.navbar-toggler');
             const overlay = document.getElementById('sidebarOverlay');
-
-            // Abrir sidebar
-            if (navbarToggler) {
-                navbarToggler.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    sidebar.classList.add('show');
-                    overlay.style.display = 'block';
-                    setTimeout(() => { overlay.style.opacity = '1'; }, 10);
-                });
-            }
 
             // Fechar sidebar (botão X)
             if (closeSidebarBtn) {
@@ -644,6 +767,43 @@
                 }
             });
         });
+
+        // ============================================================================
+        // CARREGA INFORMAÇÕES DO USUÁRIO NO HEADER
+        // ============================================================================
+
+        function loadUserInfo() {
+            try {
+                const savedUser = ESTADO_CONFIG.carregar('systelos_user');
+                
+                if (savedUser) {
+                    const userData = JSON.parse(savedUser);
+                    
+                    // Calcular iniciais
+                    const initials = userData.nome
+                        .split(' ')
+                        .map(n => n[0])
+                        .slice(0, 2)
+                        .join('')
+                        .toUpperCase();
+                    
+                    // Atualizar elementos do header
+                    document.getElementById('userInitials').textContent = initials;
+                    document.getElementById('userName').textContent = userData.nome;
+                    document.getElementById('userEmail').textContent = userData.email;
+                    
+                    // Mostrar badge de gestor se for admin
+                    if (userData.isAdmin) {
+                        document.getElementById('adminBadgeHeader').style.display = 'flex';
+                    }
+                    
+                    // Mostrar informações do usuário
+                    document.getElementById('userInfoHeader').style.display = 'flex';
+                }
+            } catch (error) {
+                console.error('❌ Erro ao carregar informações do usuário:', error);
+            }
+        }
 
         // ============================================================================
         // SISTEMA DE LOGIN
@@ -718,58 +878,37 @@
                 dashboard.classList.add('show');
             }, 100);
             
-            // Atualizar informações do usuário
-            updateUserInfo();
+            // Atualizar informações do usuário no header
+            loadUserInfo();
             
             // Carregar dados do dashboard
             loadDashboardData();
         }
         
-        // Atualizar informações do usuário
-        function updateUserInfo() {
-            const userNameHeader = document.getElementById('userNameHeader');
-            const userRoleHeader = document.getElementById('userRoleHeader');
-            const userAvatarHeader = document.getElementById('userAvatarHeader');
-            const adminBadgeHeader = document.getElementById('adminBadgeHeader');
-            const userInfoHeader = document.getElementById('userInfoHeader');
-            
-            if (currentUser) {
-                userNameHeader.textContent = currentUser.nome;
-                userRoleHeader.textContent = currentUser.email;
-                
-                if (currentUser.foto) {
-                    userAvatarHeader.src = currentUser.foto;
-                    userAvatarHeader.style.display = 'block';
-                }
-                
-                if (currentUser.isAdmin) {
-                    adminBadgeHeader.style.display = 'block';
-                }
-                
-                // Mostrar info do usuário no header
-                userInfoHeader.style.display = 'flex';
-            }
-        }
-        
         // Logout
         function logout() {
-            // Remover do localStorage
-            ESTADO_CONFIG.remover('systelos_user');
-            
-            currentUser = null;
-            
-            // Esconder dashboard
-            const dashboard = document.getElementById('dashboardContainer');
-            dashboard.classList.remove('show');
-            setTimeout(() => {
-                dashboard.style.display = 'none';
-            }, 300);
-            
-            // Mostrar tela de login
-            document.getElementById('loginContainer').style.display = 'flex';
-            
-            // Limpar senha
-            document.getElementById('senhaInput').value = '';
+            if (confirm('Deseja realmente sair do sistema?')) {
+                // Remover do localStorage
+                ESTADO_CONFIG.remover('systelos_user');
+                
+                currentUser = null;
+                
+                // Esconder dashboard
+                const dashboard = document.getElementById('dashboardContainer');
+                dashboard.classList.remove('show');
+                setTimeout(() => {
+                    dashboard.style.display = 'none';
+                }, 300);
+                
+                // Mostrar tela de login
+                document.getElementById('loginContainer').style.display = 'flex';
+                
+                // Ocultar informações do header
+                document.getElementById('userInfoHeader').style.display = 'none';
+                
+                // Limpar senha
+                document.getElementById('senhaInput').value = '';
+            }
         }
         
         // Carregar dados do dashboard
