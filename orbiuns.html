@@ -29,7 +29,6 @@
     <!-- Config.js Centralizado -->
     <script src="config.js"></script>
     
-    <style>
         /* ============================================================================
            HEADER SYSTELOS - PADRÃO UNIFICADO
            ============================================================================ */
@@ -291,6 +290,7 @@
             }
         }
 
+    <style>
         /* ============================================================================
            ESTILOS ESPECÍFICOS DO CONTROLE DE ORBIUNS
            ============================================================================ */
@@ -1266,7 +1266,7 @@
             </div>
             <div class="user-details">
                 <div class="user-name" id="userName">Alessandro Diaz Rodrigues</div>
-                <div class="user-email" id="userEmail">alessandrorodrigues@cvc.com.br</div>
+                <div class="user-email" id="userEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="57363b3224243639332538253833253e30223224173421347934383a793525">[email&#160;protected]</a></div>
             </div>
             <button class="btn-gestor" id="adminBadgeHeader" style="display: none;">
                 <i class="fas fa-crown"></i> Gestor
@@ -1277,6 +1277,13 @@
         </div>
     </header>
 
+
+    <nav id="sidebarMenu" class="sidebar-menu">
+        <div class="sidebar-header" style="position: relative; border-bottom: 1px solid rgba(255,184,0,0.3); padding: 20px;">
+            <h3 style="color: #FFB800; font-family: Poppins, sans-serif; margin: 0; font-size: 1.2rem; font-weight: 700;">[S] SYSTELOS TUR</h3>
+            <button id="closeSidebar" style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; color: white; font-size: 32px; cursor: pointer; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s;">&times;</button>
+        </div>
+        <ul style="list-style: none; padding: 0; margin: 0;">
             <li><a href="index.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">Início</a></li>
             <li><a href="orcamentos.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">Padronizador de Orçamentos</a></li>
             <li><a href="embarques.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">Controle de Embarques</a></li>
@@ -1291,80 +1298,6 @@
         .navbar .nav-link:not(.active):hover {
             background: rgba(255, 184, 0, 0.1) !important;
             color: #FFB800 !important;
-        }
-
-        /* ============================================================================
-           HEADER FIXO NO TOPO
-           ============================================================================ */
-
-        /* Header fixo no topo - não faz scroll */
-        .navbar, header, .main-header {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            width: 100% !important;
-            z-index: 1000 !important;
-            background: linear-gradient(135deg, #0F1B3D 0%, #1a2951 100%) !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
-        }
-
-        /* Compensar altura do header fixo */
-        body {
-            padding-top: 85px !important;
-        }
-
-        .navbar {
-            height: 70px;
-        }
-
-        /* Container principal sem margem extra */
-        .container-fluid, .main-container, main {
-            margin-top: 0 !important;
-        }
-
-        /* ============================================================================
-           MENU HAMBÚRGUER
-           ============================================================================ */
-
-        /* Botão menu hambúrguer posicionado à esquerda */
-        .navbar-toggler, #menuToggle {
-            display: block !important;
-            position: absolute !important;
-            left: 20px !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-            z-index: 1001 !important;
-            border: 2px solid #FFB800 !important;
-            padding: 8px 12px !important;
-            background: rgba(255, 184, 0, 0.2) !important;
-            border-radius: 8px !important;
-            transition: all 0.3s ease !important;
-            width: auto !important;
-            height: auto !important;
-            min-width: 50px !important;
-            min-height: 40px !important;
-        }
-        
-        .navbar-toggler:hover, #menuToggle:hover {
-            background: rgba(255, 184, 0, 0.4) !important;
-            transform: translateY(-50%) scale(1.05) !important;
-        }
-        
-        /* Garantir que o ícone dentro do botão apareça */
-        .navbar-toggler-icon {
-            display: inline-block !important;
-            width: 1.5em !important;
-            height: 1.5em !important;
-        }
-
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 184, 0, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-        }
-
-        /* Ajustar logo para deixar espaço para o hambúrguer */
-        .navbar-brand {
-            margin-left: 60px !important;
         }
 
         /* ============================================================================
@@ -1461,7 +1394,7 @@
     </style>
 
     <!-- Script para hover nos links do menu lateral -->
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         document.addEventListener('DOMContentLoaded', function() {
             const menuLinks = document.querySelectorAll('#sidebarMenu a');
             menuLinks.forEach(link => {
@@ -1477,6 +1410,77 @@
                 }
             });
         });
+
+        // ============================================================================
+        // CARREGA INFORMAÇÕES DO USUÁRIO NO HEADER
+        // ============================================================================
+
+        function loadUserInfo() {
+            try {
+                // Tentar usar ESTADO_CONFIG, senão usar localStorage diretamente
+                let savedUser;
+                if (typeof ESTADO_CONFIG !== 'undefined' && ESTADO_CONFIG.carregar) {
+                    savedUser
+
+        // ============================================================================
+        // FUNÇÃO DE LOGOUT
+        // ============================================================================
+
+        function logout() {
+            if (confirm('Deseja realmente sair do sistema?')) {
+                ESTADO_CONFIG.remover('systelos_user');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // ============================================================================
+        // FUNÇÃO TOGGLE SIDEBAR
+        // ============================================================================
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebarMenu');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            if (sidebar) {
+                sidebar.classList.toggle('show');
+                
+                // Criar overlay se não existir
+                if (!overlay) {
+                    const newOverlay = document.createElement('div');
+                    newOverlay.id = 'sidebarOverlay';
+                    newOverlay.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0,0,0,0.7);
+                        z-index: 998;
+                        opacity: 0;
+                        transition: opacity 0.3s;
+                    `;
+                    document.body.appendChild(newOverlay);
+                    
+                    // Fechar ao clicar no overlay
+                    newOverlay.addEventListener('click', function() {
+                        sidebar.classList.remove('show');
+                        newOverlay.style.opacity = '0';
+                        setTimeout(() => newOverlay.remove(), 300);
+                    });
+                    
+                    setTimeout(() => { newOverlay.style.opacity = '1'; }, 10);
+                } else {
+                    if (sidebar.classList.contains('show')) {
+                        overlay.style.display = 'block';
+                        setTimeout(() => { overlay.style.opacity = '1'; }, 10);
+                    } else {
+                        overlay.style.opacity = '0';
+                        setTimeout(() => { overlay.style.display = 'none'; }, 300);
+                    }
+                }
+            }
+        }
+
     </script>
 
     <!-- ============================================================================
@@ -3180,78 +3184,4 @@
                 navbarCollapse.addEventListener('click', function(e) {
                     // Se clicar no próprio collapse (overlay), fechar
                     if (e.target === navbarCollapse) {
-                        const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
-                        if (bsCollapse) {
-                            bsCollapse.hide();
-                        }
-                    }
-                });
-            }
-        });
-    </script>
-</body>
-        // ============================================================================
-        // CARREGA INFORMAÇÕES DO USUÁRIO NO HEADER
-        // ============================================================================
-
-        function loadUserInfo() {
-            try {
-                const savedUser = ESTADO_CONFIG.carregar('systelos_user');
-                
-                if (savedUser) {
-                    const userData = JSON.parse(savedUser);
-                    
-                    // Calcular iniciais
-                    const initials = userData.nome
-                        .split(' ')
-                        .map(n => n[0])
-                        .slice(0, 2)
-                        .join('')
-                        .toUpperCase();
-                    
-                    // Atualizar elementos do header
-                    document.getElementById('userInitials').textContent = initials;
-                    document.getElementById('userName').textContent = userData.nome;
-                    document.getElementById('userEmail').textContent = userData.email;
-                    
-                    // Mostrar badge de gestor se for admin
-                    if (userData.isAdmin) {
-                        document.getElementById('adminBadgeHeader').style.display = 'flex';
-                    }
-                    
-                    // Mostrar informações do usuário
-                    document.getElementById('userInfoHeader').style.display = 'flex';
-                }
-            } catch (error) {
-                console.error('❌ Erro ao carregar informações do usuário:', error);
-            }
-        }
-
-        // Carregar ao inicializar
-        document.addEventListener('DOMContentLoaded', function() {
-            loadUserInfo();
-        });
-
-        // ============================================================================
-        // FUNÇÃO DE LOGOUT
-        // ============================================================================
-
-        function logout() {
-            if (confirm('Deseja realmente sair do sistema?')) {
-                ESTADO_CONFIG.remover('systelos_user');
-                window.location.href = 'index.html';
-            }
-        }
-
-        // ============================================================================
-        // FUNÇÃO TOGGLE SIDEBAR
-        // ============================================================================
-
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebarMenu');
-            if (sidebar) {
-                sidebar.classList.toggle('active');
-            }
-        }
-
-</html>
+                        const bsCollapse = bootstrap.Collapse.
