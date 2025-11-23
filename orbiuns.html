@@ -29,6 +29,7 @@
     <!-- Config.js Centralizado -->
     <script src="config.js"></script>
     
+    <style>
         /* ============================================================================
            HEADER SYSTELOS - PADRÃO UNIFICADO
            ============================================================================ */
@@ -290,7 +291,6 @@
             }
         }
 
-    <style>
         /* ============================================================================
            ESTILOS ESPECÍFICOS DO CONTROLE DE ORBIUNS
            ============================================================================ */
@@ -1237,7 +1237,7 @@
         }
     </style>
 </head>
-<body class="systelos-body" style="padding-top: 80px;">
+<body class="systelos-body">
     <!-- ============================================================================
          NAVBAR PADRÃO SYSTELOS TUR
          ============================================================================ -->
@@ -1293,105 +1293,6 @@
         </ul>
     </nav>
 
-    <style>
-        /* Hover effects para navbar */
-        .navbar .nav-link:not(.active):hover {
-            background: rgba(255, 184, 0, 0.1) !important;
-            color: #FFB800 !important;
-        }
-
-        /* ============================================================================
-           SIDEBAR MENU LATERAL
-           ============================================================================ */
-
-        .sidebar-menu {
-            position: fixed;
-            left: -340px;
-            top: 0;
-            width: 320px;
-            height: 100vh;
-            background: #0F1B3D;
-            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 9999;
-            box-shadow: 2px 0 20px rgba(0,0,0,0.5);
-            overflow-y: auto;
-        }
-
-        .sidebar-menu.show {
-            left: 0;
-        }
-
-        /* Scrollbar personalizada */
-        .sidebar-menu::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .sidebar-menu::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.05);
-        }
-
-        .sidebar-menu::-webkit-scrollbar-thumb {
-            background: rgba(255,184,0,0.5);
-            border-radius: 3px;
-        }
-
-        .sidebar-menu::-webkit-scrollbar-thumb:hover {
-            background: rgba(255,184,0,0.7);
-        }
-
-        /* Botão fechar sidebar */
-        #closeSidebar:hover {
-            background: rgba(255,184,0,0.2) !important;
-            transform: rotate(90deg);
-        }
-
-        /* Overlay escuro */
-        #sidebarOverlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0,0,0,0.7);
-            z-index: 9998;
-            display: none;
-            transition: opacity 0.3s;
-            backdrop-filter: blur(3px);
-        }
-
-        /* ============================================================================
-           BOTÕES DE COPIAR - CORREÇÃO PONTUAL
-           ============================================================================ */
-        
-        .btn-copiar-inline {
-            background: rgba(255, 184, 0, 0.1);
-            border: 1px solid rgba(255, 184, 0, 0.3);
-            color: #FFB800;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-left: 8px;
-            vertical-align: middle;
-        }
-        
-        .btn-copiar-inline:hover {
-            background: #FFB800;
-            color: #0F1B3D;
-            transform: scale(1.1);
-        }
-        
-        .btn-copiar-inline.copiado {
-            background: #10b981;
-            border-color: #10b981;
-            color: white;
-        }
-        
-        .btn-copiar-inline i {
-            margin: 0;
-        }
-    </style>
 
     <!-- Script para hover nos links do menu lateral -->
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
