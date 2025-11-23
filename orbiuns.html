@@ -1321,7 +1321,44 @@
                 // Tentar usar ESTADO_CONFIG, senão usar localStorage diretamente
                 let savedUser;
                 if (typeof ESTADO_CONFIG !== 'undefined' && ESTADO_CONFIG.carregar) {
-                    savedUser
+                    savedUser = ESTADO_CONFIG.carregar('systelos_user');
+                } else {
+                    savedUser = localStorage.getItem('systelos_user');
+                }
+                
+                if (savedUser) {
+                    const userData = JSON.parse(savedUser);
+                    
+                    // Calcular iniciais
+                    const initials = userData.nome
+                        .split(' ')
+                        .map(n => n[0])
+                        .slice(0, 2)
+                        .join('')
+                        .toUpperCase();
+                    
+                    // Atualizar elementos do header
+                    document.getElementById('userInitials').textContent = initials;
+                    document.getElementById('userName').textContent = userData.nome;
+                    document.getElementById('userEmail').textContent = userData.email;
+                    
+                    // Mostrar badge de gestor se for admin
+                    if (userData.isAdmin) {
+                        document.getElementById('adminBadgeHeader').style.display = 'flex';
+                    }
+                    
+                    // Mostrar informações do usuário
+                    document.getElementById('userInfoHeader').style.display = 'flex';
+                }
+            } catch (error) {
+                console.error('❌ Erro ao carregar informações do usuário:', error);
+            }
+        }
+
+        // Carregar ao inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserInfo();
+        });
 
         // ============================================================================
         // FUNÇÃO DE LOGOUT
