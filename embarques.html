@@ -30,14 +30,9 @@
     <script src="config.js"></script>
     
     <style>
-        /* ============================================================================
-           HEADER SYSTELOS - PADRÃO UNIFICADO
-           ============================================================================ */
-
-        body {
-            padding-top: 70px;
-        }
-
+        /* HEADER E SIDEBAR SYSTELOS */
+        body { padding-top: 70px; }
+        
         .systelos-header {
             background: linear-gradient(135deg, #0F1B3D 0%, #1a2642 100%);
             height: 70px;
@@ -53,7 +48,7 @@
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
-
+        
         .menu-toggle {
             background: none;
             border: none;
@@ -62,25 +57,21 @@
             cursor: pointer;
             padding: 8px 12px;
             border-radius: 8px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            transition: all 0.3s;
         }
-
+        
         .menu-toggle:hover {
-            background: rgba(255, 184, 0, 0.1);
+            background: rgba(255,184,0,0.1);
             transform: scale(1.1);
         }
-
+        
         .logo-container {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-left: 20px;
-            flex-shrink: 0;
         }
-
+        
         .logo-icon {
             background: linear-gradient(135deg, #FFB800 0%, #ff8800 100%);
             color: #0F1B3D;
@@ -93,39 +84,33 @@
             font-size: 24px;
             font-weight: 800;
             font-family: 'Poppins', sans-serif;
-            box-shadow: 0 4px 12px rgba(255, 184, 0, 0.3);
         }
-
+        
         .logo-text {
             display: flex;
             flex-direction: column;
-            gap: 2px;
         }
-
+        
         .logo-title {
             color: #FFFFFF;
             font-size: 24px;
             font-weight: 600;
             font-family: 'Poppins', sans-serif;
-            line-height: 1;
-            letter-spacing: -0.5px;
         }
-
+        
         .logo-subtitle {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255,255,255,0.7);
             font-size: 11px;
-            font-weight: 400;
             font-family: 'Inter', sans-serif;
-            letter-spacing: 0.3px;
         }
-
+        
         .user-info {
             display: flex;
             align-items: center;
             gap: 16px;
             margin-left: auto;
         }
-
+        
         .user-avatar {
             width: 44px;
             height: 44px;
@@ -134,140 +119,58 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            z-index: 2;
-            box-shadow: 0 2px 8px rgba(255, 184, 0, 0.4);
         }
-
+        
         .user-avatar span {
             color: #0F1B3D;
             font-weight: bold;
             font-size: 16px;
         }
-
+        
         .user-details {
             display: flex;
             flex-direction: column;
-            gap: 2px;
         }
-
+        
         .user-name {
             color: #FFFFFF;
             font-size: 14px;
             font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            line-height: 1.2;
         }
-
+        
         .user-email {
             color: #14B8A6;
             font-size: 12px;
-            font-weight: 400;
-            font-family: 'Inter', sans-serif;
-            line-height: 1.2;
         }
-
+        
         .btn-gestor {
-            background: linear-gradient(135deg, #14B8A6 0%, #0d9488 100%);
+            background: #14B8A6;
             color: white;
             border: none;
             padding: 8px 16px;
             border-radius: 8px;
             font-size: 12px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 6px;
-            white-space: nowrap;
+            cursor: pointer;
         }
-
-        .btn-gestor:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(20, 184, 166, 0.4);
-        }
-
+        
         .btn-sair {
-            background: linear-gradient(135deg, #FFB800 0%, #ff8800 100%);
+            background: #FFB800;
             color: #0F1B3D;
             border: none;
             padding: 8px 16px;
             border-radius: 8px;
             font-size: 14px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 6px;
+            cursor: pointer;
         }
-
-        .btn-sair:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 184, 0, 0.4);
-        }
-
-        @media (max-width: 768px) {
-            .systelos-header {
-                padding: 0 16px;
-                height: 60px;
-            }
-
-            body {
-                padding-top: 60px;
-            }
-
-            .logo-title {
-                font-size: 18px;
-            }
-
-            .logo-subtitle {
-                font-size: 9px;
-            }
-
-            .logo-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 20px;
-            }
-
-            .user-name,
-            .user-email {
-                display: none;
-            }
-
-            .user-avatar {
-                width: 36px;
-                height: 36px;
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo-container {
-                margin-left: 8px;
-            }
-
-            .btn-sair span {
-                display: none;
-            }
-
-            .btn-gestor {
-                padding: 8px 12px;
-                font-size: 0;
-            }
-
-            .btn-gestor i {
-                font-size: 16px;
-                margin: 0;
-            }
-        }
-
-        /* ============================================================================
-           SIDEBAR MENU LATERAL
-           ============================================================================ */
-
+        
         .sidebar-menu {
             position: fixed;
             left: -340px;
@@ -277,56 +180,20 @@
             background: #0F1B3D;
             transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 9999;
-            box-shadow: 2px 0 20px rgba(0,0,0,0.5);
             overflow-y: auto;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.5);
         }
-
+        
         .sidebar-menu.show {
             left: 0;
         }
-
-        .sidebar-menu::-webkit-scrollbar {
-            width: 6px;
+        
+        @media (max-width: 768px) {
+            .systelos-header { height: 60px; }
+            body { padding-top: 60px; }
+            .user-name, .user-email { display: none; }
         }
 
-        .sidebar-menu::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.05);
-        }
-
-        .sidebar-menu::-webkit-scrollbar-thumb {
-            background: rgba(255,184,0,0.5);
-            border-radius: 3px;
-        }
-
-        .sidebar-menu::-webkit-scrollbar-thumb:hover {
-            background: rgba(255,184,0,0.7);
-        }
-
-        .sidebar-menu ul li a:hover {
-            background: rgba(255,184,0,0.1) !important;
-            color: #FFB800 !important;
-            padding-left: 30px !important;
-        }
-
-        #closeSidebar:hover {
-            background: rgba(255,184,0,0.2) !important;
-            transform: rotate(90deg);
-        }
-
-        #sidebarOverlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 9998;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        /* CSS específico do embarques continua aqui */
         /* ================================================================================
          * ESTILOS ESPECÍFICOS PARA EMBARQUES v12.5 - RESET DE BOTÕES DOS MODAIS
          * ================================================================================ */
@@ -773,16 +640,9 @@
     </style>
 </head>
 <body class="cvc-background">
-    <!-- ============================================================================
-         HEADER SYSTELOS - PADRÃO UNIFICADO
-         ============================================================================ -->
+<body class="cvc-background">
     <header class="systelos-header">
-        <!-- Botão Menu Hambúrguer (Esquerda) -->
-        <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Menu">
-            <i class="fas fa-bars"></i>
-        </button>
-
-        <!-- Logo SYSTELOS (Centro-Esquerda) -->
+        <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
         <div class="logo-container">
             <div class="logo-icon">[S]</div>
             <div class="logo-text">
@@ -790,45 +650,31 @@
                 <div class="logo-subtitle">Sistemas com propósito</div>
             </div>
         </div>
-
-        <!-- Informações do Usuário (Direita) -->
         <div class="user-info" id="userInfoHeader">
-            <div class="user-avatar" id="userAvatar">
-                <span id="userInitials">AR</span>
-            </div>
+            <div class="user-avatar" id="userAvatar"><span id="userInitials">AR</span></div>
             <div class="user-details">
-                <div class="user-name" id="userName">Alessandro Diaz Rodrigues</div>
-                <div class="user-email" id="userEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4e2f222b3d3d2f202a3c213c212a3c27293b2b3d0e2d382d602d2123602c3c">[email&#160;protected]</a></div>
+                <div class="user-name" id="userName">Alessandro</div>
+                <div class="user-email" id="userEmail">email@exemplo.com</div>
             </div>
-            <button class="btn-gestor" id="adminBadgeHeader" style="display: none;">
-                <i class="fas fa-crown"></i> Gestor
-            </button>
-            <button class="btn-sair" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i> <span>Sair</span>
-            </button>
+            <button class="btn-gestor" id="adminBadgeHeader" style="display:none;"><i class="fas fa-crown"></i> Gestor</button>
+            <button class="btn-sair" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
         </div>
     </header>
-
-    <!-- ============================================================================
-         SIDEBAR MENU LATERAL
-         ============================================================================ -->
     <nav id="sidebarMenu" class="sidebar-menu">
-        <div class="sidebar-header" style="position: relative; border-bottom: 1px solid rgba(255,184,0,0.3); padding: 20px;">
-            <h3 style="color: #FFB800; font-family: Poppins, sans-serif; margin: 0; font-size: 1.2rem; font-weight: 700;">[S] SYSTELOS TUR</h3>
-            <button id="closeSidebar" onclick="toggleSidebar()" style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; color: white; font-size: 32px; cursor: pointer; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s;">&times;</button>
+        <div style="padding:20px;border-bottom:1px solid rgba(255,184,0,0.3);position:relative;">
+            <h3 style="color:#FFB800;margin:0;font-family:Poppins,sans-serif;">[S] SYSTELOS TUR</h3>
+            <button onclick="toggleSidebar()" style="position:absolute;top:15px;right:15px;background:transparent;border:none;color:white;font-size:32px;cursor:pointer;">&times;</button>
         </div>
-        <ul style="list-style: none; padding: 0; margin: 0;">
-            <li><a href="index.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">Início</a></li>
-            <li><a href="orcamentos.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">Padronizador de Orçamentos</a></li>
-            <li><a href="embarques.html" style="display: block; padding: 18px 25px; color: #FFB800; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; background: rgba(255,184,0,0.2); border-left: 4px solid #FFB800; font-weight: 600;">Controle de Embarques</a></li>
-            <li><a href="vendas.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">Informe de Vendas</a></li>
-            <li><a href="orbiuns.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">Orbiuns (Processos)</a></li>
-            <li><a href="importacao.html" style="display: block; padding: 18px 25px; color: white; text-decoration: none; transition: 0.3s; font-family: Inter, sans-serif; font-size: 15px;">Importação de Dados</a></li>
+        <ul style="list-style:none;padding:0;margin:0;">
+            <li><a href="index.html" style="display:block;padding:18px 25px;color:white;text-decoration:none;">Início</a></li>
+            <li><a href="orcamentos.html" style="display:block;padding:18px 25px;color:white;text-decoration:none;">Orçamentos</a></li>
+            <li><a href="embarques.html" style="display:block;padding:18px 25px;color:#FFB800;background:rgba(255,184,0,0.2);text-decoration:none;font-weight:600;">Embarques</a></li>
+            <li><a href="vendas.html" style="display:block;padding:18px 25px;color:white;text-decoration:none;">Vendas</a></li>
+            <li><a href="orbiuns.html" style="display:block;padding:18px 25px;color:white;text-decoration:none;">Orbiuns</a></li>
+            <li><a href="importacao.html" style="display:block;padding:18px 25px;color:white;text-decoration:none;">Importação</a></li>
         </ul>
     </nav>
-
     <div class="container-fluid">
-
         
         <!-- Main Content -->
         <div class="content-section">
@@ -1108,9 +954,61 @@
 
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
+
+        // ============================================================================
+        // FUNÇÕES DO HEADER - DEVEM ESTAR NO ESCOPO GLOBAL
+        // ============================================================================
+        
+        function loadUserInfo() {
+            try {
+                const savedUser = localStorage.getItem('systelos_user');
+                if (savedUser) {
+                    const userData = JSON.parse(savedUser);
+                    const initials = userData.nome.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+                    const el1 = document.getElementById('userInitials');
+                    const el2 = document.getElementById('userName');
+                    const el3 = document.getElementById('userEmail');
+                    const el4 = document.getElementById('adminBadgeHeader');
+                    if (el1) el1.textContent = initials;
+                    if (el2) el2.textContent = userData.nome;
+                    if (el3) el3.textContent = userData.email;
+                    if (userData.isAdmin && el4) el4.style.display = 'flex';
+                }
+            } catch (error) { console.error('Erro:', error); }
+        }
+
+        function logout() {
+            if (confirm('Deseja sair?')) {
+                localStorage.removeItem('systelos_user');
+                window.location.href = 'index.html';
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebarMenu');
+            if (!sidebar) return;
+            
+            sidebar.classList.toggle('show');
+            let overlay = document.getElementById('sidebarOverlay');
+            
+            if (sidebar.classList.contains('show')) {
+                if (!overlay) {
+                    overlay = document.createElement('div');
+                    overlay.id = 'sidebarOverlay';
+                    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9998;cursor:pointer;';
+                    overlay.onclick = toggleSidebar;
+                    document.body.appendChild(overlay);
+                }
+            } else {
+                if (overlay) overlay.remove();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadUserInfo);
+
         // ================================================================================
         // SYSTELOS TUR - EMBARQUES v12.5 - CORREÇÃO MODALDATA E FORMATO DE DATAS
         // ================================================================================
@@ -2994,119 +2892,5 @@
             window.open('orbiuns.html', '_blank');
         }
     </script>
-
-        // ================================================================================
-        // 👤 CARREGAR INFORMAÇÕES DO USUÁRIO
-        // ================================================================================
-        
-        function loadUserInfo() {
-            try {
-                let savedUser;
-                if (typeof ESTADO_CONFIG !== 'undefined' && ESTADO_CONFIG.carregar) {
-                    savedUser = ESTADO_CONFIG.carregar('systelos_user');
-                } else {
-                    savedUser = localStorage.getItem('systelos_user');
-                }
-                
-                if (savedUser) {
-                    const userData = JSON.parse(savedUser);
-                    
-                    // Calcular iniciais
-                    const initials = userData.nome
-                        .split(' ')
-                        .map(n => n[0])
-                        .slice(0, 2)
-                        .join('')
-                        .toUpperCase();
-                    
-                    // Atualizar elementos do header
-                    document.getElementById('userInitials').textContent = initials;
-                    document.getElementById('userName').textContent = userData.nome;
-                    document.getElementById('userEmail').textContent = userData.email;
-                    
-                    // Mostrar badge de gestor se for admin
-                    if (userData.isAdmin) {
-                        document.getElementById('adminBadgeHeader').style.display = 'flex';
-                    }
-                    
-                    // Mostrar informações do usuário
-                    document.getElementById('userInfoHeader').style.display = 'flex';
-                }
-            } catch (error) {
-                console.error('❌ Erro ao carregar informações do usuário:', error);
-            }
-        }
-
-        // ================================================================================
-        // 🚪 LOGOUT
-        // ================================================================================
-        
-        function logout() {
-            if (confirm('Deseja realmente sair do sistema?')) {
-                if (typeof ESTADO_CONFIG !== 'undefined' && ESTADO_CONFIG.remover) {
-                    ESTADO_CONFIG.remover('systelos_user');
-                } else {
-                    localStorage.removeItem('systelos_user');
-                }
-                window.location.href = 'index.html';
-            }
-        }
-
-        // ================================================================================
-        // 🍔 TOGGLE SIDEBAR
-        // ================================================================================
-        
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebarMenu');
-            const overlay = document.getElementById('sidebarOverlay');
-            
-            if (sidebar) {
-                sidebar.classList.toggle('show');
-                
-                // Criar overlay se não existir
-                if (!overlay) {
-                    const newOverlay = document.createElement('div');
-                    newOverlay.id = 'sidebarOverlay';
-                    newOverlay.style.cssText = `
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        background: rgba(0,0,0,0.7);
-                        z-index: 9998;
-                        opacity: 0;
-                        transition: opacity 0.3s;
-                    `;
-                    document.body.appendChild(newOverlay);
-                    
-                    // Fechar ao clicar no overlay
-                    newOverlay.addEventListener('click', function() {
-                        sidebar.classList.remove('show');
-                        newOverlay.style.opacity = '0';
-                        setTimeout(() => newOverlay.remove(), 300);
-                    });
-                    
-                    setTimeout(() => { newOverlay.style.opacity = '1'; }, 10);
-                } else {
-                    if (sidebar.classList.contains('show')) {
-                        overlay.style.display = 'block';
-                        setTimeout(() => { overlay.style.opacity = '1'; }, 10);
-                    } else {
-                        overlay.style.opacity = '0';
-                        setTimeout(() => { overlay.style.display = 'none'; }, 300);
-                    }
-                }
-            }
-        }
-
-        // Fechar sidebar com ESC
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                const sidebar = document.getElementById('sidebarMenu');
-                if (sidebar && sidebar.classList.contains('show')) {
-                    sidebar.classList.remove('show');
-                    const overlay = document.getElementById('sidebarOverlay');
-                    if (overlay) {
-                        overlay.style.opacity = '0';
-                        setTimeout(() => { overlay.style.display = 'none'; }, 300);
+</body>
+</html>
