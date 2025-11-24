@@ -116,20 +116,20 @@
         /* Estilos específicos do sistema de vendas */
         .content-section {
             padding: 30px;
-            background: var(--systelos-fundo-area);
+            background: var(--systelos-fundo-area, #f8f9fa);
         }
         
         .form-section {
-            background: var(--systelos-fundo-card);
+            background: var(--systelos-fundo-card, #fff);
             border-radius: 15px;
             padding: 25px;
             margin-bottom: 25px;
-            box-shadow: var(--systelos-sombra-suave);
-            border-left: 4px solid var(--systelos-azul);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #0F1B3D;
         }
         
         .form-section h4 {
-            color: var(--systelos-azul);
+            color: #0F1B3D;
             margin-bottom: 20px;
             font-weight: 700;
             display: flex;
@@ -139,7 +139,7 @@
         
         .form-label {
             font-weight: 600;
-            color: var(--systelos-azul);
+            color: #0F1B3D;
             margin-bottom: 8px;
             font-size: 0.9rem;
             display: flex;
@@ -148,15 +148,15 @@
         }
         
         .cliente-ale-section {
-            background: var(--systelos-bg-warning);
-            border: 2px solid var(--systelos-warning);
+            background: #fff3cd;
+            border: 2px solid #FFB800;
             border-radius: 15px;
             padding: 25px;
             margin-bottom: 25px;
         }
         
         .cliente-ale-section h4 {
-            color: var(--systelos-text-warning);
+            color: #856404;
             font-weight: 700;
             margin-bottom: 15px;
         }
@@ -175,15 +175,15 @@
             border-radius: 25px;
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 2px solid var(--systelos-warning);
+            border: 2px solid #FFB800;
             font-weight: 600;
-            color: var(--systelos-text-warning);
+            color: #856404;
             min-width: 120px;
             justify-content: center;
         }
         
         .toggle-option.selected {
-            background: var(--systelos-warning);
+            background: #FFB800;
             color: white;
         }
         
@@ -195,7 +195,7 @@
         
         .radio-item, .checkbox-item {
             background: white;
-            border: 2px solid var(--systelos-border);
+            border: 2px solid #dee2e6;
             border-radius: 10px;
             padding: 12px 20px;
             cursor: pointer;
@@ -203,13 +203,13 @@
         }
         
         .radio-item:hover, .checkbox-item:hover {
-            border-color: var(--systelos-azul);
-            background: var(--systelos-azul-claro);
+            border-color: #0F1B3D;
+            background: rgba(15,27,61,0.05);
         }
         
         .radio-item.selected, .checkbox-item.selected {
-            border-color: var(--systelos-azul);
-            background: var(--systelos-azul-claro);
+            border-color: #0F1B3D;
+            background: rgba(15,27,61,0.1);
             font-weight: 600;
         }
         
@@ -218,8 +218,13 @@
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: var(--systelos-sombra-suave);
-            border-left: 4px solid var(--systelos-verde);
+            border: 2px solid #dee2e6;
+            transition: all 0.3s ease;
+        }
+        
+        .recibo-container:hover {
+            border-color: #0F1B3D;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         
         .recibo-header {
@@ -227,134 +232,235 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
         }
         
         .recibo-number {
-            background: var(--systelos-verde);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-        }
-        
-        .btn-remove-recibo {
-            background: var(--systelos-error);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        
-        .btn-submit {
-            background: var(--systelos-amarelo);
-            color: var(--systelos-azul);
-            border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
+            color: #0F1B3D;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 10px;
         }
         
-        .btn-submit:hover {
-            background: var(--systelos-amarelo);
+        .btn-remove-recibo {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-remove-recibo:hover {
+            background: #c82333;
+            transform: scale(1.05);
         }
         
         .extra-fields {
-            margin-top: 20px;
-            padding: 20px;
-            background: var(--systelos-bg-warning);
+            background: rgba(15,27,61,0.03);
             border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+            border: 1px dashed #0F1B3D;
             display: none;
         }
         
-        @media (max-width: 768px) {
-            .content-section { padding: 15px; }
-            .cliente-ale-toggle { flex-direction: column; }
-            .toggle-option { width: 100%; }
-        }
-            /* Layout principal - ocupar toda a largura */
-        body {
-            margin: 0;
-            padding: 0;
+        .extra-fields h5 {
+            color: #0F1B3D;
+            font-weight: 600;
+            margin-bottom: 15px;
         }
         
-        body > .container-fluid {
-            padding: 0;
-            margin: 0;
-            max-width: 100%;
+        .btn-submit {
+            background: linear-gradient(135deg, #0F1B3D 0%, #1a2642 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
         }
         
-        /* Conteúdo centralizado */
-        .content-section {
-            max-width: 1400px;
-            margin: 30px auto;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(15,27,61,0.3);
         }
-
+        
+        .btn-submit:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-cvc-primary {
+            background: #0F1B3D;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-cvc-primary:hover {
+            background: #1a2642;
+            transform: scale(1.05);
+        }
+        
+        .btn-cvc-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .form-control-cvc {
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control-cvc:focus {
+            border-color: #0F1B3D;
+            box-shadow: 0 0 0 3px rgba(15,27,61,0.1);
+        }
+        
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15,27,61,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            flex-direction: column;
+        }
+        
+        .loading-overlay.show {
+            display: flex;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,184,0,0.3);
+            border-top: 4px solid #FFB800;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        .loading-text {
+            color: white;
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Status messages */
+        .status-message {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
     </style>
 </head>
 <script>
-        // ============================================================================
-        // FUNÇÕES DO HEADER SYSTELOS - ESCOPO GLOBAL
-        // ============================================================================
-        
-        function loadUserInfo() {
-            try {
-                const savedUser = localStorage.getItem('systelos_user');
-                if (savedUser) {
-                    const userData = JSON.parse(savedUser);
-                    const initials = userData.nome.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
-                    const el1 = document.getElementById('userInitials');
-                    const el2 = document.getElementById('userName');
-                    const el3 = document.getElementById('userEmail');
-                    const el4 = document.getElementById('adminBadgeHeader');
-                    if (el1) el1.textContent = initials;
-                    if (el2) el2.textContent = userData.nome;
-                    if (el3) el3.textContent = userData.email;
-                    if (userData.isAdmin && el4) el4.style.display = 'flex';
-                }
-            } catch (error) { console.error('Erro loadUserInfo:', error); }
-        }
-
-        function logout() {
-            if (confirm('Deseja sair do sistema?')) {
-                localStorage.removeItem('systelos_user');
-                window.location.href = 'index.html';
+    // ============================================================================
+    // FUNÇÕES DO HEADER SYSTELOS - ESCOPO GLOBAL
+    // ============================================================================
+    
+    function loadUserInfo() {
+        try {
+            const savedUser = localStorage.getItem('systelos_user');
+            if (savedUser) {
+                const userData = JSON.parse(savedUser);
+                const initials = userData.nome.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+                const el1 = document.getElementById('userInitials');
+                const el2 = document.getElementById('userName');
+                const el3 = document.getElementById('userEmail');
+                const el4 = document.getElementById('adminBadgeHeader');
+                if (el1) el1.textContent = initials;
+                if (el2) el2.textContent = userData.nome;
+                if (el3) el3.textContent = userData.email;
+                if (userData.isAdmin && el4) el4.style.display = 'flex';
             }
-        }
+        } catch (error) { console.error('Erro loadUserInfo:', error); }
+    }
 
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebarMenu');
-            if (!sidebar) return;
-            sidebar.classList.toggle('show');
-            let overlay = document.getElementById('sidebarOverlay');
-            if (sidebar.classList.contains('show')) {
-                if (!overlay) {
-                    overlay = document.createElement('div');
-                    overlay.id = 'sidebarOverlay';
-                    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9998;cursor:pointer;';
-                    overlay.onclick = toggleSidebar;
-                    document.body.appendChild(overlay);
-                }
-            } else {
-                if (overlay) overlay.remove();
+    function logout() {
+        if (confirm('Deseja sair do sistema?')) {
+            localStorage.removeItem('systelos_user');
+            window.location.href = 'index.html';
+        }
+    }
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebarMenu');
+        if (!sidebar) return;
+        sidebar.classList.toggle('show');
+        let overlay = document.getElementById('sidebarOverlay');
+        if (sidebar.classList.contains('show')) {
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.id = 'sidebarOverlay';
+                overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9998;cursor:pointer;';
+                overlay.onclick = toggleSidebar;
+                document.body.appendChild(overlay);
             }
+        } else {
+            if (overlay) overlay.remove();
         }
+    }
 
-        document.addEventListener('DOMContentLoaded', loadUserInfo);
-    </script>
+    document.addEventListener('DOMContentLoaded', loadUserInfo);
+</script>
 <body>
+    <!-- LOADING OVERLAY -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loadingText">Cadastrando venda...</div>
+    </div>
+
     <header class="systelos-header">
         <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
         <div class="logo-container">
@@ -368,12 +474,13 @@
             <div class="user-avatar" id="userAvatar"><span id="userInitials">AR</span></div>
             <div class="user-details">
                 <div class="user-name" id="userName">Alessandro</div>
-                <div class="user-email" id="userEmail">email@exemplo.com</div>
+                <div class="user-email" id="userEmail">usuario@systelos.com.br</div>
             </div>
             <button class="btn-gestor" id="adminBadgeHeader" style="display:none;"><i class="fas fa-crown"></i> Gestor</button>
             <button class="btn-sair" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
         </div>
     </header>
+    
     <nav id="sidebarMenu" class="sidebar-menu">
         <div style="padding:20px;border-bottom:1px solid rgba(255,184,0,0.3);position:relative;">
             <h3 style="color:#FFB800;margin:0;font-family:Poppins,sans-serif;">[S] SYSTELOS TUR</h3>
@@ -388,18 +495,14 @@
             <li><a href="importacao.html" style="display:block;padding:18px 25px;color:white;text-decoration:none;">Importação</a></li>
         </ul>
     </nav>
+    
     <div class="container-fluid">
-
-        <div class="container-fluid">
         <div class="main-container">
-            <!-- HEADER -->
-            
-
-            <!-- NAVEGAÇÃO -->
-            
-            
             <!-- CONTEÚDO -->
             <div class="content-section">
+                <!-- Status Message -->
+                <div class="status-message" id="statusMessage"></div>
+                
                 <form id="formVendaCompleta">
                     <!-- Informações Gerais -->
                     <div class="form-section">
@@ -411,7 +514,7 @@
                                     <i class="fas fa-hashtag"></i> Nº do Informe
                                 </label>
                                 <input type="text" class="form-control form-control-cvc" id="nInforme" name="nInforme" 
-                                       placeholder="Automático">
+                                       placeholder="Automático (deixe vazio)">
                             </div>
                             
                             <div class="col-md-4">
@@ -432,13 +535,7 @@
                                 </label>
                                 <select class="form-select form-control-cvc" id="vendedor" name="vendedor" required>
                                     <option value="">Selecione...</option>
-                                    <option value="Alessandro">Alessandro</option>
-                                    <option value="Ana Paula">Ana Paula</option>
-                                    <option value="Adriana">Adriana</option>
-                                    <option value="Adrielly">Adrielly</option>
-                                    <option value="Bia">Bia</option>
-                                    <option value="Conceição">Conceição</option>
-                                    <option value="Jhully">Jhully</option>
+                                    <!-- Preenchido via JavaScript -->
                                 </select>
                             </div>
                         </div>
@@ -548,7 +645,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn-submit">
+                    <button type="submit" class="btn-submit" id="btnSubmit">
                         <i class="fas fa-save"></i> Cadastrar Venda Completa
                     </button>
                 </form>
@@ -557,24 +654,68 @@
     </div>
 
     <!-- Bootstrap JS -->
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- CONFIG.JS -->
     <script src="config.js"></script>
     
-    <!-- JAVASCRIPT INCORPORADO - GARANTIDO -->
+    <!-- JAVASCRIPT PRINCIPAL -->
     <script>
-
-
-
-        debugLog('🚀 Sistema v11.2 - Ultra-Simplificado - GARANTIDO!', 'info');
+        // ================================================================================
+        // CONFIGURAÇÕES E VARIÁVEIS GLOBAIS
+        // ================================================================================
+        
+        const API_URL = (typeof CVC_CONFIG !== 'undefined' && CVC_CONFIG.API_URL) 
+            ? CVC_CONFIG.API_URL 
+            : 'https://script.google.com/macros/s/AKfycbxw0y2qTzQFdnHsOwLqoVJjV00GtqNnftr4dK6LYiLK/dev';
+        
+        const VENDEDORES = (typeof CVC_CONFIG !== 'undefined' && CVC_CONFIG.VENDEDORES) 
+            ? CVC_CONFIG.VENDEDORES 
+            : [
+                'ANA PAULA MUNIZ DE SOUZA',
+                'ADRIELLY CORREA DE SOUSA',
+                'DAINA ADRIANA SILVA DE BRITO',
+                'ALESSANDRO DIAZ RODRIGUES',
+                'CONCEPCION DIAZ RODRIGUES'
+            ];
+        
+        let contadorRecibos = 0;
+        
+        // Debug log
+        function debugLog(msg, tipo = 'info') {
+            const timestamp = new Date().toLocaleTimeString('pt-BR');
+            const prefixos = {
+                'info': '📋',
+                'success': '✅',
+                'error': '❌',
+                'warning': '⚠️'
+            };
+            console.log(`[${timestamp}] ${prefixos[tipo] || '📋'} ${msg}`);
+        }
+        
+        debugLog('🚀 Sistema v12.0 - FUNCIONAL - Integrado com API', 'info');
         
         // ================================================================================
-        // VARIÁVEIS GLOBAIS
+        // POPULAR VENDEDORES
         // ================================================================================
-        let contadorRecibos = 0;
+        function popularVendedores() {
+            const select = document.getElementById('vendedor');
+            if (!select) return;
+            
+            // Limpar opções exceto a primeira
+            select.innerHTML = '<option value="">Selecione...</option>';
+            
+            VENDEDORES.forEach(vendedor => {
+                const option = document.createElement('option');
+                // Pegar primeiro nome ou nome curto
+                const nomeCurto = vendedor.split(' ')[0];
+                option.value = nomeCurto;
+                option.textContent = vendedor;
+                select.appendChild(option);
+            });
+            
+            debugLog(`✅ ${VENDEDORES.length} vendedores carregados`, 'success');
+        }
         
         // ================================================================================
         // CLIENTE DO ALE
@@ -590,12 +731,12 @@
             } else {
                 opcoes[1].classList.add('selected');
                 opcoes[1].querySelector('input').checked = true;
-                debugLog('❌ Cliente do Ale: NÃO', 'error');
+                debugLog('❌ Cliente do Ale: NÃO', 'info');
             }
         }
         
         // ================================================================================
-        // ADICIONAR RECIBO - SUPER SIMPLIFICADO
+        // ADICIONAR RECIBO
         // ================================================================================
         function adicionarRecibo() {
             debugLog('🧾 Adicionando recibo...', 'info');
@@ -652,6 +793,7 @@
                             <option value="Aéreo Facial">Aéreo Facial</option>
                             <option value="A+H">A+H</option>
                             <option value="A+H+S">A+H+S</option>
+                            <option value="Hotel">Hotel</option>
                             <option value="Terrestre">Terrestre</option>
                             <option value="Marítimo">Marítimo</option>
                             <option value="Seguro">Seguro</option>
@@ -701,25 +843,27 @@
                         
                         <div class="col-md-4">
                             <label class="form-label">LOC GDS</label>
-                            <input type="text" class="form-control form-control-cvc" name="locGds[]">
+                            <input type="text" class="form-control form-control-cvc" name="locGds[]" 
+                                   style="text-transform: uppercase;" maxlength="6">
                         </div>
                         
                         <div class="col-md-4">
                             <label class="form-label">LOC CIA</label>
-                            <input type="text" class="form-control form-control-cvc" name="locCia[]">
+                            <input type="text" class="form-control form-control-cvc" name="locCia[]"
+                                   style="text-transform: uppercase;" maxlength="6">
                         </div>
                     </div>
 
                     <div class="row g-3 mt-2">
                         <div class="col-md-6">
                             <div class="checkbox-item">
-                                <input type="checkbox" name="temBagagem[]" value="true">
+                                <input type="checkbox" name="temBagagem_${contadorRecibos}" value="true">
                                 <span><i class="fas fa-suitcase"></i> Tem Bagagem?</span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="checkbox-item">
-                                <input type="checkbox" name="temAssento[]" value="true">
+                                <input type="checkbox" name="temAssento_${contadorRecibos}" value="true">
                                 <span><i class="fas fa-chair"></i> Tem Assento Marcado?</span>
                             </div>
                         </div>
@@ -844,38 +988,254 @@
         }
         
         // ================================================================================
-        // ENVIO DO FORM
+        // MOSTRAR/ESCONDER LOADING
+        // ================================================================================
+        function mostrarLoading(texto = 'Cadastrando venda...') {
+            const overlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            if (loadingText) loadingText.textContent = texto;
+            if (overlay) overlay.classList.add('show');
+        }
+        
+        function esconderLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) overlay.classList.remove('show');
+        }
+        
+        // ================================================================================
+        // MOSTRAR MENSAGEM DE STATUS
+        // ================================================================================
+        function mostrarStatus(mensagem, tipo = 'success') {
+            const statusEl = document.getElementById('statusMessage');
+            if (statusEl) {
+                statusEl.className = `status-message ${tipo}`;
+                statusEl.innerHTML = `<i class="fas fa-${tipo === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${mensagem}`;
+                statusEl.style.display = 'block';
+                
+                // Scroll para ver a mensagem
+                statusEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // Auto-hide após 10 segundos
+                setTimeout(() => {
+                    statusEl.style.display = 'none';
+                }, 10000);
+            }
+        }
+        
+        // ================================================================================
+        // COLETAR DADOS DO FORMULÁRIO
+        // ================================================================================
+        function coletarDadosFormulario() {
+            const form = document.getElementById('formVendaCompleta');
+            const formData = new FormData(form);
+            
+            // Dados gerais
+            const dados = {
+                action: 'cadastrar_venda',
+                numeroInforme: formData.get('nInforme') || '',
+                filial: formData.get('filial') || '6220',
+                vendedor: formData.get('vendedor'),
+                tipoPacote: formData.getAll('pacote').join(', ') || 'Nacional',
+                cpfCliente: formData.get('cpfCliente'),
+                nomeCliente: formData.get('nomeCliente'),
+                whatsappCliente: formData.get('whatsappCliente') || '',
+                clienteAle: formData.get('clienteAle') || 'Não',
+                seguro: formData.get('seguro') || 'nao_oferecido',
+                recibos: []
+            };
+            
+            // Coletar recibos
+            const recibosElements = document.querySelectorAll('.recibo-container');
+            recibosElements.forEach((reciboEl, index) => {
+                const reciboId = reciboEl.id.replace('recibo-', '');
+                
+                const recibo = {
+                    numero: formData.getAll('recibo[]')[index] || '',
+                    pedido: formData.getAll('pedido[]')[index] || '',
+                    reserva: formData.getAll('reserva[]')[index] || '',
+                    tipo: formData.getAll('tipo[]')[index] || '',
+                    dataIda: formData.getAll('dataIda[]')[index] || '',
+                    dataVolta: formData.getAll('dataVolta[]')[index] || '',
+                    cia: formData.getAll('cia[]')[index] || '',
+                    locGds: formData.getAll('locGds[]')[index] || '',
+                    locCia: formData.getAll('locCia[]')[index] || '',
+                    temBagagem: document.querySelector(`input[name="temBagagem_${reciboId}"]`)?.checked ? 'Sim' : 'Não',
+                    temAssento: document.querySelector(`input[name="temAssento_${reciboId}"]`)?.checked ? 'Sim' : 'Não',
+                    observacoes: formData.getAll('observacoes[]')[index] || ''
+                };
+                
+                dados.recibos.push(recibo);
+            });
+            
+            return dados;
+        }
+        
+        // ================================================================================
+        // ENVIAR PARA API (JSONP)
+        // ================================================================================
+        function enviarParaAPI(dados) {
+            return new Promise((resolve, reject) => {
+                // Criar callback único
+                const callbackName = 'jsonpCallback_' + Date.now();
+                
+                // Registrar callback global
+                window[callbackName] = function(response) {
+                    // Limpar
+                    delete window[callbackName];
+                    document.head.removeChild(script);
+                    
+                    debugLog(`📥 Resposta da API: ${JSON.stringify(response)}`, 'info');
+                    resolve(response);
+                };
+                
+                // Montar URL com parâmetros
+                const params = new URLSearchParams();
+                params.append('callback', callbackName);
+                params.append('action', 'cadastrar_venda');
+                params.append('dados', JSON.stringify(dados));
+                
+                const url = `${API_URL}?${params.toString()}`;
+                
+                debugLog(`📤 Enviando para: ${API_URL}`, 'info');
+                debugLog(`📦 Dados: ${JSON.stringify(dados, null, 2)}`, 'info');
+                
+                // Criar script JSONP
+                const script = document.createElement('script');
+                script.src = url;
+                script.onerror = function() {
+                    delete window[callbackName];
+                    document.head.removeChild(script);
+                    reject(new Error('Erro de conexão com a API'));
+                };
+                
+                // Timeout de 30 segundos
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                        if (script.parentNode) {
+                            document.head.removeChild(script);
+                        }
+                        reject(new Error('Timeout: API não respondeu'));
+                    }
+                }, 30000);
+                
+                document.head.appendChild(script);
+            });
+        }
+        
+        // ================================================================================
+        // VALIDAR FORMULÁRIO
+        // ================================================================================
+        function validarFormulario(dados) {
+            const erros = [];
+            
+            if (!dados.vendedor) {
+                erros.push('Selecione um vendedor');
+            }
+            
+            if (!dados.cpfCliente || dados.cpfCliente.length < 14) {
+                erros.push('CPF inválido');
+            }
+            
+            if (!dados.nomeCliente) {
+                erros.push('Nome do cliente é obrigatório');
+            }
+            
+            if (dados.recibos.length === 0) {
+                erros.push('Adicione pelo menos um recibo');
+            }
+            
+            dados.recibos.forEach((recibo, index) => {
+                if (!recibo.tipo) {
+                    erros.push(`Recibo ${index + 1}: Selecione o tipo de serviço`);
+                }
+                if (!recibo.dataIda) {
+                    erros.push(`Recibo ${index + 1}: Data de ida é obrigatória`);
+                }
+            });
+            
+            return erros;
+        }
+        
+        // ================================================================================
+        // CONFIGURAR ENVIO DO FORMULÁRIO
         // ================================================================================
         function configurarFormulario() {
             const form = document.getElementById('formVendaCompleta');
-            form.addEventListener('submit', function(e) {
+            
+            form.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
+                debugLog('📝 Iniciando envio da venda...', 'info');
+                
                 // Coletar dados
-                const dados = new FormData(form);
-                debugLog('📤 Enviando venda...', 'info');
+                const dados = coletarDadosFormulario();
                 
-                // Simular sucesso
-                alert('✅ Venda cadastrada com sucesso!\n\n(Modo demonstração - dados coletados no console)');
+                // Validar
+                const erros = validarFormulario(dados);
+                if (erros.length > 0) {
+                    mostrarStatus('Erros encontrados:<br>• ' + erros.join('<br>• '), 'error');
+                    return;
+                }
                 
-                // Mostrar dados no console
-                debugLog('Dados coletados:', 'info');
-                for (let [key, value] of dados.entries()) {
-                    debugLog(`${key}: ${value}`, 'info');
+                // Mostrar loading
+                mostrarLoading('Cadastrando venda na planilha...');
+                
+                try {
+                    // Enviar para API
+                    const response = await enviarParaAPI(dados);
+                    
+                    esconderLoading();
+                    
+                    if (response && response.success) {
+                        const totalVoos = response.data?.total_voos || dados.recibos.length;
+                        const informe = response.data?.numeroInforme || 'Gerado';
+                        
+                        mostrarStatus(
+                            `✅ Venda cadastrada com sucesso!<br>` +
+                            `<strong>Informe:</strong> ${informe}<br>` +
+                            `<strong>Total de embarques criados:</strong> ${totalVoos}`,
+                            'success'
+                        );
+                        
+                        debugLog(`✅ Venda cadastrada! Informe: ${informe}, Voos: ${totalVoos}`, 'success');
+                        
+                        // Limpar formulário após 2 segundos
+                        setTimeout(() => {
+                            if (confirm('Deseja cadastrar outra venda?')) {
+                                form.reset();
+                                document.getElementById('recibosContainer').innerHTML = '';
+                                contadorRecibos = 0;
+                                adicionarRecibo();
+                                popularVendedores();
+                            }
+                        }, 2000);
+                        
+                    } else {
+                        const erro = response?.error || response?.message || 'Erro desconhecido';
+                        mostrarStatus(`Erro ao cadastrar venda: ${erro}`, 'error');
+                        debugLog(`❌ Erro: ${erro}`, 'error');
+                    }
+                    
+                } catch (error) {
+                    esconderLoading();
+                    mostrarStatus(`Erro de conexão: ${error.message}`, 'error');
+                    debugLog(`❌ Erro de conexão: ${error.message}`, 'error');
                 }
             });
         }
         
         // ================================================================================
-        // INICIALIZAÇÃO AUTOMÁTICA - GARANTIDA
+        // INICIALIZAÇÃO
         // ================================================================================
         document.addEventListener('DOMContentLoaded', function() {
             debugLog('📄 DOM carregado!', 'info');
             
             setTimeout(function() {
-                debugLog('🎯 Inicializando sistema ultra-simplificado...', 'info');
+                debugLog('🎯 Inicializando sistema FUNCIONAL...', 'info');
                 
                 // Configurar tudo
+                popularVendedores();
                 aplicarMascaras();
                 configurarInteratividade();
                 configurarFormulario();
@@ -883,26 +1243,21 @@
                 // Adicionar primeiro recibo
                 adicionarRecibo();
                 
-                debugLog('✅ Sistema v11.2 inicializado com SUCESSO!', 'success');
+                debugLog('✅ Sistema v12.0 inicializado com SUCESSO!', 'success');
                 debugLog('🔧 Funcionalidades ativas:', 'info');
-                debugLog('   ✅ Lista de vendedores hardcoded', 'info');
-                debugLog('   ✅ Botão adicionar recibo', 'info');
-                debugLog('   ✅ Campos dinâmicos aéreos', 'info'); 
-                debugLog('   ✅ Máscaras CPF/WhatsApp', 'info');
-                debugLog('   ✅ Cliente do Ale', 'info');
-                debugLog('   ✅ Envio de formulário', 'info');
-                debugLog('🚀 TUDO FUNCIONANDO!', 'info');
+                debugLog('   ✅ Vendedores carregados do config.js', 'info');
+                debugLog('   ✅ Integração com API Google Apps Script', 'info');
+                debugLog('   ✅ Validação de formulário', 'info');
+                debugLog('   ✅ Envio JSONP para cadastrar_venda', 'info');
+                debugLog('   ✅ Feedback visual de status', 'info');
+                debugLog(`🌐 API URL: ${API_URL}`, 'info');
+                debugLog('🚀 SISTEMA FUNCIONAL PRONTO!', 'success');
                 
             }, 100);
         });
         
-        // ================================================================================
-        // LOGS FINAIS
-        // ================================================================================
-        debugLog('✅ JavaScript incorporado carregado!', 'success');
-        debugLog('🎯 v11.2: Versão ultra-simplificada que SEMPRE funciona', 'info');
-        debugLog('📋 Todas as funções estão incorporadas no HTML', 'info');
-        debugLog('🔧 Não depende de carregamento externo de JS', 'info');
+        // Log final
+        debugLog('✅ JavaScript carregado!', 'success');
     </script>
 </body>
 </html>
