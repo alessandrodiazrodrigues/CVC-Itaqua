@@ -20,6 +20,99 @@
     <link href="assets/css/systelos-styles.css" rel="stylesheet">
     
     <style>
+        /* ============================================================================
+           HEADER E SIDEBAR SYSTELOS - PADRÃO UNIFICADO
+           ============================================================================ */
+        body { padding-top: 70px; }
+        
+        .systelos-header {
+            background: linear-gradient(135deg, #0F1B3D 0%, #1a2642 100%);
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: #FFB800;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .menu-toggle:hover {
+            background: rgba(255,184,0,0.1);
+            transform: scale(1.1);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-left: 20px;
+        }
+        
+        .logo-icon {
+            background: linear-gradient(135deg, #FFB800 0%, #ff8800 100%);
+            color: #0F1B3D;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .logo-text { display: flex; flex-direction: column; }
+        .logo-title { color: #FFFFFF; font-size: 24px; font-weight: 600; font-family: 'Poppins', sans-serif; }
+        .logo-subtitle { color: rgba(255,255,255,0.7); font-size: 11px; font-family: 'Inter', sans-serif; }
+        
+        .user-info { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+        .user-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #FFB800 0%, #ff8800 100%); display: flex; align-items: center; justify-content: center; }
+        .user-avatar span { color: #0F1B3D; font-weight: bold; font-size: 16px; }
+        .user-details { display: flex; flex-direction: column; }
+        .user-name { color: #FFFFFF; font-size: 14px; font-weight: 600; }
+        .user-email { color: #14B8A6; font-size: 12px; }
+        
+        .btn-gestor { background: #14B8A6; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+        .btn-sair { background: #FFB800; color: #0F1B3D; border: none; padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+        
+        .sidebar-menu {
+            position: fixed;
+            left: -340px;
+            top: 0;
+            width: 320px;
+            height: 100vh;
+            background: #0F1B3D;
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 9999;
+            overflow-y: auto;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.5);
+        }
+        
+        .sidebar-menu.show { left: 0; }
+        
+        @media (max-width: 768px) {
+            .systelos-header { height: 60px; }
+            body { padding-top: 60px; }
+            .user-name, .user-email { display: none; }
+        }
+
         /* Estilos específicos do sistema de vendas */
         .content-section {
             padding: 30px;
@@ -211,95 +304,91 @@
 
     </style>
 </head>
-<body>
-    <div class="container-fluid">
-        <!-- HEADER SYSTELOS -->
-        <header class="systelos-header">
-            <div class="container-fluid">
-                <div class="row align-items-center py-3">
-                    <!-- Logo SYSTELOS -->
-                    <div class="col-md-4">
-                        <div class="systelos-logo">
-                            <div class="systelos-logo-symbol">[S]</div>
-                            <div>
-                                <div class="systelos-logo-text">SYSTELOS TUR</div>
-                                <p class="systelos-subtitle">Sistemas com propósito</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Título da Página -->
-                    <div class="col-md-4 text-center">
-                        <h1 class="page-title mb-0" style="border: none; padding: 0; color: var(--systelos-azul-principal);">
-                             <i class="fas fa-chart-line"></i> Informe de Vendas
-                        </h1>
-                        <!-- Status API (discreto) -->
-                        <small id="apiStatus" class="text-muted">
-                            <i class="fas fa-spinner fa-spin"></i> Verificando API...
-                        </small>
-                    </div>
-                    
-                    <!-- Informações do Usuário -->
-                    <div class="col-md-4">
-                        <div class="user-info justify-content-end">
-                            <div class="me-3">
-                                <p class="user-name">Gestor SYSTELOS</p>
-                                <p class="user-role">Gestor</p>
-                            </div>
-                            <div class="admin-indicator">
-                                <i class="fas fa-crown"></i> GESTOR
-                            </div>
-                            <button class="logout-btn" onclick="window.location.href='index.html'">
-                                <i class="fas fa-sign-out-alt"></i> Sair
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
+<script>
+        // ============================================================================
+        // FUNÇÕES DO HEADER SYSTELOS - ESCOPO GLOBAL
+        // ============================================================================
+        
+        function loadUserInfo() {
+            try {
+                const savedUser = localStorage.getItem('systelos_user');
+                if (savedUser) {
+                    const userData = JSON.parse(savedUser);
+                    const initials = userData.nome.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+                    const el1 = document.getElementById('userInitials');
+                    const el2 = document.getElementById('userName');
+                    const el3 = document.getElementById('userEmail');
+                    const el4 = document.getElementById('adminBadgeHeader');
+                    if (el1) el1.textContent = initials;
+                    if (el2) el2.textContent = userData.nome;
+                    if (el3) el3.textContent = userData.email;
+                    if (userData.isAdmin && el4) el4.style.display = 'flex';
+                }
+            } catch (error) { console.error('Erro loadUserInfo:', error); }
+        }
 
-        <!-- NAVEGAÇÃO SYSTELOS -->
-        <nav class="systelos-nav">
-            <div class="container-fluid">
-                <ul class="nav nav-pills justify-content-center mb-0">
-                    <li class="nav-item">
-                        <a class="nav-link " href="index.html">
-                            <i class="fas fa-tachometer-alt"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="orcamentos.html">
-                            <i class="fas fa-calculator"></i> Padronizador de Orçamentos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="vendas.html">
-                            <i class="fas fa-chart-line"></i> Informe de Vendas
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="vendas-automatizado.html">
-                            <i class="fas fa-robot"></i> Informe Automatizado
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="embarques.html">
-                            <i class="fas fa-plane-departure"></i> Controle de Embarques
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="orbiuns.html">
-                            <i class="fas fa-clipboard-list"></i> Controle de Orbiuns
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="importacao.html">
-                            <i class="fas fa-cloud-upload-alt"></i> Importação
-                        </a>
-                    </li>
-                </ul>
+        function logout() {
+            if (confirm('Deseja sair do sistema?')) {
+                localStorage.removeItem('systelos_user');
+                window.location.href = 'index.html';
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebarMenu');
+            if (!sidebar) return;
+            sidebar.classList.toggle('show');
+            let overlay = document.getElementById('sidebarOverlay');
+            if (sidebar.classList.contains('show')) {
+                if (!overlay) {
+                    overlay = document.createElement('div');
+                    overlay.id = 'sidebarOverlay';
+                    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9998;cursor:pointer;';
+                    overlay.onclick = toggleSidebar;
+                    document.body.appendChild(overlay);
+                }
+            } else {
+                if (overlay) overlay.remove();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadUserInfo);
+    </script>
+<body>
+    <header class="systelos-header">
+        <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+        <div class="logo-container">
+            <div class="logo-icon">[S]</div>
+            <div class="logo-text">
+                <div class="logo-title">SYSTELOS TUR</div>
+                <div class="logo-subtitle">Sistemas com propósito</div>
             </div>
-        </nav>
+        </div>
+        <div class="user-info" id="userInfoHeader">
+            <div class="user-avatar" id="userAvatar"><span id="userInitials">AR</span></div>
+            <div class="user-details">
+                <div class="user-name" id="userName">Alessandro</div>
+                <div class="user-email" id="userEmail">email@exemplo.com</div>
+            </div>
+            <button class="btn-gestor" id="adminBadgeHeader" style="display:none;"><i class="fas fa-crown"></i> Gestor</button>
+            <button class="btn-sair" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+        </div>
+    </header>
+    <nav id="sidebarMenu" class="sidebar-menu">
+        <div style="padding:20px;border-bottom:1px solid rgba(255,184,0,0.3);position:relative;">
+            <h3 style="color:#FFB800;margin:0;font-family:Poppins,sans-serif;">[S] SYSTELOS TUR</h3>
+            <button onclick="toggleSidebar()" style="position:absolute;top:15px;right:15px;background:transparent;border:none;color:white;font-size:32px;cursor:pointer;">&times;</button>
+        </div>
+        <ul style="list-style:none;padding:0;margin:0;">
+            <li><a href="index.html" style="display:block;padding:18px 25px;color:white;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.1);">Início</a></li>
+            <li><a href="orcamentos.html" style="display:block;padding:18px 25px;color:white;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.1);">Orçamentos</a></li>
+            <li><a href="embarques.html" style="display:block;padding:18px 25px;color:white;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.1);">Embarques</a></li>
+            <li><a href="vendas.html" style="display:block;padding:18px 25px;color:#FFB800;background:rgba(255,184,0,0.2);text-decoration:none;font-weight:600;border-left:4px solid #FFB800;">Informe de Vendas</a></li>
+            <li><a href="orbiuns.html" style="display:block;padding:18px 25px;color:white;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.1);">Orbiuns</a></li>
+            <li><a href="importacao.html" style="display:block;padding:18px 25px;color:white;text-decoration:none;">Importação</a></li>
+        </ul>
+    </nav>
+    <div class="container-fluid">
 
         <div class="container-fluid">
         <div class="main-container">
@@ -477,6 +566,9 @@
     
     <!-- JAVASCRIPT INCORPORADO - GARANTIDO -->
     <script>
+
+
+
         debugLog('🚀 Sistema v11.2 - Ultra-Simplificado - GARANTIDO!', 'info');
         
         // ================================================================================
